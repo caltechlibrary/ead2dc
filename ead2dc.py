@@ -1,8 +1,9 @@
-#import requests
-#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead'
-#response = requests.get(url)
-#with open('aspace.xml', 'wb') as file:
-#   file.write(response.content)
+#Next four lines pull xml from url and save to file; only needed to update the local file; comment out after first run
+import requests
+url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead'
+response = requests.get(url)
+with open('aspace.xml', 'wb') as file:
+   file.write(response.content)
 
 import xml.etree.ElementTree as ET
 import xml.dom.minidom
