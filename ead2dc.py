@@ -9,22 +9,24 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from datetime import date
 
-today = date.today()
+#string form of date to write to each record
+today = date.today().strftime("%Y-%m-%d")
 
+#returns a pretty-printed XML string for on-screen display
 def prettify(elem):
-    """Return a pretty-printed XML string for the Element."""
     xml_string = ET.tostring(elem)
     xml_file = dom.parseString(xml_string)
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
 
+#builds xml for each record
 def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     record = ET.SubElement(listrecords, 'oai:record')
     header = ET.SubElement(record, 'oai:header')
     identifier = ET.SubElement(header, 'oai:identifier')
     identifier.text = 'oai:archives.caltech.edu:' + c.attrib['id']
     datestamp = ET.SubElement(header, 'oai:datestamp')
-    datestamp.text = today.strftime("%Y-%m-%d")
+    datestamp.text = today
     metadata = ET.SubElement(record, 'oai:metadata')
     dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
@@ -52,8 +54,6 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     for unitdate in c.findall('.//unitdate', ns):
         date = ET.SubElement(dc, 'dc:date')
         date.text = unitdate.text
-    #type = ET.SubElement(dc, 'dc:type')
-    #type.text = 'type...'
     for subj in c.findall('.//controlaccess/subject', ns):
         subject = ET.SubElement(dc, 'dc:subject')
         subject.text = subj.text
@@ -74,14 +74,11 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
         subject = ET.SubElement(dc, 'dc:subject')
         subject.text = func.text
         subject.attrib = {'scheme': func.attrib['source']}
-    # description = ET.SubElement(dc, 'dc:description')
-    #description.text = 'description...'
     for unitid in c.findall('.//unitid', ns):
         identifier = ET.SubElement(dc, 'dc:identifier')
         identifier.text = unitid.text
     for daoloc in c.findall('.//daoloc', ns):
         identifier = ET.SubElement(dc, 'dc:identifier')
-        # print(daoloc.attrib)
         identifier.text = daoloc.attrib['{http://www.w3.org/1999/xlink}href']
         identifier.attrib = {'scheme': 'URI'}
     return listrecords
@@ -93,13 +90,20 @@ ET.register_namespace('', 'urn:isbn:1-931666-22-9')
 ET.register_namespace('xlink', 'http://www.w3.org/1999/xlink')
 ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
 
+#read OAI finding aid
 tree = ET.parse('aspace.xml')
 root = tree.getroot()
 
+#isolate the EAD portion of the file
 ead = root.findall('.//ead', ns)[0]
+#isolate the archdesc portion of the file
 archdesc = ead.findall('.//archdesc', ns)[0]
+#isolate the dsc portion of the file
 dsc = archdesc.findall('.//dsc', ns)[0]
+#save the collection title to write to each DV record
 collectiontitle = archdesc.findall('.//did/unittitle', ns)[0].text
+collectionid = ead.find('.//eadid', ns).text
+fileout = collectionid + '.xml'
 
 from xml.dom import minidom
 
@@ -167,6 +171,9 @@ for c in dsc.findall('.//*[@level="series"]', ns):
             inheriteddata['filetitle'] = filetitle
             ListRecords = buildrecordxml(ListRecords, c4, collectiontitle, inheriteddata)
 
-
-
+#display the output
 print(prettify(oaixml))
+
+#write to disk
+with open(fileout, 'w') as f:
+    f.write(prettify(oaixml))
