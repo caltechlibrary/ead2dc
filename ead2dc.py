@@ -114,7 +114,7 @@ ead = root.findall('.//ead', ns)[0]
 archdesc = ead.findall('.//archdesc', ns)[0]
 #isolate the dsc portion of the file
 dsc = archdesc.findall('.//dsc', ns)[0]
-#save the collection title to write to each DV record
+#save the collection title to write to each DC record
 collectiontitle = archdesc.findall('.//did/unittitle', ns)[0].text
 collectionid = ead.find('.//eadid', ns).text
 fileout = collectionid + '.xml'
