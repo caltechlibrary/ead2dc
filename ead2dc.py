@@ -1,11 +1,12 @@
 #This code block pulls xml from url and save to file; only needed to update the local file; comment out after first run
-import requests
+#import requests
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead'
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'
-url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'
-response = requests.get(url)
-with open('aspace.xml', 'wb') as file:
-   file.write(response.content)
+#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'
+#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'
+#response = requests.get(url)
+#with open('aspace.xml', 'wb') as file:
+#   file.write(response.content)
 
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
@@ -26,6 +27,7 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     record = ET.SubElement(listrecords, 'oai:record')
     header = ET.SubElement(record, 'oai:header')
     identifier = ET.SubElement(header, 'oai:identifier')
+    #construct id from aspace id
     identifier.text = 'oai:archives.caltech.edu:' + c.attrib['id']
     datestamp = ET.SubElement(header, 'oai:datestamp')
     datestamp.text = today
@@ -34,28 +36,36 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
                                            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
                                            'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
                                            'xsi:schemaLocation': 'http://www.openarchives.org/OAI/2.0/oai_dc/ http:// www.openarchives.org/OAI/2.0/oai_dc.xsd'})
+    #title = file/item title
     for unittitle in c.findall('.//unittitle', ns):
         title = ET.SubElement(dc, 'dc:title')
         title.text = unittitle.text
+    #collection title
     title = ET.SubElement(dc, 'dc:title')
     title.text = collectiontitle
+    #series title
     if inheriteddata['seriestitle'] is not None:
         title = ET.SubElement(dc, 'dc:title')
         title.text = inheriteddata['seriestitle']
+    #subseries title
     if inheriteddata['subseriestitle'] is not None:
         title = ET.SubElement(dc, 'dc:title')
         title.text = inheriteddata['subseriestitle']
+    #creator (persname)
     for creat in c.findall('.//origination/persname', ns):
         creator = ET.SubElement(dc, 'dc:creator')
         creator.text = creat.text
         creator.attrib = {'scheme': creat.attrib['source']}
+    #creator (corpname)
     for creat in c.findall('.//origination/corpname', ns):
         creator = ET.SubElement(dc, 'dc:creator')
         creator.text = creat.text
         creator.attrib = {'scheme': creat.attrib['source']}
+    #date
     for unitdate in c.findall('.//unitdate', ns):
         date = ET.SubElement(dc, 'dc:date')
         date.text = unitdate.text
+    #subjects
     for subj in c.findall('.//controlaccess/subject', ns):
         subject = ET.SubElement(dc, 'dc:subject')
         subject.text = subj.text
@@ -76,16 +86,18 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
         subject = ET.SubElement(dc, 'dc:subject')
         subject.text = func.text
         subject.attrib = {'scheme': func.attrib['source']}
+    #identifiers
     for unitid in c.findall('.//unitid', ns):
         identifier = ET.SubElement(dc, 'dc:identifier')
         identifier.text = unitid.text
+    #links
     for daoloc in c.findall('.//daoloc', ns):
         identifier = ET.SubElement(dc, 'dc:identifier')
         identifier.text = daoloc.attrib['{http://www.w3.org/1999/xlink}href']
         identifier.attrib = {'scheme': 'URI'}
     return listrecords
 
-
+#namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 'xlink': 'http://www.w3.org/1999/xlink',
       'xsi': "http://www.w3.org/2001/XMLSchema-instance"}
 ET.register_namespace('', 'urn:isbn:1-931666-22-9')
@@ -107,8 +119,7 @@ collectiontitle = archdesc.findall('.//did/unittitle', ns)[0].text
 collectionid = ead.find('.//eadid', ns).text
 fileout = collectionid + '.xml'
 
-from xml.dom import minidom
-
+#build the OAI-PMH XML
 oaixml = ET.Element('Repository', {'xmlns': 'http://www.openarchives.org/OAI/2.0/static-repository',
                     'xmlns:oai': 'http://www.openarchives.org/OAI/2.0/',
                     'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
@@ -127,6 +138,7 @@ deletedRecord.text = 'no'
 granularity = ET.SubElement(Identify, 'oai:granularity')
 granularity.text = 'YYYY-MM-DD'
 
+#ListMetadataFormats
 ListMetadataFormats = ET.SubElement(oaixml, 'ListMetadataFormats')
 metadataFormat = ET.SubElement(ListMetadataFormats, 'oai:metadataFormat')
 metadataPrefix = ET.SubElement(metadataFormat, 'oai:metadataPrefix')
@@ -136,9 +148,11 @@ schema.text = "http://www.openarchives.org/OAI/2.0/oai_dc.xsd"
 metadataNamespace = ET.SubElement(metadataFormat, 'oai:metadataNamespace')
 metadataNamespace.text = "http://www.openarchives.org/OAI/2.0/oai_dc/"
 
+#ListRecords
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {
                             'metadataPrefix': 'oai_ead'})
 
+#build the records
 for c in dsc.findall('.//*[@level="series"]', ns):
     inheriteddata = {'seriestitle': None, 'subseriestitle': None, 'filetitle': None}
     if c.find('.//unittitle', ns) is not None:
