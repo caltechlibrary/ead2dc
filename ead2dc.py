@@ -195,10 +195,7 @@ metadataNamespace.text = "http://www.openarchives.org/OAI/2.0/oai_dc/"
 #build ListRecords segment
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_ead'})
 #iterate over containers to collect inherited data and build records
-first = True
 for c01 in dsc.findall('.//c01', ns):
-    if first:
-        first = False
     inheriteddata = list()
     inheritdata(c01, 1)
     for c02 in c01.findall('.//c02', ns):
