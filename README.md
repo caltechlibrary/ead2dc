@@ -11,7 +11,8 @@ A Python 3 script to convert ArchivesSpace Encoded Archival Description (EAD) fi
 * [Installation](#installation)
 * [Usage](#usage)
 * [License](#license)
-* [Acknowledgments](#authors-and-acknowledgments)
+* [References](#references)
+* [Acknowledgments](#acknowledgments)
 
 
 ## Introduction
@@ -35,11 +36,19 @@ No installation is required. The ead2dc.py file is designed to be run from the c
 ## Usage
 
 At the moment this is a command line script designed to be directly edited before each execution. See the ead2dc.py file for information. It uses standard Python libraries and has been tested using Python 3.9.17
-* 
+
 
 ## License
 
 Software produced by the Caltech Library is Copyright © 2023 California Institute of Technology.  This software is freely distributed under a BSD-style license.  Please see the [LICENSE](LICENSE) file for more information.
+
+
+## References
+
+* OSI Static Repositories: http://www.openarchives.org/OAI/2.0/guidelines-static-repository.htm
+* DCMI Metadata Terms: https://www.dublincore.org/specifications/dublin-core/dcmi-terms/
+* Dublin Core Qualifiers: https://www.dublincore.org/specifications/dublin-core/dcmes-qualifiers/
+* Guidelines for implementing DC in XML: https://www.dublincore.org/specifications/dublin-core/dc-xml-guidelines/2002-04-14/
 
 
 ## Acknowledgments
