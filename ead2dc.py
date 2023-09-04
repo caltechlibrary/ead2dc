@@ -1,12 +1,18 @@
 #This code block pulls xml from url and save to file; only needed to update the local file; comment out after first run
-#import requests
+#George Ellery Hale Papers
+#structure: series, [subseries], file | item
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead'
+#Paul B. MacCready Papers
+#structure: 
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'
+#Donald A. Glaser Papers
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'
-#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'
-#response = requests.get(url)
-#with open('aspace.xml', 'wb') as file:
-#   file.write(response.content)
+#Caltech Images Collection
+url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'
+import requests
+response = requests.get(url)
+with open('aspace.xml', 'wb') as file:
+   file.write(response.content)
 
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
@@ -15,6 +21,8 @@ from datetime import date
 #string form of date to write to each record
 today = date.today().strftime("%Y-%m-%d")
 
+#FUNCTIONS
+
 #returns a pretty-printed XML string for on-screen display
 def prettify(elem):
     xml_string = ET.tostring(elem)
@@ -22,8 +30,9 @@ def prettify(elem):
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
 
-#builds xml for each record
+# builds xml for each record and adds to ListRecords segment
 def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
+    #create record element
     record = ET.SubElement(listrecords, 'oai:record')
     header = ET.SubElement(record, 'oai:header')
     identifier = ET.SubElement(header, 'oai:identifier')
@@ -36,36 +45,31 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
                                            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
                                            'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
                                            'xsi:schemaLocation': 'http://www.openarchives.org/OAI/2.0/oai_dc/ http:// www.openarchives.org/OAI/2.0/oai_dc.xsd'})
-    #title = file/item title
-    for unittitle in c.findall('.//unittitle', ns):
-        title = ET.SubElement(dc, 'dc:title')
-        title.text = unittitle.text
+    #title = file/item title from current container
+    title = ET.SubElement(dc, 'dc:title')
+    title.text = inheriteddata[-1]
     #collection title
     title = ET.SubElement(dc, 'dc:title')
     title.text = collectiontitle
-    #series title
-    if inheriteddata['seriestitle'] is not None:
+    #inherited titles from parent containers
+    for titledata in inheriteddata[:-1]:
         title = ET.SubElement(dc, 'dc:title')
-        title.text = inheriteddata['seriestitle']
-    #subseries title
-    if inheriteddata['subseriestitle'] is not None:
-        title = ET.SubElement(dc, 'dc:title')
-        title.text = inheriteddata['subseriestitle']
-    #creator (persname)
+        title.text = titledata
+    #creator (persname) from current container
     for creat in c.findall('.//origination/persname', ns):
         creator = ET.SubElement(dc, 'dc:creator')
         creator.text = creat.text
         creator.attrib = {'scheme': creat.attrib['source']}
-    #creator (corpname)
+    #creator (corpname) from current container
     for creat in c.findall('.//origination/corpname', ns):
         creator = ET.SubElement(dc, 'dc:creator')
         creator.text = creat.text
         creator.attrib = {'scheme': creat.attrib['source']}
-    #date
+    #date from current container
     for unitdate in c.findall('.//unitdate', ns):
         date = ET.SubElement(dc, 'dc:date')
         date.text = unitdate.text
-    #subjects
+    #subjects from current container
     for subj in c.findall('.//controlaccess/subject', ns):
         subject = ET.SubElement(dc, 'dc:subject')
         subject.text = subj.text
@@ -86,16 +90,47 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
         subject = ET.SubElement(dc, 'dc:subject')
         subject.text = func.text
         subject.attrib = {'scheme': func.attrib['source']}
-    #identifiers
+    #identifiers from current container
     for unitid in c.findall('.//unitid', ns):
         identifier = ET.SubElement(dc, 'dc:identifier')
         identifier.text = unitid.text
-    #links
+    #links from current container
     for daoloc in c.findall('.//daoloc', ns):
         identifier = ET.SubElement(dc, 'dc:identifier')
         identifier.text = daoloc.attrib['{http://www.w3.org/1999/xlink}href']
         identifier.attrib = {'scheme': 'URI'}
     return listrecords
+
+#builds inherited data for each record; XML build is triggered if digital object is present
+#c is the container object
+#n is the level of the container
+def inheritdata(c, n):
+    e = c.find('./did/unittitle', ns)
+    if e is not None:
+        title = e.text
+    else:
+        title = '[no title]'
+    if len(inheriteddata) < n:
+        inheriteddata.append(title)
+    elif len(inheriteddata) == n:
+        inheriteddata[n-1] = title
+    else:
+        for i in range(len(inheriteddata)):
+            if i >= n:
+                inheriteddata.pop()
+        inheriteddata[n-1] = title
+    if locatedao(c):
+        buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
+    return
+
+#checks if digital object is present
+def locatedao(c):
+    if c.find('./did/daogrp/daoloc', ns) is not None:
+        return True
+    else:
+        return False
+
+#MAIN PROGRAM
 
 #namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 'xlink': 'http://www.w3.org/1999/xlink',
@@ -116,14 +151,23 @@ archdesc = ead.findall('.//archdesc', ns)[0]
 dsc = archdesc.findall('.//dsc', ns)[0]
 #save the collection title to write to each DC record
 collectiontitle = archdesc.findall('.//did/unittitle', ns)[0].text
-collectionid = ead.find('.//eadid', ns).text
-fileout = collectionid + '.xml'
+#construct a filename for output
+try:
+    fileid = 'caltecharchives'+root.find('.//{*}request', ns).attrib['identifier'].replace('/', '-')
+except:
+    try:
+        fileid = ead.find('.//eadid', ns).text
+    except:
+        fileid = 'caltecharchives'
+fileout = fileid + '.xml'
 
-#build the OAI-PMH XML
+#create OAI-PMH XML object
 oaixml = ET.Element('Repository', {'xmlns': 'http://www.openarchives.org/OAI/2.0/static-repository',
                     'xmlns:oai': 'http://www.openarchives.org/OAI/2.0/',
                     'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
                     'xsi:schemaLocation': 'http://www.openarchives.org/OAI/2.0/static-repository http://www.openarchives.org/OAI/2.0/static-repository.xsd'})
+
+#build Identify segment
 Identify = ET.SubElement(oaixml, 'Identify')
 repositoryName = ET.SubElement(Identify, 'oai:repositoryName')
 repositoryName.text = 'Caltech Archives Digital Collections'
@@ -138,7 +182,7 @@ deletedRecord.text = 'no'
 granularity = ET.SubElement(Identify, 'oai:granularity')
 granularity.text = 'YYYY-MM-DD'
 
-#ListMetadataFormats
+#build ListMetadataFormats segment
 ListMetadataFormats = ET.SubElement(oaixml, 'ListMetadataFormats')
 metadataFormat = ET.SubElement(ListMetadataFormats, 'oai:metadataFormat')
 metadataPrefix = ET.SubElement(metadataFormat, 'oai:metadataPrefix')
@@ -148,18 +192,48 @@ schema.text = "http://www.openarchives.org/OAI/2.0/oai_dc.xsd"
 metadataNamespace = ET.SubElement(metadataFormat, 'oai:metadataNamespace')
 metadataNamespace.text = "http://www.openarchives.org/OAI/2.0/oai_dc/"
 
-#ListRecords
-ListRecords = ET.SubElement(oaixml, 'ListRecords', {
-                            'metadataPrefix': 'oai_ead'})
+#build ListRecords segment
+ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_ead'})
+#iterate over containers to collect inherited data and build records
+first = True
+for c01 in dsc.findall('.//c01', ns):
+    if first:
+        first = False
+    inheriteddata = list()
+    inheritdata(c01, 1)
+    for c02 in c01.findall('.//c02', ns):
+        inheritdata(c02, 2)
+        for c03 in c02.findall('.//c03', ns):
+            inheritdata(c03, 3)
+            for c04 in c03.findall('.//c04', ns):
+                inheritdata(c04, 4)
+                for c05 in c04.findall('.//c05', ns):
+                    inheritdata(c05, 5)
+                    for c06 in c05.findall('.//c06', ns):
+                        inheritdata(c06, 6)
+                        for c07 in c05.findall('.//c07', ns):
+                            inheritdata(c07, 7)
+                            for c08 in c05.findall('.//c08', ns):
+                                inheritdata(c08, 8)
+                                for c09 in c05.findall('.//c09', ns):
+                                    inheritdata(c09, 9)
+                                    for c10 in c05.findall('.//c10', ns):
+                                        inheritdata(c10, 10)
+                                        for c11 in c05.findall('.//c11', ns):
+                                            inheritdata(c11, 11)
+                                            for c12 in c05.findall('.//c12', ns):
+                                                inheritdata(c12, 12)
 
+
+"""
 #build the records
 for c in dsc.findall('.//*[@level="series"]', ns):
-    inheriteddata = {'seriestitle': None, 'subseriestitle': None, 'filetitle': None}
+    inheriteddata = {'seriestitle': None, 'subseriestitle': None, 'filetitle': None, 'itemtitle': None}
     if c.find('.//unittitle', ns) is not None:
         seriestitle = c.find('.//unittitle', ns).text
     else:
         seriestitle = '[Untitled]'
-    #print('Series:', seriestitle)
+    print('Series:', seriestitle)
     inheriteddata['seriestitle'] = seriestitle
     if c.findall('.//*[@level="subseries"]', ns):
         for c2 in c.findall('.//*[@level="subseries"]', ns):
@@ -167,26 +241,42 @@ for c in dsc.findall('.//*[@level="series"]', ns):
                 subseries = c2.find('.//unittitle', ns).text
             else:
                 subseries = '[Untitled]'
-            #print('--> Subseries:', subseries)
+            print('--> Subseries:', subseries)
             inheriteddata['subseriestitle'] = subseries
             for c3 in c2.findall('.//*[@level="file"]', ns):
                 if c3.find('.//unittitle', ns) is not None:
                     filetitle = c3.find('.//unittitle', ns).text
                 else:
                     filetitle = '[Untitled]'
-                #print('----> Title:', filetitle)
+                print('----> Title:', filetitle)
                 inheriteddata['filetitle'] = filetitle
                 ListRecords = buildrecordxml(ListRecords, c3, collectiontitle, inheriteddata)
+    elif c.findall('.//*[@level="item"]', ns) is not None:
+        for c4 in c.findall('.//*[@level="file"]', ns):
+            if c4.find('.//unittitle', ns) is not None:
+                filetitle = c4.find('.//unittitle', ns).text
+            else:
+                filetitle = '[Untitled]'
+            print('----> Title:', filetitle)
+            inheriteddata['filetitle'] = filetitle
+            for c5 in c4.findall('.//*[@level="item"]', ns):
+                if c5.find('.//unittitle', ns) is not None:
+                    itemtitle = c5.find('.//unittitle', ns).text
+                else:
+                    itemtitle = '[Untitled]'
+                print('------> Title:', itemtitle)
+                inheriteddata['itemtitle'] = itemtitle
+                ListRecords = buildrecordxml(ListRecords, c4, collectiontitle, inheriteddata)
     else:
         for c4 in c.findall('.//*[@level="file"]', ns):
             if c4.find('.//unittitle', ns) is not None:
                 filetitle = c4.find('.//unittitle', ns).text
             else:
                 filetitle = '[Untitled]'
-            #print('----> Title:', filetitle)
+            print('----> Title:', filetitle)
             inheriteddata['filetitle'] = filetitle
             ListRecords = buildrecordxml(ListRecords, c4, collectiontitle, inheriteddata)
-
+"""
 #display the output
 print(prettify(oaixml))
 
