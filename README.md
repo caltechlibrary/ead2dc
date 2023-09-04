@@ -43,7 +43,7 @@ At the moment this is a command line script designed to be directly edited befor
 
 Paul B. MacCready Papers ca. 1931-2002, Caltech Archives
 
-* [Finding aid at the Online Archive of California](https://oac.cdlib.org/findaid/ark:/13030/c87d2xcp/)
+* [Finding Aid](https://collections.archives.caltech.edu/repositories/2/resources/197)
 * [ArchivesSpace OAI Data Provider output](https://caltechlibrary.github.io/ead2dc/maccready-ead.xml)
 * [OAI Static Repository created by ead2dc](https://caltechlibrary.github.io/ead2dc/maccready-dc.xml)
 
