@@ -225,58 +225,6 @@ for c01 in dsc.findall('.//c01', ns):
                                                 inheritdata(c12, 12)
 
 
-"""
-#build the records
-for c in dsc.findall('.//*[@level="series"]', ns):
-    inheriteddata = {'seriestitle': None, 'subseriestitle': None, 'filetitle': None, 'itemtitle': None}
-    if c.find('.//unittitle', ns) is not None:
-        seriestitle = c.find('.//unittitle', ns).text
-    else:
-        seriestitle = '[Untitled]'
-    print('Series:', seriestitle)
-    inheriteddata['seriestitle'] = seriestitle
-    if c.findall('.//*[@level="subseries"]', ns):
-        for c2 in c.findall('.//*[@level="subseries"]', ns):
-            if c2.find('.//unittitle', ns) is not None:
-                subseries = c2.find('.//unittitle', ns).text
-            else:
-                subseries = '[Untitled]'
-            print('--> Subseries:', subseries)
-            inheriteddata['subseriestitle'] = subseries
-            for c3 in c2.findall('.//*[@level="file"]', ns):
-                if c3.find('.//unittitle', ns) is not None:
-                    filetitle = c3.find('.//unittitle', ns).text
-                else:
-                    filetitle = '[Untitled]'
-                print('----> Title:', filetitle)
-                inheriteddata['filetitle'] = filetitle
-                ListRecords = buildrecordxml(ListRecords, c3, collectiontitle, inheriteddata)
-    elif c.findall('.//*[@level="item"]', ns) is not None:
-        for c4 in c.findall('.//*[@level="file"]', ns):
-            if c4.find('.//unittitle', ns) is not None:
-                filetitle = c4.find('.//unittitle', ns).text
-            else:
-                filetitle = '[Untitled]'
-            print('----> Title:', filetitle)
-            inheriteddata['filetitle'] = filetitle
-            for c5 in c4.findall('.//*[@level="item"]', ns):
-                if c5.find('.//unittitle', ns) is not None:
-                    itemtitle = c5.find('.//unittitle', ns).text
-                else:
-                    itemtitle = '[Untitled]'
-                print('------> Title:', itemtitle)
-                inheriteddata['itemtitle'] = itemtitle
-                ListRecords = buildrecordxml(ListRecords, c4, collectiontitle, inheriteddata)
-    else:
-        for c4 in c.findall('.//*[@level="file"]', ns):
-            if c4.find('.//unittitle', ns) is not None:
-                filetitle = c4.find('.//unittitle', ns).text
-            else:
-                filetitle = '[Untitled]'
-            print('----> Title:', filetitle)
-            inheriteddata['filetitle'] = filetitle
-            ListRecords = buildrecordxml(ListRecords, c4, collectiontitle, inheriteddata)
-"""
 #display the output
 print(prettify(oaixml))
 
