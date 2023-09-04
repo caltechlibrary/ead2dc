@@ -10,6 +10,7 @@ A Python 3 script to convert ArchivesSpace Encoded Archival Description (EAD) fi
 * [Introduction](#introduction)
 * [Installation](#installation)
 * [Usage](#usage)
+* [Example](#example)
 * [License](#license)
 * [References](#references)
 * [Acknowledgments](#acknowledgments)
@@ -30,12 +31,21 @@ The main features of the tool are:
 
 ## Installation
 
-No installation is required. The ead2dc.py file is designed to be run from the command line, or from within your favorite editing environment.
+No installation is required. The [ead2dc.py](ead2dc.py) file is designed to be run from the command line, or from within your favorite editing environment.
  
 
 ## Usage
 
-At the moment this is a command line script designed to be directly edited before each execution. See the ead2dc.py file for information. It uses standard Python libraries and has been tested using Python 3.9.17
+At the moment this is a command line script designed to be directly edited before each execution. See the [ead2dc.py](ead2dc.py) file for information. It uses standard Python libraries and has been tested using Python 3.9.17
+
+
+## Example
+
+Paul B. MacCready Papers ca. 1931-2002, Caltech Archives
+
+* Finding aid at the Online Archive of California: [https://oac.cdlib.org/findaid/ark:/13030/c87d2xcp/]
+* ArchivesSpace OAI Data Provider output: [https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead]
+* OAI Static Repository created by ead2dc: [caltecharchives-repositories-2-resources-197.xml]
 
 
 ## License

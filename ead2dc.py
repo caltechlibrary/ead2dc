@@ -8,11 +8,11 @@
 #Donald A. Glaser Papers
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'
 #Caltech Images Collection
-url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'
-import requests
-response = requests.get(url)
-with open('aspace.xml', 'wb') as file:
-   file.write(response.content)
+#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'
+#import requests
+#response = requests.get(url)
+#with open('aspace.xml', 'wb') as file:
+#   file.write(response.content)
 
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
@@ -144,13 +144,13 @@ tree = ET.parse('aspace.xml')
 root = tree.getroot()
 
 #isolate the EAD portion of the file
-ead = root.findall('.//ead', ns)[0]
+ead = root.find('.//ead', ns)
 #isolate the archdesc portion of the file
-archdesc = ead.findall('.//archdesc', ns)[0]
+archdesc = ead.find('.//archdesc', ns)
 #isolate the dsc portion of the file
-dsc = archdesc.findall('.//dsc', ns)[0]
+dsc = archdesc.find('.//dsc', ns)
 #save the collection title to write to each DC record
-collectiontitle = archdesc.findall('.//did/unittitle', ns)[0].text
+collectiontitle = archdesc.find('.//did/unittitle', ns).text
 #construct a filename for output
 try:
     fileid = 'caltecharchives'+root.find('.//{*}request', ns).attrib['identifier'].replace('/', '-')
