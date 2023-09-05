@@ -1,14 +1,12 @@
 #This code block pulls xml from url and save to file; only needed to update the local file; comment out after first run
 #George Ellery Hale Papers
-#structure: series, [subseries], file | item
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead'
 #Paul B. MacCready Papers
-#structure: 
-url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'
+#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'
 #Donald A. Glaser Papers
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'
 #Caltech Images Collection
-#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'
+url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'
 import requests
 response = requests.get(url)
 with open('aspace.xml', 'wb') as file:
@@ -69,6 +67,14 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     for unitdate in c.findall('.//unitdate', ns):
         date = ET.SubElement(dc, 'dc:date')
         date.text = unitdate.text
+    #format from current container
+    for fmt in c.findall('.//physdesc/extent', ns):
+        format = ET.SubElement(dc, 'dc:extent')
+        format.text = fmt.text
+    #description from current container
+    for desc in c.findall('.//abstract', ns):
+        description = ET.SubElement(dc, 'dc:description')
+        description.text = desc.text
     #subjects from current container
     for subj in c.findall('.//controlaccess/subject', ns):
         subject = ET.SubElement(dc, 'dc:subject')
