@@ -45,7 +45,7 @@ At the moment this is a command line script designed to be directly edited befor
 
 | Element | Encoded Archival Description | Dublin Core |
 |---|---|---|
-| Collection titles  | archdesc/did/unittitle  | title  |
+| Collection title  | archdesc/did/unittitle  | title  |
 | Container titles  | dsc/c??/did/unittitle  | title  |
 | Personal creators  | dsc/c??/did/origination label="creator"/persname  | creator  |
 | Corporate creators  | dsc/c??/did/origination label="creator"/corpname  | creator  |
