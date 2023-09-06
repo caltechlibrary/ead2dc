@@ -10,6 +10,7 @@ A Python 3 script to convert ArchivesSpace Encoded Archival Description (EAD) fi
 * [Introduction](#introduction)
 * [Installation](#installation)
 * [Usage](#usage)
+* [Mapping](#mapping)
 * [Example](#example)
 * [License](#license)
 * [References](#references)
@@ -37,6 +38,19 @@ No installation is required. The [ead2dc.py](ead2dc.py) file is designed to be r
 ## Usage
 
 At the moment this is a command line script designed to be directly edited before each execution. See the [ead2dc.py](ead2dc.py) file for information. It uses standard Python libraries and has been tested using Python 3.9.17
+
+
+## Mapping
+
+| Encoded Archival Description | Dublin Core |
+|---|---|
+|   |   |
+| archdesc/did/unittitle  | title  |
+| dsc/c??/did/unittitle  | title  |
+| dsc/c??/did/origination label="creator"/persname|corpname  | creator  |
+| dsc/c??/did/unitdate  | date  |
+| dsc/c??/did/physdesc/extent  | extent  |
+| dsc/c??/did/abstract  | description  |
 
 
 ## Example
