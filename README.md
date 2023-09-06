@@ -47,7 +47,8 @@ At the moment this is a command line script designed to be directly edited befor
 |   |   |
 | archdesc/did/unittitle  | title  |
 | dsc/c??/did/unittitle  | title  |
-| dsc/c??/did/origination label="creator"/persname|corpname  | creator  |
+| dsc/c??/did/origination label="creator"/persname  | creator  |
+| dsc/c??/did/origination label="creator"/corpname  | creator  |
 | dsc/c??/did/unitdate  | date  |
 | dsc/c??/did/physdesc/extent  | extent  |
 | dsc/c??/did/abstract  | description  |
