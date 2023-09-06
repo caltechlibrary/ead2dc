@@ -45,20 +45,20 @@ At the moment this is a command line script designed to be directly edited befor
 
 | Element | Encoded Archival Description | Dublin Core |
 |---|---|---|
-| Collection title  | archdesc/did/unittitle  | title  |
-| Container titles  | dsc/c??/did/unittitle  | title  |
-| Personal creators  | dsc/c??/did/origination label="creator"/persname  | creator  |
-| Corporate creators  | dsc/c??/did/origination label="creator"/corpname  | creator  |
-| Dates  | dsc/c??/did/unitdate  | date  |
-| Extent  | dsc/c??/did/physdesc/extent  | extent  |
-| Description  | dsc/c??/did/abstract  | description  |
-| Subject. general  | dsc/c??/controlaccess/subject  | subject  |
-| Subject, geographic  | dsc/c??/controlaccess/geogname  | subject  |
-| Subject, person  | dsc/c??/controlaccess/persname  | subject  |
-| Subject, corporate  | dsc/c??/controlaccess/corpname  | subject  |
-| Subject, activity  | dsc/c??/controlaccess/function  | subject  |
-| Identifier  | dsc/c??/did/unitid  | identifier  |
-| Identifier, link  | dsc/c??/did/daogrp/daoloc['xlink:href']  | identifier  |
+| Collection title  | `archdesc/did/unittitle`  | `title`  |
+| Container titles  | `dsc/c??/did/unittitle`  | `title`  |
+| Personal creators  | `dsc/c??/did/origination label="creator"/persname`  | `creator`  |
+| Corporate creators  | `dsc/c??/did/origination label="creator"/corpname`  | `creator`  |
+| Dates  | `dsc/c??/did/unitdate`  | `date`  |
+| Extent  | `dsc/c??/did/physdesc/extent`  | `extent`  |
+| Description  | `dsc/c??/did/abstract`  | `description`  |
+| Subject, general  | `dsc/c??/controlaccess/subject`  | `subject`  |
+| Subject, geographic  | `dsc/c??/controlaccess/geogname`  | `subject`  |
+| Subject, person  | `dsc/c??/controlaccess/persname`  | `subject`  |
+| Subject, corporate  | `dsc/c??/controlaccess/corpname`  | `subject`  |
+| Subject, activity  | `dsc/c??/controlaccess/function`  | `subject`  |
+| Identifier  | `dsc/c??/did/unitid`  | `identifier`  |
+| Identifier, link  | `dsc/c??/did/daogrp/daoloc['xlink:href']`  | `identifier`  |
 
 
 ## Example
