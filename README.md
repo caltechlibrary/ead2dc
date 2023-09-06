@@ -21,13 +21,14 @@ A Python 3 script to convert ArchivesSpace Encoded Archival Description (EAD) fi
 
 This tool takes as its input the Open Archives Initiative (OAI) output of an ArchivesSpace resource finding aid in Encoded Archival Description (EAD) format and converts it to an OAI Static Repository containing DC metadata records with links to digital objects. 
 
-The main features of the tool are:
+Main features and assumptions:
 
 * Both input and output are OAI-compliant XML files.
 * All 12 levels of EAD container are supported.
 * Titles are inherited down the container hierarchy.
 * All other metadata is mapped from the record containing the digital object references.
 * Records without digital object references are ignored (i.e. not mapped to the output file)
+* Records with non-image object references are ignored (e.g. video)
 
 
 ## Installation

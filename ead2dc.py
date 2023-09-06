@@ -2,11 +2,11 @@
 #George Ellery Hale Papers
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead'
 #Paul B. MacCready Papers
-#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'
+url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'
 #Donald A. Glaser Papers
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'
 #Caltech Images Collection
-url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'
+#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'
 import requests
 response = requests.get(url)
 with open('aspace.xml', 'wb') as file:
@@ -132,6 +132,9 @@ def inheritdata(c, n):
 #checks if digital object is present
 def locatedao(c):
     if c.find('./did/daogrp/daoloc', ns) is not None:
+        for daoloc in c.findall('./did/daogrp/daoloc', ns):
+            if 'datastream' in daoloc.attrib['{http://www.w3.org/1999/xlink}href']:
+                return False
         return True
     else:
         return False
