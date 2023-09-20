@@ -2,9 +2,9 @@
 #George Ellery Hale Papers
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead'
 #Paul B. MacCready Papers
-url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'
+#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'
 #Donald A. Glaser Papers
-#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'
+url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'
 #Caltech Images Collection
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'
 import requests
