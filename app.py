@@ -112,9 +112,6 @@ def oai():
             rquest.text = 'https://feeds.caltechlibrary.dev/oai-gateway'
             getrecord = ET.SubElement(oaixml, 'GetRecord')
             record = root.find(f'.//oai:identifier[.="{identifier}"]/../../.', ns)
-
-#HERE
-
             getrecord.append(record)
 
     else:
