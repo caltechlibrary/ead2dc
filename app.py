@@ -14,6 +14,10 @@ ET.register_namespace('oai', 'http://www.openarchives.org/OAI/2.0/')
 ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
 ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
 
+# read OAI finding aid
+tree = ET.parse('caltecharchives.xml')
+root = tree.getroot()
+
 # string form of date to write to each record
 today = date.today().strftime("%Y-%m-%d")
 
@@ -30,10 +34,6 @@ def prettify(elem):
 @app.route('/oai')
 def oai():
  
-    # read OAI finding aid
-    tree = ET.parse('caltecharchives.xml')
-    root = tree.getroot()
-
     verb = request.args.get('verb')
 
 
