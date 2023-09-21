@@ -4,9 +4,11 @@
 #Paul B. MacCready Papers
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'
 #Donald A. Glaser Papers
-url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'
+#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'
 #Caltech Images Collection
 #url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'
+#Palomar Observatory Records
+url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/228&metadataPrefix=oai_ead'
 import requests
 response = requests.get(url)
 with open('aspace.xml', 'wb') as file:
@@ -41,18 +43,21 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     metadata = ET.SubElement(record, 'oai:metadata')
     dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+                                           'xmlns:dcterms': 'http://purl.org/dc/terms/',
                                            'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
                                            'xsi:schemaLocation': 'http://www.openarchives.org/OAI/2.0/oai_dc/ http:// www.openarchives.org/OAI/2.0/oai_dc.xsd'})
     #title = file/item title from current container
     title = ET.SubElement(dc, 'dc:title')
-    title.text = inheriteddata[-1]
+    title.text = inheriteddata[-1][1]
     #collection title
-    title = ET.SubElement(dc, 'dc:title')
-    title.text = collectiontitle
+    relation = ET.SubElement(dc, 'dc:relation')
+    relation.text = collectiontitle
+    relation.attrib = {'label': 'Collection'}
     #inherited titles from parent containers
     for titledata in inheriteddata[:-1]:
-        title = ET.SubElement(dc, 'dc:title')
-        title.text = titledata
+        relation = ET.SubElement(dc, 'dc:relation')
+        relation.text = titledata[1]
+        relation.attrib = {'label': titledata[0].title()}
     #creator (persname) from current container
     for creat in c.findall('.//origination/persname', ns):
         creator = ET.SubElement(dc, 'dc:creator')
@@ -103,8 +108,12 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     #links from current container
     for daoloc in c.findall('.//daoloc', ns):
         identifier = ET.SubElement(dc, 'dc:identifier')
-        identifier.text = daoloc.attrib['{http://www.w3.org/1999/xlink}href']
-        identifier.attrib = {'scheme': 'URI'}
+        text = daoloc.attrib['{http://www.w3.org/1999/xlink}href']
+        identifier.text = text
+        if 'img.archives.caltech.edu' in text:
+            identifier.attrib = {'scheme': 'URI', 'type': 'thumbnail'}
+        else:
+            identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
     return listrecords
 
 #builds inherited data for each record; XML build is triggered if digital object is present
@@ -113,9 +122,9 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
 def inheritdata(c, n):
     e = c.find('./did/unittitle', ns)
     if e is not None:
-        title = e.text
+        title = (c.attrib['level'], e.text)
     else:
-        title = '[no title]'
+        title = ('', '')
     if len(inheriteddata) < n:
         inheriteddata.append(title)
     elif len(inheriteddata) == n:
@@ -205,7 +214,7 @@ metadataNamespace.text = "http://www.openarchives.org/OAI/2.0/oai_dc/"
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_ead'})
 #iterate over containers to collect inherited data and build records
 for c01 in dsc.findall('.//c01', ns):
-    inheriteddata = list()
+    inheriteddata = list(tuple())
     inheritdata(c01, 1)
     for c02 in c01.findall('.//c02', ns):
         inheritdata(c02, 2)
@@ -217,17 +226,17 @@ for c01 in dsc.findall('.//c01', ns):
                     inheritdata(c05, 5)
                     for c06 in c05.findall('.//c06', ns):
                         inheritdata(c06, 6)
-                        for c07 in c05.findall('.//c07', ns):
+                        for c07 in c06.findall('.//c07', ns):
                             inheritdata(c07, 7)
-                            for c08 in c05.findall('.//c08', ns):
+                            for c08 in c07.findall('.//c08', ns):
                                 inheritdata(c08, 8)
-                                for c09 in c05.findall('.//c09', ns):
+                                for c09 in c08.findall('.//c09', ns):
                                     inheritdata(c09, 9)
-                                    for c10 in c05.findall('.//c10', ns):
+                                    for c10 in c09.findall('.//c10', ns):
                                         inheritdata(c10, 10)
-                                        for c11 in c05.findall('.//c11', ns):
+                                        for c11 in c10.findall('.//c11', ns):
                                             inheritdata(c11, 11)
-                                            for c12 in c05.findall('.//c12', ns):
+                                            for c12 in c11.findall('.//c12', ns):
                                                 inheritdata(c12, 12)
 
 

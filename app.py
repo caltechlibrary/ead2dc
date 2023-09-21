@@ -31,7 +31,7 @@ def prettify(elem):
 def oai():
  
     # read OAI finding aid
-    tree = ET.parse('caltecharchives-repositories-2-resources-34.xml')
+    tree = ET.parse('caltecharchives-repositories-2-resources-228.xml')
     root = tree.getroot()
 
     verb = request.args.get('verb')
