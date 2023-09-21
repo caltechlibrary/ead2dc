@@ -31,7 +31,7 @@ def prettify(elem):
 def oai():
  
     # read OAI finding aid
-    tree = ET.parse('caltecharchives-repositories-2-resources-228.xml')
+    tree = ET.parse('caltecharchives.xml')
     root = tree.getroot()
 
     verb = request.args.get('verb')
@@ -51,7 +51,6 @@ def oai():
         for node in elem:
             identify.append(node)
 
-
     elif verb == 'ListMetadataFormats':
 
         elem = root.find('.//ListMetadataFormats', ns)
@@ -66,6 +65,19 @@ def oai():
         for node in elem:
             listmetadataformats.append(node)
 
+    elif verb == 'ListSets':
+
+        elem = root.find('.//ListSets', ns)
+        # create OAI-PMH XML object
+        oaixml = ET.Element('OAI-PMH')
+        respDate = ET.SubElement(oaixml, 'responseDate')
+        respDate.text = today
+        rquest = ET.SubElement(oaixml, 'request')
+        rquest.attrib = {'verb': 'ListSets'}
+        rquest.text = 'https://feeds.caltechlibrary.dev/oai-gateway'
+        listsets = ET.SubElement(oaixml, 'ListSets')
+        for node in elem:
+            listsets.append(node)
 
     elif verb == 'ListRecords' or verb == 'ListIdentifiers':
 

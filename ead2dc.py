@@ -1,25 +1,7 @@
-#This code block pulls xml from url and save to file; only needed to update the local file; comment out after first run
-#George Ellery Hale Papers
-#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead'
-#Paul B. MacCready Papers
-#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'
-#Donald A. Glaser Papers
-#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'
-#Caltech Images Collection
-#url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'
-#Palomar Observatory Records
-url = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/228&metadataPrefix=oai_ead'
 import requests
-response = requests.get(url)
-with open('aspace.xml', 'wb') as file:
-   file.write(response.content)
-
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from datetime import date
-
-#string form of date to write to each record
-today = date.today().strftime("%Y-%m-%d")
 
 #FUNCTIONS
 
@@ -32,6 +14,7 @@ def prettify(elem):
 
 # builds xml for each record and adds to ListRecords segment
 def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
+    global no_records, setid
     #create record element
     record = ET.SubElement(listrecords, 'oai:record')
     header = ET.SubElement(record, 'oai:header')
@@ -40,6 +23,8 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     identifier.text = 'oai:archives.caltech.edu:' + c.attrib['id']
     datestamp = ET.SubElement(header, 'oai:datestamp')
     datestamp.text = today
+    setspec = ET.SubElement(header, 'oai:setSpec')
+    setspec.text = setid
     metadata = ET.SubElement(record, 'oai:metadata')
     dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
@@ -114,6 +99,7 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
             identifier.attrib = {'scheme': 'URI', 'type': 'thumbnail'}
         else:
             identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
+    no_records += 1
     return listrecords
 
 #builds inherited data for each record; XML build is triggered if digital object is present
@@ -148,49 +134,60 @@ def locatedao(c):
     else:
         return False
 
+
 #MAIN PROGRAM
 
-#namespace dictionary
+
+# string form of date to write to each record
+today = date.today().strftime("%Y-%m-%d")
+
+
+# Collections
+colls = list()
+# George Ellery Hale Papers
+colls.append(('hale',
+              'George Elery Hale Papers, 1872-1938, Archives, California Institute of Technology (Caltech), Pasadena, California, USA.', 
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead'))
+# Paul B. MacCready Papers
+colls.append(('maccready', 
+              'Paul B. MacCready Papers, 1930-2002, Archives, California Institute of Technology (Caltech), Pasadena, California, USA.',
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'))
+# Donald A. Glaser Papers
+colls.append(('glaser', 
+              'Donald A. Glaser Papers, 1947-2013, Archives, California Institute of Technology (Caltech), Pasadena, California, USA.',
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'))
+# Caltech Images Collection
+colls.append(('images', 
+              'Caltech Images Collection, 1880-2000, Archives, California Institute of Technology (Caltech), Pasadena, California, USA.',
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'))
+# Palomar Observatory Records
+colls.append(('palomar', 
+              'Palomar Observatory Records, 1888-2003, Archives, California Institute of Technology (Caltech), Pasadena, California, USA.',
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/228&metadataPrefix=oai_ead'))
+
+print('Building OAI-PMH XML...')
+
+# namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 'xlink': 'http://www.w3.org/1999/xlink',
       'xsi': "http://www.w3.org/2001/XMLSchema-instance"}
 ET.register_namespace('', 'urn:isbn:1-931666-22-9')
 ET.register_namespace('xlink', 'http://www.w3.org/1999/xlink')
 ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
 
-#read OAI finding aid
-tree = ET.parse('aspace.xml')
-root = tree.getroot()
 
-#isolate the EAD portion of the file
-ead = root.find('.//ead', ns)
-#isolate the archdesc portion of the file
-archdesc = ead.find('.//archdesc', ns)
-#isolate the dsc portion of the file
-dsc = archdesc.find('.//dsc', ns)
-#save the collection title to write to each DC record
-collectiontitle = archdesc.find('.//did/unittitle', ns).text
-#construct a filename for output
-try:
-    fileid = 'caltecharchives'+root.find('.//{*}request', ns).attrib['identifier'].replace('/', '-')
-except:
-    try:
-        fileid = ead.find('.//eadid', ns).text
-    except:
-        fileid = 'caltecharchives'
-fileout = fileid + '.xml'
-
-#create OAI-PMH XML object
+# create OAI-PMH XML object
 oaixml = ET.Element('Repository', {'xmlns': 'http://www.openarchives.org/OAI/2.0/static-repository',
                     'xmlns:oai': 'http://www.openarchives.org/OAI/2.0/',
-                    'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-                    'xsi:schemaLocation': 'http://www.openarchives.org/OAI/2.0/static-repository http://www.openarchives.org/OAI/2.0/static-repository.xsd'})
+                                   'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+                                   'xsi:schemaLocation': 'http://www.openarchives.org/OAI/2.0/static-repository http://www.openarchives.org/OAI/2.0/static-repository.xsd'})
 
-#build Identify segment
+
+# build Identify segment
 Identify = ET.SubElement(oaixml, 'Identify')
 repositoryName = ET.SubElement(Identify, 'oai:repositoryName')
 repositoryName.text = 'Caltech Archives Digital Collections'
 baseURL = ET.SubElement(Identify, 'oai:baseURL')
-baseURL.text = 'http://gateway.institution.org/oai/an.oai.org/ma/mini.xml'
+baseURL.text = 'http://apps.library.caltech.edu/oai'
 protocolVersion = ET.SubElement(Identify, 'oai:protocolVersion')
 protocolVersion.text = '2.0'
 adminEmail = ET.SubElement(Identify, 'oai:adminEmail')
@@ -200,7 +197,8 @@ deletedRecord.text = 'no'
 granularity = ET.SubElement(Identify, 'oai:granularity')
 granularity.text = 'YYYY-MM-DD'
 
-#build ListMetadataFormats segment
+
+# build ListMetadataFormats segment
 ListMetadataFormats = ET.SubElement(oaixml, 'ListMetadataFormats')
 metadataFormat = ET.SubElement(ListMetadataFormats, 'oai:metadataFormat')
 metadataPrefix = ET.SubElement(metadataFormat, 'oai:metadataPrefix')
@@ -210,38 +208,88 @@ schema.text = "http://www.openarchives.org/OAI/2.0/oai_dc.xsd"
 metadataNamespace = ET.SubElement(metadataFormat, 'oai:metadataNamespace')
 metadataNamespace.text = "http://www.openarchives.org/OAI/2.0/oai_dc/"
 
-#build ListRecords segment
-ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_ead'})
-#iterate over containers to collect inherited data and build records
-for c01 in dsc.findall('.//c01', ns):
-    inheriteddata = list(tuple())
-    inheritdata(c01, 1)
-    for c02 in c01.findall('.//c02', ns):
-        inheritdata(c02, 2)
-        for c03 in c02.findall('.//c03', ns):
-            inheritdata(c03, 3)
-            for c04 in c03.findall('.//c04', ns):
-                inheritdata(c04, 4)
-                for c05 in c04.findall('.//c05', ns):
-                    inheritdata(c05, 5)
-                    for c06 in c05.findall('.//c06', ns):
-                        inheritdata(c06, 6)
-                        for c07 in c06.findall('.//c07', ns):
-                            inheritdata(c07, 7)
-                            for c08 in c07.findall('.//c08', ns):
-                                inheritdata(c08, 8)
-                                for c09 in c08.findall('.//c09', ns):
-                                    inheritdata(c09, 9)
-                                    for c10 in c09.findall('.//c10', ns):
-                                        inheritdata(c10, 10)
-                                        for c11 in c10.findall('.//c11', ns):
-                                            inheritdata(c11, 11)
-                                            for c12 in c11.findall('.//c12', ns):
-                                                inheritdata(c12, 12)
+
+# build ListSets segment
+ListSets = ET.SubElement(oaixml, 'ListSets')
+for coll in colls:
+    set = ET.SubElement(ListSets, 'oai:set')
+    setSpec = ET.SubElement(set, 'oai:setSpec')
+    setSpec.text = coll[0]
+    setName = ET.SubElement(set, 'oai:setName')
+    setName.text = coll[1]
+
+
+no_records = 0
+
+
+for coll in colls:
+
+    setid = coll[0]
+
+    print('Reading ' + coll[0] + '...')
+    response = requests.get(coll[2])
+    with open('aspace.xml', 'wb') as file:
+        file.write(response.content)
+
+    #read OAI finding aid
+    print('Writing ' + coll[0] + '...')
+    tree = ET.parse('aspace.xml')
+    root = tree.getroot()
+
+    #isolate the EAD portion of the file
+    ead = root.find('.//ead', ns)
+    #isolate the archdesc portion of the file
+    archdesc = ead.find('.//archdesc', ns)
+    #isolate the dsc portion of the file
+    dsc = archdesc.find('.//dsc', ns)
+    #save the collection title to write to each DC record
+    collectiontitle = archdesc.find('.//did/unittitle', ns).text
+
+    #construct a filename for output
+    #try:
+    #    fileid = 'caltecharchives'+root.find('.//{*}request', ns).attrib['identifier'].replace('/', '-')
+    #except:
+    #    try:
+    #        fileid = ead.find('.//eadid', ns).text
+    #    except:
+    #        fileid = 'caltecharchives'
+    #fileout = fileid + '.xml'
+    fileout = 'caltecharchives.xml'
+
+    #build ListRecords segment
+    ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_ead'})
+    #iterate over containers to collect inherited data and build records
+    for c01 in dsc.findall('.//c01', ns):
+        inheriteddata = list(tuple())
+        inheritdata(c01, 1)
+        for c02 in c01.findall('.//c02', ns):
+            inheritdata(c02, 2)
+            for c03 in c02.findall('.//c03', ns):
+                inheritdata(c03, 3)
+                for c04 in c03.findall('.//c04', ns):
+                    inheritdata(c04, 4)
+                    for c05 in c04.findall('.//c05', ns):
+                        inheritdata(c05, 5)
+                        for c06 in c05.findall('.//c06', ns):
+                            inheritdata(c06, 6)
+                            for c07 in c06.findall('.//c07', ns):
+                                inheritdata(c07, 7)
+                                for c08 in c07.findall('.//c08', ns):
+                                    inheritdata(c08, 8)
+                                    for c09 in c08.findall('.//c09', ns):
+                                        inheritdata(c09, 9)
+                                        for c10 in c09.findall('.//c10', ns):
+                                            inheritdata(c10, 10)
+                                            for c11 in c10.findall('.//c11', ns):
+                                                inheritdata(c11, 11)
+                                                for c12 in c11.findall('.//c12', ns):
+                                                    inheritdata(c12, 12)
 
 
 #display the output
 print(prettify(oaixml))
+print()
+print('Total records: ' + str(no_records))
 
 #write to disk
 with open(fileout, 'w') as f:
