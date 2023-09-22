@@ -1,6 +1,10 @@
 # ArchiveSpace OAI/EAD to OAI/DC Conversion
 
-A Python 3 script to convert ArchivesSpace Encoded Archival Description (EAD) finding aids to Dublin Core (DC) records.
+There are two components to this service:
+
+* A Python 3 script to convert ArchivesSpace Encoded Archival Description (EAD) finding aids to Dublin Core (DC) records.
+* An Open Archives Initiative (OAI) data provider to provide access to the DC records.
+
 
 [![License](https://img.shields.io/badge/License-BSD--like-lightgrey)](https://choosealicense.com/licenses/bsd-3-clause)
 
@@ -19,7 +23,7 @@ A Python 3 script to convert ArchivesSpace Encoded Archival Description (EAD) fi
 
 ## Introduction
 
-This tool takes as its input the Open Archives Initiative (OAI) output of an ArchivesSpace resource finding aid in Encoded Archival Description (EAD) format and converts it to an OAI Static Repository containing DC metadata records with links to digital objects. 
+This tool takes as its input the Open Archives Initiative (OAI) output of an ArchivesSpace resource finding aid in Encoded Archival Description (EAD) format and converts it to an OAI Static Repository containing DC metadata records with links to digital objects. That static repository is the data source for the Open Archives Initiative (OAI) Data Provider
 
 Main features and assumptions:
 
