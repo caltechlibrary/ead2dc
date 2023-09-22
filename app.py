@@ -3,6 +3,7 @@ from flask import Flask, request, Response
 from datetime import date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
+from pathlib import Path
 
 # namespace dictionary
 ns = {'': 'http://www.openarchives.org/OAI/2.0/static-repository', 'oai': 'http://www.openarchives.org/OAI/2.0/',
@@ -15,7 +16,7 @@ ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
 ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
 
 # read OAI finding aid
-tree = ET.parse('./caltecharchives.xml')
+tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath("caltecharchives.xml"))
 root = tree.getroot()
 
 # string form of date to write to each record
@@ -30,6 +31,11 @@ def prettify(elem):
     xml_file = dom.parseString(xml_string)
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
+
+
+@app.route('/')
+def index():
+    return 'Visit /OAI for something useful.'
 
 @app.route('/oai')
 def oai():
