@@ -19,6 +19,9 @@ ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
 tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath("caltecharchives.xml"))
 root = tree.getroot()
 
+# data provider URL
+dpurl = 'https://apps.library.caltech.edu/ead2dc/oai'
+
 # string form of date to write to each record
 today = date.today().strftime("%Y-%m-%d")
 
@@ -53,7 +56,7 @@ def oai():
         respDate.text = today
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'Identify'}
-        rquest.text = 'https://apps.library.caltech.edu/oai'
+        rquest.text = dpurl
         identify = ET.SubElement(oaixml, 'Identify')
         for node in elem:
             identify.append(node)
@@ -67,7 +70,7 @@ def oai():
         respDate.text = today
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'ListMetadataFormats'}
-        rquest.text = 'https://apps.library.caltech.edu/oai'
+        rquest.text = dpurl
         listmetadataformats = ET.SubElement(oaixml, 'ListMetadataFormats')
         for node in elem:
             listmetadataformats.append(node)
@@ -81,7 +84,7 @@ def oai():
         respDate.text = today
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'ListSets'}
-        rquest.text = 'https://apps.library.caltech.edu/oai'
+        rquest.text = dpurl
         listsets = ET.SubElement(oaixml, 'ListSets')
         for node in elem:
             listsets.append(node)
@@ -95,7 +98,7 @@ def oai():
         respDate.text = today
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'ListRecords'}
-        rquest.text = 'https://apps.library.caltech.edu/oai'
+        rquest.text = dpurl
         listrecords = ET.SubElement(oaixml, 'ListRecords')
         listrecords.attrib = {'metadataPrefix': 'oai_dc'}
         recrds = root.findall('.//{http://www.openarchives.org/OAI/2.0/}record')
@@ -131,7 +134,7 @@ def oai():
             respDate.text = today
             rquest = ET.SubElement(oaixml, 'request')
             rquest.attrib = {'verb': 'GetRecord', 'identifier': identifier, 'metaDataPrefix': 'oai_dc'}
-            rquest.text = 'https://apps.library.caltech.edu/oai'
+            rquest.text = dpurl
             getrecord = ET.SubElement(oaixml, 'GetRecord')
             record = root.find(f'.//oai:identifier[.="{identifier}"]/../../.', ns)
             getrecord.append(record)

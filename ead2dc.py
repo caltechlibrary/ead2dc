@@ -6,11 +6,11 @@ from datetime import date
 #FUNCTIONS
 
 #returns a pretty-printed XML string for on-screen display
-def prettify(elem):
-    xml_string = ET.tostring(elem)
-    xml_file = dom.parseString(xml_string)
-    pretty_xml = xml_file.toprettyxml(indent="  ")
-    return pretty_xml
+#def prettify(elem):
+#    xml_string = ET.tostring(elem)
+#    xml_file = dom.parseString(xml_string)
+#    pretty_xml = xml_file.toprettyxml(indent="  ")
+#    return pretty_xml
 
 # builds xml for each record and adds to ListRecords segment
 def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
@@ -145,25 +145,20 @@ today = date.today().strftime("%Y-%m-%d")
 # Collections
 colls = list()
 # George Ellery Hale Papers
-colls.append(('hale',
-              'George Elery Hale Papers, 1872-1938, Archives, California Institute of Technology (Caltech), Pasadena, California, USA.', 
-              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead'))
+colls.append(['hale', 
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead'])
 # Paul B. MacCready Papers
-colls.append(('maccready', 
-              'Paul B. MacCready Papers, 1930-2002, Archives, California Institute of Technology (Caltech), Pasadena, California, USA.',
-              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'))
+colls.append(['maccready', 
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'])
 # Donald A. Glaser Papers
-colls.append(('glaser', 
-              'Donald A. Glaser Papers, 1947-2013, Archives, California Institute of Technology (Caltech), Pasadena, California, USA.',
-              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'))
+colls.append(['glaser', 
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'])
 # Caltech Images Collection
-colls.append(('images', 
-              'Caltech Images Collection, 1880-2000, Archives, California Institute of Technology (Caltech), Pasadena, California, USA.',
-              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'))
+colls.append(['images', 
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'])
 # Palomar Observatory Records
-colls.append(('palomar', 
-              'Palomar Observatory Records, 1888-2003, Archives, California Institute of Technology (Caltech), Pasadena, California, USA.',
-              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/228&metadataPrefix=oai_ead'))
+colls.append(['palomar', 
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/228&metadataPrefix=oai_ead'])
 
 print('Building OAI-PMH XML...')
 
@@ -187,7 +182,7 @@ Identify = ET.SubElement(oaixml, 'Identify')
 repositoryName = ET.SubElement(Identify, 'oai:repositoryName')
 repositoryName.text = 'Caltech Archives Digital Collections'
 baseURL = ET.SubElement(Identify, 'oai:baseURL')
-baseURL.text = 'http://apps.library.caltech.edu/oai'
+baseURL.text = 'http://apps.library.caltech.edu/ead2dc/oai'
 protocolVersion = ET.SubElement(Identify, 'oai:protocolVersion')
 protocolVersion.text = '2.0'
 adminEmail = ET.SubElement(Identify, 'oai:adminEmail')
@@ -209,14 +204,8 @@ metadataNamespace = ET.SubElement(metadataFormat, 'oai:metadataNamespace')
 metadataNamespace.text = "http://www.openarchives.org/OAI/2.0/oai_dc/"
 
 
-# build ListSets segment
+# create ListSets segment
 ListSets = ET.SubElement(oaixml, 'ListSets')
-for coll in colls:
-    set = ET.SubElement(ListSets, 'oai:set')
-    setSpec = ET.SubElement(set, 'oai:setSpec')
-    setSpec.text = coll[0]
-    setName = ET.SubElement(set, 'oai:setName')
-    setName.text = coll[1]
 
 
 no_records = 0
@@ -224,10 +213,10 @@ no_records = 0
 
 for coll in colls:
 
-    setid = coll[0]
+    
 
     print('Reading ' + coll[0] + '...')
-    response = requests.get(coll[2])
+    response = requests.get(coll[1])
     with open('aspace.xml', 'wb') as file:
         file.write(response.content)
 
@@ -242,8 +231,22 @@ for coll in colls:
     archdesc = ead.find('.//archdesc', ns)
     #isolate the dsc portion of the file
     dsc = archdesc.find('.//dsc', ns)
-    #save the collection title to write to each DC record
+    #save the collection title
     collectiontitle = archdesc.find('.//did/unittitle', ns).text
+    #save collection abstract
+    collectiondescription = archdesc.find('.//did/abstract', ns)
+    #update set information
+    setid = coll[0]
+    set = ET.SubElement(ListSets, 'oai:set')
+    setSpec = ET.SubElement(set, 'oai:setSpec')
+    setSpec.text = setid
+    setName = ET.SubElement(set, 'oai:setName')
+    setName.text = collectiontitle
+    if collectiondescription is not None:
+        setDescription = ET.SubElement(ET.SubElement(ET.SubElement(
+        set, 'oai:setDescription'), 'oai_dc:dc'), 'dc:description')
+        setDescription.text = collectiondescription.text
+    ListSets.append(set)
 
     #construct a filename for output
     #try:
@@ -287,10 +290,13 @@ for coll in colls:
 
 
 #display the output
-print(prettify(oaixml))
-print()
+#print(prettify(oaixml))
+#print()
 print('Total records: ' + str(no_records))
 
 #write to disk
-with open(fileout, 'w') as f:
-    f.write(prettify(oaixml))
+#with open(fileout, 'w') as f:
+#    f.write(ET.tostring(oaixml))
+
+tree = ET.ElementTree(oaixml)
+tree.write('caltecharchives.xml', encoding='utf-8', xml_declaration=True)
