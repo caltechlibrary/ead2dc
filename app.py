@@ -35,6 +35,7 @@ def prettify(elem):
 def oai():
  
     verb = request.args.get('verb')
+    set = request.args.get('set')
 
 
     if verb == 'Identify':
@@ -46,7 +47,7 @@ def oai():
         respDate.text = today
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'Identify'}
-        rquest.text = 'https://feeds.caltechlibrary.dev/oai-gateway'
+        rquest.text = 'https://apps.library.caltech.edu/oai'
         identify = ET.SubElement(oaixml, 'Identify')
         for node in elem:
             identify.append(node)
@@ -60,7 +61,7 @@ def oai():
         respDate.text = today
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'ListMetadataFormats'}
-        rquest.text = 'https://feeds.caltechlibrary.dev/oai-gateway'
+        rquest.text = 'https://apps.library.caltech.edu/oai'
         listmetadataformats = ET.SubElement(oaixml, 'ListMetadataFormats')
         for node in elem:
             listmetadataformats.append(node)
@@ -74,7 +75,7 @@ def oai():
         respDate.text = today
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'ListSets'}
-        rquest.text = 'https://feeds.caltechlibrary.dev/oai-gateway'
+        rquest.text = 'https://apps.library.caltech.edu/oai'
         listsets = ET.SubElement(oaixml, 'ListSets')
         for node in elem:
             listsets.append(node)
@@ -88,24 +89,27 @@ def oai():
         respDate.text = today
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'ListRecords'}
-        rquest.text = 'https://feeds.caltechlibrary.dev/oai-gateway'
+        rquest.text = 'https://apps.library.caltech.edu/oai'
         listrecords = ET.SubElement(oaixml, 'ListRecords')
         listrecords.attrib = {'metadataPrefix': 'oai_dc'}
         recrds = root.findall('.//{http://www.openarchives.org/OAI/2.0/}record')
         for recrd in recrds:
-            record = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}record')
-            header = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}header')
-            hdr = recrd.find('.//{http://www.openarchives.org/OAI/2.0/}header')
-            for node in hdr:
-                header.append(node)
 
-            if verb == 'ListRecords':
+            if recrd.find('.//oai:setSpec', ns).text == set or set is None:
 
-                metadata = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}metadata')
-                dc = ET.SubElement(metadata, '{http://www.openarchives.org/OAI/2.0/oai_dc/}dc')
-                metad = recrd.find('.//{http://www.openarchives.org/OAI/2.0/oai_dc/}dc')
-                for node in metad:
-                    dc.append(node)
+                record = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}record')
+                header = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}header')
+                hdr = recrd.find('.//{http://www.openarchives.org/OAI/2.0/}header')
+                for node in hdr:
+                    header.append(node)
+
+                if verb == 'ListRecords':
+
+                    metadata = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}metadata')
+                    dc = ET.SubElement(metadata, '{http://www.openarchives.org/OAI/2.0/oai_dc/}dc')
+                    metad = recrd.find('.//{http://www.openarchives.org/OAI/2.0/oai_dc/}dc')
+                    for node in metad:
+                        dc.append(node)
 
 
     elif verb == 'GetRecord':
@@ -121,7 +125,7 @@ def oai():
             respDate.text = today
             rquest = ET.SubElement(oaixml, 'request')
             rquest.attrib = {'verb': 'GetRecord', 'identifier': identifier, 'metaDataPrefix': 'oai_dc'}
-            rquest.text = 'https://feeds.caltechlibrary.dev/oai-gateway'
+            rquest.text = 'https://apps.library.caltech.edu/oai'
             getrecord = ET.SubElement(oaixml, 'GetRecord')
             record = root.find(f'.//oai:identifier[.="{identifier}"]/../../.', ns)
             getrecord.append(record)
