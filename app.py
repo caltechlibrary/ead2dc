@@ -160,7 +160,7 @@ def oai():
         respDate = ET.SubElement(oaixml, 'responseDate')
         respDate.text = today
         error = ET.SubElement(oaixml, 'error')
-        error.text = "Invalid key or verb, or verb not yet supported."
+        error.text = "Missing or invalid verb or key."
 
 
     return Response(ET.tostring(oaixml), mimetype='text/xml')
