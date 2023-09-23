@@ -40,11 +40,10 @@ def prettify(elem):
 @app.route('/')
 def index():
     msg = '<!DOCTYPE html><html><head>'
-#    msg += '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">'
     msg += '<title>Caltech Archives Data Provider</title></head><body>'
-    msg += '<p>This is the Caltech Archives OAI-PMH data provider.<br>'
-    msg += 'The base URL is <a href="https://apps.library.caltech.edu/ead2dc/oai">https://apps.library.caltech.edu/ead2dc/oai</a>.<br>'
-    msg += 'All verbs and the set argument are supported, as noted below:</p>'
+    msg += '<p>This is the Caltech Archives OAI-PMH data provider.</p>'
+    msg += '<p>The base URL is <a href="https://apps.library.caltech.edu/ead2dc/oai">https://apps.library.caltech.edu/ead2dc/oai</a>.</p>'
+    msg += '<p>All verbs, and the set argument, are supported, viz.:</p>'
     msg += '<ul><li>Identify'
     msg += '<ul><li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=Identify">Identify</a></li></ul></li>'
     msg += '<li>ListMetadataFormats'
@@ -65,6 +64,14 @@ def index():
     msg += '<ul><li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=GetRecord&identifier=oai:archives.caltech.edu:aspace_09a14c019ee4a38be8885d5d57cc2d06">GetRecord&identifier=oai:archives.caltech.edu:aspace_09a14c019ee4a38be8885d5d57cc2d06</a></li>'
     msg += '<li>argument supported: identifier</li>'
     msg += '<li>argument not supported: metadataPrefix</li></ul></li></ul>'
+    msg += '<p>Notes:</p>'
+    msg += '<ul><li>Dublin Core is the only metadata standard supported at this time.</li>'
+    msg += '<li>The set structure is flat, not hierarchical.</li>'
+    msg += '<li>All records belong to one and only one set, so harvesting all sets will capture all records.</li></ul>'
+    msg += '<p>For more information visit:</p>'
+    msg += '<ul><li><a href="https://www.openarchives.org/OAI/openarchivesprotocol.html">OAI-PMH specification</a></li>'
+    msg += '<li><a href="https://archives.caltech.edu">Caltech Archives website</a></li>'
+    msg += '<li><a href="https://github.com/caltechlibrary/ead2dc">GitHub</a></li></ul>'
     return msg
 
 
