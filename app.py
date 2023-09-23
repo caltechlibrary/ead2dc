@@ -39,19 +39,25 @@ def prettify(elem):
 
 @app.route('/')
 def index():
-    msg = '<p>'
-    msg += 'This is the Caltech Archives OAI-PMH data provider.<br>'
+    msg = '<!DOCTYPE html><html><head>'
+    msg += '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">'
+    msg += '<title>Caltech Archives Data Provider</title></head><body>'
+    msg += '<p>This is the Caltech Archives OAI-PMH data provider.<br>'
     msg += 'The base URL is <a href="https://apps.library.caltech.edu/ead2dc/oai">https://apps.library.caltech.edu/ead2dc/oai</a>.<br>'
-    msg += 'The following verbs and qualifiers are supported:</p>'
-    msg += '<ul>'
-    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=Identify">Identify</a></li>'  
-    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListMetadataFormats">ListMetadataFormats</a></li>'    
-    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListSets">ListSets</a></li>'  
-    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListIdentifiers&set=hale">ListIdentifiers&set=hale</a></li>'    
-    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListRecords&set=palomar">ListRecords&set=palomar</a></li>'
-    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=GetRecord&identifier=oai:archives.caltech.edu:aspace_09a14c019ee4a38be8885d5d57cc2d06">GetRecord&identifier=oai:archives.caltech.edu:aspace_09a14c019ee4a38be8885d5d57cc2d06</a></li>'
-    msg += '</ul>'
-    msg += '<p>Resumption tokens are not supported at this time.</p>'
+    msg += 'All verbs and the set argument are supported, as noted below:</p>'
+    msg += '<ul><li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=Identify">Identify</a></li>'
+    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListMetadataFormats">ListMetadataFormats</a>'
+    msg += '<ul><li>argument not supported: identifier</li></ul></li>'    
+    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListSets">ListSets</a>'
+    msg += '<ul><li>argument not supported: resumptionToken</li></ul></li>'  
+    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListIdentifiers&set=hale">ListIdentifiers&set=hale</a>'
+    msg += '<ul><li>argument supported: set</li>'
+    msg += '<li>arguments not supported: from, until, metadataPrefix, resumptionToken</li></ul></li>'    
+    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListRecords&set=palomar">ListRecords&set=palomar</a>'
+    msg += '<ul><li>argument supported: set</li>'
+    msg += '<li>arguments not supported: from, until, metadataPrefix, resumptionToken</li></ul></li>'
+    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=GetRecord&identifier=oai:archives.caltech.edu:aspace_09a14c019ee4a38be8885d5d57cc2d06">GetRecord&identifier=oai:archives.caltech.edu:aspace_09a14c019ee4a38be8885d5d57cc2d06</a>'
+    msg += '<ul><li>argument not supported: metadataPrefix</li></ul></li></ul>'
     return msg
 
 
