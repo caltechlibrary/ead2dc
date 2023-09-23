@@ -6,11 +6,11 @@ from datetime import date
 #FUNCTIONS
 
 #returns a pretty-printed XML string for on-screen display
-#def prettify(elem):
-#    xml_string = ET.tostring(elem)
-#    xml_file = dom.parseString(xml_string)
-#    pretty_xml = xml_file.toprettyxml(indent="  ")
-#    return pretty_xml
+def prettify(elem):
+    xml_string = ET.tostring(elem)
+    xml_file = dom.parseString(xml_string)
+    pretty_xml = xml_file.toprettyxml(indent="  ")
+    return pretty_xml
 
 # builds xml for each record and adds to ListRecords segment
 def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
@@ -146,28 +146,42 @@ today = date.today().strftime("%Y-%m-%d")
 colls = list()
 # George Ellery Hale Papers
 colls.append(['hale', 
-              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead'])
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead',
+              'George Ellery Hale Papers',
+              "George Ellery Hale(1868-1938) was an influential astrophysicist and science administrator. This collection of Hale's scientific, professional, and personal papers documents his roles in inventing the spectrohelioscope; promoting international cooperation among scientists; and founding major observatories, as well as the California Institute of Technology, Huntington Library, Astrophysical Journal, and National Research Council."])
 # Paul B. MacCready Papers
 colls.append(['maccready', 
-              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead'])
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead',
+              'Paul B. MacCready Papers',
+              "Arriving on December 30th 2003, the collection documents most aspects of MacCready's career and many features of his individual character. Constituted within the papers is a diverse array of documents, media, objects, manuscripts and printed material; awards; videos and film; photographs and slides, diaries and notebooks; memorabilia, biographical material and ephemera. While the collection spans over seventy years (ca. 1930-2002), the bulk of material dates from the mid 1960s to the mid '90s. Especially prevalent within the collection are papers and ephemera from 1977 to 1985 during which time MacCready was working on his Gossamers and interest in human-powered flight was at its peak"])
 # Donald A. Glaser Papers
 colls.append(['glaser', 
-              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead'])
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead',
+              'Donald A. Glaser Papers',
+              "Donald Arthur Glaser (1926-2013) earned his PhD in Physics and Mathematics from the California Institute of Technology in 1950 and won the 1960 Nobel Prize in Physics for his invention of the bubble chamber. He then changed his research focus to molecular biology and went on to co-found Cetus Corporation, the first biotechnology company. In the 1980s he again switched his focus to neurobiology and the visual system. The Donald A. Glaser papers consist of research notes and notebooks, manuscripts and printed papers, correspondence, awards, biographical material, photographs, audio-visual material, and born-digital files. This finding aid is an intellectual arrangement of two collections: first portion originally from the University of California Berkeley, Bancroft Library and the second from the Caltech Archives."])
 # Caltech Images Collection
 colls.append(['images', 
-              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead'])
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead',
+              'Caltech Images Collection',
+              "Caltech Images is a collection of over ten thousand images representing Caltech's history and the people who have contributed to the Caltech story. It includes historic and contemporary photographs of people and places, reproductions of historic scientific artifacts and art, and illustrations drawn from Caltech's rare book collection in the history of science and technology."])
 # Palomar Observatory Records
 colls.append(['palomar', 
-              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/228&metadataPrefix=oai_ead'])
+              'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/228&metadataPrefix=oai_ead',
+              'Palomar Observatory Records',
+              'In an ongoing effort led by Jean Mueller, the Caltech Library, and funded by the Riesenfeld family, a collection of telescope logbooks, spanning the years 1936-2012, have been scanned and made available online.'])
 
 print('Building OAI-PMH XML...')
 
 # namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 'xlink': 'http://www.w3.org/1999/xlink',
-      'xsi': "http://www.w3.org/2001/XMLSchema-instance"}
+      'xsi': "http://www.w3.org/2001/XMLSchema-instance",
+      'oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+      'dc': 'http://purl.org/dc/elements/1.1/'}
 ET.register_namespace('', 'urn:isbn:1-931666-22-9')
 ET.register_namespace('xlink', 'http://www.w3.org/1999/xlink')
 ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
+ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
+ET.register_namespace('dc', 'http://purl.org/dc/elements/1.1/')
 
 
 # create OAI-PMH XML object
@@ -204,16 +218,35 @@ metadataNamespace = ET.SubElement(metadataFormat, 'oai:metadataNamespace')
 metadataNamespace.text = "http://www.openarchives.org/OAI/2.0/oai_dc/"
 
 
-# create ListSets segment
+# build ListSets segment
 ListSets = ET.SubElement(oaixml, 'ListSets')
+                         
+for coll in colls:
+    set = ET.SubElement(ListSets, 'oai:set')
+    setSpec = ET.SubElement(set, 'oai:setSpec')
+    setSpec.text = coll[0]
+    setName = ET.SubElement(set, 'oai:setName')
+    setName.text = coll[2]
+#    setdescription = ET.SubElement(set, 'setDescription')
+#    oaidcdc = ET.SubElement(setdescription, 'dc')
+#    dc = ET.SubElement(oaidcdc, 'description')
+#    dc.text = 'some text'
+
+    setDescription = ET.SubElement(ET.SubElement(ET.SubElement(
+         set, 'setDescription'), 'dc'), 'description')
+    setDescription.text = coll[3]
 
 
 no_records = 0
 
 
-for coll in colls:
+for coll in colls:   
 
-    
+
+#    if coll[0] in ['maccready', 'glaser', 'images', 'hale']:
+#        continue
+
+    setid = coll[0]
 
     print('Reading ' + coll[0] + '...')
     response = requests.get(coll[1])
@@ -233,20 +266,6 @@ for coll in colls:
     dsc = archdesc.find('.//dsc', ns)
     #save the collection title
     collectiontitle = archdesc.find('.//did/unittitle', ns).text
-    #save collection abstract
-    collectiondescription = archdesc.find('.//did/abstract', ns)
-    #update set information
-    setid = coll[0]
-    set = ET.SubElement(ListSets, 'oai:set')
-    setSpec = ET.SubElement(set, 'oai:setSpec')
-    setSpec.text = setid
-    setName = ET.SubElement(set, 'oai:setName')
-    setName.text = collectiontitle
-    if collectiondescription is not None:
-        setDescription = ET.SubElement(ET.SubElement(ET.SubElement(
-        set, 'oai:setDescription'), 'oai_dc:dc'), 'dc:description')
-        setDescription.text = collectiondescription.text
-    ListSets.append(set)
 
     #construct a filename for output
     #try:
@@ -289,14 +308,21 @@ for coll in colls:
                                                     inheritdata(c12, 12)
 
 
+#insert ListSets segment into oaixml
+#oaixml.insert(0, ListSets)
+
+
 #display the output
-#print(prettify(oaixml))
-#print()
+print(prettify(oaixml))
+print()
 print('Total records: ' + str(no_records))
 
 #write to disk
-#with open(fileout, 'w') as f:
-#    f.write(ET.tostring(oaixml))
+with open(fileout, 'w') as f:
+    f.write(prettify(oaixml))
 
-tree = ET.ElementTree(oaixml)
-tree.write('caltecharchives.xml', encoding='utf-8', xml_declaration=True)
+#tree = ET.ElementTree(oaixml)
+#tree.write('caltecharchives.xml', encoding='utf-8', xml_declaration=True)
+
+#tree = ET.ElementTree(ListSets)
+#tree.write('sets.xml', encoding='utf-8', xml_declaration=True)

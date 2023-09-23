@@ -17,6 +17,7 @@ ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
 
 # read OAI finding aid
 tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath("caltecharchives.xml"))
+#tree = ET.parse("caltecharchives.xml")
 root = tree.getroot()
 
 # data provider URL
@@ -38,7 +39,19 @@ def prettify(elem):
 
 @app.route('/')
 def index():
-    return 'Visit /OAI for something useful.'
+    msg = '<p>'
+    msg += 'This is the Caltech Archives OAI-PMH data provider.<br>'
+    msg += 'The base URL is <a href="https://apps.library.caltech.edu/ead2dc/oai">https://apps.library.caltech.edu/ead2dc/oai</a>.<br>'
+    msg += 'The following verbs are supported:<br>'
+    msg += '<ul>'
+    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=Identify">Identify</a></li>'  
+    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListMetadataFormats">ListMetadataFormats</a></li>'    
+    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListSets">ListSets</a></li>'  
+    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListIdentifiers">ListIdentifiersRecords</a></li>'    
+    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListRecords">ListRecords</a></li>'
+    msg += '<li><a href="https://apps.library.caltech.edu/ead2dc/oai?verb=GetRecord">GetRecord</a></li>'        
+    msg += '</p>'
+
 
 @app.route('/oai')
 def oai():
