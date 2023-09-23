@@ -156,8 +156,11 @@ def oai():
 
     else:
 
-        oaixml = ET.Element('noThing',)
-        oaixml.text = "Invalid key or verb, or verb not yet supported."
+        oaixml = ET.Element('OAI-PMH')
+        respDate = ET.SubElement(oaixml, 'responseDate')
+        respDate.text = today
+        error = ET.SubElement(oaixml, 'error')
+        error.text = "Invalid key or verb, or verb not yet supported."
 
 
     return Response(ET.tostring(oaixml), mimetype='text/xml')
