@@ -67,13 +67,13 @@ homepg = '''
         '''
 
 # import main Flask class and request object
-from flask import Flask, request, Response, session
-from flask_session import Session
+from flask import Flask, request, Response#, session
+#from flask_session import Session
 from datetime import date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from pathlib import Path
-import secrets
+#import secrets
 
 # namespace dictionary
 ns = {'': 'http://www.openarchives.org/OAI/2.0/static-repository', 'oai': 'http://www.openarchives.org/OAI/2.0/',
@@ -98,9 +98,9 @@ today = date.today().strftime("%Y-%m-%d")
 
 # create the Flask app
 app = Flask(__name__)
-SESSION_TYPE = 'filesystem'
-app.config.from_object(__name__)
-Session(app)
+#SESSION_TYPE = 'filesystem'
+#app.config.from_object(__name__)
+#Session(app)
 
 
 # returns a pretty-printed XML string
