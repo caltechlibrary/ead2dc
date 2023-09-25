@@ -37,7 +37,7 @@ homepg = '''
         </li>
         <li>ListRecords
             <ul>
-            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListRecords&set=Palomar">ListRecords&set=palomar</a></li>
+            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListRecords&set=Palomar">ListRecords&set=Palomar</a></li>
             <li>argument supported: set</li>
             <li>arguments not supported: from, until, metadataPrefix, resumptionToken</li></ul></li>
         <li>GetRecord
