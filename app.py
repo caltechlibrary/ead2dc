@@ -30,7 +30,7 @@ homepg = '''
         </li>
         <li>ListIdentifiers
             <ul>
-            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListIdentifiers&set=hale">ListIdentifiers&set=hale</a></li>
+            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListIdentifiers&set=HaleGE">ListIdentifiers&set=HaleGE</a></li>
             <li>argument supported: set</li>
             <li>arguments not supported: from, until, metadataPrefix, resumptionToken</li>
             </ul>
