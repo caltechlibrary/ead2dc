@@ -131,10 +131,10 @@ def index():
 def oai():
 
     
-    session['verb'] = request.args.get('verb')
+    #session['verb'] = request.args.get('verb')
     #session['set'] = request.args.get('set')
     
-    print(session['verb'])
+    #print(session['verb'])
     #print(session['set'])
     #print(app.secret_key)
     #token = secrets.token_urlsafe(24)
