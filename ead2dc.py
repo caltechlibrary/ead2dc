@@ -145,27 +145,27 @@ today = date.today().strftime("%Y-%m-%d")
 # Collections
 colls = list()
 # George Ellery Hale Papers
-colls.append(['hale', 
+colls.append(['HaleGE',
               'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead',
               'George Ellery Hale Papers',
               "George Ellery Hale(1868-1938) was an influential astrophysicist and science administrator. This collection of Hale's scientific, professional, and personal papers documents his roles in inventing the spectrohelioscope; promoting international cooperation among scientists; and founding major observatories, as well as the California Institute of Technology, Huntington Library, Astrophysical Journal, and National Research Council."])
 # Paul B. MacCready Papers
-colls.append(['maccready', 
+colls.append(['MacCreadyPB',
               'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead',
               'Paul B. MacCready Papers',
               "Arriving on December 30th 2003, the collection documents most aspects of MacCready's career and many features of his individual character. Constituted within the papers is a diverse array of documents, media, objects, manuscripts and printed material; awards; videos and film; photographs and slides, diaries and notebooks; memorabilia, biographical material and ephemera. While the collection spans over seventy years (ca. 1930-2002), the bulk of material dates from the mid 1960s to the mid '90s. Especially prevalent within the collection are papers and ephemera from 1977 to 1985 during which time MacCready was working on his Gossamers and interest in human-powered flight was at its peak"])
 # Donald A. Glaser Papers
-colls.append(['glaser', 
+colls.append(['GlaserDA',
               'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead',
               'Donald A. Glaser Papers',
               "Donald Arthur Glaser (1926-2013) earned his PhD in Physics and Mathematics from the California Institute of Technology in 1950 and won the 1960 Nobel Prize in Physics for his invention of the bubble chamber. He then changed his research focus to molecular biology and went on to co-found Cetus Corporation, the first biotechnology company. In the 1980s he again switched his focus to neurobiology and the visual system. The Donald A. Glaser papers consist of research notes and notebooks, manuscripts and printed papers, correspondence, awards, biographical material, photographs, audio-visual material, and born-digital files. This finding aid is an intellectual arrangement of two collections: first portion originally from the University of California Berkeley, Bancroft Library and the second from the Caltech Archives."])
 # Caltech Images Collection
-colls.append(['images', 
+colls.append(['Photographs',
               'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead',
               'Caltech Images Collection',
               "Caltech Images is a collection of over ten thousand images representing Caltech's history and the people who have contributed to the Caltech story. It includes historic and contemporary photographs of people and places, reproductions of historic scientific artifacts and art, and illustrations drawn from Caltech's rare book collection in the history of science and technology."])
 # Palomar Observatory Records
-colls.append(['palomar', 
+colls.append(['Palomar',
               'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/228&metadataPrefix=oai_ead',
               'Palomar Observatory Records',
               'In an ongoing effort led by Jean Mueller, the Caltech Library, and funded by the Riesenfeld family, a collection of telescope logbooks, spanning the years 1936-2012, have been scanned and made available online.'])
@@ -241,10 +241,6 @@ no_records = 0
 
 
 for coll in colls:   
-
-
-#    if coll[0] in ['maccready', 'glaser', 'images', 'hale']:
-#        continue
 
     setid = coll[0]
 

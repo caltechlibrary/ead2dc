@@ -1,9 +1,79 @@
+homepg = '''
+        <!DOCTYPE html>
+        <html>
+        <head><title>Caltech Archives Data Provider</title></head>
+        <body>
+        
+        <p>This is the Caltech Archives OAI-PMH data provider.</p>
+        
+        <p>The base URL is <a href="https://apps.library.caltech.edu/ead2dc/oai">https://apps.library.caltech.edu/ead2dc/oai</a>.</p>
+        
+        <p>All verbs, and the set argument, are supported, viz.:</p>
+        
+        <ul>
+        <li>Identify
+            <ul>
+            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=Identify">Identify</a></li>
+            </ul>
+        </li>
+        <li>ListMetadataFormats
+            <ul>
+            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListMetadataFormats">ListMetadataFormats</a></li>
+            <li>argument not supported: identifier</li>
+            </ul>
+        </li>
+        <li>ListSets
+            <ul>
+            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListSets">ListSets</a></li>
+            <li>argument not supported: resumptionToken</li>
+            </ul>
+        </li>
+        <li>ListIdentifiers
+            <ul>
+            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListIdentifiers&set=hale">ListIdentifiers&set=hale</a></li>
+            <li>argument supported: set</li>
+            <li>arguments not supported: from, until, metadataPrefix, resumptionToken</li>
+            </ul>
+        </li>
+        <li>ListRecords
+            <ul>
+            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListRecords&set=palomar">ListRecords&set=palomar</a></li>
+            <li>argument supported: set</li>
+            <li>arguments not supported: from, until, metadataPrefix, resumptionToken</li></ul></li>
+        <li>GetRecord
+            <ul>
+            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=GetRecord&identifier=oai:archives.caltech.edu:aspace_09a14c019ee4a38be8885d5d57cc2d06">GetRecord&identifier=oai:archives.caltech.edu:aspace_09a14c019ee4a38be8885d5d57cc2d06</a></li>
+            <li>argument supported: identifier</li>
+            <li>argument not supported: metadataPrefix</li>
+            </ul>
+        </li>
+        </ul>
+
+        <p>Notes:</p>
+        
+        <ul>
+        <li>Dublin Core is the only metadata standard supported at this time.</li>
+        <li>The set structure is flat, not hierarchical.</li>
+        <li>All records belong to one and only one set, so harvesting all sets will capture all records.</li>
+        </ul>
+        
+        <p>For more information visit:</p>
+        
+        <ul>
+        <li><a href="https://www.openarchives.org/OAI/openarchivesprotocol.html">OAI-PMH specification</a></li>
+        <li><a href="https://archives.caltech.edu">Caltech Archives website</a></li>
+        <li><a href="https://github.com/caltechlibrary/ead2dc">GitHub</a></li>
+        </ul>
+        '''
+
 # import main Flask class and request object
-from flask import Flask, request, Response
+from flask import Flask, request, Response, session
+from flask_session import Session
 from datetime import date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from pathlib import Path
+import secrets
 
 # namespace dictionary
 ns = {'': 'http://www.openarchives.org/OAI/2.0/static-repository', 'oai': 'http://www.openarchives.org/OAI/2.0/',
@@ -28,6 +98,10 @@ today = date.today().strftime("%Y-%m-%d")
 
 # create the Flask app
 app = Flask(__name__)
+SESSION_TYPE = 'filesystem'
+app.config.from_object(__name__)
+Session(app)
+
 
 # returns a pretty-printed XML string
 def prettify(elem):
@@ -36,48 +110,39 @@ def prettify(elem):
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
 
+'''
+@app.route('/set/<string:value>')
+def set_session(value):
+    session['key'] = value
+    return Response(f"Value set to {value}")
+
+@app.route('/get/')
+def get_session():
+    stored_session = session.get('key', 'None')
+    return (Response(f"Value stored in session is {stored_session}"))
+'''
 
 @app.route('/')
 def index():
-    msg = '<!DOCTYPE html><html><head>'
-    msg += '<title>Caltech Archives Data Provider</title></head><body>'
-    msg += '<p>This is the Caltech Archives OAI-PMH data provider.</p>'
-    msg += '<p>The base URL is <a href="https://apps.library.caltech.edu/ead2dc/oai">https://apps.library.caltech.edu/ead2dc/oai</a>.</p>'
-    msg += '<p>All verbs, and the set argument, are supported, viz.:</p>'
-    msg += '<ul><li>Identify'
-    msg += '<ul><li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=Identify">Identify</a></li></ul></li>'
-    msg += '<li>ListMetadataFormats'
-    msg += '<ul><li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListMetadataFormats">ListMetadataFormats</a></li>'
-    msg += '<li>argument not supported: identifier</li></ul></li>'
-    msg += '<li>ListSets'
-    msg += '<ul><li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListSets">ListSets</a></li>'
-    msg += '<li>argument not supported: resumptionToken</li></ul></li>'
-    msg += '<li>ListIdentifiers'
-    msg += '<ul><li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListIdentifiers&set=hale">ListIdentifiers&set=hale</a></li>'
-    msg += '<li>argument supported: set</li>'
-    msg += '<li>arguments not supported: from, until, metadataPrefix, resumptionToken</li></ul></li>'
-    msg += '<li>ListRecords'
-    msg += '<ul><li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListRecords&set=palomar">ListRecords&set=palomar</a></li>'
-    msg += '<li>argument supported: set</li>'
-    msg += '<li>arguments not supported: from, until, metadataPrefix, resumptionToken</li></ul></li>'
-    msg += '<li>GetRecord'
-    msg += '<ul><li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=GetRecord&identifier=oai:archives.caltech.edu:aspace_09a14c019ee4a38be8885d5d57cc2d06">GetRecord&identifier=oai:archives.caltech.edu:aspace_09a14c019ee4a38be8885d5d57cc2d06</a></li>'
-    msg += '<li>argument supported: identifier</li>'
-    msg += '<li>argument not supported: metadataPrefix</li></ul></li></ul>'
-    msg += '<p>Notes:</p>'
-    msg += '<ul><li>Dublin Core is the only metadata standard supported at this time.</li>'
-    msg += '<li>The set structure is flat, not hierarchical.</li>'
-    msg += '<li>All records belong to one and only one set, so harvesting all sets will capture all records.</li></ul>'
-    msg += '<p>For more information visit:</p>'
-    msg += '<ul><li><a href="https://www.openarchives.org/OAI/openarchivesprotocol.html">OAI-PMH specification</a></li>'
-    msg += '<li><a href="https://archives.caltech.edu">Caltech Archives website</a></li>'
-    msg += '<li><a href="https://github.com/caltechlibrary/ead2dc">GitHub</a></li></ul>'
-    return msg
+    return homepg
 
 
 @app.route('/oai')
 def oai():
- 
+
+    
+    session['verb'] = request.args.get('verb')
+    #session['set'] = request.args.get('set')
+    
+    print(session['verb'])
+    #print(session['set'])
+    #print(app.secret_key)
+    #token = secrets.token_urlsafe(24)
+    #print('secrets token:', token)
+
+
+    
+
     verb = request.args.get('verb')
     set = request.args.get('set')
 
