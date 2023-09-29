@@ -6,43 +6,43 @@ homepg = '''
         
         <p>This is the Caltech Archives OAI-PMH data provider.</p>
         
-        <p>The base URL is <a href="https://apps.library.caltech.edu/ead2dc/oai">https://apps.library.caltech.edu/ead2dc/oai</a>.</p>
+        <p>The base URL is <a href="oai">https://apps.library.caltech.edu/ead2dc/oai</a>.</p>
         
         <p>All verbs, and the set argument, are supported, viz.:</p>
         
         <ul>
         <li>Identify
             <ul>
-            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=Identify">Identify</a></li>
+            <li>Example: <a href="oai?verb=Identify">Identify</a></li>
             </ul>
         </li>
         <li>ListMetadataFormats
             <ul>
-            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListMetadataFormats">ListMetadataFormats</a></li>
+            <li>Example: <a href="oai?verb=ListMetadataFormats">ListMetadataFormats</a></li>
             <li>argument not supported: identifier</li>
             </ul>
         </li>
         <li>ListSets
             <ul>
-            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListSets">ListSets</a></li>
+            <li>Example: <a href="oai?verb=ListSets">ListSets</a></li>
             <li>argument not supported: resumptionToken</li>
             </ul>
         </li>
         <li>ListIdentifiers
             <ul>
-            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListIdentifiers&set=HaleGE">ListIdentifiers&set=HaleGE</a></li>
+            <li>Example: <a href="oai?verb=ListIdentifiers&set=HaleGE">ListIdentifiers&set=HaleGE</a></li>
             <li>argument supported: set</li>
             <li>arguments not supported: from, until, metadataPrefix, resumptionToken</li>
             </ul>
         </li>
         <li>ListRecords
             <ul>
-            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=ListRecords&set=Palomar">ListRecords&set=Palomar</a></li>
+            <li>Example: <a href="oai?verb=ListRecords&set=Palomar">ListRecords&set=Palomar</a></li>
             <li>argument supported: set</li>
             <li>arguments not supported: from, until, metadataPrefix, resumptionToken</li></ul></li>
         <li>GetRecord
             <ul>
-            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=GetRecord&identifier=archives.caltech.edu:aspace_73762b265a7027bc0a5c5e26fe006848">GetRecord&identifier=archives.caltech.edu:aspace_73762b265a7027bc0a5c5e26fe006848</a></li>
+            <li>Example: <a href="oai?verb=GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628">GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628</a></li>
             <li>argument supported: identifier</li>
             <li>argument not supported: metadataPrefix</li>
             </ul>

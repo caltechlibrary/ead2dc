@@ -19,8 +19,13 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     record = ET.SubElement(listrecords, 'record')
     header = ET.SubElement(record, 'header')
     identifier = ET.SubElement(header, 'identifier')
-    #construct id from aspace id
-    identifier.text = 'archives.caltech.edu:' + c.attrib['id']
+    try:
+        #construct id from aspace uri
+        identifier.text = 'collections.archives.caltech.edu' + c.find('./did/unitid[@type="aspace_uri"]', ns).text
+    except:
+        #construct id from aspace id
+        identifier.text = 'archives.caltech.edu:' + c.attrib['id']
+
     datestamp = ET.SubElement(header, 'datestamp')
     datestamp.text = today
     setspec = ET.SubElement(header, 'setSpec')
@@ -87,7 +92,10 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     #identifiers from current container
     for unitid in c.findall('.//unitid', ns):
         identifier = ET.SubElement(dc, 'dc:identifier')
-        identifier.text = unitid.text
+        text = unitid.text
+        if text[:14]=='/repositories/':
+            text = 'collections.archives.caltech.edu' + text
+        identifier.text = text
     #links from current container
     for daoloc in c.findall('.//daoloc', ns):
         identifier = ET.SubElement(dc, 'dc:identifier')
@@ -125,9 +133,10 @@ def inheritdata(c, n):
 #checks if digital object is present
 def locatedao(c):
     if c.find('./did/daogrp/daoloc', ns) is not None:
-        for daoloc in c.findall('./did/daogrp/daoloc', ns):
-            if 'datastream' in daoloc.attrib['{http://www.w3.org/1999/xlink}href']:
-                return False
+        #checks for video or audio
+        #for daoloc in c.findall('./did/daogrp/daoloc', ns):
+        #    if 'datastream' in daoloc.attrib['{http://www.w3.org/1999/xlink}href']:
+        #        return False
         return True
     else:
         return False
