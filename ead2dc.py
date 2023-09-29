@@ -16,21 +16,19 @@ def prettify(elem):
 def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     global no_records, setid
     #create record element
-    record = ET.SubElement(listrecords, 'oai:record')
-    header = ET.SubElement(record, 'oai:header')
-    identifier = ET.SubElement(header, 'oai:identifier')
+    record = ET.SubElement(listrecords, 'record')
+    header = ET.SubElement(record, 'header')
+    identifier = ET.SubElement(header, 'identifier')
     #construct id from aspace id
-    identifier.text = 'oai:archives.caltech.edu:' + c.attrib['id']
-    datestamp = ET.SubElement(header, 'oai:datestamp')
+    identifier.text = 'archives.caltech.edu:' + c.attrib['id']
+    datestamp = ET.SubElement(header, 'datestamp')
     datestamp.text = today
-    setspec = ET.SubElement(header, 'oai:setSpec')
+    setspec = ET.SubElement(header, 'setSpec')
     setspec.text = setid
-    metadata = ET.SubElement(record, 'oai:metadata')
+    metadata = ET.SubElement(record, 'metadata')
     dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-                                           'xmlns:dcterms': 'http://purl.org/dc/terms/',
-                                           'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-                                           'xsi:schemaLocation': 'http://www.openarchives.org/OAI/2.0/oai_dc/ http:// www.openarchives.org/OAI/2.0/oai_dc.xsd'})
+                                           'xmlns:dcterms': 'http://purl.org/dc/terms/'})
     #title = file/item title from current container
     title = ET.SubElement(dc, 'dc:title')
     title.text = inheriteddata[-1][1]
@@ -173,48 +171,44 @@ colls.append(['Palomar',
 print('Building OAI-PMH XML...')
 
 # namespace dictionary
-ns = {'': 'urn:isbn:1-931666-22-9', 'xlink': 'http://www.w3.org/1999/xlink',
-      'xsi': "http://www.w3.org/2001/XMLSchema-instance",
+ns = {'': 'urn:isbn:1-931666-22-9', 
+      'xlink': 'http://www.w3.org/1999/xlink',
       'oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
       'dc': 'http://purl.org/dc/elements/1.1/'}
-ET.register_namespace('', 'urn:isbn:1-931666-22-9')
+ET.register_namespace('', 'http://www.openarchives.org/OAI/2.0/')
 ET.register_namespace('xlink', 'http://www.w3.org/1999/xlink')
-ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
 ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
 ET.register_namespace('dc', 'http://purl.org/dc/elements/1.1/')
 
 
 # create OAI-PMH XML object
-oaixml = ET.Element('Repository', {'xmlns': 'http://www.openarchives.org/OAI/2.0/static-repository',
-                    'xmlns:oai': 'http://www.openarchives.org/OAI/2.0/',
-                                   'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-                                   'xsi:schemaLocation': 'http://www.openarchives.org/OAI/2.0/static-repository http://www.openarchives.org/OAI/2.0/static-repository.xsd'})
+oaixml = ET.Element('OAI-PMH', {'xmlns': 'http://www.openarchives.org/OAI/2.0/'})
 
 
 # build Identify segment
 Identify = ET.SubElement(oaixml, 'Identify')
-repositoryName = ET.SubElement(Identify, 'oai:repositoryName')
+repositoryName = ET.SubElement(Identify, 'repositoryName')
 repositoryName.text = 'Caltech Archives Digital Collections'
-baseURL = ET.SubElement(Identify, 'oai:baseURL')
+baseURL = ET.SubElement(Identify, 'baseURL')
 baseURL.text = 'http://apps.library.caltech.edu/ead2dc/oai'
-protocolVersion = ET.SubElement(Identify, 'oai:protocolVersion')
+protocolVersion = ET.SubElement(Identify, 'protocolVersion')
 protocolVersion.text = '2.0'
-adminEmail = ET.SubElement(Identify, 'oai:adminEmail')
+adminEmail = ET.SubElement(Identify, 'adminEmail')
 adminEmail.text = 'archives@caltech.edu'
-deletedRecord = ET.SubElement(Identify, 'oai:deletedRecord')
+deletedRecord = ET.SubElement(Identify, 'deletedRecord')
 deletedRecord.text = 'no'
-granularity = ET.SubElement(Identify, 'oai:granularity')
+granularity = ET.SubElement(Identify, 'granularity')
 granularity.text = 'YYYY-MM-DD'
 
 
 # build ListMetadataFormats segment
 ListMetadataFormats = ET.SubElement(oaixml, 'ListMetadataFormats')
-metadataFormat = ET.SubElement(ListMetadataFormats, 'oai:metadataFormat')
-metadataPrefix = ET.SubElement(metadataFormat, 'oai:metadataPrefix')
+metadataFormat = ET.SubElement(ListMetadataFormats, 'metadataFormat')
+metadataPrefix = ET.SubElement(metadataFormat, 'metadataPrefix')
 metadataPrefix.text = "oai_dc"
-schema = ET.SubElement(metadataFormat, 'oai:schema')
+schema = ET.SubElement(metadataFormat, 'schema')
 schema.text = "http://www.openarchives.org/OAI/2.0/oai_dc.xsd"
-metadataNamespace = ET.SubElement(metadataFormat, 'oai:metadataNamespace')
+metadataNamespace = ET.SubElement(metadataFormat, 'metadataNamespace')
 metadataNamespace.text = "http://www.openarchives.org/OAI/2.0/oai_dc/"
 
 
@@ -222,10 +216,10 @@ metadataNamespace.text = "http://www.openarchives.org/OAI/2.0/oai_dc/"
 ListSets = ET.SubElement(oaixml, 'ListSets')
                          
 for coll in colls:
-    set = ET.SubElement(ListSets, 'oai:set')
-    setSpec = ET.SubElement(set, 'oai:setSpec')
+    set = ET.SubElement(ListSets, 'set')
+    setSpec = ET.SubElement(set, 'setSpec')
     setSpec.text = coll[0]
-    setName = ET.SubElement(set, 'oai:setName')
+    setName = ET.SubElement(set, 'setName')
     setName.text = coll[2]
 #    setdescription = ET.SubElement(set, 'setDescription')
 #    oaidcdc = ET.SubElement(setdescription, 'dc')
@@ -233,7 +227,8 @@ for coll in colls:
 #    dc.text = 'some text'
 
     setDescription = ET.SubElement(ET.SubElement(ET.SubElement(
-         set, 'setDescription'), 'dc'), 'description')
+        set, 'setDescription'), 'oai_dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+                                           'xmlns:dc': 'http://purl.org/dc/elements/1.1/'}), 'dc:description')
     setDescription.text = coll[3]
 
 

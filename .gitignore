@@ -22,3 +22,5 @@
 .venv/*
 .gitignore
 __pycache__/*
+ead2dc.bk
+test.py

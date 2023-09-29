@@ -76,14 +76,15 @@ from pathlib import Path
 #import secrets
 
 # namespace dictionary
-ns = {'': 'http://www.openarchives.org/OAI/2.0/static-repository', 'oai': 'http://www.openarchives.org/OAI/2.0/',
-      'xsi': "http://www.w3.org/2001/XMLSchema-instance", 'dc': 'http://purl.org/dc/elements/1.1/',
-      'oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/'
-      }
-ET.register_namespace('', 'http://www.openarchives.org/OAI/2.0/static-repository')
-ET.register_namespace('oai', 'http://www.openarchives.org/OAI/2.0/')
-ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
+ns = {'': 'http://www.openarchives.org/OAI/2.0/',
+      'xlink': 'http://www.w3.org/1999/xlink',
+      'dc': 'http://purl.org/dc/elements/1.1/',
+      'oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/'}
+
+ET.register_namespace('', 'http://www.openarchives.org/OAI/2.0/')
+ET.register_namespace('xlink', 'http://www.w3.org/1999/xlink')
 ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
+ET.register_namespace('dc', 'http://purl.org/dc/elements/1.1/')
 
 # read OAI finding aid
 tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath("caltecharchives.xml"))
@@ -204,7 +205,7 @@ def oai():
         recrds = root.findall('.//{http://www.openarchives.org/OAI/2.0/}record')
         for recrd in recrds:
 
-            if recrd.find('.//oai:setSpec', ns).text == set or set is None:
+            if recrd.find('.//setSpec', ns).text == set or set is None:
 
                 record = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}record')
                 header = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}header')
@@ -236,7 +237,7 @@ def oai():
             rquest.attrib = {'verb': 'GetRecord', 'identifier': identifier, 'metaDataPrefix': 'oai_dc'}
             rquest.text = dpurl
             getrecord = ET.SubElement(oaixml, 'GetRecord')
-            record = root.find(f'.//oai:identifier[.="{identifier}"]/../../.', ns)
+            record = root.find(f'.//identifier[.="{identifier}"]/../../.', ns)
             getrecord.append(record)
 
     else:
