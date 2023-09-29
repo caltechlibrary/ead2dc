@@ -42,7 +42,7 @@ homepg = '''
             <li>arguments not supported: from, until, metadataPrefix, resumptionToken</li></ul></li>
         <li>GetRecord
             <ul>
-            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=GetRecord&identifier=archives.caltech.edu:aspace_169b6a78cfd91824bfe71deb6bb0e022">GetRecord&identifier=archives.caltech.edu:aspace_169b6a78cfd91824bfe71deb6bb0e022</a></li>
+            <li>Example: <a href="https://apps.library.caltech.edu/ead2dc/oai?verb=GetRecord&identifier=archives.caltech.edu:aspace_73762b265a7027bc0a5c5e26fe006848">GetRecord&identifier=archives.caltech.edu:aspace_73762b265a7027bc0a5c5e26fe006848</a></li>
             <li>argument supported: identifier</li>
             <li>argument not supported: metadataPrefix</li>
             </ul>
