@@ -40,11 +40,12 @@ def prettify(elem):
 
 
 # log requests
+db = Path(Path(__file__).resolve().parent).joinpath("log.db")
 def log(verb, set):
 
     query = "INSERT INTO logs (date, verb, setname) VALUES (?, ?, ?);"
 
-    connection = sqlite3.connect('log.db')
+    connection = sqlite3.connect(db)
     cursor = connection.cursor()
     cursor.execute(query, [today, verb, set])
     cursor.close()
