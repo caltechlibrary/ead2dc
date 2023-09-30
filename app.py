@@ -68,7 +68,7 @@ def oai():
 
     verb = request.args.get('verb')
     set = request.args.get('set')
-    log(verb, set)
+#    log(verb, set)
 
     if verb == 'Identify':
 
