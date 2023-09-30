@@ -1,79 +1,9 @@
-homepg = '''
-        <!DOCTYPE html>
-        <html>
-        <head><title>Caltech Archives Data Provider</title></head>
-        <body>
-        
-        <p>This is the Caltech Archives OAI-PMH data provider.</p>
-        
-        <p>The base URL is <a href="oai">https://apps.library.caltech.edu/ead2dc/oai</a>.</p>
-        
-        <p>All verbs, and the set argument, are supported, viz.:</p>
-        
-        <ul>
-        <li>Identify
-            <ul>
-            <li>Example: <a href="oai?verb=Identify">Identify</a></li>
-            </ul>
-        </li>
-        <li>ListMetadataFormats
-            <ul>
-            <li>Example: <a href="oai?verb=ListMetadataFormats">ListMetadataFormats</a></li>
-            <li>argument not supported: identifier</li>
-            </ul>
-        </li>
-        <li>ListSets
-            <ul>
-            <li>Example: <a href="oai?verb=ListSets">ListSets</a></li>
-            <li>argument not supported: resumptionToken</li>
-            </ul>
-        </li>
-        <li>ListIdentifiers
-            <ul>
-            <li>Example: <a href="oai?verb=ListIdentifiers&set=HaleGE">ListIdentifiers&set=HaleGE</a></li>
-            <li>argument supported: set</li>
-            <li>arguments not supported: from, until, metadataPrefix, resumptionToken</li>
-            </ul>
-        </li>
-        <li>ListRecords
-            <ul>
-            <li>Example: <a href="oai?verb=ListRecords&set=Palomar">ListRecords&set=Palomar</a></li>
-            <li>argument supported: set</li>
-            <li>arguments not supported: from, until, metadataPrefix, resumptionToken</li></ul></li>
-        <li>GetRecord
-            <ul>
-            <li>Example: <a href="oai?verb=GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628">GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628</a></li>
-            <li>argument supported: identifier</li>
-            <li>argument not supported: metadataPrefix</li>
-            </ul>
-        </li>
-        </ul>
-
-        <p>Notes:</p>
-        
-        <ul>
-        <li>Dublin Core is the only metadata standard supported at this time.</li>
-        <li>The set structure is flat, not hierarchical.</li>
-        <li>All records belong to one and only one set, so harvesting all sets will capture all records.</li>
-        </ul>
-        
-        <p>For more information visit:</p>
-        
-        <ul>
-        <li><a href="https://www.openarchives.org/OAI/openarchivesprotocol.html">OAI-PMH specification</a></li>
-        <li><a href="https://archives.caltech.edu">Caltech Archives website</a></li>
-        <li><a href="https://github.com/caltechlibrary/ead2dc">GitHub</a></li>
-        </ul>
-        '''
-
-# import main Flask class and request object
-from flask import Flask, request, Response#, session
-#from flask_session import Session
+from flask import Flask, request, Response, render_template
 from datetime import date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from pathlib import Path
-#import secrets
+import secrets, sqlite3
 
 # namespace dictionary
 ns = {'': 'http://www.openarchives.org/OAI/2.0/',
@@ -81,6 +11,7 @@ ns = {'': 'http://www.openarchives.org/OAI/2.0/',
       'dc': 'http://purl.org/dc/elements/1.1/',
       'oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/'}
 
+# register namespaces
 ET.register_namespace('', 'http://www.openarchives.org/OAI/2.0/')
 ET.register_namespace('xlink', 'http://www.w3.org/1999/xlink')
 ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
@@ -88,7 +19,6 @@ ET.register_namespace('dc', 'http://purl.org/dc/elements/1.1/')
 
 # read OAI finding aid
 tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath("caltecharchives.xml"))
-#tree = ET.parse("caltecharchives.xml")
 root = tree.getroot()
 
 # data provider URL
@@ -99,9 +29,6 @@ today = date.today().strftime("%Y-%m-%d")
 
 # create the Flask app
 app = Flask(__name__)
-#SESSION_TYPE = 'filesystem'
-#app.config.from_object(__name__)
-#Session(app)
 
 
 # returns a pretty-printed XML string
@@ -111,42 +38,36 @@ def prettify(elem):
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
 
-'''
-@app.route('/set/<string:value>')
-def set_session(value):
-    session['key'] = value
-    return Response(f"Value set to {value}")
 
-@app.route('/get/')
-def get_session():
-    stored_session = session.get('key', 'None')
-    return (Response(f"Value stored in session is {stored_session}"))
-'''
+# log requests
+def log(verb, set):
+
+    query = "INSERT INTO logs (date, verb, setname) VALUES (?, ?, ?);"
+
+    connection = sqlite3.connect('log.db')
+    cursor = connection.cursor()
+    cursor.execute(query, [today, verb, set])
+    cursor.close()
+    connection.commit()
+    connection.close()
+
+    return
+
 
 @app.route('/')
 def index():
-    return homepg
+    return render_template('index.html')
 
 
 @app.route('/oai')
 def oai():
 
-    
-    #session['verb'] = request.args.get('verb')
-    #session['set'] = request.args.get('set')
-    
-    #print(session['verb'])
-    #print(session['set'])
-    #print(app.secret_key)
-    #token = secrets.token_urlsafe(24)
-    #print('secrets token:', token)
-
-
-    
+#    token = secrets.token_urlsafe(64)
+#    print('secrets token:', token)
 
     verb = request.args.get('verb')
     set = request.args.get('set')
-
+    log(verb, set)
 
     if verb == 'Identify':
 
