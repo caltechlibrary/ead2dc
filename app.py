@@ -1,4 +1,4 @@
-from flask import Flask, request, Response, render_template
+from flask import Flask, request, Response, render_template, g
 from datetime import datetime, date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
@@ -28,6 +28,21 @@ dpurl = 'https://apps.library.caltech.edu/ead2dc/oai'
 app = Flask(__name__)
 
 
+def get_db():
+    if 'db' not in g:
+        g.db = sql.connect('log.db')
+
+    return g.db
+
+
+@app.teardown_appcontext
+def teardown_db(exception):
+    db = g.pop('db', None)
+
+    if db is not None:
+        db.close()
+
+
 # returns a pretty-printed XML string
 def prettify(elem):
     xml_string = ET.tostring(elem)
@@ -42,7 +57,7 @@ def log(now, verb, set=None, identifier=None):
     query = "INSERT INTO logs (date, verb, setname, identifier) VALUES (?, ?, ?, ?);"
 
     try:
-        with sql.connect('log.db') as connection:
+        with sql.connect('./log.db') as connection:
             cursor = connection.cursor()
             cursor.execute(query, [now, verb, set, identifier])
             connection.commit()
