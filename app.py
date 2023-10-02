@@ -27,6 +27,9 @@ dpurl = 'https://apps.library.caltech.edu/ead2dc/oai'
 # create the Flask app
 app = Flask(__name__)
 
+# database location
+dbpath = Path(Path(__file__).resolve().parent).joinpath('log.db')
+
 '''
 def get_db():
     if 'db' not in g:
@@ -52,12 +55,12 @@ def prettify(elem):
 
 
 # log requests
-def log(now, verb, set=None, identifier=None):
+def log(dbpath, now, verb, set=None, identifier=None):
 
     query = "INSERT INTO logs (date, verb, setname, identifier) VALUES (?, ?, ?, ?);"
 
     try:
-        with sql.connect(Path(Path(__file__).resolve().parent).joinpath('log.db')) as connection:
+        with sql.connect(dbpath) as connection:
             cursor = connection.cursor()
             cursor.execute(query, [now, verb, set, identifier])
             connection.commit()
