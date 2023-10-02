@@ -38,7 +38,7 @@ def prettify(elem):
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
 
-
+'''
 # log requests
 def log(now, verb, set=None, identifier=None):
 
@@ -49,7 +49,7 @@ def log(now, verb, set=None, identifier=None):
     db.commit()
 
     return
-
+'''
 
 @bp.route('/')
 def index():
@@ -69,8 +69,8 @@ def oai():
     verb = request.args.get('verb')
     set = request.args.get('set')
     identifier = request.args.get('identifier')
-    now = datetime.now().isoformat()
-    log(now, verb, set, identifier)
+    #now = datetime.now().isoformat()
+    #log(now, verb, set, identifier)
 
     if verb == 'Identify':
 
