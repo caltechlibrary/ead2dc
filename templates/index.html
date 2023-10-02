@@ -1,11 +1,29 @@
 <!DOCTYPE html>
-<html>
-<head><title>Caltech Archives Data Provider</title></head>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
+    <title>Caltech Archives Data Provider</title></head>
 <body>
-        
-<p>This is the Caltech Archives OAI-PMH data provider.</p>
-        
-<p>The base URL is <a href="oai">https://apps.library.caltech.edu/ead2dc/oai</a>.</p>
+
+<!-- Sidebar -->
+<div class="w3-sidebar w3-light-grey w3-bar-block" style="width:12%">
+<!---<a class="w3-bar-item w3-button">Register</a>
+<a class="w3-bar-item w3-button">Log In</a>--->
+<a>&nbsp;</a>
+</div>
+
+<!-- Page Content -->
+<div style="margin-left:12%">
+   
+<div class="w3-container w3-teal">
+<h3>Caltech Archives</h3>
+<h2>OAI-PMH Data Provider</h2>
+<h4>Base URL: <a href="oai">https://apps.library.caltech.edu/ead2dc/oai</a></h4>
+</div>
+
+<section class="w3-container">
         
 <p>All verbs, and the set argument, are supported, viz.:</p>
         
@@ -65,3 +83,5 @@
 <li><a href="https://archives.caltech.edu">Caltech Archives website</a></li>
 <li><a href="https://github.com/caltechlibrary/ead2dc">GitHub</a></li>
 </ul>
+
+</section>

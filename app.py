@@ -1,9 +1,9 @@
 from flask import Flask, request, Response, render_template
-from datetime import date
+from datetime import datetime, date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from pathlib import Path
-import secrets, sqlite3
+import sqlite3 as sql
 
 # namespace dictionary
 ns = {'': 'http://www.openarchives.org/OAI/2.0/',
@@ -24,9 +24,6 @@ root = tree.getroot()
 # data provider URL
 dpurl = 'https://apps.library.caltech.edu/ead2dc/oai'
 
-# string form of date to write to each record
-today = date.today().strftime("%Y-%m-%d")
-
 # create the Flask app
 app = Flask(__name__)
 
@@ -40,19 +37,19 @@ def prettify(elem):
 
 
 # log requests
-db = Path(Path(__file__).resolve().parent).joinpath("log.db")
-def log(verb, set):
+def log(now, verb, set=None, identifier=None):
 
-    query = "INSERT INTO logs (date, verb, setname) VALUES (?, ?, ?);"
+    query = "INSERT INTO logs (date, verb, setname, identifier) VALUES (?, ?, ?, ?);"
 
-    connection = sqlite3.connect(db)
-    cursor = connection.cursor()
-    cursor.execute(query, [today, verb, set])
-    cursor.close()
-    connection.commit()
-    connection.close()
-
-    return
+    try:
+        with sql.connect('log.db') as connection:
+            cursor = connection.cursor()
+            cursor.execute(query, [now, verb, set, identifier])
+            connection.commit()
+    except:
+        connection.rollback()
+    finally:
+        return
 
 
 @app.route('/')
@@ -66,9 +63,15 @@ def oai():
 #    token = secrets.token_urlsafe(64)
 #    print('secrets token:', token)
 
+    # string form of date to write to each record
+    today = date.today().strftime("%Y-%m-%d")
+
+# log request
     verb = request.args.get('verb')
     set = request.args.get('set')
-#    log(verb, set)
+    identifier = request.args.get('identifier')
+    now = datetime.now().isoformat()
+    log(now, verb, set, identifier)
 
     if verb == 'Identify':
 
@@ -146,7 +149,6 @@ def oai():
 
     elif verb == 'GetRecord':
 
-        identifier = request.args.get('identifier')
         if identifier is None:
             oaixml = ET.Element('noThing',)
             oaixml.text = "No identifier specified."
