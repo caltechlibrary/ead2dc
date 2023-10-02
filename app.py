@@ -1,4 +1,4 @@
-from flask import Flask, request, Response, render_template, g
+from flask import Flask, request, Response, render_template#, g
 from datetime import datetime, date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
@@ -18,7 +18,7 @@ ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
 ET.register_namespace('dc', 'http://purl.org/dc/elements/1.1/')
 
 # read OAI finding aid
-tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath("caltecharchives.xml"))
+tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('caltecharchives.xml'))
 root = tree.getroot()
 
 # data provider URL
@@ -27,7 +27,7 @@ dpurl = 'https://apps.library.caltech.edu/ead2dc/oai'
 # create the Flask app
 app = Flask(__name__)
 
-
+'''
 def get_db():
     if 'db' not in g:
         g.db = sql.connect('log.db')
@@ -41,7 +41,7 @@ def teardown_db(exception):
 
     if db is not None:
         db.close()
-
+'''
 
 # returns a pretty-printed XML string
 def prettify(elem):
@@ -57,7 +57,7 @@ def log(now, verb, set=None, identifier=None):
     query = "INSERT INTO logs (date, verb, setname, identifier) VALUES (?, ?, ?, ?);"
 
     try:
-        with sql.connect('./log.db') as connection:
+        with sql.connect(Path(Path(__file__).resolve().parent).joinpath('log.db')) as connection:
             cursor = connection.cursor()
             cursor.execute(query, [now, verb, set, identifier])
             connection.commit()
