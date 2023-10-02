@@ -276,7 +276,7 @@ for coll in colls:
     #    except:
     #        fileid = 'caltecharchives'
     #fileout = fileid + '.xml'
-    fileout = 'caltecharchives.xml'
+    fileout = 'xml/caltecharchives.xml'
 
     #build ListRecords segment
     ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_ead'})

@@ -22,6 +22,7 @@
 .venv/*
 .gitignore
 __pycache__/*
+xml/*
+instance/*
 ead2dc.bk
 test.py
-log.db
