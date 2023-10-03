@@ -5,7 +5,7 @@ import xml.dom.minidom as dom
 
 from app.db import get_db
 
-bp = Blueprint('blog', __name__)
+bp = Blueprint('oaidp', __name__)
 
 # namespace dictionary
 ns = {'': 'http://www.openarchives.org/OAI/2.0/',
