@@ -21,8 +21,8 @@ ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
 ET.register_namespace('dc', 'http://purl.org/dc/elements/1.1/')
 
 # read OAI finding aid
-tree = ET.parse('../xml/caltecharchives.xml')
-#tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('caltecharchives.xml'))
+#tree = ET.parse('../xml/caltecharchives.xml')
+tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml'))
 root = tree.getroot()
 
 # data provider URL
