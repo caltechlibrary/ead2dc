@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, request, Response, render_template#, g
+from flask import Blueprint, request, Response, render_template, session
 from datetime import datetime, date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
@@ -41,12 +41,12 @@ def prettify(elem):
 
 
 # log requests
-def log(now, verb, set=None, identifier=None):
+def log(rq):
 
-    query = "INSERT INTO logs (date, verb, setname, identifier) VALUES (?, ?, ?, ?);"
+    query = "INSERT INTO logs (date, verb, setname, identifier, datefrom, dateuntil) VALUES (?, ?, ?, ?, ?, ?);"
 
     db = get_db()
-    db.execute(query, [now, verb, set, identifier])
+    db.execute(query, rq)
     db.commit()
 
     return
@@ -66,12 +66,23 @@ def oai():
     # string form of date to write to each record
     today = date.today().strftime("%Y-%m-%d")
 
-# log request
-    verb = request.args.get('verb')
-    set = request.args.get('set')
-    identifier = request.args.get('identifier')
+    # get parameters from request
+    verb = session['verb'] = request.args.get('verb')
+    set = session['set'] = request.args.get('set')
+    identifier = session['identifier'] = request.args.get('identifier')
+    datefrom = session['datefrom'] = '000-00-00' if request.args.get('from') is None else request.args.get('from')
+    dateuntil = session['dateuntil'] = '999-99-99' if request.args.get('until') is None else request.args.get('until')
+    resumptionToken = session['resumptionToken'] = request.args.get('resumptionToken')
+    
     now = datetime.now().isoformat()
-    log(now, verb, set, identifier)
+
+    # log request
+    try:
+        id = identifier[identifier.rfind('/')+1:]
+    except:
+        id = identifier
+    rq = [now, verb, set, id, datefrom, dateuntil]
+    log(rq)
 
     if verb == 'Identify':
 
@@ -132,19 +143,21 @@ def oai():
 
             if recrd.find('.//setSpec', ns).text == set or set is None:
 
-                record = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}record')
-                header = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}header')
-                hdr = recrd.find('.//{http://www.openarchives.org/OAI/2.0/}header')
-                for node in hdr:
-                    header.append(node)
+                if recrd.find('.//datestamp', ns).text >= datefrom and recrd.find('.//datestamp', ns).text <= dateuntil:
 
-                if verb == 'ListRecords':
+                    record = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}record')
+                    header = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}header')
+                    hdr = recrd.find('.//{http://www.openarchives.org/OAI/2.0/}header')
+                    for node in hdr:
+                        header.append(node)
 
-                    metadata = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}metadata')
-                    dc = ET.SubElement(metadata, '{http://www.openarchives.org/OAI/2.0/oai_dc/}dc')
-                    metad = recrd.find('.//{http://www.openarchives.org/OAI/2.0/oai_dc/}dc')
-                    for node in metad:
-                        dc.append(node)
+                    if verb == 'ListRecords':
+
+                        metadata = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}metadata')
+                        dc = ET.SubElement(metadata, '{http://www.openarchives.org/OAI/2.0/oai_dc/}dc')
+                        metad = recrd.find('.//{http://www.openarchives.org/OAI/2.0/oai_dc/}dc')
+                        for node in metad:
+                            dc.append(node)
 
 
     elif verb == 'GetRecord':
@@ -176,9 +189,3 @@ def oai():
     return Response(ET.tostring(oaixml), mimetype='text/xml')
 
 
-'''
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
-else:
-    application = app
-'''

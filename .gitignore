@@ -21,8 +21,12 @@
 # =============================================================================
 .venv/*
 .gitignore
+__pycache__/*
 app/__pycache__/*
 xml/*
 instance/*
 ead2dc.bk
 test.py
+*.pyc
+devnotes.txt
+app.wsgi
