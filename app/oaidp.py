@@ -120,7 +120,7 @@ def oai():
     # position for ListRecords/ListIdentifiers
     cursor = 0
 
-    # record written
+    # records written
     count = 0
 
 
@@ -219,6 +219,7 @@ def oai():
 
         if not rToken and not first:
             resumptionToken = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}resumptionToken')
+            resumptionToken.attrib = {'cursor': str(cursor)}
                                   
 
     elif verb == 'GetRecord':
