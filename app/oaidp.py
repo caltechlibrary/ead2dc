@@ -1,8 +1,9 @@
-from flask import Blueprint, request, Response, render_template, session
+from flask import Blueprint, request, Response, render_template
 from datetime import datetime, date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from pathlib import Path
+from urllib.parse import quote, unquote
 
 from app.db import get_db
 
@@ -25,11 +26,12 @@ ET.register_namespace('dc', 'http://purl.org/dc/elements/1.1/')
 tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml'))
 root = tree.getroot()
 
-# data provider URL
-dpurl = 'https://apps.library.caltech.edu/ead2dc/oai'
 
-# create the Flask app
-#app = Flask(__name__)
+# encode and decode URL parameters
+def urlencode(str):
+  return quote(str)
+def urldecode(str):
+  return unquote(str)
 
 
 # returns a pretty-printed XML string
@@ -60,19 +62,49 @@ def index():
 @bp.route('/oai')
 def oai():
 
-#    token = secrets.token_urlsafe(64)
-#    print('secrets token:', token)
+    # data provider URL
+    dpurl = 'https://apps.library.caltech.edu/ead2dc/oai'
+
+    # number of records per request
+    maxrecs = 500
+
+    # empty list for errors
+    errors = list()
 
     # string form of date to write to each record
     today = date.today().strftime("%Y-%m-%d")
 
-    # get parameters from request
-    verb = session['verb'] = request.args.get('verb')
-    set = session['set'] = request.args.get('set')
-    identifier = session['identifier'] = request.args.get('identifier')
-    datefrom = session['datefrom'] = '000-00-00' if request.args.get('from') is None else request.args.get('from')
-    dateuntil = session['dateuntil'] = '999-99-99' if request.args.get('until') is None else request.args.get('until')
-    resumptionToken = session['resumptionToken'] = request.args.get('resumptionToken')
+    # get verb from request
+    verb = request.args.get('verb')
+    identifier = request.args.get('identifier')
+ 
+    # resumption token flag
+    rToken = False
+
+    if request.args.get('resumptionToken'):
+
+        # iteration flag
+        first = False
+
+        # get resumptionToken from request and decode
+        resumptionToken = urldecode(request.args.get('resumptionToken')).split('|')
+        set = resumptionToken[0]
+        datefrom = resumptionToken[1]
+        dateuntil = resumptionToken[2]
+        startrec = int(resumptionToken[3])
+        print(f'startrec: {startrec}')
+
+    else:
+
+        # iteration flag
+        first = True
+    
+        # get parameters from request
+        set =  request.args.get('set')
+        datefrom = '000-00-00' if request.args.get('from') is None else request.args.get('from')
+        dateuntil = '999-99-99' if request.args.get('until') is None else request.args.get('until')
+        startrec = 0
+
     
     now = datetime.now().isoformat()
 
@@ -83,6 +115,14 @@ def oai():
         id = identifier
     rq = [now, verb, set, id, datefrom, dateuntil]
     log(rq)
+
+
+    # position for ListRecords/ListIdentifiers
+    cursor = 0
+
+    # record written
+    count = 0
+
 
     if verb == 'Identify':
 
@@ -97,6 +137,7 @@ def oai():
         identify = ET.SubElement(oaixml, 'Identify')
         for node in elem:
             identify.append(node)
+        count += 1
 
     elif verb == 'ListMetadataFormats':
 
@@ -111,6 +152,7 @@ def oai():
         listmetadataformats = ET.SubElement(oaixml, 'ListMetadataFormats')
         for node in elem:
             listmetadataformats.append(node)
+            count += 1
 
     elif verb == 'ListSets':
 
@@ -125,6 +167,7 @@ def oai():
         listsets = ET.SubElement(oaixml, 'ListSets')
         for node in elem:
             listsets.append(node)
+            count = 1
 
     elif verb == 'ListRecords' or verb == 'ListIdentifiers':
 
@@ -139,26 +182,44 @@ def oai():
         listrecords = ET.SubElement(oaixml, 'ListRecords')
         listrecords.attrib = {'metadataPrefix': 'oai_dc'}
         recrds = root.findall('.//{http://www.openarchives.org/OAI/2.0/}record')
+
         for recrd in recrds:
 
             if recrd.find('.//setSpec', ns).text == set or set is None:
 
                 if recrd.find('.//datestamp', ns).text >= datefrom and recrd.find('.//datestamp', ns).text <= dateuntil:
 
-                    record = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}record')
-                    header = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}header')
-                    hdr = recrd.find('.//{http://www.openarchives.org/OAI/2.0/}header')
-                    for node in hdr:
-                        header.append(node)
+                    if (cursor >= startrec) and (cursor < startrec + maxrecs):
 
-                    if verb == 'ListRecords':
+                        record = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}record')
+                        header = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}header')
+                        hdr = recrd.find('.//{http://www.openarchives.org/OAI/2.0/}header')
+                        for node in hdr:
+                            header.append(node)
+                        
+                        count += 1
 
-                        metadata = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}metadata')
-                        dc = ET.SubElement(metadata, '{http://www.openarchives.org/OAI/2.0/oai_dc/}dc')
-                        metad = recrd.find('.//{http://www.openarchives.org/OAI/2.0/oai_dc/}dc')
-                        for node in metad:
-                            dc.append(node)
+                        if verb == 'ListRecords':
 
+                            metadata = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}metadata')
+                            dc = ET.SubElement(metadata, '{http://www.openarchives.org/OAI/2.0/oai_dc/}dc')
+                            metad = recrd.find('.//{http://www.openarchives.org/OAI/2.0/oai_dc/}dc')
+                            for node in metad:
+                                dc.append(node)
+
+                    cursor += 1
+
+                    if cursor >= startrec + maxrecs:
+                        resumptionToken = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}resumptionToken')
+                        resumptionToken.attrib = {'cursor': str(cursor)}
+                        resumptionToken.text = urlencode(f'{set}|{datefrom}|{dateuntil}|{cursor}')
+                        rToken = True
+                        break
+
+
+        if not rToken and not first:
+            resumptionToken = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}resumptionToken')
+                                  
 
     elif verb == 'GetRecord':
 
@@ -176,6 +237,7 @@ def oai():
             getrecord = ET.SubElement(oaixml, 'GetRecord')
             record = root.find(f'.//identifier[.="{identifier}"]/../../.', ns)
             getrecord.append(record)
+            count += 1
 
     else:
 
@@ -185,6 +247,8 @@ def oai():
         error = ET.SubElement(oaixml, 'error')
         error.text = "Missing or invalid verb or key."
 
+    print(f'{count} records returned')
+    print(f'cursor position: {cursor}')
 
     return Response(ET.tostring(oaixml), mimetype='text/xml')
 

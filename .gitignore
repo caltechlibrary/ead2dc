@@ -21,7 +21,7 @@
 # =============================================================================
 .venv/*
 .gitignore
-__pycache__/*
+__pycache__/*.pyc
 app/__pycache__/*.pyc
 xml/*
 instance/*
