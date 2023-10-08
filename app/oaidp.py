@@ -5,7 +5,20 @@ import xml.dom.minidom as dom
 from pathlib import Path
 from urllib.parse import quote, unquote
 
+import json
+
+with open("app/config.json", "r") as f:
+    config = json.load(f)
+
+# max number of records to return
+maxrecs = config['maxrecs']
+
+# data provider URL
+dpurl = config['dpurl']
+ 
+
 from app.db import get_db
+
 
 bp = Blueprint('oaidp', __name__)
 
@@ -62,12 +75,6 @@ def index():
 @bp.route('/oai')
 def oai():
 
-    # data provider URL
-    dpurl = 'https://apps.library.caltech.edu/ead2dc/oai'
-
-    # number of records per request
-    maxrecs = 500
-
     # empty list for errors
     errors = list()
 
@@ -92,7 +99,6 @@ def oai():
         datefrom = resumptionToken[1]
         dateuntil = resumptionToken[2]
         startrec = int(resumptionToken[3])
-        print(f'startrec: {startrec}')
 
     else:
 
@@ -189,15 +195,17 @@ def oai():
 
                 if recrd.find('.//datestamp', ns).text >= datefrom and recrd.find('.//datestamp', ns).text <= dateuntil:
 
-                    if (cursor >= startrec) and (cursor < startrec + maxrecs):
+                    cursor += 1
+
+                    if (cursor > startrec) and (cursor <= startrec + maxrecs):
+
+                        count += 1
 
                         record = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}record')
                         header = ET.SubElement(record, '{http://www.openarchives.org/OAI/2.0/}header')
                         hdr = recrd.find('.//{http://www.openarchives.org/OAI/2.0/}header')
                         for node in hdr:
                             header.append(node)
-                        
-                        count += 1
 
                         if verb == 'ListRecords':
 
@@ -206,8 +214,6 @@ def oai():
                             metad = recrd.find('.//{http://www.openarchives.org/OAI/2.0/oai_dc/}dc')
                             for node in metad:
                                 dc.append(node)
-
-                    cursor += 1
 
                     if cursor >= startrec + maxrecs:
                         resumptionToken = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}resumptionToken')
@@ -248,8 +254,9 @@ def oai():
         error = ET.SubElement(oaixml, 'error')
         error.text = "Missing or invalid verb or key."
 
-    print(f'{count} records returned')
-    print(f'cursor position: {cursor}')
+    print(f'{count} records written.')
+    print(f'Cursor position: {cursor}')
+
 
     return Response(ET.tostring(oaixml), mimetype='text/xml')
 

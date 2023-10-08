@@ -25,45 +25,47 @@
 
 <section class="w3-container">
         
-<p>All verbs, and the set argument, are supported, viz.:</p>
+<p>This data provider supports all OAI-PMH verbs, and most arguments, viz.:</p>
         
 <ul>
-<li>Identify
+<li><strong>Identify</strong>
     <ul>
-    <li>Example: <a href="oai?verb=Identify">Identify</a></li>
+    <li>example: <a href="oai?verb=Identify">Identify</a></li>
     </ul>
 </li>
-<li>ListMetadataFormats
+<li><strong>ListMetadataFormats</strong>
     <ul>
-    <li>Example: <a href="oai?verb=ListMetadataFormats">ListMetadataFormats</a></li>
     <li>argument not supported: identifier</li>
+    <li>example: <a href="oai?verb=ListMetadataFormats">ListMetadataFormats</a></li>
     </ul>
 </li>
-<li>ListSets
+<li><strong>ListSets</strong>
     <ul>
-    <li>Example: <a href="oai?verb=ListSets">ListSets</a></li>
     <li>argument not supported: resumptionToken</li>
+    <li>example: <a href="oai?verb=ListSets">ListSets</a></li>
     </ul>
 </li>
-<li>ListIdentifiers
+<li><strong>ListIdentifiers</strong>
     <ul>
-    <li>Example: <a href="oai?verb=ListIdentifiers&set=HaleGE">ListIdentifiers&set=HaleGE</a></li>
     <li>arguments supported: set, from, until, resumptionToken</li>
     <li>argument not supported: metadataPrefix</li>
+    <li>example: <a href="oai?verb=ListIdentifiers&set=HaleGE&from=2023-01-01&until=2023-10-31">ListIdentifiers&set=HaleGE&from=2023-01-01&until=2023-10-31</a></li>
+    <li>example: <a href="oai?verb=ListIdentifiers&resumptionToken=HaleGE%7C2023-01-01%7C2023-10-31%7C250">ListIdentifiers&resumptionToken=HaleGE%7C2023-01-01%7C2023-10-31%7C250</a></li>
     </ul>
 </li>
-<li>ListRecords
+<li><strong>ListRecords</strong>
     <ul>
-    <li>Example: <a href="oai?verb=ListRecords&set=Palomar">ListRecords&set=Palomar</a></li>
     <li>arguments supported: set, from, until, resumptionToken</li>
     <li>argument not supported: metadataPrefix</li>
+    <li>example: <a href="oai?verb=ListRecords&set=Photographs">ListRecords&set=Photographs</a></li>
+    <li>example: <a href="oai?verb=ListRecords&resumptionToken=Photographs%7C000-00-00%7C999-99-99%7C250">ListRecords&resumptionToken=Photographs%7C000-00-00%7C999-99-99%7C250</a></li>
     </ul>
 </li>
-<li>GetRecord
+<li><strong>GetRecord</strong>
     <ul>
-    <li>Example: <a href="oai?verb=GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628">GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628</a></li>
     <li>argument supported: identifier</li>
     <li>argument not supported: metadataPrefix</li>
+    <li>example: <a href="oai?verb=GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628">GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628</a></li>
     </ul>
 </li>
 </ul>
@@ -71,9 +73,23 @@
 <p>Notes:</p>
         
 <ul>
-<li>Dublin Core is the only metadata standard supported at this time.</li>
-<li>The set structure is flat, not hierarchical.</li>
-<li>All records belong to one and only one set, so harvesting all sets will capture all records.</li>
+<li><strong>Metadata</strong> 
+    <ul>
+        <li>Dublin Core is the only metadata standard supported at this time.</li>
+    </ul>
+</li>
+<li><strong>Flow control</strong> 
+    <ul>
+        <li>ListIdentifiers and ListRecords return batches of 250 records, with a resumption token.</li>
+        <li>Resumption tokens are valid indefinitely. Note, however, that <a href="https://restfulapi.net/idempotent-rest-apis/">idempotency</a> is not guaranteed as the underlying data may change at any time.</li>
+    </ul>
+</li>
+<li><strong>Sets</strong>
+    <ul>
+        <li>The set structure is flat, not hierarchical.</li>
+        <li>All records belong to one and only one set, so harvesting all sets will capture all records.</li>
+    </ul>
+</li>
 </ul>
         
 <p>For more information visit:</p>
