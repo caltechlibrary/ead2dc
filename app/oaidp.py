@@ -7,7 +7,9 @@ from urllib.parse import quote, unquote
 
 import json
 
-with open("app/config.json", "r") as f:
+
+# read config file
+with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
     config = json.load(f)
 
 # max number of records to return
