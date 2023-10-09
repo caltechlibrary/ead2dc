@@ -3,10 +3,8 @@ from datetime import datetime, date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from pathlib import Path
-from urllib.parse import quote, unquote
 
 import json
-
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
@@ -40,13 +38,6 @@ ET.register_namespace('dc', 'http://purl.org/dc/elements/1.1/')
 #tree = ET.parse('../xml/caltecharchives.xml')
 tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml'))
 root = tree.getroot()
-
-
-# encode and decode URL parameters
-def urlencode(str):
-  return quote(str)
-def urldecode(str):
-  return unquote(str)
 
 
 # returns a pretty-printed XML string
@@ -96,7 +87,7 @@ def oai():
         first = False
 
         # get resumptionToken from request and decode
-        resumptionToken = urldecode(request.args.get('resumptionToken')).split('|')
+        resumptionToken = request.args.get('resumptionToken').split(':')
         set = resumptionToken[0]
         datefrom = resumptionToken[1]
         dateuntil = resumptionToken[2]
@@ -158,9 +149,20 @@ def oai():
         rquest.attrib = {'verb': 'ListMetadataFormats'}
         rquest.text = dpurl
         listmetadataformats = ET.SubElement(oaixml, 'ListMetadataFormats')
-        for node in elem:
-            listmetadataformats.append(node)
-            count += 1
+
+        if identifier is None:
+
+            for node in elem:
+                listmetadataformats.append(node)
+                count += 1
+
+        else:
+
+            nodes = root.findall(f'.//identifier[.="{identifier}"]/../../..[@metadataPrefix]', ns)
+            for node in nodes:
+                prefix = node.attrib['metadataPrefix']
+                print(root.find(f'.//ListMetadataFormats/metadataFormat/metadataPrefix', ns).text, prefix)
+                count += 1
 
     elif verb == 'ListSets':
 
@@ -220,7 +222,7 @@ def oai():
                     if cursor >= startrec + maxrecs:
                         resumptionToken = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}resumptionToken')
                         resumptionToken.attrib = {'cursor': str(cursor)}
-                        resumptionToken.text = urlencode(f'{set}|{datefrom}|{dateuntil}|{cursor}')
+                        resumptionToken.text = f'{set}:{datefrom}:{dateuntil}:{cursor}'
                         rToken = True
                         break
 
