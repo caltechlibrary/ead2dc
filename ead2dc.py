@@ -279,7 +279,7 @@ for coll in colls:
     fileout = 'xml/caltecharchives.xml'
 
     #build ListRecords segment
-    ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
+    ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'}) 
     #iterate over containers to collect inherited data and build records
     for c01 in dsc.findall('.//c01', ns):
         inheriteddata = list(tuple())
