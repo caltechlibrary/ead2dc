@@ -161,7 +161,9 @@ def oai():
             nodes = root.findall(f'.//identifier[.="{identifier}"]/../../..[@metadataPrefix]', ns)
             for node in nodes:
                 prefix = node.attrib['metadataPrefix']
-                print(root.find(f'.//ListMetadataFormats/metadataFormat/metadataPrefix', ns).text, prefix)
+                print(f'.//ListMetadataFormats/metadataFormat/metadataPrefix[.="{prefix}"]/..')
+                mf = root.find(f'.//ListMetadataFormats/metadataFormat/metadataPrefix[.="{prefix}"]/..', ns)
+                listmetadataformats.append(mf)
                 count += 1
 
     elif verb == 'ListSets':
