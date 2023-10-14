@@ -11,10 +11,10 @@ with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as
     config = json.load(f)
 
 # max number of records to return
-maxrecs = config['maxrecs']
+maxrecs = config['maximum records returned']
 
 # data provider URL
-dpurl = config['dpurl']
+dpurl = config['data provider url']
  
 
 from app.db import get_db
@@ -146,18 +146,19 @@ def oai():
         respDate = ET.SubElement(oaixml, 'responseDate')
         respDate.text = today
         rquest = ET.SubElement(oaixml, 'request')
-        rquest.attrib = {'verb': 'ListMetadataFormats'}
         rquest.text = dpurl
         listmetadataformats = ET.SubElement(oaixml, 'ListMetadataFormats')
 
         if identifier is None:
 
+            rquest.attrib = {'verb': 'ListMetadataFormats'}
             for node in elem:
                 listmetadataformats.append(node)
                 count += 1
 
         else:
 
+            rquest.attrib = {'verb': 'ListMetadataFormats', 'identifier': identifier}
             nodes = root.findall(f'.//identifier[.="{identifier}"]/../../..[@metadataPrefix]', ns)
             for node in nodes:
                 prefix = node.attrib['metadataPrefix']

@@ -1,4 +1,37 @@
 {
-    "maxrecs": 250,
-    "dpurl": "https://apps.library.caltech.edu/ead2dc/oai"
+    "maximum records returned": 250,
+    "data provider url": "https://apps.library.caltech.edu/ead2dc/oai",
+    "digital collections":
+    [
+        {
+            "id": "HaleGE",
+            "title": "George Ellery Hale Papers",
+            "description": "George Ellery Hale(1868-1938) was an influential astrophysicist and science administrator. This collection of Hale's scientific, professional, and personal papers documents his roles in inventing the spectrohelioscope; promoting international cooperation among scientists; and founding major observatories, as well as the California Institute of Technology, Huntington Library, Astrophysical Journal, and National Research Council.",
+            "ead url": "https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/124&metadataPrefix=oai_ead"
+        },
+        {
+            "id": "MacCreadyPB",
+            "title": "Paul B. MacCready Papers",
+            "description": "Arriving on December 30th 2003, the collection documents most aspects of MacCready's career and many features of his individual character. Constituted within the papers is a diverse array of documents, media, objects, manuscripts and printed material; awards; videos and film; photographs and slides, diaries and notebooks; memorabilia, biographical material and ephemera. While the collection spans over seventy years (ca. 1930-2002), the bulk of material dates from the mid 1960s to the mid '90s. Especially prevalent within the collection are papers and ephemera from 1977 to 1985 during which time MacCready was working on his Gossamers and interest in human-powered flight was at its peak.",
+            "ead url": "https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/197&metadataPrefix=oai_ead"
+        },
+        {
+            "id": "GlaserDA",
+            "title": "Donald A. Glaser Papers",
+            "description": "Donald Arthur Glaser (1926-2013) earned his PhD in Physics and Mathematics from the California Institute of Technology in 1950 and won the 1960 Nobel Prize in Physics for his invention of the bubble chamber. He then changed his research focus to molecular biology and went on to co-found Cetus Corporation, the first biotechnology company. In the 1980s he again switched his focus to neurobiology and the visual system. The Donald A. Glaser papers consist of research notes and notebooks, manuscripts and printed papers, correspondence, awards, biographical material, photographs, audio-visual material, and born-digital files. This finding aid is an intellectual arrangement of two collections: first portion originally from the University of California Berkeley, Bancroft Library and the second from the Caltech Archives.",
+            "ead url": "https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/34&metadataPrefix=oai_ead"
+        },
+        {
+            "id": "Photographs",
+            "title": "Caltech Images Collection",
+            "description": "Caltech Images is a collection of over ten thousand images representing Caltech's history and the people who have contributed to the Caltech story. It includes historic and contemporary photographs of people and places, reproductions of historic scientific artifacts and art, and illustrations drawn from Caltech's rare book collection in the history of science and technology.",
+            "ead url": "https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/219&metadataPrefix=oai_ead"
+        },
+        {
+            "id": "Palomar",
+            "title": "Palomar Observatory Records",
+            "description": "In an ongoing effort led by Jean Mueller, the Caltech Library, and funded by the Riesenfeld family, a collection of telescope logbooks, spanning the years 1936-2012, have been scanned and made available online.",
+            "ead url": "https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/228&metadataPrefix=oai_ead"
+        }
+    ]
 }
