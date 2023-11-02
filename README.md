@@ -23,27 +23,30 @@ There are two components to this service:
 
 ## Introduction
 
-This tool takes as its input the Open Archives Initiative (OAI) output of an ArchivesSpace resource finding aid in Encoded Archival Description (EAD) format and converts it to an OAI Static Repository containing DC metadata records with links to digital objects. That static repository is the data source for the Open Archives Initiative (OAI) Data Provider
+The Python 3 script, ead2dc.py, takes as its input the Open Archives Initiative (OAI) output of an ArchivesSpace resource finding aid in Encoded Archival Description (EAD) format and outputs an XML file. The XML output contains Dublin Core (DC) records for digital resources found in the finding aid. Only records containing links to digital objects are included. The XML output is a 'static repository', inspired by the OAI Static Repository specification, but adhering to it strictly. The static repository is the data source for the Open Archives Initiative (OAI) Data Provider.
 
-Main features and assumptions:
+The [OAI Data Provider](https://apps.library.caltech.edu/ead2dc/) adheres to the OAI standard and supports all the verbs (Identify, ListMetadataFormats, ListSets, ListIdentifiers, ListRecords, and GetRecord), resumption tokens, and sets. Only DC metadata is provided. Sets correspond to the archival collections in the Caltech Archives.
+
+ead2dc - Main features and assumptions:
 
 * Both input and output are OAI-compliant XML files.
 * All 12 levels of EAD container are supported.
 * Titles are inherited down the container hierarchy.
 * All other metadata is mapped from the record containing the digital object references.
 * Records without digital object references are ignored (i.e. not mapped to the output file)
-* Records with non-image object references are ignored (e.g. video)
 
+OAI Data Provider - Main features and assumptions:
 
-## Installation
+* The OAI Data Provider uses a static repository, i.e. it does not dynamically generate records.
+* DC metadata only.
+* Sets correspond to the archival collections and do not overlap.
+* Records are delivered in batches of 250.
 
-No installation is required. The [ead2dc.py](ead2dc.py) file is designed to be run from the command line, or from within your favorite editing environment.
- 
+## Installation and Usage
 
-## Usage
+The [ead2dc.py](ead2dc.py) file is designed to be run from the command line, or from within your favorite editing environment. It uses standard Python libraries and has been tested using Python 3.9.10 and 3.9.17.
 
-At the moment this is a command line script designed to be directly edited before each execution. See the [ead2dc.py](ead2dc.py) file for information. It uses standard Python libraries and has been tested using Python 3.9.17
-
+The [OAI Data Provider](https://apps.library.caltech.edu/ead2dc/) is a web application written in Python 3 using the [Flask](https://flask.palletsprojects.com/en/3.0.x/) micro web framework. Installation of Flask will include dependent libraries, such as Jinja2 and werkzeug. No additional libraries are required.
 
 ## Mapping
 
