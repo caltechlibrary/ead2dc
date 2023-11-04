@@ -1,0 +1,23 @@
+{
+    "ASPACE_API_URL": "",
+    "ASPACE_PASSWORD": "",
+    "ASPACE_USERNAME": "",
+    "DATA_PROVIDER_URL": "",
+    "MAXIMUM_RECORDS_RETURNED": 250,
+    
+    "digital collections":
+    [
+        {
+            "id": "",
+            "title": "",
+            "description": "",
+            "ead url": ""
+        },
+        {
+            "id": "",
+            "title": "",
+            "description": "",
+            "ead url": ""
+        }
+    ]
+}
