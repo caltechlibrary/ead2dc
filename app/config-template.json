@@ -1,23 +1,34 @@
 {
-    "ASPACE_API_URL": "",
-    "ASPACE_PASSWORD": "",
-    "ASPACE_USERNAME": "",
-    "DATA_PROVIDER_URL": "",
-    "MAXIMUM_RECORDS_RETURNED": 250,
+    "ArchivesSpace Credentials":
+    {
+        "ASPACE_API_URL": "htps://...",
+        "ASPACE_USERNAME": "username",
+        "ASPACE_PASSWORD": "password"  
+    },
+
+    "EAD2DC Configuration":
+    {
+        "DATA_PROVIDER_URL": "https://...",
+        "MAXIMUM_RECORDS_RETURNED": 250
+    },
     
-    "digital collections":
+    "Flask Configuration": {
+        "SECRET_KEY": "..."
+    },
+    
+    "Digital Collections":
     [
         {
-            "id": "",
-            "title": "",
-            "description": "",
-            "ead url": ""
+            "id": "ID1",
+            "title": "Xyz Papers",
+            "description": "Collection contains...",
+            "ead url": "https://..."
         },
         {
-            "id": "",
-            "title": "",
-            "description": "",
-            "ead url": ""
+            "id": "ID2",
+            "title": "Abc Collection",
+            "description": "Collections contains...",
+            "ead url": "https://..."
         }
     ]
 }

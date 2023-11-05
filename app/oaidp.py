@@ -3,7 +3,6 @@ from datetime import datetime, date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from pathlib import Path
-
 import json
 
 # read config file
@@ -11,10 +10,10 @@ with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as
     config = json.load(f)
 
 # max number of records to return
-maxrecs = config['maximum records returned']
+maxrecs = config['EAD2DC Configuration']['MAXIMUM_RECORDS_RETURNED']
 
 # data provider URL
-dpurl = config['data provider url']
+dpurl = config['EAD2DC Configuration']['DATA_PROVIDER_URL']
  
 
 from app.db import get_db

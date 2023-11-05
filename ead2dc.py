@@ -154,7 +154,7 @@ with open(Path(Path(__file__).resolve().parent).joinpath('app/config.json'), "r"
 
 # load collection info as list of lists
 colls = list()
-for collection in config['digital collections']:
+for collection in config['Digital Collections']:
     colls.append([collection['id'], collection['ead url'], collection['title'], collection['description']])
 
 print('Building OAI-PMH XML...')
