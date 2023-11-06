@@ -23,7 +23,7 @@ There are two components to this service:
 
 ## Introduction
 
-The Python 3 script, ead2dc.py, takes as its input the Open Archives Initiative (OAI) output of an ArchivesSpace resource finding aid in Encoded Archival Description (EAD) format and outputs an XML file. The XML output contains Dublin Core (DC) records for digital resources found in the finding aid. Only records containing links to digital objects are included. The XML output is a 'static repository', inspired by the OAI Static Repository specification, but adhering to it strictly. The static repository is the data source for the Open Archives Initiative (OAI) Data Provider.
+The Python 3 script, [ead2dc.py](app/ead2dc.py), takes as its input the Open Archives Initiative (OAI) output of an ArchivesSpace resource finding aid in Encoded Archival Description (EAD) format and outputs an XML file. The XML output contains Dublin Core (DC) records for digital resources found in the finding aid. Only records containing links to digital objects are included. The XML output is a 'static repository', inspired by the OAI Static Repository specification, but adhering to it strictly. The static repository is the data source for the Open Archives Initiative (OAI) Data Provider.
 
 The [OAI Data Provider](https://apps.library.caltech.edu/ead2dc/) adheres to the OAI standard and supports all the verbs (Identify, ListMetadataFormats, ListSets, ListIdentifiers, ListRecords, and GetRecord), resumption tokens, and sets. Only DC metadata is provided. Sets correspond to the archival collections in the Caltech Archives.
 
