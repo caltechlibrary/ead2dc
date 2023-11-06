@@ -44,7 +44,7 @@ OAI Data Provider - Main features and assumptions:
 
 ## Installation and Usage
 
-The [ead2dc.py](ead2dc.py) file is designed to be run from the command line, or from within your favorite editing environment. It uses standard Python libraries and has been tested using Python 3.9.10 and 3.9.17.
+The [ead2dc.py](app/ead2dc.py) file is designed to be run from the command line, or from within your favorite editing environment. It uses standard Python libraries and has been tested using Python 3.9.10 and 3.9.17.
 
 The [OAI Data Provider](https://apps.library.caltech.edu/ead2dc/) is a web application written in Python 3 using the [Flask](https://flask.palletsprojects.com/en/3.0.x/) micro web framework. Installation of Flask will include dependent libraries, such as Jinja2 and werkzeug. No additional libraries are required.
 
