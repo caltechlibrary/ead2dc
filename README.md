@@ -12,8 +12,7 @@ There are two components to this service:
 ## Table of contents
 
 * [Introduction](#introduction)
-* [Installation](#installation)
-* [Usage](#usage)
+* [Installation and Usage](#installation)
 * [Mapping](#mapping)
 * [Example](#example)
 * [License](#license)
