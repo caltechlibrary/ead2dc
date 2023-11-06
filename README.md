@@ -72,8 +72,8 @@ The [OAI Data Provider](https://apps.library.caltech.edu/ead2dc/) is a web appli
 Paul B. MacCready Papers ca. 1931-2002, Caltech Archives
 
 * [Finding Aid](https://collections.archives.caltech.edu/repositories/2/resources/197)
-* [ArchivesSpace OAI Data Provider output](https://caltechlibrary.github.io/ead2dc/maccready-ead.xml)
-* [OAI Static Repository created by ead2dc](https://caltechlibrary.github.io/ead2dc/maccready-dc.xml)
+* [ArchivesSpace OAI Data Provider output](https://caltechlibrary.github.io/ead2dc/xml/maccready-ead.xml)
+* [OAI Static Repository created by ead2dc](https://caltechlibrary.github.io/ead2dc/xml/maccready-dc.xml)
 
 
 ## License
