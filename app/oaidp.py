@@ -58,12 +58,6 @@ def log(rq):
 
     return
 
-
-@bp.route('/')
-def index():
-    return render_template('index.html')
-
-
 @bp.route('/oai')
 def oai():
 

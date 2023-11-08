@@ -1,103 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">
-    <title>Caltech Archives Data Provider</title></head>
-<body>
+{% extends "base.html" %}
 
-<!-- Sidebar -->
-<div class="w3-sidebar w3-light-grey w3-bar-block" style="width:12%">
-<!---<a class="w3-bar-item w3-button">Register</a>
-<a class="w3-bar-item w3-button">Log In</a>--->
-<a>&nbsp;</a>
-</div>
+{% block content %}
+        
+        <h2>ArchiveSpace OAI/EAD to OAI/DC Conversion</h2>
+        
+        <p>ArchivesSpace is an open source web application for managing archives information. The application is designed to
+        support core functions in archives administration such as accessioning; description and arrangement of processed
+        materials including analog, hybrid, and born-digital content; management of authorities (agents and subjects) and
+        rights; and reference service. The application supports collection management through collection management records,
+        tracking of events, and a growing number of administrative reports. The application also functions as a metadata
+        authoring tool, enabling the generation of EAD, MARCXML, MODS, Dublin Core, and METS formatted data.</p>
+        
+        <p>The Python 3 script, ead2dc.py, takes as its input the Open Archives Initiative (OAI) output of an ArchivesSpace
+        resource finding aid in Encoded Archival Description (EAD) format and outputs an XML file. The XML output contains
+        Dublin Core (DC) records for digital resources found in the finding aid. Only records containing links to digital
+        objects are included. The XML output is a 'static repository', inspired by the OAI Static Repository specification, but
+        not adhering to it strictly. The static repository is the data source for the Open Archives Initiative (OAI) Data
+        Provider.</p>
+        
+        <p>The OAI Data Provider adheres to the OAI standard and supports all the verbs (Identify, ListMetadataFormats, ListSets,
+        ListIdentifiers, ListRecords, and GetRecord), resumption tokens, and sets. Only DC metadata is provided. Sets correspond
+        to the archival collections in the Caltech Archives.</p>
+        
+        <h3>ead2dc - Main features and assumptions:</h3>
+        
+        <ul>
+        <li>Both input and output are OAI-compliant XML files.</li>
+        <li>All 12 levels of EAD container are supported.</li>
+        <li>Titles are inherited down the container hierarchy.</li>
+        <li>All other metadata is mapped from the record containing the digital object references.</li>
+        <li>Records without digital object references are ignored (i.e. not mapped to the output file)</li>
+        </ul>
 
-<!-- Page Content -->
-<div style="margin-left:12%">
-   
-<div class="w3-container w3-teal">
-<h3>Caltech Archives</h3>
-<h2>OAI-PMH Data Provider</h2>
-<h4>Base URL: <a href="oai">https://apps.library.caltech.edu/ead2dc/oai</a></h4>
-</div>
+        <h3>OAI Data Provider - Main features and assumptions:</h3>
+        
+        <ul>
+        <li>The OAI Data Provider uses a static repository, i.e. it does not dynamically generate records.</li>
+        <li>DC metadata only.</li>
+        <li>Sets correspond to the archival collections and do not overlap.</li>
+        <li>Records are delivered in batches of 250.</li>
+        </ul>
 
-<section class="w3-container">
-        
-<p>Query examples:</p>
-        
-<ul>
-<li><strong>Identify</strong>
-    <ul>
-    <li><a href="oai?verb=Identify">Identify</a></li>
-    </ul>
-</li>
-<li><strong>ListMetadataFormats</strong>
-    <ul>
-    <li><a href="oai?verb=ListMetadataFormats">ListMetadataFormats</a></li>
-    <li><a href="oai?verb=ListMetadataFormats&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106578">ListMetadataFormats&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106578</a></li>
-    </ul>
-</li>
-<li><strong>ListSets</strong>
-    <ul>
-    <li>argument not supported: resumptionToken</li>
-    <li><a href="oai?verb=ListSets">ListSets</a></li>
-    </ul>
-</li>
-<li><strong>ListIdentifiers</strong>
-    <ul>
-    <li>arguments supported: set, from, until, resumptionToken</li>
-    <li>argument not supported: metadataPrefix</li>
-    <li><a href="oai?verb=ListIdentifiers&set=HaleGE&from=2023-01-01&until=2023-12-31">ListIdentifiers&set=HaleGE&from=2023-01-01&until=2023-12-31</a></li>
-    <li><a href="oai?verb=ListIdentifiers&resumptionToken=HaleGE:2023-01-01:2023-12-31:250">ListIdentifiers&resumptionToken=HaleGE:2023-01-01:2023-12-31:250</a></li>
-    </ul>
-</li>
-<li><strong>ListRecords</strong>
-    <ul>
-    <li>arguments supported: set, from, until, resumptionToken</li>
-    <li>argument not supported: metadataPrefix</li>
-    <li><a href="oai?verb=ListRecords&set=Photographs">ListRecords&set=Photographs</a></li>
-    <li><a href="oai?verb=ListRecords&resumptionToken=Photographs:000-00-00:999-99-99:250">ListRecords&resumptionToken=Photographs:000-00-00:999-99-99:250</a></li>
-    </ul>
-</li>
-<li><strong>GetRecord</strong>
-    <ul>
-    <li>argument supported: identifier</li>
-    <li>argument not supported: metadataPrefix</li>
-    <li><a href="oai?verb=GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628">GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628</a></li>
-    </ul>
-</li>
-</ul>
-
-<p>Notes:</p>
-        
-<ul>
-<li><strong>Metadata</strong> 
-    <ul>
-        <li>Dublin Core is the only metadata standard supported at this time.</li>
-    </ul>
-</li>
-<li><strong>Flow control</strong> 
-    <ul>
-        <li>ListIdentifiers and ListRecords return batches of 250 records, with a resumption token.</li>
-        <li>Resumption tokens are valid indefinitely. Note, however, that <a href="http://www.openarchives.org/OAI/openarchivesprotocol.html#Idempotency">idempotency</a> is not guaranteed as the underlying data may change at any time.</li>
-    </ul>
-</li>
-<li><strong>Sets</strong>
-    <ul>
-        <li>The set structure is flat, not hierarchical.</li>
-        <li>All records belong to one and only one set, so harvesting all sets will capture all records.</li>
-    </ul>
-</li>
-</ul>
-        
-<p>For more information visit:</p>
-        
-<ul>
-<li><a href="https://www.openarchives.org/OAI/openarchivesprotocol.html">OAI-PMH specification</a></li>
-<li><a href="https://archives.caltech.edu">Caltech Archives website</a></li>
-<li><a href="https://github.com/caltechlibrary/ead2dc">GitHub</a></li>
-</ul>
-
-</section>
+{% endblock %}
