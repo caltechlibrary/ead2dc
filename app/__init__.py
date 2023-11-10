@@ -34,17 +34,13 @@ app.add_url_rule('/', endpoint='index')
 def index():
     return render_template('index.html')
 
-@app.route('/ead2dc')
-def ead2dc():
-    return render_template('ead2dc.html')
-
 @app.route('/login')
 def login():
     return render_template('auth/login.html')
 
-@app.route('/oaidp')
-def oaidp():
-    return render_template('oaidp.html')
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 @app.route('/search')
 def search():
