@@ -10,8 +10,8 @@
 <body>
 
     <div class="sidenav">
-        <a href="{{ url_for('oaidp') }}">Home</a>
-        <a href="{{ url_for('index') }}">About</a>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
         {% if g.user %}
         <a href="{{ url_for('search') }}">Search</a>
         <a href="{{ url_for('browse') }}">Browse</a>
