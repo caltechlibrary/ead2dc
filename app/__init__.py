@@ -3,7 +3,6 @@ from pathlib import Path
 from flask import Flask, render_template
 
 from asnake.client import ASnakeClient
-from decouple import config
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
