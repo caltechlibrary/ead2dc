@@ -14,9 +14,8 @@
         <a href="{{ url_for('ead2dc') }}">Static Repository</a>
         <a href="{{ url_for('oaidp') }}">Example Queries</a>
         {% if g.user %}
-        <a href="{{ url_for('findreview') }}">Find/Review</a>
-        <a href="{{ url_for('menuitem2') }}">Menu Item 2</a>
-        <a href="{{ url_for('menuitem3') }}">Menu Item 3</a>
+        <a href="{{ url_for('search') }}">Search</a>
+        <a href="{{ url_for('browse') }}">Browse</a>
         <a href="{{ url_for('auth.logout') }}">(logout {{ g.user['username'] }})</a>
         {% else %}
         <a href="{{ url_for('auth.login') }}">(login)</a>
