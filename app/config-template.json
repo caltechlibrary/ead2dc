@@ -22,13 +22,15 @@
             "id": "ID1",
             "title": "Xyz Papers",
             "description": "Collection contains...",
-            "ead url": "https://..."
+            "ead url": "https://...",
+            "collnmbr": "1234"
         },
         {
             "id": "ID2",
             "title": "Abc Collection",
             "description": "Collections contains...",
-            "ead url": "https://..."
+            "ead url": "https://...",
+            "collnmbr": "5678"
         }
     ]
 }

@@ -12,15 +12,32 @@
     <div class="sidenav">
         <a href="{{ url_for('index') }}">About</a>
         <a href="{{ url_for('ead2dc') }}">Static Repository</a>
-        <a href="{{ url_for('oaidp') }}">OAI Data Provider</a>
-        <a href="{{ url_for('login') }}">(login)</a>
+        <a href="{{ url_for('oaidp') }}">Example Queries</a>
+        {% if g.user %}
+        <a href="{{ url_for('findreview') }}">Find/Review</a>
+        <a href="{{ url_for('menuitem2') }}">Menu Item 2</a>
+        <a href="{{ url_for('menuitem3') }}">Menu Item 3</a>
+        <a href="{{ url_for('auth.logout') }}">(logout {{ g.user['username'] }})</a>
+        {% else %}
+        <a href="{{ url_for('auth.login') }}">(login)</a>
+        {% endif %}
+
+
     </div>
 
     <div class="main">
 
-        <h4>Caltech Archives</h4>
+        <h5><a href="https://archives.caltech.edu">Caltech Archives</a> - <a href="https://digital.archives.caltech.edu">Digital Collections</a></h5>
+
+        <h4>OAI Data Provider</h4>
 
         {% block content %}{% endblock %}
+
+        <p>
+        {% for message in get_flashed_messages() %}
+        {{ message }}
+        {% endfor %}
+        </p>
 
     </div>
 

@@ -2,21 +2,14 @@
 
 {% block content %}
         
-        <h2>ArchiveSpace OAI/EAD to OAI/DC Conversion</h2>
+        <h2>Encoded Archival Description to Dublin Core Conversion</h2>
         
-        <p>ArchivesSpace is an open source web application for managing archives information. The application is designed to
-        support core functions in archives administration such as accessioning; description and arrangement of processed
-        materials including analog, hybrid, and born-digital content; management of authorities (agents and subjects) and
-        rights; and reference service. The application supports collection management through collection management records,
-        tracking of events, and a growing number of administrative reports. The application also functions as a metadata
-        authoring tool, enabling the generation of EAD, MARCXML, MODS, Dublin Core, and METS formatted data.</p>
-        
-        <p>The Python 3 script, ead2dc.py, takes as its input the Open Archives Initiative (OAI) output of an ArchivesSpace
-        resource finding aid in Encoded Archival Description (EAD) format and outputs an XML file. The XML output contains
+        <p>The Caltech Archives use the Encoded Archival Description (EAD) XML output from ArchivesSpace to create
+        a static XML repository, which in turn is used to provide OAI-PMH access to the digital collections. The static repository
+        is inspired by the OAI Static Repository specification, but does not adhere to it strictly.   
+        The static repository contains
         Dublin Core (DC) records for digital resources found in the finding aid. Only records containing links to digital
-        objects are included. The XML output is a 'static repository', inspired by the OAI Static Repository specification, but
-        not adhering to it strictly. The static repository is the data source for the Open Archives Initiative (OAI) Data
-        Provider.</p>
+        objects are included.</p>
         
         <p>The OAI Data Provider adheres to the OAI standard and supports all the verbs (Identify, ListMetadataFormats, ListSets,
         ListIdentifiers, ListRecords, and GetRecord), resumption tokens, and sets. Only DC metadata is provided. Sets correspond
