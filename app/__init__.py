@@ -46,15 +46,10 @@ def login():
 def oaidp():
     return render_template('oaidp.html')
 
-@app.route('/findreview')
-def findreview():
-    return render_template('findreview.html')
+@app.route('/search')
+def search():
+    return render_template('search.html')
 
-@app.route('/menuitem2')
-def menuitem2():
-    return render_template('menuitem2.html')
-
-@app.route('/menuitem3')
-def menuitem3():
-    return render_template('menuitem3.html')
-
+@app.route('/browse')
+def browse():
+    return render_template('browse.html')
