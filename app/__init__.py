@@ -2,18 +2,18 @@ import os, json
 from pathlib import Path
 from flask import Flask, render_template
 
-from asnake.client import ASnakeClient
+#from asnake.client import ASnakeClient
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
     config = json.load(f)
 
-asnake_client = ASnakeClient(
-    baseurl=config["ArchivesSpace Credentials"]["ASPACE_API_URL"],
-    username=config["ArchivesSpace Credentials"]["ASPACE_USERNAME"],
-    password=config["ArchivesSpace Credentials"]["ASPACE_PASSWORD"]
-)
-asnake_client.authorize()
+#asnake_client = ASnakeClient(
+#    baseurl=config["ArchivesSpace Credentials"]["ASPACE_API_URL"],
+#    username=config["ArchivesSpace Credentials"]["ASPACE_USERNAME"],
+#    password=config["ArchivesSpace Credentials"]["ASPACE_PASSWORD"]
+#)
+#asnake_client.authorize()
 
 # create and configure the app
 app = Flask(__name__, instance_relative_config=True)
@@ -46,6 +46,6 @@ def about():
 def search():
     return render_template('search.html')
 
-@app.route('/browse')
-def browse():
-    return render_template('browse.html')
+#@app.route('/browse')
+#def browse():
+#    return render_template('browse.html')

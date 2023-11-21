@@ -33,8 +33,7 @@ ET.register_namespace('xlink', 'http://www.w3.org/1999/xlink')
 ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
 ET.register_namespace('dc', 'http://purl.org/dc/elements/1.1/')
 
-# read OAI finding aid
-#tree = ET.parse('../xml/caltecharchives.xml')
+# read static repository file
 tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml'))
 root = tree.getroot()
 
@@ -46,6 +45,20 @@ def prettify(elem):
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
 
+# returns a list of IDs
+@bp.route('/browse')
+def browse():
+    ids = list()
+    for node in root.findall('.//record/header/identifier', ns):
+        ids.append(node.text[65:])
+    return render_template("browse.html", ids=ids)
+
+# returns a record
+@bp.route('/search')
+def search():
+    id = 'collections.archives.caltech.edu/repositories/2/archival_objects/'+str()
+    node = root.findone('.//record/header/identifier', ns)
+    return render_template("browse.html")
 
 # log requests
 def log(rq):
