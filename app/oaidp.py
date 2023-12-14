@@ -56,9 +56,9 @@ def browse():
 # returns a record
 @bp.route('/search')
 def search():
-    id = 'collections.archives.caltech.edu/repositories/2/archival_objects/'+str()
-    node = root.findone('.//record/header/identifier', ns)
-    return render_template("browse.html")
+#    id = 'collections.archives.caltech.edu/repositories/2/archival_objects/'+str()
+#    node = root.findone('.//record/header/identifier', ns)
+    return render_template("search.html")
 
 # log requests
 def log(rq):
