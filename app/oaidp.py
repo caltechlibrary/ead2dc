@@ -54,11 +54,25 @@ def browse():
     return render_template("browse.html", ids=ids)
 
 # returns a record
-@bp.route('/search')
+@bp.route('/search', methods=('GET', 'POST'))
 def search():
-#    id = 'collections.archives.caltech.edu/repositories/2/archival_objects/'+str()
-#    node = root.findone('.//record/header/identifier', ns)
-    return render_template("search.html")
+    if request.method == 'POST':
+        ids = [id.text[65:] for id in root.findall('.//record/header/identifier', ns)]
+        if request.form['id'] in ids:
+            id = request.form['id']
+        else:
+            id = "id not found"
+        return render_template("search.html", id=id)
+    else:
+        return render_template("search.html")
+
+@bp.route('/search2')
+def search2():
+    try:
+        ids = [root.find('.//record/header/identifier', ns)]
+    except:
+        ids = ['']
+    return render_template("browse.html")
 
 # log requests
 def log(rq):
