@@ -16,6 +16,7 @@ print(client.get('schemas/sub_container').json())
 print()
 print(list(client.get('schemas').json().keys()))
 print()
-print(client.get('/search', params={'q':'primary_type:resource', 'page':1}).json())
+resource = client.get('repositories/2/archival_objects/106628')
+print(resource)
 
 
