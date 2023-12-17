@@ -16,7 +16,7 @@ print(client.get('schemas/sub_container').json())
 print()
 print(list(client.get('schemas').json().keys()))
 print()
-resource = client.get('repositories/2/archival_objects/106628')
+resource = client.get('repositories/2/archival_objects/106628').json()
 print(resource)
 
 
