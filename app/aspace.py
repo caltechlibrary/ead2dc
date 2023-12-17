@@ -11,5 +11,9 @@ client = ASnakeClient(baseurl=config['ArchivesSpace Credentials']['ASPACE_API_UR
                       password=config['ArchivesSpace Credentials']['ASPACE_PASSWORD'])
 client.authorize()
 repos=client.get('repositories').json()
-print(repos)
+
+print(client.get('schemas/sub_container').json())
+print(list(client.get('schemas').json().keys()))
+print()
+
 
