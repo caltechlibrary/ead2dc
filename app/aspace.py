@@ -18,5 +18,6 @@ print(list(client.get('schemas').json().keys()))
 print()
 resource = client.get('repositories/2/archival_objects/106628').json()
 print(resource)
+print(resource['title'])
 
 
