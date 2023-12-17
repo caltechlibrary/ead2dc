@@ -13,7 +13,9 @@ client.authorize()
 repos=client.get('repositories').json()
 
 print(client.get('schemas/sub_container').json())
+print()
 print(list(client.get('schemas').json().keys()))
+print()
 print(client.get('/search', params={'q':'primary+type:resource', 'page':1}))
 
 
