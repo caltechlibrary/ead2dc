@@ -19,5 +19,6 @@ print()
 resource = client.get('repositories/2/archival_objects/106628').json()
 print(resource)
 print(resource['title'])
+print(client.get('repositories/2/resources/219').json())
 
 
