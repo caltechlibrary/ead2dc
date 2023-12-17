@@ -20,5 +20,11 @@ resource = client.get('repositories/2/archival_objects/106628').json()
 print(resource)
 print(resource['title'])
 print(client.get('repositories/2/resources/219').json())
+print()
+resources = list()
+for resource in client.get_paged('repositories/2/archival_objects'):
+    print(resource['title'])
+    resources.append(resource)
+print(resources[:5])
 
 
