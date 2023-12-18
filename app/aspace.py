@@ -21,20 +21,15 @@ print(resource)
 print(resource['title'])
 print(client.get('repositories/2/resources/219').json())
 print()
-resources = list()
-i = 0
-for resource in client.get_paged('repositories/2/archival_objects'):
+#resources = list()
+#i = 0
+#for resource in client.get_paged('repositories/2/archival_objects'):
 #    print(resource['title'])
 #    resources.append(resource)
-    i += 1
+#    i += 1
 #print(resources[:5])
 #print(len(resources))
-print(i)
-
-from asnake.aspace import ASpace
-
-aspace = ASpace()
-
-for repo in aspace.repositories:
-    for resource in repo.resources:
-        print(resource.title)
+#print(i)
+print('ancestors:', resource['ancestors'])
+print('uri:', resource['uri'])
+print('resource:', resource['resource'])
