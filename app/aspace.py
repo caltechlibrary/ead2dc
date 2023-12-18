@@ -31,3 +31,10 @@ for resource in client.get_paged('repositories/2/archival_objects'):
 #print(len(resources))
 print(i)
 
+from asnake.aspace import ASpace
+
+aspace = ASpace()
+
+for repo in aspace.repositories:
+    for resource in repo.resources:
+        print(resource.title)
