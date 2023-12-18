@@ -32,6 +32,7 @@ print()
 #print(i)
 print('-----------------')
 for ancestor in resource['ancestors']:
-    print(client.get(ancestor['ref']).json())
+    ref = client.get(ancestor['ref']['level']).json()
+    print(ref['level'], ref['title'])
 print('uri:', resource['uri'])
 print('resource:', resource['resource'])
