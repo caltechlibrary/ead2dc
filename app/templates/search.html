@@ -11,6 +11,14 @@
     <input type="submit" value="Find">
 </form>
 
-<p>{{ id }}</p>
+{% if id %}
+<table>
+    <tr>
+        <td>{{ id }}</td>
+        <td>[<a href="https://{{ idbase }}{{ id }}">html</a>]</td>
+        <td>[<a href="{{ dpurl }}?verb=GetRecord&identifier={{ idbase }}{{ id}}">oai</a>]</td>
+    </tr>
+</table>
+{% endif %}
 
 {% endblock %}

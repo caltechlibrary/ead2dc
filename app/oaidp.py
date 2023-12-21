@@ -14,7 +14,9 @@ maxrecs = config['EAD2DC Configuration']['MAXIMUM_RECORDS_RETURNED']
 
 # data provider URL
 dpurl = config['EAD2DC Configuration']['DATA_PROVIDER_URL']
- 
+
+# base uri
+idbase = config['EAD2DC Configuration']['ID_BASE_URI'] 
 
 from app.db import get_db
 
@@ -51,7 +53,7 @@ def browse():
     ids = list()
     for node in root.findall('.//record/header/identifier', ns):
         ids.append(node.text[65:])
-    return render_template("browse.html", ids=ids)
+    return render_template("browse.html", ids=ids, idbase=idbase, dpurl=dpurl)
 
 # returns a record
 @bp.route('/search', methods=('GET', 'POST'))
@@ -62,7 +64,7 @@ def search():
             id = request.form['id']
         else:
             id = "id not found"
-        return render_template("search.html", id=id)
+        return render_template("search.html", id=id, idbase=idbase, dpurl=dpurl)
     else:
         return render_template("search.html")
 

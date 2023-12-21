@@ -4,6 +4,14 @@
 
 <h3>Browse</h3>
 
-<p>{% for id in ids %}{{ id }}<br>{% endfor %}</p>
+<table>{% for id in ids %}
+    <tr>
+        <td>{{ loop.index }}.</td>
+        <td>{{ id }}</td>
+        <td>[<a href="https://{{ idbase }}{{ id }}">html</a>]</td>
+        <td>[<a href="{{ dpurl }}?verb=GetRecord&identifier={{ idbase }}{{ id}}">oai</a>]</td>
+    </tr>
+    {% endfor %}
+</table>
 
 {% endblock %}
