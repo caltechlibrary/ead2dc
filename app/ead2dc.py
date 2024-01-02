@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from datetime import date
 from pathlib import Path
+from asnake.client import ASnakeClient
 
 #FUNCTIONS
 
@@ -145,17 +146,29 @@ def locatedao(c):
 
 #MAIN PROGRAM
 
-# string form of date to write to each record
-today = date.today().strftime("%Y-%m-%d")
-
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('app/config.json'), "r") as f:
     config = json.load(f)
+'''
+# create and authorize aspace client
+client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
+                      username=config['ASPACE_USERNAME'],
+                      password=config['ASPACE_PASSWORD'])
+client.authorize()
+'''
+# string form of date to write to each record
+today = date.today().strftime("%Y-%m-%d")
 
 # load collection info as list of lists
 colls = list()
 for collection in config['Digital Collections']:
     colls.append([collection['id'], collection['ead url'], collection['title'], collection['description']])
+'''
+# load collection info as list of lists
+for id in config['Collections']:
+    uri = config['+str(id)
+'''
+
 
 print('Building OAI-PMH XML...')
 

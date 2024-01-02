@@ -10,13 +10,13 @@ with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as
     config = json.load(f)
 
 # max number of records to return
-maxrecs = config['EAD2DC Configuration']['MAXIMUM_RECORDS_RETURNED']
+maxrecs = config['MAXIMUM_RECORDS_RETURNED']
 
 # data provider URL
-dpurl = config['EAD2DC Configuration']['DATA_PROVIDER_URL']
+dpurl = config['DATA_PROVIDER_URL']
 
 # base uri
-idbase = config['EAD2DC Configuration']['ID_BASE_URI'] 
+idbase = config['ID_BASE_URI'] 
 
 from app.db import get_db
 

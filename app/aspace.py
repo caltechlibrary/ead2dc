@@ -24,7 +24,6 @@ client.authorize()
 
 start = time.time()
 
-colls = list()
 n = 0
 colls = dict()
 for obj in client.get_paged('repositories/2/digital_objects'):

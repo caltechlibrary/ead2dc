@@ -9,15 +9,15 @@ with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as
     config = json.load(f)
 
 #asnake_client = ASnakeClient(
-#    baseurl=config["ArchivesSpace Credentials"]["ASPACE_API_URL"],
-#    username=config["ArchivesSpace Credentials"]["ASPACE_USERNAME"],
-#    password=config["ArchivesSpace Credentials"]["ASPACE_PASSWORD"]
+#    baseurl=config["ASPACE_API_URL"],
+#    username=config["ASPACE_USERNAME"],
+#    password=config["ASPACE_PASSWORD"]
 #)
 #asnake_client.authorize()
 
 # create and configure the app
 app = Flask(__name__, instance_relative_config=True)
-app.config['SECRET_KEY'] = config['Flask Configuration']['SECRET_KEY']
+app.config['SECRET_KEY'] = config['SECRET_KEY']
 app.config.from_mapping(DATABASE=os.path.join(app.instance_path, 'ead2dc.db'))
 
 from . import db
