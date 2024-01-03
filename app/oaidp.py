@@ -39,6 +39,9 @@ ET.register_namespace('dc', 'http://purl.org/dc/elements/1.1/')
 tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml'))
 root = tree.getroot()
 
+ids = list()
+for node in root.findall('.//record/header/identifier', ns):
+    ids.append(node.text[65:])
 
 # returns a pretty-printed XML string
 def prettify(elem):
@@ -48,12 +51,21 @@ def prettify(elem):
     return pretty_xml
 
 # returns a list of IDs
-@bp.route('/browse')
-def browse():
-    ids = list()
-    for node in root.findall('.//record/header/identifier', ns):
-        ids.append(node.text[65:])
-    return render_template("browse.html", ids=ids, idbase=idbase, dpurl=dpurl)
+@bp.route('/browse/<page_number>')
+def browse(page_number):
+    page_number=int(page_number)
+    page_size=1000
+    items_total=len(ids)
+    pages_total=(items_total+page_size-1)//page_size
+    ids_display=ids[(page_number-1)*page_size:page_number*page_size]
+    return render_template("browse.html", 
+                           ids=ids_display, 
+                           idbase=idbase, 
+                           dpurl=dpurl,
+                           page_size=page_size,
+                           items_total=items_total,
+                           pages_total=pages_total,
+                           page_number=page_number)
 
 # returns a record
 @bp.route('/search', methods=('GET', 'POST'))
