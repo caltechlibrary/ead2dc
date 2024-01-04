@@ -49,7 +49,3 @@ def about():
 @app.route('/search')
 def search():
     return render_template('search.html')
-
-#@app.route('/browse')
-#def browse():
-#    return render_template('browse.html')

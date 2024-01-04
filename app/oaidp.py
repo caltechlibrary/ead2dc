@@ -1,9 +1,9 @@
 from flask import Blueprint, request, Response, render_template
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from pathlib import Path
-import json, subprocess, threading
+import json, subprocess, os, time
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
@@ -67,18 +67,6 @@ def browse(page_number):
                            pages_total=pages_total,
                            page_number=page_number)
 
-# delete?
-@bp.route('/wait/<task>')
-def wait(task):
-    result_available = threading.Event()
-    thread = threading.Thread(target=current_task(task))
-    thread.start()
-    while not result_available.wait(timeout=5):
-        if task=='regen':
-            return render_template("wait.html", msg="Regenerating XML...<br>please wait...<b>this will take a few minutes...")
-        else:
-            return render_template("wait.html", msg="Finding collections...<br>please wait...<br>this will take a few minutes...")
-
 # returns a record
 @bp.route('/search', methods=('GET', 'POST'))
 def search():
@@ -95,32 +83,32 @@ def search():
 # choose collections
 @bp.route('/collections', methods=('GET', 'POST'))
 def collections():
-    if request.method == 'POST':
-        ids = [id.text[65:] for id in root.findall('.//record/header/identifier', ns)]
-        if request.form['id'] in ids:
-            id = request.form['id']
-        else:
-            id = "id not found"
-        return render_template("search.html", id=id, idbase=idbase, dpurl=dpurl)
-    else:
-        return render_template("search.html")
+    return render_template('index.html')
 
-# current_task: 'regen' or 'collections'
-@bp.route('/regen', methods=('GET', 'POST'))
+# regenerate XML
+@bp.route('/regen')
 def regen():
-    file_path = 'app/ead2dc.py'
-    try:
-        completed_process = subprocess.run(['python', file_path], capture_output=True, text=True)
-        if completed_process.returncode == 0:
-            msg = "Execution successful."
-            output = completed_process.stdout
-        else:
-            msg = f"Error: Failed to execute '{file_path}'."
-            output = completed_process.stderr
-    except FileNotFoundError:
-        msg = f"Error: The file '{file_path}' does not exist."
-        output = ""
-    return render_template("regen.html", msg=msg, output=output)
+    xmlpath = 'xml/caltecharchives.xml'
+    return render_template("regen.html", done=False, dt=create_datetime(xmlpath))
+
+@bp.route('/regen2')
+def regen2():
+    codepath = 'app/ead2dc.py'
+    xmlpath = 'xml/caltecharchives.xml'
+    completed_process = subprocess.run(['python', codepath], capture_output=True, text=True)
+    output = completed_process.stdout
+    return render_template("regen.html", done=True, output=output, dt=create_datetime(xmlpath))
+
+def create_datetime(path):
+    # modified time elapsed since EPOCH in float
+    dtm = os.path.getmtime(path)
+    # converting modified time in seconds to timestamp
+    mdt = time.ctime(dtm)
+    # elapsed time
+    delta = str(timedelta(seconds=time.time()-dtm)).split(':')
+    # round seconds to integer
+    delta[2] = str(round(float(delta[2])))
+    return (mdt, delta)
 
 @bp.route('/search2')
 def search2():

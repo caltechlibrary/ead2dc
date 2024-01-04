@@ -4,8 +4,22 @@
 
 <h3>Regenerate XML</h3>
 
-<p>{{ msg }}</p>
+<p><strong>XML last updated:</strong> {{ dt[0] }} 
+    
+    ({{ dt[1][0] }}h {{ dt[1][1] }}m {{ dt[1][2] }}s ago)</p>
+
+{% if not done %}
+
+<p>This may take a few minutes. You may navigate away after clicking "continue".</p>
+
+<p>Either <a href="{{ url_for('oaidp.regen2') }}">continue</a>, or choose another option.</p>
+
+{% else %}
+
+<p>Done.</p>
 
 <p>{{ output }}</p>
+
+{% endif %}
 
 {% endblock %}

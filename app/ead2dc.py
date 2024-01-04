@@ -170,7 +170,7 @@ for id in config['Collections']:
 '''
 
 
-print('Building OAI-PMH XML...')
+#print('Building OAI-PMH XML...')
 
 # namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 
@@ -307,8 +307,7 @@ for coll in colls:
 
 #display the output
 #print(prettify(oaixml))
-print()
-print('Total records: ' + str(no_records))
+print('Number of records: ' + str(no_records))
 
 #write to disk
 with open(fileout, 'w') as f:

@@ -1,14 +1,5 @@
 <!DOCTYPE html>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-<script type="text/javascript">// <![CDATA[
-    function loading() {
-        $("#loading").show();
-        $("#content").hide();
-    }
-    // ]]></script>
-
 <html>
 
 <head>
@@ -30,7 +21,7 @@
         <a href="{{ url_for('oaidp.search') }}">Search</a>
         <a href="{{ url_for('oaidp.browse', page_number=1) }}">Browse</a>
         <a href="{{ url_for('oaidp.collections') }}">Collections</a>
-        <a href="{{ url_for('oaidp.regen') }}" onclick="loading();">Regenerate XML</a>
+        <a href="{{ url_for('oaidp.regen') }}">Regenerate XML</a>
         <a href="{{ url_for('auth.logout') }}">(logout {{ g.user['username'] }})</a>
         {% else %}
         <a href="{{ url_for('auth.login') }}">(login)</a>
