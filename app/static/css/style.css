@@ -43,3 +43,11 @@ body {
         font-size: 18px;
     }
 }
+
+div#loading {
+    width: 35px;
+    height: 35px;
+    display: none;
+    background: url(/static/download.png) no-repeat;
+    cursor: wait;
+}

@@ -3,7 +3,7 @@ from datetime import datetime, date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from pathlib import Path
-import json
+import json, subprocess, threading
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
@@ -67,6 +67,18 @@ def browse(page_number):
                            pages_total=pages_total,
                            page_number=page_number)
 
+# delete?
+@bp.route('/wait/<task>')
+def wait(task):
+    result_available = threading.Event()
+    thread = threading.Thread(target=current_task(task))
+    thread.start()
+    while not result_available.wait(timeout=5):
+        if task=='regen':
+            return render_template("wait.html", msg="Regenerating XML...<br>please wait...<b>this will take a few minutes...")
+        else:
+            return render_template("wait.html", msg="Finding collections...<br>please wait...<br>this will take a few minutes...")
+
 # returns a record
 @bp.route('/search', methods=('GET', 'POST'))
 def search():
@@ -79,6 +91,36 @@ def search():
         return render_template("search.html", id=id, idbase=idbase, dpurl=dpurl)
     else:
         return render_template("search.html")
+
+# choose collections
+@bp.route('/collections', methods=('GET', 'POST'))
+def collections():
+    if request.method == 'POST':
+        ids = [id.text[65:] for id in root.findall('.//record/header/identifier', ns)]
+        if request.form['id'] in ids:
+            id = request.form['id']
+        else:
+            id = "id not found"
+        return render_template("search.html", id=id, idbase=idbase, dpurl=dpurl)
+    else:
+        return render_template("search.html")
+
+# current_task: 'regen' or 'collections'
+@bp.route('/regen', methods=('GET', 'POST'))
+def regen():
+    file_path = 'app/ead2dc.py'
+    try:
+        completed_process = subprocess.run(['python', file_path], capture_output=True, text=True)
+        if completed_process.returncode == 0:
+            msg = "Execution successful."
+            output = completed_process.stdout
+        else:
+            msg = f"Error: Failed to execute '{file_path}'."
+            output = completed_process.stderr
+    except FileNotFoundError:
+        msg = f"Error: The file '{file_path}' does not exist."
+        output = ""
+    return render_template("regen.html", msg=msg, output=output)
 
 @bp.route('/search2')
 def search2():

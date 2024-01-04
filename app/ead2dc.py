@@ -147,7 +147,7 @@ def locatedao(c):
 #MAIN PROGRAM
 
 # read config file
-with open(Path(Path(__file__).resolve().parent).joinpath('app/config.json'), "r") as f:
+with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
     config = json.load(f)
 '''
 # create and authorize aspace client
@@ -241,13 +241,13 @@ for coll in colls:
 
     setid = coll[0]
 
-    print('Reading ' + coll[0] + '...')
+    #print('Reading ' + coll[0] + '...')
     response = requests.get(coll[1])
     with open('xml/aspace.xml', 'wb') as file:
         file.write(response.content)
 
     #read OAI finding aid
-    print('Writing ' + coll[0] + '...')
+    #print('Writing ' + coll[0] + '...')
     tree = ET.parse('xml/aspace.xml')
     root = tree.getroot()
 
@@ -306,7 +306,7 @@ for coll in colls:
 
 
 #display the output
-print(prettify(oaixml))
+#print(prettify(oaixml))
 print()
 print('Total records: ' + str(no_records))
 

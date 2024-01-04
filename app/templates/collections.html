@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Find/Review Records</h3>
+
+<p>Enter an ArchivesSpace ID</p>
+
+<form method="post">
+    <input name="id" id="id" required>
+    <input type="submit" value="Find">
+</form>
+
+{% if id %}
+<br>
+<table>
+    <tr>
+        <td>{{ id }}</td>
+        <td>[<a href="https://{{ idbase }}{{ id }}">aspace</a>]</td>
+        <td>[<a href="{{ dpurl }}?verb=GetRecord&identifier={{ idbase }}{{ id}}">oai</a>]</td>
+    </tr>
+</table>
+{% endif %}
+
+{% endblock %}
