@@ -81,9 +81,17 @@ def search():
         return render_template("search.html")
 
 # choose collections
-@bp.route('/collections', methods=('GET', 'POST'))
+@bp.route('/collections')
 def collections():
-    return render_template('index.html')
+    return render_template('collections.html', done=False)
+
+@bp.route('/collections2')
+def collections2():
+    codepath = Path(Path(__file__).resolve().parent).joinpath('aspace.py')
+    print(codepath)
+    completed_process = subprocess.run(['python', codepath], capture_output=True, text=True)
+    output = completed_process.stdout
+    return render_template('collections.html', done=True, output=output)
 
 # regenerate XML
 @bp.route('/regen')
@@ -95,6 +103,8 @@ def regen():
 def regen2():
     codepath = Path(Path(__file__).resolve().parent).joinpath('ead2dc.py')
     xmlpath = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
+    print(codepath)
+    print(xmlpath)
     completed_process = subprocess.run(['python', codepath], capture_output=True, text=True)
     output = completed_process.stdout
     return render_template("regen.html", done=True, output=output, dt=create_datetime(xmlpath))

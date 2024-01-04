@@ -2,24 +2,18 @@
 
 {% block content %}
 
-<h3>Find/Review Records</h3>
+<h3>Collections with Digital Content</h3>
 
-<p>Enter an ArchivesSpace ID</p>
+{% if not done %}
 
-<form method="post">
-    <input name="id" id="id" required>
-    <input type="submit" value="Find">
-</form>
+<p>This may take a few minutes.</p>
 
-{% if id %}
-<br>
-<table>
-    <tr>
-        <td>{{ id }}</td>
-        <td>[<a href="https://{{ idbase }}{{ id }}">aspace</a>]</td>
-        <td>[<a href="{{ dpurl }}?verb=GetRecord&identifier={{ idbase }}{{ id}}">oai</a>]</td>
-    </tr>
-</table>
+<p>Either <a href="{{ url_for('oaidp.collections2') }}">continue</a>, or choose another option.</p>
+
+{% else %}
+
+<p>{{ output }}</p>
+
 {% endif %}
 
 {% endblock %}

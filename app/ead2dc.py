@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from datetime import date
 from pathlib import Path
-from asnake.client import ASnakeClient
+#from asnake.client import ASnakeClient
 
 #FUNCTIONS
 

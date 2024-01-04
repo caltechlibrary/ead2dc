@@ -7,10 +7,13 @@ with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as
     config = json.load(f)
 
 from asnake.client import ASnakeClient
-client = ASnakeClient(baseurl=config['ArchivesSpace Credentials']['ASPACE_API_URL'],
-                      username=config['ArchivesSpace Credentials']['ASPACE_USERNAME'],
-                      password=config['ArchivesSpace Credentials']['ASPACE_PASSWORD'])
+client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
+                      username=config['ASPACE_USERNAME'],
+                      password=config['ASPACE_PASSWORD'])
 client.authorize()
+
+start = time.time()
+print(start)
 
 #i = 0
 #for resource in client.get_paged('repositories/2/archival_objects'):
@@ -21,8 +24,6 @@ client.authorize()
 #for ancestor in resource['ancestors']:
 #    ref = client.get(ancestor['ref']).json()
 #    print(ref['title'], ref['level'], ref['uri'], resource['resource'])
-
-start = time.time()
 
 n = 0
 colls = dict()
