@@ -90,7 +90,7 @@ def collections2():
     codepath = Path(Path(__file__).resolve().parent).joinpath('aspace.py')
     print(codepath)
     completed_process = subprocess.run(['python', codepath], capture_output=True)
-    output = completed_process.stdout
+    output = completed_process.stdout.decode('utf-8')
     return render_template('collections.html', done=True, output=output)
 
 # regenerate XML
