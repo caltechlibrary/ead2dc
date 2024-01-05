@@ -12,9 +12,6 @@ client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
                       password=config['ASPACE_PASSWORD'])
 client.authorize()
 
-start = time.time()
-print(start)
-
 #i = 0
 #for resource in client.get_paged('repositories/2/archival_objects'):
 #    i += 1
@@ -25,6 +22,7 @@ print(start)
 #    ref = client.get(ancestor['ref']).json()
 #    print(ref['title'], ref['level'], ref['uri'], resource['resource'])
 
+#start = time.time()
 n = 0
 colls = dict()
 for obj in client.get_paged('repositories/2/digital_objects'):
@@ -47,11 +45,13 @@ for obj in client.get_paged('repositories/2/digital_objects'):
                 n += 1
         except:
             print('failed')
+out = list()
 for key in colls:
-    print(client.get(key).json()['title'], '(coll. numb.:', key[26:] + ', count:', str(colls[key]) + ')')
+    list.append(client.get(key).json()['title']+' (coll. numb.: '+key[26:]+', count: '+str(colls[key])+')')
+
 print('number of digital objects:', n)
 print('number of collections:', len(colls))
 
-end = time.time()
-delta = end - start
-print('time:', delta, 'seconds')
+#end = time.time()
+#delta = end - start
+#print('time:', delta, 'seconds')
