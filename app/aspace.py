@@ -1,6 +1,6 @@
 from pathlib import Path
 import json
-#import time
+import time
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
@@ -22,9 +22,10 @@ client.authorize()
 #    ref = client.get(ancestor['ref']).json()
 #    print(ref['title'], ref['level'], ref['uri'], resource['resource'])
 
-#start = time.time()
+start = time.time()
 n = 0
 colls = dict()
+
 for obj in client.get_paged('repositories/2/digital_objects'):
     for c in obj['collection']:
         if c['ref'][16:26] != 'accessions':
@@ -33,13 +34,18 @@ for obj in client.get_paged('repositories/2/digital_objects'):
             else:
                 colls[c['ref']] = 1
             n += 1
-out = list()
-for key in colls:
-    list.append(client.get(key).json()['title']+' (coll. numb.: '+key[26:]+', count: '+str(colls[key])+')')
 
+out = list()
+
+for key in colls:
+    out.append(client.get(key).json()['title']+' (coll. numb.: '+key[26:]+', count: '+str(colls[key])+')')
+
+for el in out:
+    print(el)
+print()
 print('number of digital objects:', n)
 print('number of collections:', len(colls))
 
-#end = time.time()
-#delta = end - start
-#print('time:', delta, 'seconds')
+end = time.time()
+delta = end - start
+print('time:', delta, 'seconds')
