@@ -1,6 +1,6 @@
 from pathlib import Path
 import json
-import time
+#import time
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
@@ -50,7 +50,7 @@ for key in colls:
     list.append(client.get(key).json()['title']+' (coll. numb.: '+key[26:]+', count: '+str(colls[key])+')')
 
 print('number of digital objects:', n)
-print('number of collections:', len(colls))
+#print('number of collections:', len(colls))
 
 #end = time.time()
 #delta = end - start
