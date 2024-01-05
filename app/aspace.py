@@ -26,31 +26,19 @@ client.authorize()
 n = 0
 colls = dict()
 for obj in client.get_paged('repositories/2/digital_objects'):
-    try:
-        for c in obj['collection']:
-            if c['ref'][16:26] != 'accessions':
-                if c['ref'] in colls.keys():
-                    colls[c['ref']] = colls[c['ref']] + 1
-                else:
-                    colls[c['ref']] = 1
-                n += 1
-    except:
-        try:
-            c = obj['resource']['ref']
-            if c['ref'][16:26]!='accessions':
-                if c['ref'] in colls.keys():
-                    colls[c['ref']] = colls[c['ref']] + 1
-                else:
-                    colls[c['ref']] = 1
-                n += 1
-        except:
-            print('failed')
+    for c in obj['collection']:
+        if c['ref'][16:26] != 'accessions':
+            if c['ref'] in colls.keys():
+                colls[c['ref']] = colls[c['ref']] + 1
+            else:
+                colls[c['ref']] = 1
+            n += 1
 out = list()
 for key in colls:
     list.append(client.get(key).json()['title']+' (coll. numb.: '+key[26:]+', count: '+str(colls[key])+')')
 
 print('number of digital objects:', n)
-#print('number of collections:', len(colls))
+print('number of collections:', len(colls))
 
 #end = time.time()
 #delta = end - start
