@@ -12,7 +12,15 @@
 
 {% else %}
 
-<p>{{ output }}</p>
+<p>{{ output[0] }} digital objects located in {{ output[1] }} collections.</p>
+
+<p>
+    {% for coll in {{ output[2] }} %}
+    {{ coll }}<br>
+    {% endfor %}
+</p>
+
+<p>Time elapsed: {{ output[3] }}</p>
 
 {% endif %}
 
