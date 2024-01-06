@@ -49,4 +49,4 @@ def update_collections():
     end = time.time()
     delta = end - start
     #print('time:', delta, 'seconds')
-    return (n, len(colls), colls, delta)
+    return (n, len(colls), out, delta)
