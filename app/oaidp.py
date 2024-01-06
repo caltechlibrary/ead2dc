@@ -1,5 +1,3 @@
-import ead2dc
-
 from flask import Blueprint, request, Response, render_template
 from datetime import datetime, date, timedelta
 import xml.etree.ElementTree as ET
@@ -141,13 +139,13 @@ def regen():
 
 @bp.route('/regen2')
 def regen2():
-    #codepath = Path(Path(__file__).resolve().parent).joinpath('ead2dc.py')
+    codepath = Path(Path(__file__).resolve().parent).joinpath('ead2dc.py')
     xmlpath = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
     #print(codepath)
     #print(xmlpath)
-    #completed_process = subprocess.run(['python', codepath], capture_output=True)
-    #output = completed_process.stdout
-    return render_template("regen.html", done=True, output=, dt=create_datetime(xmlpath))
+    completed_process = subprocess.run(['python', codepath], capture_output=True)
+    output = completed_process.stdout
+    return render_template("regen.html", done=True, output=output, dt=create_datetime(xmlpath))
 
 def create_datetime(path):
     # modified time elapsed since EPOCH in float
@@ -375,8 +373,8 @@ def oai():
         error = ET.SubElement(oaixml, 'error')
         error.text = "Missing or invalid verb or key."
 
-    print(f'{count} records written.')
-    print(f'Cursor position: {cursor}')
+    #print(f'{count} records written.')
+    #print(f'Cursor position: {cursor}')
 
 
     return Response(ET.tostring(oaixml), mimetype='text/xml')
