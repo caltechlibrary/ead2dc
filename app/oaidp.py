@@ -1,3 +1,5 @@
+from app.aspace import update_collections
+
 from flask import Blueprint, request, Response, render_template
 from datetime import datetime, date, timedelta
 import xml.etree.ElementTree as ET
@@ -17,45 +19,6 @@ dpurl = config['DATA_PROVIDER_URL']
 
 # base uri
 idbase = config['ID_BASE_URI'] 
-
-#==== ASnake =================
-from asnake.client import ASnakeClient
-client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
-                      username=config['ASPACE_USERNAME'],
-                      password=config['ASPACE_PASSWORD'])
-
-def update_collections():
-    client.authorize()
-
-    start = time.time()
-    n = 0
-    colls = dict()
-
-    for obj in client.get_paged('repositories/2/digital_objects'):
-        for c in obj['collection']:
-            if c['ref'][16:26] != 'accessions':
-                if c['ref'] in colls.keys():
-                    colls[c['ref']] = colls[c['ref']] + 1
-                else:
-                    colls[c['ref']] = 1
-                n += 1
-
-    out = list()
-
-    for key in colls:
-        out.append(client.get(key).json()['title']+' (coll. numb.: '+key[26:]+', count: '+str(colls[key])+')')
-
-    for el in out:
-        print(el)
-    print()
-    print('number of digital objects:', n)
-    print('number of collections:', len(colls))
-
-    end = time.time()
-    delta = end - start
-    print('time:', delta, 'seconds')
-    return (n, len(colls), delta)
-#=============================
 
 from app.db import get_db
 
