@@ -15,6 +15,11 @@ client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
                       password=config['ASPACE_PASSWORD'])
 
 def update_collections():
+    # searches for digital content and returns (n, len(colls), colls, delta)
+    #       n = number of digital objects found
+    #       len(colls) = number of collections with digital objects
+    #       colls = list collections (title, number, number of dig. objs.)
+    #       time elapsed
     client.authorize()
 
     start = time.time()
@@ -37,11 +42,11 @@ def update_collections():
 
     for el in out:
         print(el)
-    print()
-    print('number of digital objects:', n)
-    print('number of collections:', len(colls))
+    #print()
+    #print('number of digital objects:', n)
+    #print('number of collections:', len(colls))
 
     end = time.time()
     delta = end - start
-    print('time:', delta, 'seconds')
-    return (n, len(colls), delta)
+    #print('time:', delta, 'seconds')
+    return (n, len(colls), colls, delta)
