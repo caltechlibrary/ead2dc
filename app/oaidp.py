@@ -89,7 +89,7 @@ def collections():
 def collections2():
     codepath = Path(Path(__file__).resolve().parent).joinpath('aspace.py')
     print(codepath)
-    completed_process = subprocess.run(['python', codepath], capture_output=True, text=True)
+    completed_process = subprocess.run(['python', codepath], capture_output=True)
     output = completed_process.stdout
     return render_template('collections.html', done=True, output=output)
 
@@ -105,7 +105,7 @@ def regen2():
     xmlpath = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
     print(codepath)
     print(xmlpath)
-    completed_process = subprocess.run(['python', codepath], capture_output=True, text=True)
+    completed_process = subprocess.run(['python', codepath], capture_output=True)
     output = completed_process.stdout
     return render_template("regen.html", done=True, output=output, dt=create_datetime(xmlpath))
 
