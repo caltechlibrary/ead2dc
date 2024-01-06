@@ -1,3 +1,5 @@
+import ead2dc
+
 from flask import Blueprint, request, Response, render_template
 from datetime import datetime, date, timedelta
 import xml.etree.ElementTree as ET
@@ -6,7 +8,7 @@ from pathlib import Path
 import json, subprocess, os, time
 
 # read config file
-with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
+with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), 'r') as f:
     config = json.load(f)
 
 # max number of records to return
@@ -18,8 +20,46 @@ dpurl = config['DATA_PROVIDER_URL']
 # base uri
 idbase = config['ID_BASE_URI'] 
 
-from app.db import get_db
+#==== ASnake =================
+from asnake.client import ASnakeClient
+client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
+                      username=config['ASPACE_USERNAME'],
+                      password=config['ASPACE_PASSWORD'])
 
+def update_collections():
+    client.authorize()
+
+    start = time.time()
+    n = 0
+    colls = dict()
+
+    for obj in client.get_paged('repositories/2/digital_objects'):
+        for c in obj['collection']:
+            if c['ref'][16:26] != 'accessions':
+                if c['ref'] in colls.keys():
+                    colls[c['ref']] = colls[c['ref']] + 1
+                else:
+                    colls[c['ref']] = 1
+                n += 1
+
+    out = list()
+
+    for key in colls:
+        out.append(client.get(key).json()['title']+' (coll. numb.: '+key[26:]+', count: '+str(colls[key])+')')
+
+    for el in out:
+        print(el)
+    print()
+    print('number of digital objects:', n)
+    print('number of collections:', len(colls))
+
+    end = time.time()
+    delta = end - start
+    print('time:', delta, 'seconds')
+    return (n, len(colls), delta)
+#=============================
+
+from app.db import get_db
 
 bp = Blueprint('oaidp', __name__)
 
@@ -87,11 +127,11 @@ def collections():
 
 @bp.route('/collections2')
 def collections2():
-    codepath = Path(Path(__file__).resolve().parent).joinpath('aspace.py')
-    print(codepath)
-    completed_process = subprocess.run(['python', codepath], capture_output=True)
-    output = completed_process.stdout
-    return render_template('collections.html', done=True, output=output)
+    #codepath = Path(Path(__file__).resolve().parent).joinpath('aspace.py')
+    #print(codepath)
+    #completed_process = subprocess.run(['python', codepath], capture_output=True)
+    #output = completed_process.stdout
+    return render_template('collections.html', done=True, output=update_collections())
 
 # regenerate XML
 @bp.route('/regen')
@@ -101,13 +141,13 @@ def regen():
 
 @bp.route('/regen2')
 def regen2():
-    codepath = Path(Path(__file__).resolve().parent).joinpath('ead2dc.py')
+    #codepath = Path(Path(__file__).resolve().parent).joinpath('ead2dc.py')
     xmlpath = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
-    print(codepath)
-    print(xmlpath)
-    completed_process = subprocess.run(['python', codepath], capture_output=True)
-    output = completed_process.stdout
-    return render_template("regen.html", done=True, output=output, dt=create_datetime(xmlpath))
+    #print(codepath)
+    #print(xmlpath)
+    #completed_process = subprocess.run(['python', codepath], capture_output=True)
+    #output = completed_process.stdout
+    return render_template("regen.html", done=True, output=, dt=create_datetime(xmlpath))
 
 def create_datetime(path):
     # modified time elapsed since EPOCH in float
