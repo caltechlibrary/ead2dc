@@ -77,7 +77,10 @@ def search():
             id = request.form['id']
         else:
             id = "id not found"
-        return render_template("search.html", id=id, idbase=idbase, dpurl=dpurl)
+        return render_template("search.html", 
+                               id=id, 
+                               idbase=idbase, 
+                               dpurl=dpurl)
     else:
         return render_template("search.html")
 
@@ -89,7 +92,9 @@ def collections():
     colls = db.execute(query).fetchall()
     last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
     n = sum(k for (_, _, k) in colls)
-    return render_template('collections.html', output=(n, len(colls), colls, None), dt=last_update)
+    return render_template('collections.html', 
+                           output=(n, len(colls), colls, None), 
+                           dt=datetime.fromisoformat(last_update))
 
 @bp.route('/collections2')
 def collections2():
@@ -103,7 +108,9 @@ def collections2():
         db.execute(query, [coll[0], coll[1], coll[2]])
     db.execute('UPDATE last_update SET dt=?;', [last_update])
     db.commit()
-    return render_template('collections.html', output=output, dt=last_update)
+    return render_template('collections.html', 
+                           output=output, 
+                           dt=datetime.fromisoformat(last_update))
 
 # regenerate XML
 @bp.route('/regen')
