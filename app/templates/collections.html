@@ -4,24 +4,31 @@
 
 <h3>Collections</h3>
 
-{% if not done %}
-
-<p>This will take a few minutes. Please wait until the screen refreshes.</p>
-
-<p>Either <a href="{{ url_for('oaidp.collections2') }}">continue</a>, or choose another option.</p>
-
-{% else %}
-
 <p>{{ output[0] }} digital objects located in {{ output[1] }} collections.</p>
 
-<p>
-    {{ output[2] }}
-    {{ coll }}<br>
-    
-</p>
+<p>Last updated: {{ dt }} </p>
 
-<p>Time elapsed: {{ output[3] }} seconds.</p>
+<p>Refresh data from ArchivesSpace? This takes a few minutes. Either <a href="{{ url_for('oaidp.collections2', act='w') }}">continue refresh</a>, or choose another option.</p>
 
-{% endif %}
+<table>
+<tr>
+    <th></th>
+    <th>No.</th>
+    <th>Title</th>
+    <th>Count</th>
+</tr>
+{% for coll in output[2] %}
+    <tr>
+        <td><input type="checkbox"></td>
+        <td>{{ coll[0] }}</td>
+        <td>{{ coll[1] }}</td>
+        <td align="right">{{ coll[2] }}</td>
+    </tr>
+{% endfor %}
+</table>
+
+{% if output[3] is not None %}
+    <p>Refresh complete. Time elapsed: {{ output[3] }} seconds.</p>
+{% end if %}
 
 {% endblock %}

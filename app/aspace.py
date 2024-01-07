@@ -36,10 +36,12 @@ def update_collections():
                 n += 1
 
     out = list()
+    def sortfunc(e):
+        return e[2]
 
     for key in colls:
-        out.append(client.get(key).json()['title']+' (coll. numb.: '+key[26:]+', count: '+str(colls[key])+')')
-
+        out.append((key[26:], client.get(key).json()['title'], colls[key]))
+    out.sort(reverse=True, key=sortfunc)
     for el in out:
         print(el)
     #print()
@@ -49,4 +51,4 @@ def update_collections():
     end = time.time()
     delta = end - start
     #print('time:', delta, 'seconds')
-    return (n, len(colls), type(out), round(delta))
+    return (n, len(colls), out, round(delta))

@@ -2,6 +2,18 @@ body {
     font-family: "Lato", sans-serif;
 }
 
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 8px;
+}
+
 .sidenav {
     width: 160px;
     position: fixed;

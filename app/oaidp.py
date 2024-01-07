@@ -81,10 +81,22 @@ def search():
     else:
         return render_template("search.html")
 
-# choose collections
-@bp.route('/collections')
-def collections():
-    return render_template('collections.html', done=False)
+# read/write collections data to db
+@bp.route('/collections/<act>')
+def collections(act):
+    if act=='r':
+        query = "SELECT * FROM collections"
+        db = get_db()
+        colls = db.execute(query).fetchall()
+        last_update = db.execute('SELECT dt FROM last_update').fetchone()
+        n = sum(k for (_, _, k) in colls)
+        return render_template('collections.html', output=(n, len(colls), colls, None), dt=last_update)
+    elif act=='w':
+        query = ""
+        return
+    else:
+        return
+
 
 @bp.route('/collections2')
 def collections2():
@@ -92,7 +104,7 @@ def collections2():
     #print(codepath)
     #completed_process = subprocess.run(['python', codepath], capture_output=True)
     #output = completed_process.stdout
-    return render_template('collections.html', done=True, output=update_collections())
+    return render_template('collections.html', output=update_collections(), dt=last_update)
 
 # regenerate XML
 @bp.route('/regen')
@@ -131,13 +143,10 @@ def search2():
 
 # log requests
 def log(rq):
-
     query = "INSERT INTO logs (date, verb, setname, identifier, datefrom, dateuntil) VALUES (?, ?, ?, ?, ?, ?);"
-
     db = get_db()
     db.execute(query, rq)
     db.commit()
-
     return
 
 @bp.route('/oai')
