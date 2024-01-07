@@ -20,7 +20,7 @@
         {% if g.user %}
         <a href="{{ url_for('oaidp.search') }}">Search</a>
         <a href="{{ url_for('oaidp.browse', page_number=1) }}">Browse</a>
-        <a href="{{ url_for('oaidp.collections', act='r') }}">Collections</a>
+        <a href="{{ url_for('oaidp.collections') }}">Collections</a>
         <a href="{{ url_for('oaidp.regen') }}">Regenerate XML</a>
         <a href="{{ url_for('auth.logout') }}">(logout {{ g.user['username'] }})</a>
         {% else %}

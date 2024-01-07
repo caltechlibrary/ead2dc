@@ -83,20 +83,13 @@ def search():
 
 # read/write collections data to db
 @bp.route('/collections/<act>')
-def collections(act):
-    if act=='r':
-        query = "SELECT * FROM collections"
-        db = get_db()
-        colls = db.execute(query).fetchall()
-        last_update = db.execute('SELECT dt FROM last_update').fetchone()
-        n = sum(k for (_, _, k) in colls)
-        return render_template('collections.html', output=(n, len(colls), colls, None), dt=last_update)
-    elif act=='w':
-        query = ""
-        return
-    else:
-        return
-
+def collections():
+    query = "SELECT * FROM collections;"
+    db = get_db()
+    colls = db.execute(query).fetchall()
+    last_update = db.execute('SELECT dt FROM last_update;').fetchone()
+    n = sum(k for (_, _, k) in colls)
+    return render_template('collections.html', output=(n, len(colls), colls, None), dt=last_update)
 
 @bp.route('/collections2')
 def collections2():
@@ -104,7 +97,19 @@ def collections2():
     #print(codepath)
     #completed_process = subprocess.run(['python', codepath], capture_output=True)
     #output = completed_process.stdout
-    return render_template('collections.html', output=update_collections(), dt=last_update)
+    output=update_collections()
+    last_update = datetime.datetime.now().isoformat()
+    db = get_db()
+    db.execute('UPDATE last_update SET dt=?;', [last_update])
+    for coll in output:
+        n = db.execute('SELECT count(collno) FROM collections WHERE collno=?;', [coll[0]])
+        if n > 0:
+            query = 'UPDATE collections SET colltitle=?, docount=? WHERE collno=?;'
+            db.execute(query, [coll[1], coll[2], coll[0]])
+        else:
+            query = 'INSERT INTO collections(collno, colltitle, docount) VALUES (?,?,?);'
+            db.execute(query, coll[0], coll[1], coll[2]])
+    return render_template('collections.html', output=output, dt=last_update)
 
 # regenerate XML
 @bp.route('/regen')
