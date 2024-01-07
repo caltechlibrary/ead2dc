@@ -98,7 +98,7 @@ def collections2():
     #completed_process = subprocess.run(['python', codepath], capture_output=True)
     #output = completed_process.stdout
     output=update_collections()
-    last_update = datetime.datetime.now().isoformat()
+    last_update = datetime.now().isoformat()
     db = get_db()
     db.execute('UPDATE last_update SET dt=?;', [last_update])
     for coll in output:
