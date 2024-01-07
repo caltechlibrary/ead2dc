@@ -108,7 +108,7 @@ def collections2():
             db.execute(query, [coll[1], coll[2], coll[0]])
         else:
             query = 'INSERT INTO collections(collno, colltitle, docount) VALUES (?,?,?);'
-            db.execute(query, coll[0], coll[1], coll[2]])
+            db.execute(query, coll[0], coll[1], coll[2])
     return render_template('collections.html', output=output, dt=last_update)
 
 # regenerate XML
