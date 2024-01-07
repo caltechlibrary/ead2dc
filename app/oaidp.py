@@ -97,16 +97,12 @@ def collections2():
     colls=output[2]
     last_update = datetime.now().isoformat()
     db = get_db()
-    db.execute('UPDATE last_update SET dt=?;', [last_update])
+    db.execute('DELETE FROM collections')
     for coll in colls:
-        n = db.execute('SELECT count(collno) FROM collections WHERE collno=?;', [coll[0]]).fetchone()[0]
-        if n > 0:
-            query = 'UPDATE collections SET colltitle=?, docount=? WHERE collno=?;'
-            db.execute(query, [coll[1], coll[2], coll[0]])
-        else:
-            query = 'INSERT INTO collections(collno, colltitle, docount) VALUES (?,?,?);'
-            db.execute(query, [coll[0], coll[1], coll[2]])
-        db.commit()
+        query = 'INSERT INTO collections(collno, colltitle, docount) VALUES (?,?,?);'
+        db.execute(query, [coll[0], coll[1], coll[2]])
+    db.execute('UPDATE last_update SET dt=?;', [last_update])
+    db.commit()
     return render_template('collections.html', output=output, dt=last_update)
 
 # regenerate XML
