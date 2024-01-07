@@ -87,7 +87,7 @@ def collections():
     query = "SELECT * FROM collections;"
     db = get_db()
     colls = db.execute(query).fetchall()
-    last_update = db.execute('SELECT dt FROM last_update;').fetchone()
+    last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
     n = sum(k for (_, _, k) in colls)
     return render_template('collections.html', output=(n, len(colls), colls, None), dt=last_update)
 
@@ -103,7 +103,7 @@ def collections2():
     db = get_db()
     db.execute('UPDATE last_update SET dt=?;', [last_update])
     for coll in colls:
-        n = db.execute('SELECT count(collno) FROM collections WHERE collno=?;', [coll[0]])
+        n = db.execute('SELECT count(collno) FROM collections WHERE collno=?;', [coll[0]]).fetchone()[0]
         if n > 0:
             query = 'UPDATE collections SET colltitle=?, docount=? WHERE collno=?;'
             db.execute(query, [coll[1], coll[2], coll[0]])
