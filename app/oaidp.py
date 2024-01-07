@@ -98,10 +98,11 @@ def collections2():
     #completed_process = subprocess.run(['python', codepath], capture_output=True)
     #output = completed_process.stdout
     output=update_collections()
+    colls=output[2]
     last_update = datetime.now().isoformat()
     db = get_db()
     db.execute('UPDATE last_update SET dt=?;', [last_update])
-    for coll in output:
+    for coll in colls:
         n = db.execute('SELECT count(collno) FROM collections WHERE collno=?;', [coll[0]])
         if n > 0:
             query = 'UPDATE collections SET colltitle=?, docount=? WHERE collno=?;'
