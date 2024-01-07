@@ -87,7 +87,7 @@ def collections():
     query = "SELECT * FROM collections;"
     db = get_db()
     colls = db.execute(query).fetchall()
-    last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
+    last_update = db.execute('SELECT dt FROM last_update;')
     n = sum(k for (_, _, k) in colls)
     return render_template('collections.html', output=(n, len(colls), colls, None), dt=last_update)
 
