@@ -82,7 +82,7 @@ def search():
         return render_template("search.html")
 
 # read/write collections data to db
-@bp.route('/collections/<act>')
+@bp.route('/collections')
 def collections():
     query = "SELECT * FROM collections;"
     db = get_db()
