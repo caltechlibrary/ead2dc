@@ -87,16 +87,12 @@ def collections():
     query = "SELECT * FROM collections;"
     db = get_db()
     colls = db.execute(query).fetchall()
-    last_update = db.execute('SELECT dt FROM last_update;')
+    last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
     n = sum(k for (_, _, k) in colls)
     return render_template('collections.html', output=(n, len(colls), colls, None), dt=last_update)
 
 @bp.route('/collections2')
 def collections2():
-    #codepath = Path(Path(__file__).resolve().parent).joinpath('aspace.py')
-    #print(codepath)
-    #completed_process = subprocess.run(['python', codepath], capture_output=True)
-    #output = completed_process.stdout
     output=update_collections()
     colls=output[2]
     last_update = datetime.now().isoformat()
@@ -110,6 +106,7 @@ def collections2():
         else:
             query = 'INSERT INTO collections(collno, colltitle, docount) VALUES (?,?,?);'
             db.execute(query, [coll[0], coll[1], coll[2]])
+        db.commit()
     return render_template('collections.html', output=output, dt=last_update)
 
 # regenerate XML
