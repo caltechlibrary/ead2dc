@@ -109,10 +109,16 @@ def collections2():
     colls=output[2]
     last_update = datetime.now().isoformat()
     db = get_db()
+    incl = list()
+    for e in db.execute('SELECT collno FROM collections WHERE incl=1;'):
+        incl.append(e[0])
     db.execute('DELETE FROM collections')
+    query = 'INSERT INTO collections(collno, colltitle, docount) VALUES (?, ?, ?);'
     for coll in colls:
-        query = 'INSERT INTO collections(collno, colltitle, docount, incl) VALUES (?, ?, ?, ?);'
-        db.execute(query, [coll[0], coll[1], coll[2], coll[3]])
+        db.execute(query, [coll[0], coll[1], coll[2]])
+    query = 'UPDATE collections SET incl=1 WHERE collno=?;'
+    for id in incl:
+        db.execute(query, id)
     db.execute('UPDATE last_update SET dt=?;', [last_update])
     db.commit()
     return render_template('collections.html', 

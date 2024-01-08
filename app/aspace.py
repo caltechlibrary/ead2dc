@@ -41,14 +41,14 @@ def update_collections():
         return e[2]
 
     for key in colls:
-        print(key)
+    #    print(key)
         out.append((key[26:], client.get(key).json()['title'], colls[key]))
     out.sort(reverse=True, key=sortfunc)
-    for el in out:
-        print(el)
-    print()
-    print('number of digital objects:', n)
-    print('number of collections:', len(colls))
+    #for el in out:
+    #    print(el)
+    #print()
+    #print('number of digital objects:', n)
+    #print('number of collections:', len(colls))
 
     end = time.time()
     delta = end - start
