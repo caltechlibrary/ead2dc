@@ -20,6 +20,12 @@ dpurl = config['DATA_PROVIDER_URL']
 # base uri
 idbase = config['ID_BASE_URI'] 
 
+# public url
+pub_url = config['PUBLIC_URL']
+
+# collection base
+cbase = config['COLLECTION_BASE_URI']
+
 from app.db import get_db
 
 bp = Blueprint('oaidp', __name__)
@@ -87,14 +93,15 @@ def search():
 # read/write collections data to db
 @bp.route('/collections')
 def collections():
-    query = "SELECT * FROM collections;"
+    query = "SELECT * FROM collections ORDER BY docount DESC;"
     db = get_db()
     colls = db.execute(query).fetchall()
     last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
-    n = sum(k for (_, _, k) in colls)
+    n = sum(k for (_, _, k, _) in colls)
     return render_template('collections.html', 
                            output=(n, len(colls), colls, None), 
-                           dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"))
+                           dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
+                           url=pub_url+cbase)
 
 @bp.route('/collections2')
 def collections2():
@@ -104,29 +111,49 @@ def collections2():
     db = get_db()
     db.execute('DELETE FROM collections')
     for coll in colls:
-        query = 'INSERT INTO collections(collno, colltitle, docount) VALUES (?,?,?);'
-        db.execute(query, [coll[0], coll[1], coll[2]])
+        query = 'INSERT INTO collections(collno, colltitle, docount, incl) VALUES (?, ?, ?, ?);'
+        db.execute(query, [coll[0], coll[1], coll[2], coll[3]])
     db.execute('UPDATE last_update SET dt=?;', [last_update])
     db.commit()
     return render_template('collections.html', 
                            output=output, 
                            dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"))
 
+@bp.route('/collections3', methods=['GET', 'POST'])
+def collections3():
+    db = get_db()
+    if request.method == 'POST':
+        db.execute('UPDATE collections SET incl=0;')
+        for id in request.form.getlist('include'):
+            db.execute('UPDATE collections SET incl=1 WHERE collno=?', [id])
+        db.commit()
+    query = "SELECT * FROM collections ORDER BY docount DESC;"
+    colls = db.execute(query).fetchall()
+    last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
+    n = sum(k for (_, _, k, _) in colls)
+    return render_template('collections.html', 
+                           output=(n, len(colls), colls, None), 
+                           dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
+                           url=pub_url+cbase)
+
 # regenerate XML
 @bp.route('/regen')
 def regen():
     xmlpath = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
-    return render_template("regen.html", done=False, dt=create_datetime(xmlpath))
+    return render_template("regen.html", 
+                           done=False, 
+                           dt=create_datetime(xmlpath))
 
 @bp.route('/regen2')
 def regen2():
     codepath = Path(Path(__file__).resolve().parent).joinpath('ead2dc.py')
     xmlpath = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
-    #print(codepath)
-    #print(xmlpath)
-    completed_process = subprocess.run(['python', codepath], capture_output=True)
+    completed_process = subprocess.run(['python', codepath], capture_output=True, text=True)
     output = completed_process.stdout
-    return render_template("regen.html", done=True, output=output, dt=create_datetime(xmlpath))
+    return render_template("regen.html", 
+                           done=True, 
+                           output=output, 
+                           dt=create_datetime(xmlpath))
 
 def create_datetime(path):
     # modified time elapsed since EPOCH in float

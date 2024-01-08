@@ -268,7 +268,7 @@ for coll in colls:
     #    except:
     #        fileid = 'caltecharchives'
     #fileout = fileid + '.xml'
-    fileout = 'xml/caltecharchives.xml'
+    fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 
     #build ListRecords segment
     ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'}) 

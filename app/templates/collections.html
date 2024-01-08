@@ -4,28 +4,30 @@
 
 <h3>Collections</h3>
 
-<p>{{ output[0] }} digital objects located in {{ output[1] }} collections.</p>
+<p><strong>{{ output[0] }} digital objects</strong> in <strong>{{ output[1] }} collections</strong>.</p>
 
-<p>Last updated: {{ dt }} </p>
+<p><strong>Last updated:</strong> {{ dt }}</p>
 
 <p>Refresh data from ArchivesSpace? This takes a few minutes. Either <a href="{{ url_for('oaidp.collections2') }}">continue refresh</a>, or choose another option.</p>
 
+<form action="{{ url_for('oaidp.collections3') }}" method="POST">
 <table>
 <tr>
-    <th></th>
+    <th><input type="submit" value="Update"><br>Include</th>
     <th>No.</th>
     <th>Title</th>
     <th>Count</th>
 </tr>
 {% for coll in output[2] %}
     <tr>
-        <td><input type="checkbox"></td>
-        <td>{{ coll[0] }}</td>
+        <td align="center"><input name="include" id="include" type="checkbox" value="{{ coll[0] }}"{% if coll[3] %} checked {% endif %}></td>
+        <td align="right"><a href="{{ url }}{{ coll[0] }}">{{ coll[0] }}</a></td>
         <td>{{ coll[1] }}</td>
-        <td align="right">{{ coll[2] }}</td>
+        <td align="right"><a href="{{ url }}{{ coll[0] }}/digitized">{{ coll[2] }}</a></td>
     </tr>
 {% endfor %}
 </table>
+</form>
 
 {% if output[3] != None %}
     <p>Refresh complete. Time elapsed: {{ output[3] }} seconds.</p>

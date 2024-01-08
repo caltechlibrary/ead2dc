@@ -10,13 +10,14 @@
 
 {% if not done %}
 
-<p>This will take a few minutes. Please wait until the screen refreshes.</p>
-
-<p>Either <a href="{{ url_for('oaidp.regen2') }}">continue</a>, or choose another option.</p>
+<ul>
+    <li>Either <a href="{{ url_for('oaidp.regen2') }}">regenerate XML</a> (this will take a few minutes)</li>
+    <li>Or choose another option</li>
+</ul>
 
 {% else %}
 
-<p>Done.</p>
+<p style="color:ForestGreen;"><strong>DONE</strong></p>
 
 <p>{{ output }}</p>
 

@@ -28,7 +28,39 @@ def update_collections():
 
     for obj in client.get_paged('repositories/2/digital_objects'):
         for c in obj['collection']:
-            if c['ref'][16:26] != 'accessions':
+            if c['publish'] == True:
+                if c['ref'][16:26] != 'accessions':
+                    if c['ref'] in colls.keys():
+                        colls[c['ref']] = colls[c['ref']] + 1
+                    else:
+                        colls[c['ref']] = 1
+                    n += 1
+
+    out = list()
+    def sortfunc(e):
+        return e[2]
+
+    for key in colls:
+        out.append((key[26:], client.get(key).json()['title'], colls[key]))
+    out.sort(reverse=True, key=sortfunc)
+    for el in out:
+        print(el)
+    #print()
+    #print('number of digital objects:', n)
+    #print('number of collections:', len(colls))
+
+    end = time.time()
+    delta = end - start
+    #print('time:', delta, 'seconds')
+    return (n, len(colls), out, round(delta))
+'''
+def display_collection(id):
+    client.authorize()
+
+    dos = list()
+    for obj in client.get_paged('repositories/2/digital_objects'):
+        for c in obj['collection']:
+            if c['ref'] == "/repositories/2/resources/"+id:
                 if c['ref'] in colls.keys():
                     colls[c['ref']] = colls[c['ref']] + 1
                 else:
@@ -52,3 +84,4 @@ def update_collections():
     delta = end - start
     #print('time:', delta, 'seconds')
     return (n, len(colls), out, round(delta))
+'''
