@@ -118,7 +118,7 @@ def collections2():
         db.execute(query, [coll[0], coll[1], coll[2]])
     query = 'UPDATE collections SET incl=1 WHERE collno=?;'
     for id in incl:
-        db.execute(query, id)
+        db.execute(query, str(id))
     db.execute('UPDATE last_update SET dt=?;', [last_update])
     db.commit()
     return render_template('collections.html', 
