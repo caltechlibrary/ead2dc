@@ -27,8 +27,8 @@ def update_collections():
     colls = dict()
 
     for obj in client.get_paged('repositories/2/digital_objects'):
-        for c in obj['collection']:
-            if c['publish'] == True:
+        if obj['publish'] == True:
+            for c in obj['collection']:
                 if c['ref'][16:26] != 'accessions':
                     if c['ref'] in colls.keys():
                         colls[c['ref']] = colls[c['ref']] + 1
@@ -41,13 +41,14 @@ def update_collections():
         return e[2]
 
     for key in colls:
+        print(key)
         out.append((key[26:], client.get(key).json()['title'], colls[key]))
     out.sort(reverse=True, key=sortfunc)
     for el in out:
         print(el)
-    #print()
-    #print('number of digital objects:', n)
-    #print('number of collections:', len(colls))
+    print()
+    print('number of digital objects:', n)
+    print('number of collections:', len(colls))
 
     end = time.time()
     delta = end - start
