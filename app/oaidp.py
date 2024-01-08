@@ -105,22 +105,44 @@ def collections():
 
 @bp.route('/collections2')
 def collections2():
-    output=update_collections()
-    colls=output[2]
-    last_update = datetime.now().isoformat()
+    
     db = get_db()
-    incl = list()
+
+    # list of collections to include in OAI DP
+    incl = list() 
     for e in db.execute('SELECT collno FROM collections WHERE incl=1;'):
         incl.append(e[0])
+
+    # get data from ArchivesSpace as list
+    output=update_collections(incl) 
+    # output[0] = total number of do's
+    # output[1] = number of collections
+    # output[2] = a list of collections [coll id, title, no. of do's, incl]
+    # output[3] = elapsed time
+
+    # isolate collections info
+    colls=output[2]
+    
+    # delete collections
     db.execute('DELETE FROM collections')
-    query = 'INSERT INTO collections(collno, colltitle, docount) VALUES (?, ?, ?);'
+    
+    # insert updated data from ArchivesSpace
+    query = 'INSERT INTO collections(collno, colltitle, docount) VALUES (?, ?, ?, ?);'
     for coll in colls:
-        db.execute(query, [coll[0], coll[1], coll[2]])
-    query = 'UPDATE collections SET incl=1 WHERE collno=?;'
-    for id in incl:
-        db.execute(query, [id])
+        db.execute(query, [coll[0], coll[1], coll[2], coll[3]])
+    
+    # write included collections to db
+    #query = 'UPDATE collections SET incl=1 WHERE collno=?;'
+    #for id in incl:
+    #    db.execute(query, [id])
+
+    # record time of update
+    last_update = datetime.now().isoformat()
     db.execute('UPDATE last_update SET dt=?;', [last_update])
+
+    # commit changes
     db.commit()
+    
     return render_template('collections.html', 
                            output=output, 
                            dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"))

@@ -14,7 +14,8 @@ client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
                       username=config['ASPACE_USERNAME'],
                       password=config['ASPACE_PASSWORD'])
 
-def update_collections():
+def update_collections(incl):
+    # incl is list of coll ids to include in harvesting
     # searches for digital content and returns (n, len(colls), colls, delta)
     #       n = number of digital objects found
     #       len(colls) = number of collections with digital objects
@@ -27,62 +28,44 @@ def update_collections():
     colls = dict()
 
     for obj in client.get_paged('repositories/2/digital_objects'):
+        # selection published objects only
         if obj['publish'] == True:
+            # iterate over collection references (usually only one)
             for c in obj['collection']:
+                # filter out accession records
                 if c['ref'][16:26] != 'accessions':
+                    # use object reference as key
                     if c['ref'] in colls.keys():
+                        # if the collection is already in colls, increment
                         colls[c['ref']] = colls[c['ref']] + 1
                     else:
+                        # otherwise add reference to collection
                         colls[c['ref']] = 1
+                    # increment overall count of do's
                     n += 1
 
+    # create list for output
     out = list()
+
+    # iterate over collections
+    for key in colls:
+        # test for inclusion
+        if key[26:] in incl:
+            i=1
+        else:
+            i=0
+        # output tuples include id, title, do count, include T/F for each collection
+        out.append((key[26:], client.get(key).json()['title'], colls[key], i))
+
+    # function for sorting by number of do's
     def sortfunc(e):
         return e[2]
-
-    for key in colls:
-    #    print(key)
-        out.append((key[26:], client.get(key).json()['title'], colls[key]))
+    # sort in place
     out.sort(reverse=True, key=sortfunc)
-    #for el in out:
-    #    print(el)
-    #print()
-    #print('number of digital objects:', n)
-    #print('number of collections:', len(colls))
-
+    
+    # elapsed time
     end = time.time()
     delta = end - start
-    #print('time:', delta, 'seconds')
+    
+    # return total number of do's, number of collections, a list of collections [coll id, title, no. of do's, incl], elapsed time
     return (n, len(colls), out, round(delta))
-'''
-def display_collection(id):
-    client.authorize()
-
-    dos = list()
-    for obj in client.get_paged('repositories/2/digital_objects'):
-        for c in obj['collection']:
-            if c['ref'] == "/repositories/2/resources/"+id:
-                if c['ref'] in colls.keys():
-                    colls[c['ref']] = colls[c['ref']] + 1
-                else:
-                    colls[c['ref']] = 1
-                n += 1
-
-    out = list()
-    def sortfunc(e):
-        return e[2]
-
-    for key in colls:
-        out.append((key[26:], client.get(key).json()['title'], colls[key]))
-    out.sort(reverse=True, key=sortfunc)
-    for el in out:
-        print(el)
-    #print()
-    #print('number of digital objects:', n)
-    #print('number of collections:', len(colls))
-
-    end = time.time()
-    delta = end - start
-    #print('time:', delta, 'seconds')
-    return (n, len(colls), out, round(delta))
-'''
