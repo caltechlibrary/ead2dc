@@ -94,7 +94,7 @@ def collections():
     n = sum(k for (_, _, k) in colls)
     return render_template('collections.html', 
                            output=(n, len(colls), colls, None), 
-                           dt=datetime.replace(microsecond=0).fromisoformat(last_update))
+                           dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"))
 
 @bp.route('/collections2')
 def collections2():
@@ -110,7 +110,7 @@ def collections2():
     db.commit()
     return render_template('collections.html', 
                            output=output, 
-                           dt=datetime.fromisoformat(last_update))
+                           dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"))
 
 # regenerate XML
 @bp.route('/regen')
