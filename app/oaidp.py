@@ -94,7 +94,7 @@ def collections():
     n = sum(k for (_, _, k) in colls)
     return render_template('collections.html', 
                            output=(n, len(colls), colls, None), 
-                           dt=datetime.fromisoformat(last_update))
+                           dt=datetime.replace(microsecond=0).fromisoformat(last_update))
 
 @bp.route('/collections2')
 def collections2():
