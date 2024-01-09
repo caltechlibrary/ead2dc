@@ -9,10 +9,12 @@ import time
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
     config = json.load(f)
 
+from asnake.aspace import ASpace
 from asnake.client import ASnakeClient
 client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
                       username=config['ASPACE_USERNAME'],
                       password=config['ASPACE_PASSWORD'])
+client.authorize()
 
 def update_collections(incl):
     # incl is list of coll ids to include in harvesting
@@ -21,7 +23,7 @@ def update_collections(incl):
     #       len(colls) = number of collections with digital objects
     #       colls = list collections (title, number, number of dig. objs.)
     #       time elapsed
-    client.authorize()
+    #client.authorize()
 
     start = time.time()
     n = 0
@@ -69,3 +71,18 @@ def update_collections(incl):
     
     # return total number of do's, number of collections, a list of collections [coll id, title, no. of do's, incl], elapsed time
     return (n, len(colls), out, round(delta))
+
+
+# get collection info for a list of collection ids
+def get_collectioninfo(ids):
+
+    aspace = ASpace()
+    repo = aspace.repositories(2)
+
+    for id in ids:
+        file = repo.archival_objects(id)
+        print (file.title)
+
+    # return list of lists containing collection info
+    #[collection['id'], collection['ead url'], collection['title'], collection['description']
+    return

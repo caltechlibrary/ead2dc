@@ -1,4 +1,5 @@
 from app.aspace import update_collections
+from app.db import get_db
 
 from flask import Blueprint, request, Response, render_template
 from datetime import datetime, date, timedelta
@@ -25,8 +26,6 @@ pub_url = config['PUBLIC_URL']
 
 # collection base
 cbase = config['COLLECTION_BASE_URI']
-
-from app.db import get_db
 
 bp = Blueprint('oaidp', __name__)
 
