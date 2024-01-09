@@ -242,12 +242,12 @@ for coll in colls:
 
     #print('Reading ' + coll[0] + '...')
     response = requests.get(coll[1])
-    with open('xml/aspace.xml', 'wb') as file:
+    with open(Path(Path(__file__).resolve().parent).joinpath('xml/aspace.xml'), 'wb') as file:
         file.write(response.content)
 
     #read OAI finding aid
     #print('Writing ' + coll[0] + '...')
-    tree = ET.parse('xml/aspace.xml')
+    tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('xml/aspace.xml'))
     root = tree.getroot()
 
     #isolate the EAD portion of the file
