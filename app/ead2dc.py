@@ -168,9 +168,6 @@ for id in config['Collections']:
     uri = config['+str(id)
 '''
 
-
-print('Building OAI-PMH XML...')
-
 # namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 
       'xlink': 'http://www.w3.org/1999/xlink',
@@ -235,11 +232,7 @@ for coll in colls:
 
 no_records = 0
 
-print("Collections written to XML:\n")
-
 for coll in colls: 
-
-    print(coll[2])
 
     setid = coll[0]
 
@@ -301,21 +294,8 @@ for coll in colls:
                                                 for c12 in c11.findall('.//c12', ns):
                                                     inheritdata(c12, 12)
 
-
-#insert ListSets segment into oaixml
-#oaixml.insert(0, ListSets)
-
-
-#display the output
-#print(prettify(oaixml))
 print('Number of records: ' + str(no_records))
 
 #write to disk
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
-
-#tree = ET.ElementTree(oaixml)
-#tree.write('caltecharchives.xml', encoding='utf-8', xml_declaration=True)
-
-#tree = ET.ElementTree(ListSets)
-#tree.write('sets.xml', encoding='utf-8', xml_declaration=True)
