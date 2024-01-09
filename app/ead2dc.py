@@ -235,12 +235,14 @@ for coll in colls:
 
 no_records = 0
 
+print("Collections written to XML:\n")
 
 for coll in colls: 
 
+    print(coll[2])
+
     setid = coll[0]
 
-    print('Reading ' + coll[0] + '...')
     response = requests.get(coll[1])
     with open(Path(Path(__file__).resolve().parent).joinpath('../xml/aspace.xml'), 'wb') as file:
         file.write(response.content)
