@@ -14,7 +14,6 @@ from asnake.client import ASnakeClient
 client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
                       username=config['ASPACE_USERNAME'],
                       password=config['ASPACE_PASSWORD'])
-client.authorize()
 
 def update_collections(incl):
     # incl is list of coll ids to include in harvesting
@@ -23,7 +22,7 @@ def update_collections(incl):
     #       len(colls) = number of collections with digital objects
     #       colls = list collections (title, number, number of dig. objs.)
     #       time elapsed
-    #client.authorize()
+    client.authorize()
 
     start = time.time()
     n = 0
