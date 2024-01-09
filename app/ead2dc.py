@@ -156,22 +156,22 @@ with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as
 today = date.today().strftime("%Y-%m-%d")
 
 # load collection info as list of lists
-#colls = list()
-#for collection in config['Digital Collections']:
-#    colls.append([collection['id'], collection['ead url'], collection['title'], collection['description']])
+colls = list()
+for collection in config['Digital Collections']:
+    colls.append([collection['id'], collection['ead url'], collection['title'], collection['description']])
 '''
 # load collection info as list of lists
 for id in config['Collections']:
     uri = config['+str(id)
 '''
 
-db = get_db()
+#db = get_db()
 # list of collections to include in OAI DP
 # ['id', 'ead url', 'title', 'description']
-incl = list() 
-for e in db.execute('SELECT collno FROM collections WHERE incl=1;'):
-    incl.append(e[0])
-colls = get_collectioninfo(incl)
+#incl = list() 
+#for e in db.execute('SELECT collno FROM collections WHERE incl=1;'):
+#    incl.append(e[0])
+#colls = get_collectioninfo(incl)
 
 #print('Building OAI-PMH XML...')
 
