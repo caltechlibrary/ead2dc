@@ -241,7 +241,6 @@ for coll in colls:
         file.write(response.content)
 
     #read OAI finding aid
-    print('Writing ' + coll[0] + '...')
     tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('../xml/aspace.xml'))
     root = tree.getroot()
 
@@ -294,7 +293,7 @@ for coll in colls:
                                                 for c12 in c11.findall('.//c12', ns):
                                                     inheritdata(c12, 12)
 
-print('Number of records: ' + str(no_records))
+print('Number of records: '+str(no_records)+" ("+str(len(colls))+" collections).")
 
 #write to disk
 with open(fileout, 'w') as f:
