@@ -169,7 +169,7 @@ for id in config['Collections']:
 '''
 
 
-#print('Building OAI-PMH XML...')
+print('Building OAI-PMH XML...')
 
 # namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 
@@ -240,14 +240,14 @@ for coll in colls:
 
     setid = coll[0]
 
-    #print('Reading ' + coll[0] + '...')
+    print('Reading ' + coll[0] + '...')
     response = requests.get(coll[1])
-    with open(Path(Path(__file__).resolve().parent).joinpath('xml/aspace.xml'), 'wb') as file:
+    with open(Path(Path(__file__).resolve().parent).joinpath('../xml/aspace.xml'), 'wb') as file:
         file.write(response.content)
 
     #read OAI finding aid
-    #print('Writing ' + coll[0] + '...')
-    tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('xml/aspace.xml'))
+    print('Writing ' + coll[0] + '...')
+    tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('../xml/aspace.xml'))
     root = tree.getroot()
 
     #isolate the EAD portion of the file
