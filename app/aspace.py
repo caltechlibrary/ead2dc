@@ -79,8 +79,34 @@ def get_collectioninfo(ids):
     repo = aspace.repositories(2)
 
     for id in ids:
-        file = repo.archival_objects(id)
-        print (file.title)
+        #file = repo.archival_objects(id)
+        #print (file.title)
+        collection = repo.resources(id)
+        print(collection.title)
+        print(collection.id_0)
+        print(collection.uri)
+        print(collection.uri[26:])
+        print(collection)
+        print(collection.json()["title"])
+        print(collection.json()["id_0"])
+        print(collection.json()["publish"])
+        print(collection.json()["level"])
+        print(collection.json()["uri"])
+        print(collection.json()["uri"][26:])
+        for note in collection.json()["notes"]:
+            print('----------------------------------------------------------------')
+            if note['jsonmodel_type']=='note_multipart':
+                print(note['type'])
+                for subnote in note['subnotes']:
+                    print(subnote['content'])
+            elif note['jsonmodel_type']=='note_singlepart':
+                print(note['type'])
+                for content in note['content']:
+                    print(content)
+            else:
+                print('else', note['jsonmodel_type'])
+        print('----------------------------------------------------------------')
+
 
     # return list of lists containing collection info
     #[collection['id'], collection['ead url'], collection['title'], collection['description']

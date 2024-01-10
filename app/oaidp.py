@@ -1,4 +1,4 @@
-from app.aspace import update_collections
+from app.aspace import update_collections, get_collectioninfo
 from app.db import get_db
 
 from flask import Blueprint, request, Response, render_template
@@ -55,6 +55,12 @@ def prettify(elem):
     xml_file = dom.parseString(xml_string)
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
+
+# testing
+@bp.route('/test')
+def test():
+    get_collectioninfo(['219','197','124','34','228'])
+    return render_template("test.html")
 
 # returns a list of IDs
 @bp.route('/browse/<page_number>')
