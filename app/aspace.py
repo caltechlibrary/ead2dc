@@ -133,11 +133,11 @@ def get_notes(id):
         if note['jsonmodel_type']=='note_multipart':
             for subnote in note['subnotes']:
                 note_list.append(subnote['content'])
-            note_dict[note_type] = note_list
+            note_dict[note_type] = ' '.join(note_list)
         elif note['jsonmodel_type']=='note_singlepart':
             for content in note['content']:
                 note_list.append(content)
-            note_dict[note_type] = note_list
+            note_dict[note_type] = ' '.join(note_list)
         else:
             continue
 
