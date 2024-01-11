@@ -160,7 +160,7 @@ def update_coll_json(ids):
     db = get_db()
     # initialize dict for json output
     coll_dict = dict()
-    query = "SELECT title FROM collections WHERE collno=?;"
+    query = "SELECT colltitle FROM collections WHERE collno=?;"
     for id in ids:
         coll_dict[id] = {'title' : db.execute(query, id).fetchone()[0],
                          'description' : get_notes(id),
