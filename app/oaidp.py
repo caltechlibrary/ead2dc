@@ -133,13 +133,16 @@ def collections2():
 
     # initialize dict for json output
     coll_dict = dict()
+    print(coll_dict)
 
     # insert updated data from ArchivesSpace into db
     query = 'INSERT INTO collections(collno, colltitle, docount, incl) VALUES (?, ?, ?, ?);'
+    print(query)
     for coll in colls:
         db.execute(query, [coll[0], coll[1], coll[2], coll[3]])
 
         # dict for included collections
+        print(coll[3])
         if coll[3]:
             coll_dict[id] = {'title' : coll[1], 
                              'description' : get_notes(id), 
@@ -150,6 +153,7 @@ def collections2():
     for id in incl:
         db.execute(query, [id])
 
+    print(coll_dict)
     # save included collections to JSON file
     with open(Path(Path(__file__).resolve().parent).joinpath('collections.json'), 'w') as f:
         json.dump(coll_dict, f)
