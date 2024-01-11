@@ -232,6 +232,7 @@ for coll in colls:
 
 no_records = 0
 
+
 for coll in colls: 
 
     setid = coll[0]
@@ -293,8 +294,21 @@ for coll in colls:
                                                 for c12 in c11.findall('.//c12', ns):
                                                     inheritdata(c12, 12)
 
-print('Number of records: '+str(no_records)+" ("+str(len(colls))+" collections).")
+
+#insert ListSets segment into oaixml
+#oaixml.insert(0, ListSets)
+
+
+#display the output
+#print(prettify(oaixml))
+print('Number of records: ' + str(no_records) + ' (' + str(len(colls)) + ' collections)')
 
 #write to disk
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
+
+#tree = ET.ElementTree(oaixml)
+#tree.write('caltecharchives.xml', encoding='utf-8', xml_declaration=True)
+
+#tree = ET.ElementTree(ListSets)
+#tree.write('sets.xml', encoding='utf-8', xml_declaration=True)

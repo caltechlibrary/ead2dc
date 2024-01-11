@@ -9,14 +9,26 @@ import time
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
     config = json.load(f)
 
+# max number of records to return
+maxrecs = config['MAXIMUM_RECORDS_RETURNED']
+# data provider URL
+dpurl = config['DATA_PROVIDER_URL']
+# base uri
+idbase = config['ID_BASE_URI'] 
+# public url
+pub_url = config['PUBLIC_URL']
+# collection base
+cbase = config['COLLECTION_BASE_URI']
+
 from asnake.aspace import ASpace
 from asnake.client import ASnakeClient
 client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
                       username=config['ASPACE_USERNAME'],
                       password=config['ASPACE_PASSWORD'])
 
-def update_collections(incl):
-    # incl is list of coll ids to include in harvesting
+def update_collections(ids):
+
+    # ids is list of coll ids to include in harvesting
     # searches for digital content and returns (n, len(colls), colls, delta)
     #       n = number of digital objects found
     #       len(colls) = number of collections with digital objects
@@ -28,8 +40,9 @@ def update_collections(incl):
     n = 0
     colls = dict()
 
+    # iterate over digital objects
     for obj in client.get_paged('repositories/2/digital_objects'):
-        # selection published objects only
+        # select published objects only
         if obj['publish'] == True:
             # iterate over collection references (usually only one)
             for c in obj['collection']:
@@ -51,7 +64,7 @@ def update_collections(incl):
     # iterate over collections
     for key in colls:
         # test for inclusion
-        if key[26:] in incl:
+        if key[26:] in ids:
             i=1
         else:
             i=0
@@ -75,39 +88,57 @@ def update_collections(incl):
 # get collection info for a list of collection ids
 def get_collectioninfo(ids):
 
-    aspace = ASpace()
-    repo = aspace.repositories(2)
+    client.authorize()
 
     for id in ids:
-        #file = repo.archival_objects(id)
-        #print (file.title)
-        collection = repo.resources(id)
-        print(collection.title)
-        print(collection.id_0)
-        print(collection.uri)
-        print(collection.uri[26:])
-        print(collection)
-        print(collection.json()["title"])
-        print(collection.json()["id_0"])
-        print(collection.json()["publish"])
-        print(collection.json()["level"])
-        print(collection.json()["uri"])
-        print(collection.json()["uri"][26:])
-        for note in collection.json()["notes"]:
-            print('----------------------------------------------------------------')
-            if note['jsonmodel_type']=='note_multipart':
-                print(note['type'])
-                for subnote in note['subnotes']:
-                    print(subnote['content'])
-            elif note['jsonmodel_type']=='note_singlepart':
-                print(note['type'])
-                for content in note['content']:
-                    print(content)
-            else:
-                print('else', note['jsonmodel_type'])
-        print('----------------------------------------------------------------')
-
+        # initiate list of collections
+        colls = list()
+        # construct uri from id
+        uri = '/repositories/2/resources/'+id
+        # retrieve collection
+        collection = client.get(uri)
+        # construct url for ead
+        ead_url = pub_url+'oai?verb=GetRecord&identifier='+cbase+id+'&metadataPrefix=oai_ead'
+        # retrieve collection identifier, e.g. 'HaleGE'
+        id_0 = collection.json()["id_0"]
+        # retrieve title, e.g. 'George Ellery Hale Collection'
+        title = collection.json()["title"]
+        # retrieve notes dict
+        notes = get_notes(id)
+        k = notes.keys()
+        description = notes[k]
+        # assemble collection info as list
+        coll_info = [id_0, ead_url, title, description]
+        print(coll_info)
+        colls.append(coll_info)
 
     # return list of lists containing collection info
     #[collection['id'], collection['ead url'], collection['title'], collection['description']
-    return
+    
+    return colls
+
+
+# read notes from collection; returns dict
+def get_notes(id):
+
+    client.authorize()
+
+    uri = '/repositories/2/resources/'+id
+    collection = client.get(uri)
+    note_dict = dict()
+
+    for note in collection.json()["notes"]:
+        note_type = note['type']
+        note_list = list()
+        if note['jsonmodel_type']=='note_multipart':
+            for subnote in note['subnotes']:
+                note_list.append(subnote['content'])
+            note_dict[note_type] = note_list
+        elif note['jsonmodel_type']=='note_singlepart':
+            for content in note['content']:
+                note_list.append(content)
+            note_dict[note_type] = note_list
+        else:
+            continue
+
+    return note_dict

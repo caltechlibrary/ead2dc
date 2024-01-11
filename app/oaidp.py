@@ -1,5 +1,6 @@
 from app.aspace import update_collections, get_collectioninfo
 from app.db import get_db
+#import app.ead2dc
 
 from flask import Blueprint, request, Response, render_template
 from datetime import datetime, date, timedelta
@@ -14,16 +15,12 @@ with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), 'r') as
 
 # max number of records to return
 maxrecs = config['MAXIMUM_RECORDS_RETURNED']
-
 # data provider URL
 dpurl = config['DATA_PROVIDER_URL']
-
 # base uri
 idbase = config['ID_BASE_URI'] 
-
 # public url
 pub_url = config['PUBLIC_URL']
-
 # collection base
 cbase = config['COLLECTION_BASE_URI']
 
@@ -183,6 +180,7 @@ def regen2():
     xmlpath = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
     completed_process = subprocess.run(['python', codepath], capture_output=True, text=True)
     output = completed_process.stdout
+    #output = app.ead2dc.ead()
     return render_template("regen.html", 
                            done=True, 
                            output=output, 
