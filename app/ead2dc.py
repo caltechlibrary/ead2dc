@@ -148,13 +148,7 @@ def locatedao(c):
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
     config = json.load(f)
-'''
-# create and authorize aspace client
-client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
-                      username=config['ASPACE_USERNAME'],
-                      password=config['ASPACE_PASSWORD'])
-client.authorize()
-'''
+
 # string form of date to write to each record
 today = date.today().strftime("%Y-%m-%d")
 

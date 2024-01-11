@@ -20,7 +20,6 @@ pub_url = config['PUBLIC_URL']
 # collection base
 cbase = config['COLLECTION_BASE_URI']
 
-from asnake.aspace import ASpace
 from asnake.client import ASnakeClient
 client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
                       username=config['ASPACE_USERNAME'],
@@ -34,6 +33,7 @@ def update_collections(ids):
     #       len(colls) = number of collections with digital objects
     #       colls = list collections (title, number, number of dig. objs.)
     #       time elapsed
+    
     client.authorize()
 
     start = time.time()

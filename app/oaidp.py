@@ -92,6 +92,7 @@ def search():
         return render_template("search.html")
 
 # read/write collections data to db
+# display collections list
 @bp.route('/collections')
 def collections():
     query = "SELECT * FROM collections ORDER BY docount DESC;"
@@ -104,27 +105,30 @@ def collections():
                            dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
                            url=pub_url+cbase)
 
+# refresh collections data from ArchivesSpace
 @bp.route('/collections2')
 def collections2():
-    
+
     db = get_db()
 
     # list of collections to include in OAI DP
+    # this is used to update incl field after update
     incl = list() 
     for e in db.execute('SELECT collno FROM collections WHERE incl=1;'):
         incl.append(e[0])
 
     # get data from ArchivesSpace as list
-    output=update_collections(incl) 
     # output[0] = total number of do's
     # output[1] = number of collections
     # output[2] = a list of collections [coll id, title, no. of do's, incl]
     # output[3] = elapsed time
+    output=update_collections(incl) 
 
     # isolate collections info
     colls=output[2]
     
     # delete collections
+    # easiest way to refresh data
     db.execute('DELETE FROM collections')
     
     # insert updated data from ArchivesSpace
@@ -132,10 +136,10 @@ def collections2():
     for coll in colls:
         db.execute(query, [coll[0], coll[1], coll[2], coll[3]])
     
-    # write included collections to db
-    #query = 'UPDATE collections SET incl=1 WHERE collno=?;'
-    #for id in incl:
-    #    db.execute(query, [id])
+    # update incl field
+    query = 'UPDATE collections SET incl=1 WHERE collno=?;'
+    for id in incl:
+        db.execute(query, [id])
 
     # record time of update
     last_update = datetime.now().isoformat()
