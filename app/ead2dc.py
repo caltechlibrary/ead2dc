@@ -219,11 +219,6 @@ for coll in colls:
     setSpec.text = coll[0]
     setName = ET.SubElement(set, 'setName')
     setName.text = coll[2]
-#    setdescription = ET.SubElement(set, 'setDescription')
-#    oaidcdc = ET.SubElement(setdescription, 'dc')
-#    dc = ET.SubElement(oaidcdc, 'description')
-#    dc.text = 'some text'
-
     setDescription = ET.SubElement(ET.SubElement(ET.SubElement(
         set, 'setDescription'), 'oai_dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'}), 'dc:description')
@@ -254,15 +249,6 @@ for coll in colls:
     #save the collection title
     collectiontitle = archdesc.find('.//did/unittitle', ns).text
 
-    #construct a filename for output
-    #try:
-    #    fileid = 'caltecharchives'+root.find('.//{*}request', ns).attrib['identifier'].replace('/', '-')
-    #except:
-    #    try:
-    #        fileid = ead.find('.//eadid', ns).text
-    #    except:
-    #        fileid = 'caltecharchives'
-    #fileout = fileid + '.xml'
     fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 
     #build ListRecords segment
@@ -295,20 +281,10 @@ for coll in colls:
                                                     inheritdata(c12, 12)
 
 
-#insert ListSets segment into oaixml
-#oaixml.insert(0, ListSets)
-
-
-#display the output
-#print(prettify(oaixml))
+# output (to screen if running from command line; to web app otherwise)
 print('Number of records: ' + str(no_records) + ' (' + str(len(colls)) + ' collections)')
 
 #write to disk
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
 
-#tree = ET.ElementTree(oaixml)
-#tree.write('caltecharchives.xml', encoding='utf-8', xml_declaration=True)
-
-#tree = ET.ElementTree(ListSets)
-#tree.write('sets.xml', encoding='utf-8', xml_declaration=True)
