@@ -151,7 +151,7 @@ def collections2():
         db.execute(query, [id])
 
     # save included collections to JSON file
-    with open("collections.json", "w") as f:
+    with open(Path(Path(__file__).resolve().parent).joinpath('collections.json'), 'w') as f:
         json.dump(coll_dict, f)
 
     # record time of update
