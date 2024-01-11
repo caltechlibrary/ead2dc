@@ -33,7 +33,7 @@ def update_collections(ids):
     #       len(colls) = number of collections with digital objects
     #       colls = list collections (title, number, number of dig. objs.)
     #       time elapsed
-    
+
     client.authorize()
 
     start = time.time()
@@ -118,7 +118,7 @@ def get_collectioninfo(ids):
     return colls
 
 
-# read notes from collection; returns dict
+# read notes from collection; returns string
 def get_notes(id):
 
     client.authorize()
@@ -141,4 +141,8 @@ def get_notes(id):
         else:
             continue
 
-    return note_dict
+        description = ''
+        for key in note_dict.keys():
+            description = description + ' (' + key + ') ' + note_dict[key]
+
+    return description

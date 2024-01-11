@@ -1,4 +1,4 @@
-from app.aspace import update_collections, get_collectioninfo
+from app.aspace import update_collections, get_collectioninfo, get_notes
 from app.db import get_db
 
 from flask import Blueprint, request, Response, render_template
@@ -130,16 +130,29 @@ def collections2():
     # delete collections
     # easiest way to refresh data
     db.execute('DELETE FROM collections')
-    
-    # insert updated data from ArchivesSpace
+
+    # initialize dict for json output
+    coll_dict = dict()
+
+    # insert updated data from ArchivesSpace into db
     query = 'INSERT INTO collections(collno, colltitle, docount, incl) VALUES (?, ?, ?, ?);'
     for coll in colls:
         db.execute(query, [coll[0], coll[1], coll[2], coll[3]])
+
+        # dict for included collections
+        if coll[3]:
+            coll_dict[id] = {'title' : coll[1], 
+                             'description' : get_notes(id), 
+                             'eadurl' : pub_url+cbase+id+'&metadataPrefix=oai_ead'}
     
     # update incl field
     query = 'UPDATE collections SET incl=1 WHERE collno=?;'
     for id in incl:
         db.execute(query, [id])
+
+    # save included collections to JSON file
+    with open("collections.json", "w") as f:
+        json.dump(coll_dict, f)
 
     # record time of update
     last_update = datetime.now().isoformat()
@@ -152,6 +165,7 @@ def collections2():
                            output=output, 
                            dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"))
 
+# update selected collections
 @bp.route('/collections3', methods=['GET', 'POST'])
 def collections3():
     db = get_db()
@@ -412,10 +426,4 @@ def oai():
         error = ET.SubElement(oaixml, 'error')
         error.text = "Missing or invalid verb or key."
 
-    #print(f'{count} records written.')
-    #print(f'Cursor position: {cursor}')
-
-
     return Response(ET.tostring(oaixml), mimetype='text/xml')
-
-
