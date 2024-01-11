@@ -121,6 +121,8 @@ def get_collectioninfo(ids):
 # read notes from collection; returns string
 def get_notes(id):
 
+    description = ''
+
     client.authorize()
 
     uri = '/repositories/2/resources/'+id
@@ -141,7 +143,6 @@ def get_notes(id):
         else:
             continue
 
-        description = ''
         for key in note_dict.keys():
             description = description + ' (' + key + ') ' + note_dict[key]
 
