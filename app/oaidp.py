@@ -162,7 +162,7 @@ def update_coll_json(ids):
     coll_dict = dict()
     query = "SELECT colltitle FROM collections WHERE collno=?;"
     for id in ids:
-        coll_dict[id] = {'title' : db.execute(query, id).fetchone()[0],
+        coll_dict[id] = {'title' : db.execute(query, [id]).fetchone()[0],
                          'description' : get_notes(id),
                          'eadurl' : pub_url+cbase+id+'&metadataPrefix=oai_ead'}
     print(coll_dict)
