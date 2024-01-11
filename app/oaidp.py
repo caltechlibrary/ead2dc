@@ -117,6 +117,8 @@ def collections2():
     for e in db.execute('SELECT collno FROM collections WHERE incl=1;'):
         incl.append(e[0])
 
+    update_coll_json(incl)
+
     # get data from ArchivesSpace as list
     # output[0] = total number of do's
     # output[1] = number of collections
@@ -131,32 +133,16 @@ def collections2():
     # easiest way to refresh data
     db.execute('DELETE FROM collections')
 
-    # initialize dict for json output
-    coll_dict = dict()
-    print(coll_dict)
-
     # insert updated data from ArchivesSpace into db
     query = 'INSERT INTO collections(collno, colltitle, docount, incl) VALUES (?, ?, ?, ?);'
     print(query)
     for coll in colls:
         db.execute(query, [coll[0], coll[1], coll[2], coll[3]])
-
-        # dict for included collections
-        print(coll[3])
-        if coll[3]:
-            coll_dict[id] = {'title' : coll[1], 
-                             'description' : get_notes(id), 
-                             'eadurl' : pub_url+cbase+id+'&metadataPrefix=oai_ead'}
     
     # update incl field
     query = 'UPDATE collections SET incl=1 WHERE collno=?;'
     for id in incl:
         db.execute(query, [id])
-
-    print(coll_dict)
-    # save included collections to JSON file
-    with open(Path(Path(__file__).resolve().parent).joinpath('collections.json'), 'w') as f:
-        json.dump(coll_dict, f)
 
     # record time of update
     last_update = datetime.now().isoformat()
@@ -169,15 +155,32 @@ def collections2():
                            output=output, 
                            dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"))
 
+# update collections json
+def update_coll_json(ids):
+    db = get_db()
+    # initialize dict for json output
+    coll_dict = dict()
+    query = "SELECT title FROM collections WHERE collno=?;"
+    for id in ids:
+        coll_dict[id] = {'title' : db.execute(query, id).fetchone()[0],
+                         'description' : get_notes(id),
+                         'eadurl' : pub_url+cbase+id+'&metadataPrefix=oai_ead'}
+    print(coll_dict)
+    # save included collections to JSON file
+    with open(Path(Path(__file__).resolve().parent).joinpath('collections.json'), 'w') as f:
+        json.dump(coll_dict, f)
+
 # update selected collections
 @bp.route('/collections3', methods=['GET', 'POST'])
 def collections3():
     db = get_db()
     if request.method == 'POST':
         db.execute('UPDATE collections SET incl=0;')
-        for id in request.form.getlist('include'):
+        ids = request.form.getlist('include')
+        for id in ids:
             db.execute('UPDATE collections SET incl=1 WHERE collno=?', [id])
         db.commit()
+        update_coll_json(ids)
     query = "SELECT * FROM collections ORDER BY docount DESC;"
     colls = db.execute(query).fetchall()
     last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
