@@ -52,12 +52,6 @@ def prettify(elem):
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
 
-# testing
-@bp.route('/test')
-def test():
-    get_collectioninfo(['219','197','124','34','228'])
-    return render_template("test.html")
-
 # returns a list of IDs
 @bp.route('/browse/<page_number>')
 def browse(page_number):
