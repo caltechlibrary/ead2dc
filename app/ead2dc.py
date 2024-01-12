@@ -158,9 +158,9 @@ with open(Path(Path(__file__).resolve().parent).joinpath('collections.json'), 'r
     collection_dict = json.load(f)
 colls = list()
 for key in collection_dict:
-    coll = list()
-    coll.append([key, collection_dict[key]['eadurl'], collection_dict[key]['title'], collection_dict[key]['description']])
-    colls.append(coll)
+    colls.append([key, collection_dict[key]['eadurl'], collection_dict[key]['title'], collection_dict[key]['description']])
+
+print(collection_dict)
 '''
 for collection in config['Digital Collections']:
     colls.append([collection['id'], collection['ead url'], collection['title'], collection['description']])
@@ -235,12 +235,14 @@ for coll in colls:
     setid = coll[0]
 
     response = requests.get(coll[1])
-    with open(Path(Path(__file__).resolve().parent).joinpath('../xml/aspace.xml'), 'wb') as file:
-        file.write(response.content)
+    #with open(Path(Path(__file__).resolve().parent).joinpath('../xml/aspace.xml'), 'wb') as file:
+    #    file.write(response.content)
 
     #read OAI finding aid
-    tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('../xml/aspace.xml'))
-    root = tree.getroot()
+    #tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('../xml/aspace.xml'))
+    #root = tree.getroot()
+    print('coll[1]:', coll[1], response.content)
+    root = ET.fromstring(response.content)
 
     #isolate the EAD portion of the file
     ead = root.find('.//ead', ns)

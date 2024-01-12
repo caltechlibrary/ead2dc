@@ -164,7 +164,7 @@ def update_coll_json(ids):
     for id in ids:
         coll_dict[id] = {'title' : db.execute(query, [id]).fetchone()[0],
                          'description' : get_notes(id),
-                         'eadurl' : pub_url+cbase+id+'&metadataPrefix=oai_ead'}
+                         'eadurl' : pub_url+'oai?verb=GetRecord&identifier=/'+cbase+id+'&metadataPrefix=oai_ead'}
     print(coll_dict)
     # save included collections to JSON file
     with open(Path(Path(__file__).resolve().parent).joinpath('collections.json'), 'w') as f:
