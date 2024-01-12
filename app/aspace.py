@@ -127,29 +127,24 @@ def get_notes(id):
 
     uri = '/repositories/2/resources/'+id
     collection = client.get(uri)
-#    note_dict = dict()
-#    note_type_list = list()
 
     for note in collection.json()['notes']:
         note_type = note['type']
         note_list = list()
         if note['jsonmodel_type']=='note_multipart':
-            for subnote in note['subnotes']:
-                note_list.append(subnote['content'])
-#            if note_type not in note_type_list:
-#                note_dict[note_type] = ' '.join(note_list)
-#                note_type_list.append(note_type)
+            try:
+                for subnote in note['subnotes']:
+                    note_list.append(subnote['content'])
+            except:
+                continue
         elif note['jsonmodel_type']=='note_singlepart':
-            for content in note['content']:
-                note_list.append(content)
-#            if note_type not in note_type_list:
-#                note_dict[note_type] = ' '.join(note_list)
-#                note_type_list.append(note_type)
+            try:
+                for content in note['content']:
+                    note_list.append(content)
+            except:
+                continue
         else:
             continue
-
-#        for key in note_dict.keys():
-#            description = description + ' (' + key + ') ' + note_dict[key]
 
         description = description + ' (' + note_type + ') ' + ' '.join(note_list)
 
