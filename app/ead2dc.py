@@ -153,10 +153,17 @@ with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as
 today = date.today().strftime("%Y-%m-%d")
 
 # load collection info as list of lists
+with open(Path(Path(__file__).resolve().parent).joinpath('collections.json'), 'r') as f:
+    # reading from json file
+    collection_dict = json.load(f)
 colls = list()
+for key in collection_dict:
+    coll = list()
+    coll.append([key, collection_dict[key]['eadurl'], collection_dict[key]['title'], collection_dict[key]['description']])
+'''
 for collection in config['Digital Collections']:
     colls.append([collection['id'], collection['ead url'], collection['title'], collection['description']])
-'''
+
 # load collection info as list of lists
 for id in config['Collections']:
     uri = config['+str(id)
