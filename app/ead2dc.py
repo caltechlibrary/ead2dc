@@ -157,14 +157,10 @@ with open(Path(Path(__file__).resolve().parent).joinpath('collections.json'), 'r
     # reading from json file
     collection_dict = json.load(f)
 colls = list()
-print(collection_dict)
 for key in collection_dict:
-    print(key)
     coll = list()
     coll.append([key, collection_dict[key]['eadurl'], collection_dict[key]['title'], collection_dict[key]['description']])
     colls.append(coll)
-    print(coll)
-print(colls)
 '''
 for collection in config['Digital Collections']:
     colls.append([collection['id'], collection['ead url'], collection['title'], collection['description']])

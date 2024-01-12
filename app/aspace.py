@@ -130,7 +130,7 @@ def get_notes(id):
     note_dict = dict()
     note_type_list = list()
 
-    for note in collection.json()["notes"]:
+    for note in collection.json()["notes"][0]:
         note_type = note['type']
         note_list = list()
         if note['jsonmodel_type']=='note_multipart':
