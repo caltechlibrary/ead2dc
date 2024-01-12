@@ -161,6 +161,7 @@ for key in collection_dict:
     coll = list()
     coll.append([key, collection_dict[key]['eadurl'], collection_dict[key]['title'], collection_dict[key]['description']])
     colls.append(coll)
+print(colls)
 '''
 for collection in config['Digital Collections']:
     colls.append([collection['id'], collection['ead url'], collection['title'], collection['description']])
