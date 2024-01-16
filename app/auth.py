@@ -105,9 +105,9 @@ def authorize_user():
         # we check the username against our authorized users.csv file
         query = "SELECT username FROM user WHERE username = ?;"
         db = get_db()
-        user = db.execute(query, [email_address]).fetchone()[0]
+        user = db.execute(query, [email_address]).fetchone()
         if user:
-            return user
+            return user[0]
         else:
             return None
     else:
