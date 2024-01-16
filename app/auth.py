@@ -40,6 +40,8 @@ def register():
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     user_email = authorize_user()
+    return render_template('auth/login.html', user_email)
+
     if user_email:
         print(user_email)
     else:
