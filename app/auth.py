@@ -67,18 +67,17 @@ def login():
 
     return render_template('auth/login.html')
     '''
-'''
+
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
-
     if user_id is None:
         g.user = None
     else:
         g.user = get_db().execute(
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
-'''
+
 @bp.route('/logout')
 def logout():
     session.clear()
@@ -105,7 +104,6 @@ def authorize_user():
     query = "SELECT username FROM user WHERE username = ?;"
     db = get_db()
     if db.execute(query, [email_address]).fetchone():
-        g.user = username
-    else:
-        g.user = None
-    return
+        session.clear()
+        session['user_id'] = username
+    return redirect(url_for('index'))
