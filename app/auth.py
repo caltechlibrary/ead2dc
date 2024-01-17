@@ -40,10 +40,10 @@ def register():
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     username, user_email = authorize_user()
-    if username:
-        g.user['username'] = username
+    if user_email:
+        g.user = user_email
     else:
-        g.user['username'] = None
+        g.user = None
     return render_template('index.html')
     '''
     if request.method == 'POST':
