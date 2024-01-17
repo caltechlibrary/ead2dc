@@ -44,7 +44,7 @@ def login():
         g.user = username
     else:
         g.user = None
-    return render_template('/')
+    return redirect(url_for('index'))
     '''
     if request.method == 'POST':
         username = request.form['username']
