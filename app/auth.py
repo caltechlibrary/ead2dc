@@ -44,4 +44,4 @@ def authorize_user():
         session['auth'] = True
     else:
         session['auth'] = False
-    return redirect(url_for('index'))
+    return
