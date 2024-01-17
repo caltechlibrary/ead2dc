@@ -99,7 +99,8 @@ def login_required(view):
     return wrapped_view
 
 def authorize_user():
-    if request.environ.get("REMOTE_USER", None):
+    return request.environ["REMOTE_USER"]
+    if request.environ["REMOTE_USER"]:
         # REMOTE_USER is an email address in Shibboleth
         email_address = request.environ["REMOTE_USER"]
         # we check the username against our authorized users.csv file
