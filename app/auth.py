@@ -41,9 +41,9 @@ def register():
 def login():
     username, user_email = authorize_user()
     if username:
-        g.user = username
+        g.user['username'] = username
     else:
-        g.user = None
+        g.user['username'] = None
     return render_template('index.html')
     '''
     if request.method == 'POST':
