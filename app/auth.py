@@ -44,7 +44,7 @@ def login():
         g.user = username
     else:
         g.user = None
-    return render_template('auth/login.html', username=username, user_email=user_email)
+    return render_template('/')
     '''
     if request.method == 'POST':
         username = request.form['username']
