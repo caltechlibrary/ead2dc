@@ -107,8 +107,12 @@ def authorize_user():
         user = None
     # we check the username against our authorized users
     query = "SELECT username FROM user WHERE username = ?;"
+    print(query)
     db = get_db()
+    print(user)
     if db.execute(query, [user]).fetchone():
+        print('found')
         return user
     else:
+        print('not found')
         return None
