@@ -40,13 +40,12 @@ def register():
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     username, user_email = authorize_user()
+    if username:
+        g.user = username
+    else:
+        g.user = None
     return render_template('auth/login.html', username=username, user_email=user_email)
     '''
-    if user_email:
-        print(user_email)
-    else:
-        print('None')
-
     if request.method == 'POST':
         username = request.form['username']
         #password = request.form['password']
@@ -72,7 +71,7 @@ def login():
 
     return render_template('auth/login.html')
     '''
-    
+'''
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
@@ -83,7 +82,7 @@ def load_logged_in_user():
         g.user = get_db().execute(
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
-
+'''
 @bp.route('/logout')
 def logout():
     session.clear()
