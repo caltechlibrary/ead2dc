@@ -41,9 +41,11 @@ def register():
 def login():
     username, user_email = authorize_user()
     if user_email:
-        g.user = user_email
+        g.user = username
+        g.useremail = user_email
     else:
         g.user = None
+        g.useremail = None
     return render_template('index.html')
     '''
     if request.method == 'POST':
@@ -71,7 +73,7 @@ def login():
 
     return render_template('auth/login.html')
     '''
-
+'''
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
@@ -82,7 +84,7 @@ def load_logged_in_user():
         g.user = get_db().execute(
             'SELECT * FROM user WHERE id = ?', (user_id,)
         ).fetchone()
-
+'''
 @bp.route('/logout')
 def logout():
     session.clear()
@@ -109,6 +111,7 @@ def authorize_user():
     query = "SELECT username FROM user WHERE username = ?;"
     db = get_db()
     if db.execute(query, [email_address]).fetchone():
-        return username, email_address
+        g.user = username
     else:
-        return None, None
+        g.user = None
+    return
