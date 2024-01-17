@@ -160,15 +160,6 @@ colls = list()
 for key in collection_dict:
     colls.append([key, collection_dict[key]['eadurl'], collection_dict[key]['title'], collection_dict[key]['description']])
 
-print(collection_dict)
-'''
-for collection in config['Digital Collections']:
-    colls.append([collection['id'], collection['ead url'], collection['title'], collection['description']])
-
-# load collection info as list of lists
-for id in config['Collections']:
-    uri = config['+str(id)
-'''
 
 # namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 
@@ -241,7 +232,6 @@ for coll in colls:
     #read OAI finding aid
     #tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('../xml/aspace.xml'))
     #root = tree.getroot()
-    print('coll[1]:', coll[1], response.content)
     root = ET.fromstring(response.content)
 
     #isolate the EAD portion of the file
@@ -284,9 +274,6 @@ for coll in colls:
                                                 for c12 in c11.findall('.//c12', ns):
                                                     inheritdata(c12, 12)
 
-
-# output (to screen if running from command line; to web app otherwise)
-print('Number of records: ' + str(no_records) + ' (' + str(len(colls)) + ' collections)')
 
 #write to disk
 with open(fileout, 'w') as f:

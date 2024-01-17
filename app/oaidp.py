@@ -129,7 +129,6 @@ def collections2():
 
     # insert updated data from ArchivesSpace into db
     query = 'INSERT INTO collections(collno, colltitle, docount, incl) VALUES (?, ?, ?, ?);'
-    print(query)
     for coll in colls:
         db.execute(query, [coll[0], coll[1], coll[2], coll[3]])
     
@@ -159,7 +158,6 @@ def update_coll_json(ids):
         coll_dict[id] = {'title' : db.execute(query, [id]).fetchone()[0],
                          'description' : get_notes(id),
                          'eadurl' : pub_url+'oai?verb=GetRecord&identifier=/'+cbase+id+'&metadataPrefix=oai_ead'}
-    print(coll_dict)
     # save included collections to JSON file
     with open(Path(Path(__file__).resolve().parent).joinpath('collections.json'), 'w') as f:
         json.dump(coll_dict, f)
@@ -325,7 +323,6 @@ def oai():
             nodes = root.findall(f'.//identifier[.="{identifier}"]/../../..[@metadataPrefix]', ns)
             for node in nodes:
                 prefix = node.attrib['metadataPrefix']
-                print(f'.//ListMetadataFormats/metadataFormat/metadataPrefix[.="{prefix}"]/..')
                 mf = root.find(f'.//ListMetadataFormats/metadataFormat/metadataPrefix[.="{prefix}"]/..', ns)
                 listmetadataformats.append(mf)
                 count += 1

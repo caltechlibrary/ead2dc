@@ -146,6 +146,11 @@ def get_notes(id):
         else:
             continue
 
-        description = description + ' (' + note_type + ') ' + ' '.join(note_list)
+        if description == '' and note_type == 'abstract':
+            description = ' '.join(note_list)
+        elif description == '' and note_type == 'scopecontent':
+            description = ' '.join(note_list)
+
+        #description = description + ' (' + note_type + ') ' + ' '.join(note_list)
 
     return description
