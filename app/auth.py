@@ -99,17 +99,16 @@ def login_required(view):
     return wrapped_view
 
 def authorize_user():
-    return request.environ["REMOTE_USER"]
-    if request.environ["REMOTE_USER"]:
-        # REMOTE_USER is an email address in Shibboleth
-        email_address = request.environ["REMOTE_USER"]
-        # we check the username against our authorized users.csv file
-        query = "SELECT username FROM user WHERE username = ?;"
-        db = get_db()
-        user = db.execute(query, [email_address]).fetchone()
-        if user:
-            return user[0]
-        else:
-            return None
+    # REMOTE_USER is an email address in Shibboleth
+    email_address = request.environ["REMOTE_USER"]
+    if '@caltech.edu' in email_address:
+        user = email_address[:email_address.find('@caltech.edu')]
+    else:
+        user = None
+    # we check the username against our authorized users
+    query = "SELECT username FROM user WHERE username = ?;"
+    db = get_db()
+    if db.execute(query, [email_address]).fetchone():
+        return user[0]
     else:
         return None
