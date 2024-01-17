@@ -39,9 +39,9 @@ def register():
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
-    user_email = authorize_user()
-    return render_template('auth/login.html', user_email=user_email)
-
+    username, user_email = authorize_user()
+    return render_template('auth/login.html', username=username, user_email=user_email)
+    '''
     if user_email:
         print(user_email)
     else:
@@ -71,7 +71,8 @@ def login():
         flash(error)
 
     return render_template('auth/login.html')
-
+    '''
+    
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
@@ -102,17 +103,13 @@ def authorize_user():
     # REMOTE_USER is an email address in Shibboleth
     email_address = request.environ["REMOTE_USER"]
     if '@caltech.edu' in email_address:
-        user = email_address[:email_address.find('@caltech.edu')]
+        username = email_address[:email_address.find('@caltech.edu')]
     else:
-        user = None
+        username = email_address
     # we check the username against our authorized users
     query = "SELECT username FROM user WHERE username = ?;"
-    print(query)
     db = get_db()
-    print(user)
-    if db.execute(query, [user]).fetchone():
-        print('found')
-        return user
+    if db.execute(query, [email_address]).fetchone():
+        return username, email_address
     else:
-        print('not found')
-        return None
+        return None, None
