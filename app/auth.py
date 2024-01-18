@@ -8,7 +8,20 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
-    authorize_user()
+    # REMOTE_USER is an email address in Shibboleth
+    email_address = request.environ["REMOTE_USER"]
+    username = email_address[:email_address.find('@caltech.edu')]
+    # check the username against authorized users
+    session.clear()
+    session['user_id'] = username
+    query = "SELECT username FROM user WHERE username = ?;"
+    db = get_db()
+    if db.execute(query, [email_address]).fetchone():
+        session['auth'] = True
+    else:
+        session['auth'] = False
+    g.user = session.get('user_id')
+    g.auth = session.get('auth')
     return render_template('index.html')
 
 @bp.before_app_request
@@ -31,17 +44,3 @@ def login_required(view):
 
     return wrapped_view
 
-def authorize_user():
-    # REMOTE_USER is an email address in Shibboleth
-    email_address = request.environ["REMOTE_USER"]
-    username = email_address[:email_address.find('@caltech.edu')]
-    # check the username against authorized users
-    session.clear()
-    session['user_id'] = username
-    query = "SELECT username FROM user WHERE username = ?;"
-    db = get_db()
-    if db.execute(query, [email_address]).fetchone():
-        session['auth'] = True
-    else:
-        session['auth'] = False
-    return
