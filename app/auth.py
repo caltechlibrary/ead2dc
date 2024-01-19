@@ -1,7 +1,6 @@
 import functools
 
 from flask import (Blueprint, flash, g, redirect, render_template, request, session, url_for)
-from werkzeug.security import check_password_hash, generate_password_hash
 from app.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -11,12 +10,11 @@ def login():
     # REMOTE_USER is an email address in Shibboleth
     email_address = request.environ["REMOTE_USER"]
     username = email_address[:email_address.find('@caltech.edu')]
-    # check the username against authorized users
+    # check the email against authorized users
     session.clear()
     session['user_id'] = username
-    query = "SELECT username FROM user WHERE username = ?;"
     db = get_db()
-    if db.execute(query, [email_address]).fetchone():
+    if db.execute("SELECT username FROM user WHERE username = ?;", [email_address]).fetchone():
         session['auth'] = True
     else:
         session['auth'] = False

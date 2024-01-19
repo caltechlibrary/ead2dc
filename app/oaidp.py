@@ -123,8 +123,7 @@ def collections2():
     # isolate collections info
     colls=output[2]
     
-    # delete collections
-    # easiest way to refresh data
+    # delete collections (easiest way to refresh data)
     db.execute('DELETE FROM collections')
 
     # insert updated data from ArchivesSpace into db
@@ -226,6 +225,7 @@ def log(rq):
     db.commit()
     return
 
+# OAI data provider
 @bp.route('/oai')
 def oai():
 

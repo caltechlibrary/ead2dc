@@ -134,10 +134,6 @@ def inheritdata(c, n):
 #checks if digital object is present
 def locatedao(c):
     if c.find('./did/daogrp/daoloc', ns) is not None:
-        #checks for video or audio
-        #for daoloc in c.findall('./did/daogrp/daoloc', ns):
-        #    if 'datastream' in daoloc.attrib['{http://www.w3.org/1999/xlink}href']:
-        #        return False
         return True
     else:
         return False
