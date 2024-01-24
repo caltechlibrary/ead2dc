@@ -106,6 +106,12 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
             identifier.attrib = {'scheme': 'URI', 'type': 'thumbnail'}
         else:
             identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
+    for dao in c.findall('.//dao', ns):
+        identifier = ET.SubElement(dc, 'dc:identifier')
+        text = dao.attrib['{http://www.w3.org/1999/xlink}href']
+        type = dao.attrib['{http://www.w3.org/1999/xlink}type']
+        identifier.text = text
+        identifier.attrib = {'scheme': 'URI', 'type': type}
     no_records += 1
     return listrecords
 
@@ -135,6 +141,8 @@ def inheritdata(c, n):
 def locatedao(c):
     if c.find('./did/daogrp/daoloc', ns) is not None:
         return True
+    elif c.find('./did/dao', ns) is not None:
+        return True
     else:
         return False
 
@@ -154,8 +162,10 @@ with open(Path(Path(__file__).resolve().parent).joinpath('collections.json'), 'r
     collection_dict = json.load(f)
 colls = list()
 for key in collection_dict:
-    colls.append([key, collection_dict[key]['eadurl'], collection_dict[key]['title'], collection_dict[key]['description']])
-
+    colls.append([key, 
+                  collection_dict[key]['eadurl'], 
+                  collection_dict[key]['title'], 
+                  collection_dict[key]['description']])
 
 # namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 
@@ -167,10 +177,8 @@ ET.register_namespace('xlink', 'http://www.w3.org/1999/xlink')
 ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
 ET.register_namespace('dc', 'http://purl.org/dc/elements/1.1/')
 
-
 # create OAI-PMH XML object
 oaixml = ET.Element('OAI-PMH', {'xmlns': 'http://www.openarchives.org/OAI/2.0/'})
-
 
 # build Identify segment
 Identify = ET.SubElement(oaixml, 'Identify')
@@ -187,7 +195,6 @@ deletedRecord.text = 'no'
 granularity = ET.SubElement(Identify, 'granularity')
 granularity.text = 'YYYY-MM-DD'
 
-
 # build ListMetadataFormats segment
 ListMetadataFormats = ET.SubElement(oaixml, 'ListMetadataFormats')
 metadataFormat = ET.SubElement(ListMetadataFormats, 'metadataFormat')
@@ -197,7 +204,6 @@ schema = ET.SubElement(metadataFormat, 'schema')
 schema.text = "http://www.openarchives.org/OAI/2.0/oai_dc.xsd"
 metadataNamespace = ET.SubElement(metadataFormat, 'metadataNamespace')
 metadataNamespace.text = "http://www.openarchives.org/OAI/2.0/oai_dc/"
-
 
 # build ListSets segment
 ListSets = ET.SubElement(oaixml, 'ListSets')
@@ -213,21 +219,11 @@ for coll in colls:
                                            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'}), 'dc:description')
     setDescription.text = coll[3]
 
-
 no_records = 0
 
-
 for coll in colls: 
-
     setid = coll[0]
-
     response = requests.get(coll[1])
-    #with open(Path(Path(__file__).resolve().parent).joinpath('../xml/aspace.xml'), 'wb') as file:
-    #    file.write(response.content)
-
-    #read OAI finding aid
-    #tree = ET.parse(Path(Path(__file__).resolve().parent).joinpath('../xml/aspace.xml'))
-    #root = tree.getroot()
     root = ET.fromstring(response.content)
 
     #isolate the EAD portion of the file
@@ -270,8 +266,6 @@ for coll in colls:
                                                 for c12 in c11.findall('.//c12', ns):
                                                     inheritdata(c12, 12)
 
-
 #write to disk
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
-
