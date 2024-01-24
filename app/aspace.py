@@ -44,19 +44,25 @@ def update_collections(ids):
     for obj in client.get_paged('repositories/2/digital_objects'):
         # select published objects only
         if obj['publish'] == True:
-            # iterate over collection references (usually only one)
-            for c in obj['collection']:
-                # filter out accession records
-                if c['ref'][16:26] != 'accessions':
-                    # use object reference as key
-                    if c['ref'] in colls.keys():
-                        # if the collection is already in colls, increment
-                        colls[c['ref']] = colls[c['ref']] + 1
-                    else:
-                        # otherwise add reference to collection
-                        colls[c['ref']] = 1
-                    # increment overall count of do's
-                    n += 1
+            link=False
+            for file_version in obj['file_versions']:
+                if file_version['publish']:
+                    if file_version['file_uri'][:4]=='http':
+                        link=True
+            if link:
+                # iterate over collection references (usually only one)
+                for c in obj['collection']:
+                    # filter out accession records
+                    if c['ref'][16:26] != 'accessions':
+                        # use object reference as key
+                        if c['ref'] in colls.keys():
+                            # if the collection is already in colls, increment
+                            colls[c['ref']] = colls[c['ref']] + 1
+                        else:
+                            # otherwise add reference to collection
+                            colls[c['ref']] = 1
+                        # increment overall count of do's
+                        n += 1
 
     # create list for output
     out = list()
