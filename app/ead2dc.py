@@ -267,5 +267,6 @@ for coll in colls:
                                                     inheritdata(c12, 12)
 
 #write to disk
+print('line 270')
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
