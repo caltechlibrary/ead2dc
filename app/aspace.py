@@ -43,13 +43,13 @@ def update_collections(ids):
     # iterate over digital objects
     for obj in client.get_paged('repositories/2/digital_objects'):
         # select published objects only
-        if obj['publish']=='true':
-            link=False
+        if obj['publish']:
+            incl=False
             for file_version in obj['file_versions']:
-                if file_version['publish']=='true':
+                if file_version['publish']:
                     if file_version['file_uri'][:4]=='http':
-                        link=True
-            if link:
+                        incl=True
+            if incl:
                 # iterate over collection references (usually only one)
                 for c in obj['collection']:
                     # filter out accession records
