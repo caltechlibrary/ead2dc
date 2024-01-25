@@ -51,12 +51,14 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     for creat in c.findall('.//origination/persname', ns):
         creator = ET.SubElement(dc, 'dc:creator')
         creator.text = creat.text
-        creator.attrib = {'scheme': creat.attrib['source']}
+        if creat.attrib.get('source'):
+            creator.attrib = {'scheme': creat.attrib['source']}
     #creator (corpname) from current container
     for creat in c.findall('.//origination/corpname', ns):
         creator = ET.SubElement(dc, 'dc:creator')
         creator.text = creat.text
-        creator.attrib = {'scheme': creat.attrib['source']}
+        if creat.attrib.get('source'):
+            creator.attrib = {'scheme': creat.attrib['source']}
     #date from current container
     for unitdate in c.findall('.//unitdate', ns):
         date = ET.SubElement(dc, 'dc:date')
