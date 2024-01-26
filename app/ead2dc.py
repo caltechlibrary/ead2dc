@@ -75,23 +75,28 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     for subj in c.findall('.//controlaccess/subject', ns):
         subject = ET.SubElement(dc, 'dc:subject')
         subject.text = subj.text
-        subject.attrib = {'scheme': subj.attrib['source']}
+        if subj.attrib.get('source'):
+            subject.attrib = {'scheme': subj.attrib['source']}
     for geog in c.findall('.//controlaccess/geogname', ns):
         subject = ET.SubElement(dc, 'dc:subject')
         subject.text = geog.text
-        subject.attrib = {'scheme': geog.attrib['source']}
+        if geog.attrib.get('source'):
+            subject.attrib = {'scheme': geog.attrib['source']}
     for pers in c.findall('.//controlaccess/persname', ns):
         subject = ET.SubElement(dc, 'dc:subject')
         subject.text = pers.text
-        subject.attrib = {'scheme': pers.attrib['source']}
+        if pers.attrib.get('source'):
+            subject.attrib = {'scheme': pers.attrib['source']}
     for corp in c.findall('.//controlaccess/corpname', ns):
         subject = ET.SubElement(dc, 'dc:subject')
         subject.text = corp.text
-        subject.attrib = {'scheme': corp.attrib['source']}
+        if corp.attrib.get('source'):
+            subject.attrib = {'scheme': corp.attrib['source']}
     for func in c.findall('.//controlaccess/function', ns):
         subject = ET.SubElement(dc, 'dc:subject')
         subject.text = func.text
-        subject.attrib = {'scheme': func.attrib['source']}
+        if func.attrib.get('source'):
+            subject.attrib = {'scheme': func.attrib['source']}
     #identifiers from current container
     for unitid in c.findall('.//unitid', ns):
         identifier = ET.SubElement(dc, 'dc:identifier')

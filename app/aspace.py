@@ -43,7 +43,7 @@ def update_collections(ids):
     # iterate over digital objects
     for obj in client.get_paged('repositories/2/digital_objects'):
         # select published objects only
-        if obj['publish']:
+        if obj['publish'] and not obj['suppressed']:
             incl=False
             for file_version in obj['file_versions']:
                 if file_version['publish']:
