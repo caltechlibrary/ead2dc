@@ -231,6 +231,11 @@ def log(rq):
 @bp.route('/oai')
 def oai():
 
+    # list of collections to include
+    db = get_db()
+    query = "SELECT collno FROM collections WHERE incl;"
+    colls = [coll[0] for coll in db.execute(query).fetchall()]
+
     # empty list for errors
     errors = list()
 
@@ -341,8 +346,10 @@ def oai():
         rquest.text = dpurl
         listsets = ET.SubElement(oaixml, 'ListSets')
         for node in elem:
-            listsets.append(node)
-            count = 1
+            # check that set is in list of collections to include
+            if node.find('./setSpec', ns).text in colls:
+                listsets.append(node)
+                count = 1
 
     elif verb == 'ListRecords' or verb == 'ListIdentifiers':
 
@@ -360,9 +367,11 @@ def oai():
 
         for recrd in recrds:
 
-            if recrd.find('.//setSpec', ns).text == set or set is None:
+            if (recrd.find('.//setSpec', ns).text == set or set is None) and \
+                recrd.find('.//setSpec', ns).text in colls:
 
-                if recrd.find('.//datestamp', ns).text >= datefrom and recrd.find('.//datestamp', ns).text <= dateuntil:
+                if recrd.find('.//datestamp', ns).text >= datefrom and \
+                   recrd.find('.//datestamp', ns).text <= dateuntil:
 
                     cursor += 1
 
@@ -411,10 +420,14 @@ def oai():
             rquest.attrib = {'verb': 'GetRecord', 'identifier': identifier, 'metaDataPrefix': 'oai_dc'}
             rquest.text = dpurl
             getrecord = ET.SubElement(oaixml, 'GetRecord')
-            record = root.find(f'.//identifier[.="{identifier}"]/../../.', ns)
-            getrecord.append(record)
-            count += 1
-
+            if root.find('.//ListRecords/record/header/setSpec', ns).text in colls:
+                try:
+                    record = root.find(f'.//identifier[.="{identifier}"]/../../.', ns)
+                    getrecord.append(record)
+                    count += 1
+                except:
+                    pass
+            
     else:
 
         oaixml = ET.Element('OAI-PMH')
