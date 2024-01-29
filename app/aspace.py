@@ -4,6 +4,7 @@
 from pathlib import Path
 import json
 import time
+import re
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
@@ -29,15 +30,21 @@ def update_collections(ids):
 
     # ids is list of coll ids to include in harvesting
     # searches for digital content and returns (n, len(colls), colls, delta)
-    #       n = number of digital objects found
+    #       docount = total number of published digital objects
     #       len(colls) = number of collections with digital objects
-    #       colls = list collections (title, number, number of dig. objs.)
+    #       colls = list collections (title, number, number of dig. objs., 5 domain categories)
+    #       domains are:
+    #           'archives.caltech.edu' -> 'caltecharchives'
+    #           'library.caltech.edu' -> 'caltechlibrary'
+    #           'archive.org' -> 'internetarchive'
+    #           'youtube.com' -> 'youtube'
+    #           'other'
     #       time elapsed
 
     client.authorize()
 
     start = time.time()
-    n = 0
+
     colls = dict()
 
     # iterate over digital objects
@@ -51,18 +58,23 @@ def update_collections(ids):
                         incl=True
             if incl:
                 # iterate over collection references (usually only one)
-                for c in obj['collection']:
+                for collectionid in obj['collection']:
                     # filter out accession records
-                    if c['ref'][16:26] != 'accessions':
+                    if collectionid['ref'][16:26] != 'accessions':
                         # use object reference as key
-                        if c['ref'] in colls.keys():
+                        if collectionid['ref'] in colls.keys():
                             # if the collection is already in colls, increment
-                            colls[c['ref']] = colls[c['ref']] + 1
+                            colls[collectionid['ref']] = colls[collectionid['ref']] + 1
                         else:
                             # otherwise add reference to collection
-                            colls[c['ref']] = 1
-                        # increment overall count of do's
-                        n += 1
+                            colls[collectionid['ref']] = 1
+
+    # remove collections that are suppressed or not published
+    for coll in colls:
+        if client.get(coll).json()['suppressed'] or not client.get(coll).json()['publish']:
+            colls[coll]=0
+    colls = {key:val for key, val in colls.items() if val <= 0}
+    docount=sum(colls.values())
 
     # create list for output
     out = list()
@@ -77,18 +89,15 @@ def update_collections(ids):
         # output tuples include id, title, do count, include T/F for each collection
         out.append((key[26:], client.get(key).json()['title'], colls[key], i))
 
-    # function for sorting by number of do's
-    def sortfunc(e):
-        return e[2]
-    # sort in place
-    out.sort(reverse=True, key=sortfunc)
+    # sort in place, in reverse order by number of digital objects (i.e. 'colls[key]')
+    out.sort(reverse=True, key=lambda item: item[2], reverse=True)
     
     # elapsed time
     end = time.time()
     delta = end - start
     
     # return total number of do's, number of collections, a list of collections [coll id, title, no. of do's, incl], elapsed time
-    return (n, len(colls), out, round(delta))
+    return (docount, len(colls), out, round(delta))
 
 
 # get collection info for a list of collection ids
@@ -160,3 +169,17 @@ def get_notes(id):
         #description = description + ' (' + note_type + ') ' + ' '.join(note_list)
 
     return description
+
+# return domain of digital object
+def url_domain(url):
+    # remove spaces, split on '//', then split on '/' to find domain
+    domain = re.split('/', re.split('//', url.replace(' ', ''))[1])[0]
+    if 'archives.caltech.edu' in domain:
+        return 'caltecharchives'
+    elif 'archive.org' in domain:
+        return 'internetarchive'
+    elif 'library.caltech.edu' in domain:
+        return 'caltechlibrary'
+    else:
+        return 'other'
+    

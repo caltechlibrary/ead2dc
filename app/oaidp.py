@@ -145,7 +145,8 @@ def collections2():
     
     return render_template('collections.html', 
                            output=output, 
-                           dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"))
+                           dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
+                           url=pub_url+cbase)
 
 # update collections json
 def update_coll_json(ids):
