@@ -73,7 +73,7 @@ def update_collections(ids):
     for coll in colls:
         if client.get(coll).json()['suppressed'] or not client.get(coll).json()['publish']:
             colls[coll]=0
-    colls = {key:val for key, val in colls.items() if val <= 0}
+    colls = {key:val for key, val in colls.items() if val != 0}
     docount=sum(colls.values())
 
     # create list for output
