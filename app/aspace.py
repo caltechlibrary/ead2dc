@@ -90,7 +90,7 @@ def update_collections(ids):
         out.append((key[26:], client.get(key).json()['title'], colls[key], i))
 
     # sort in place, in reverse order by number of digital objects (i.e. 'colls[key]')
-    out.sort(reverse=True, key=lambda item: item[2], reverse=True)
+    out.sort(key=lambda item: item[2], reverse=True)
     
     # elapsed time
     end = time.time()
