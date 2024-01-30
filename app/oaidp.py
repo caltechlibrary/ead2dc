@@ -127,9 +127,12 @@ def collections2():
     db.execute('DELETE FROM collections')
 
     # insert updated data from ArchivesSpace into db
-    query = 'INSERT INTO collections(collno, colltitle, docount, incl) VALUES (?, ?, ?, ?);'
+    query = 'INSERT INTO collections(collno,colltitle,docount,carchives,clibrary,iarchive,youtube,other,incl) VALUES (?,?,?,?,?,?,?,?,?);'
     for coll in colls:
-        db.execute(query, [coll[0], coll[1], coll[2], coll[3]])
+        db.execute(query, [coll[0], coll[1], \
+                    coll[2]['docount'], coll[2]['caltecharchives'], coll[2]['caltechlibrary'], \
+                    coll[2]['internetarchive'], coll[2]['youtube'], coll[2]['other'], \
+                    coll[3]])
     
     # update incl field
     query = 'UPDATE collections SET incl=1 WHERE collno=?;'

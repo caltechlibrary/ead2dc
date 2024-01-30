@@ -2,6 +2,7 @@
 # functions for accessing the ASpace API
 
 from pathlib import Path
+from collections import defaultdict
 import json
 import time
 import re
@@ -47,34 +48,44 @@ def update_collections(ids):
 
     colls = dict()
 
-    # iterate over digital objects
+    # iterate over digital objects in all collections
     for obj in client.get_paged('repositories/2/digital_objects'):
         # select published objects only
         if obj['publish'] and not obj['suppressed']:
-            incl=False
+            # iterate over file versions in object record
             for file_version in obj['file_versions']:
+                # published versions only
                 if file_version['publish']:
-                    if file_version['file_uri'][:4]=='http':
-                        incl=True
-            if incl:
-                # iterate over collection references (usually only one)
-                for collectionid in obj['collection']:
-                    # filter out accession records
-                    if collectionid['ref'][16:26] != 'accessions':
-                        # use object reference as key
-                        if collectionid['ref'] in colls.keys():
-                            # if the collection is already in colls, increment
-                            colls[collectionid['ref']] = colls[collectionid['ref']] + 1
-                        else:
-                            # otherwise add reference to collection
-                            colls[collectionid['ref']] = 1
+                    # http and https links only
+                    uri = file_version['file_uri']
+                    if uri[:4]=='http':
+                        # iterate over collection references (usually only one)
+                        for collectionid in obj['collection']:
+                            # filter out accession records
+                            if collectionid['ref'][16:26] != 'accessions':
+                                # use object reference as key
+                                coll_id = collectionid['ref']
+                                # if the collection is already in colls, increment
+                                if coll_id in colls.keys():
+                                    colls[coll_id]['docount'] = colls[coll_id]['docount'] + 1
+                                # otherwise initialize count
+                                else:
+                                    colls[coll_id] = defaultdict(int)
+                                    colls[coll_id]['docount'] = 1
+                                # identify/count domain
+                                colls[coll_id][url_domain(uri)] += 1
 
     # remove collections that are suppressed or not published
     for coll in colls:
+        # set collection count to zero for suppressed or not published
         if client.get(coll).json()['suppressed'] or not client.get(coll).json()['publish']:
-            colls[coll]=0
-    colls = {key:val for key, val in colls.items() if val != 0}
-    docount=sum(colls.values())
+            colls[coll]['docount']=0
+    # regenerate dict removing those with zero count
+    colls = {key:val for key, val in colls.items() if val['docount'] != 0}
+    # calculate total count
+    docount = 0
+    for coll in colls:
+        docount += coll['docount']
 
     # create list for output
     out = list()
@@ -89,8 +100,8 @@ def update_collections(ids):
         # output tuples include id, title, do count, include T/F for each collection
         out.append((key[26:], client.get(key).json()['title'], colls[key], i))
 
-    # sort in place, in reverse order by number of digital objects (i.e. 'colls[key]')
-    out.sort(key=lambda item: item[2], reverse=True)
+    # sort in place, in reverse order by number of digital objects (i.e. 'colls[key]'docount')
+    out.sort(key=lambda item: item[2]['docount'], reverse=True)
     
     # elapsed time
     end = time.time()
@@ -180,6 +191,8 @@ def url_domain(url):
         return 'internetarchive'
     elif 'library.caltech.edu' in domain:
         return 'caltechlibrary'
+    elif 'youtube.com' in domain:
+        return 'youtube'
     else:
         return 'other'
     
