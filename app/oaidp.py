@@ -161,6 +161,7 @@ def update_coll_json(ids):
     # save included collections to JSON file
     with open(Path(Path(__file__).resolve().parent).joinpath('collections.json'), 'w') as f:
         json.dump(coll_dict, f)
+    return
 
 # update selected collections
 @bp.route('/collections3', methods=['GET', 'POST'])

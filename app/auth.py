@@ -14,17 +14,21 @@ def login():
     session.clear()
     session['user_id'] = username
     db = get_db()
-    if db.execute("SELECT username FROM user WHERE username = ?;", [email_address]).fetchone():
+    userinfo = db.execute("SELECT username, role FROM user WHERE username = ?;", [email_address]).fetchone()
+    if userinfo:
         session['auth'] = True
+        session['role'] = userinfo[1]
     else:
         session['auth'] = False
     g.user = session.get('user_id')
+    g.role = session.get('role')
     g.auth = session.get('auth')
     return render_template('index.html')
 
 @bp.before_app_request
 def load_logged_in_user():
     g.user = session.get('user_id')
+    g.role = session.get('role')
     g.auth = session.get('auth')
 
 @bp.route('/logout')
