@@ -191,6 +191,10 @@ def url_domain(url):
         return 'internetarchive'
     elif 'library.caltech.edu' in domain:
         return 'caltechlibrary'
+    elif 'resolver.caltech.edu' in domain:
+        return 'caltechlibrary'
+    elif 'data.caltech.edu' in domain:
+        return 'caltechlibrary'
     elif 'youtube.com' in domain:
         return 'youtube'
     else:
