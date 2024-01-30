@@ -119,7 +119,7 @@ def collections2():
     # get data from ArchivesSpace as list
     # output[0] = total number of do's
     # output[1] = number of collections
-    # output[2] = a list of collections [coll id, title, no. of do's, incl]
+    # output[2] = a list of collections [coll id, title, stats(dict), incl]
     # output[3] = elapsed time
     output=update_collections(incl) 
 
