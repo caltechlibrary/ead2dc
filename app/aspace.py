@@ -85,6 +85,7 @@ def update_collections(ids):
     # calculate total count
     docount = 0
     for coll in colls:
+        print(coll)
         docount += coll['docount']
 
     # create list for output
