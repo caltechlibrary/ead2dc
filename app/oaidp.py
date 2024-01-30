@@ -183,7 +183,7 @@ def collections3():
     query = "SELECT * FROM collections ORDER BY docount DESC;"
     colls = db.execute(query).fetchall()
     last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
-    n = sum(k for (_, _, k, _) in colls)
+    n = sum(k for (_,_,k,_,_,_,_,_,_) in colls)
     return render_template('collections.html', 
                            output=(n, len(colls), colls, None), 
                            dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
