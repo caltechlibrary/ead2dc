@@ -55,6 +55,7 @@ def update_collections(ids):
         # select published objects only
         if obj['publish'] and not obj['suppressed']:
             # iterate over file versions in object record
+            counted = False
             for file_version in obj['file_versions']:
                 # published versions only
                 if file_version['publish']:
@@ -64,16 +65,17 @@ def update_collections(ids):
                         # iterate over collection references (usually only one)
                         for collectionid in obj['collection']:
                             # filter out accession records
-                            if collectionid['ref'][16:26] != 'accessions':
+                            if collectionid['ref'][16:26] != 'accessions' and not counted:
                                 # use object reference as key
                                 coll_id = collectionid['ref']
                                 # if the collection is already in colls, increment
                                 if coll_id in colls.keys():
-                                    colls[coll_id]['docount'] = colls[coll_id]['docount'] + 1
+                                    colls[coll_id]['docount'] += 1
                                 # otherwise initialize count
                                 else:
                                     colls[coll_id] = defaultdict(int)
                                     colls[coll_id]['docount'] = 1
+                                counted = True
                                 # identify/count domain
                                 colls[coll_id][url_domain(uri)] += 1
 
