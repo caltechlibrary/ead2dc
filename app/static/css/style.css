@@ -9,12 +9,15 @@ td {
     border-collapse: collapse;
 }
 
-table,
 th,
 td {
     padding: 8px;
     border-color: #96D4D4;
     border-style: dotted;
+}
+
+tr:nth-child(even) {
+    background-color: #D6EEEE;
 }
 
 .sidenav {
