@@ -50,6 +50,13 @@ def update_collections(ids):
 
     archival_ids, digitalobject_ids = set(), set()
 
+    totals = {'total'           : 0, 
+              'caltecharchives' : 0, 
+              'caltechlibrary'  : 0, 
+              'internetarchive' : 0, 
+              'youtube'         : 0, 
+              'other'           : 0}
+
     # iterate over digital objects in all collections
     for obj in client.get_paged('repositories/2/digital_objects'):
         # select published objects only
@@ -75,9 +82,11 @@ def update_collections(ids):
                                 else:
                                     colls[coll_id] = defaultdict(int)
                                     colls[coll_id]['docount'] = 1
+                                totals['total'] += 1
                                 counted = True
                                 # identify/count domain
                                 colls[coll_id][url_domain(uri)] += 1
+                                totals[url_domain(uri)] += 1
 
                                 digitalobject_ids.add(obj['uri'])
                                 for ref in obj['linked_instances']:
@@ -117,7 +126,7 @@ def update_collections(ids):
     delta = end - start
     
     # return total number of do's, number of collections, a list of collections [coll id, title, no. of do's, incl], elapsed time
-    return (docount, len(colls), out, round(delta)), len(digitalobject_ids), len(archival_ids)
+    return (docount, len(colls), out, round(delta)), len(digitalobject_ids), len(archival_ids), totals
 
 
 # get collection info for a list of collection ids
