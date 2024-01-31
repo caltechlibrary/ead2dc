@@ -130,7 +130,9 @@ def collections2():
     db.execute('DELETE FROM collections')
 
     # insert updated data from ArchivesSpace into db
-    query = 'INSERT INTO collections(collno,colltitle,docount,carchives,clibrary,iarchive,youtube,other,incl) VALUES (?,?,?,?,?,?,?,?,?);'
+    query = 'INSERT INTO collections(collno,colltitle,docount,carchives,clibrary,\
+                        iarchive,youtube,other,incl) \
+                        VALUES (?,?,?,?,?,?,?,?,?);'
     for coll in colls:
         db.execute(query, [coll[0], coll[1], \
                     coll[2]['docount'], coll[2]['caltecharchives'], coll[2]['caltechlibrary'], \
@@ -149,8 +151,14 @@ def collections2():
     # commit changes
     db.commit()
     
+    # read collections data for display
+    query = "SELECT collno, colltitle, docount, carchives, clibrary, \
+            iarchive, youtube, other, incl FROM collections ORDER BY docount DESC;"
+    colls = db.execute(query).fetchall()
+    n = sum(k for (_,_,k,_,_,_,_,_,_) in colls)
+
     return render_template('collections.html', 
-                           output=output, 
+                           output=(n, len(colls), colls, None), 
                            dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
                            url=pub_url+cbase)
 
@@ -202,7 +210,7 @@ def regen():
 def regen2():
     codepath = Path(Path(__file__).resolve().parent).joinpath('ead2dc.py')
     xmlpath = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
-    output=subprocess.run(['python', codepath], capture_output=True)
+    output=subprocess.run(['python', codepath], capture_output=False)
     return render_template("regen.html", 
                            done=True, 
                            dt=create_datetime(xmlpath),
