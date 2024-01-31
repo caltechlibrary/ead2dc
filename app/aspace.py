@@ -58,29 +58,31 @@ def update_collections(ids):
             for file_version in obj['file_versions']:
                 # published versions only
                 if file_version['publish']:
-                    # http and https links only
-                    uri = file_version['file_uri']
-                    if uri[:4]=='http':
-                        # iterate over collection references (usually only one)
-                        for collectionid in obj['collection']:
-                            # filter out accession records
-                            if collectionid['ref'][16:26] != 'accessions':
-                                # use object reference as key
-                                coll_id = collectionid['ref']
-                                # if the collection is already in colls, increment
-                                if coll_id in colls.keys():
-                                    colls[coll_id]['docount'] = colls[coll_id]['docount'] + 1
-                                # otherwise initialize count
-                                else:
-                                    colls[coll_id] = defaultdict(int)
-                                    colls[coll_id]['docount'] = 1
-                                # identify/count domain
-                                colls[coll_id][url_domain(uri)] += 1
+                    # Web-Access only
+                    if file_version['use_statement']=='Web-Access':
+                        # http and https links only
+                        uri = file_version['file_uri']
+                        if uri[:4]=='http':
+                            # iterate over collection references (usually only one)
+                            for collectionid in obj['collection']:
+                                # filter out accession records
+                                if collectionid['ref'][16:26] != 'accessions':
+                                    # use object reference as key
+                                    coll_id = collectionid['ref']
+                                    # if the collection is already in colls, increment
+                                    if coll_id in colls.keys():
+                                        colls[coll_id]['docount'] = colls[coll_id]['docount'] + 1
+                                    # otherwise initialize count
+                                    else:
+                                        colls[coll_id] = defaultdict(int)
+                                        colls[coll_id]['docount'] = 1
+                                    # identify/count domain
+                                    colls[coll_id][url_domain(uri)] += 1
 
-                                digitalobject_ids.add(obj['uri'])
-                                for ref in obj['linked_instances']:
-                                    if '/repositories/2/archival_objects/' in ref['ref']:
-                                        archival_ids.add(ref['ref'])
+                                    digitalobject_ids.add(obj['uri'])
+                                    for ref in obj['linked_instances']:
+                                        if '/repositories/2/archival_objects/' in ref['ref']:
+                                            archival_ids.add(ref['ref'])
 
     # remove collections that are suppressed or not published
     for coll in colls:
