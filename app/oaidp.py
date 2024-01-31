@@ -142,9 +142,6 @@ def collections2():
                     coll[2]['internetarchive'], coll[2]['youtube'], coll[2]['other'], \
                     coll[3]])
     
-    # update totals
-    db.execute (query, totals.values())
-    
     # update incl field
     query = 'UPDATE collections SET incl=1 WHERE collno=?;'
     for id in incl:
