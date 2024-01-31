@@ -201,11 +201,10 @@ def regen():
 def regen2():
     codepath = Path(Path(__file__).resolve().parent).joinpath('ead2dc.py')
     xmlpath = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
-    output=subprocess.run(['python', codepath], capture_output=False)
+    subprocess.run(['python', codepath], capture_output=False)
     return render_template("regen.html", 
                            done=True, 
-                           dt=create_datetime(xmlpath),
-                           output=output)
+                           dt=create_datetime(xmlpath))
 
 def create_datetime(path):
     # modified time elapsed since EPOCH in float
