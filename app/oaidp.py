@@ -180,7 +180,8 @@ def collections3():
             db.execute('UPDATE collections SET incl=1 WHERE collno=?', [id])
         db.commit()
         update_coll_json(ids)
-    query = "SELECT * FROM collections ORDER BY docount DESC;"
+    query = "SELECT collno, colltitle, docount, carchives, clibrary, \
+            iarchive, youtube, other, incl FROM collections ORDER BY docount DESC;"
     colls = db.execute(query).fetchall()
     last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
     n = sum(k for (_,_,k,_,_,_,_,_,_) in colls)
