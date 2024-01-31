@@ -89,16 +89,9 @@ def search():
 # display collections list
 @bp.route('/collections')
 def collections():
-    query = "SELECT collno, colltitle, docount, carchives, \
-                    clibrary, iarchive, youtube, other, incl \
-            FROM collections \
-            ORDER BY docount DESC;"
-    db = get_db()
-    colls = db.execute(query).fetchall()
-    last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
-    n = sum(k for (_,_,k,_,_,_,_,_,_) in colls)
+    last_update = get_db().execute('SELECT dt FROM last_update;').fetchone()[0]
     return render_template('collections.html', 
-                           output=(n, len(colls), colls, None), 
+                           output=read_colls(), 
                            dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
                            url=pub_url+cbase)
 
@@ -151,16 +144,18 @@ def collections2():
     # commit changes
     db.commit()
     
-    # read collections data for display
-    query = "SELECT collno, colltitle, docount, carchives, clibrary, \
-            iarchive, youtube, other, incl FROM collections ORDER BY docount DESC;"
-    colls = db.execute(query).fetchall()
-    n = sum(k for (_,_,k,_,_,_,_,_,_) in colls)
-
     return render_template('collections.html', 
-                           output=(n, len(colls), colls, None), 
+                           output=read_colls(), 
                            dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
                            url=pub_url+cbase)
+
+# read collections data for display
+def read_colls():
+    query = "SELECT collno, colltitle, docount, carchives, clibrary, \
+            iarchive, youtube, other, incl FROM collections ORDER BY docount DESC;"
+    colls = get_db().execute(query).fetchall()
+    n = sum(k for (_,_,k,_,_,_,_,_,_) in colls)
+    return (n, len(colls), colls)
 
 # update collections json
 def update_coll_json(ids):
@@ -188,13 +183,9 @@ def collections3():
             db.execute('UPDATE collections SET incl=1 WHERE collno=?', [id])
         db.commit()
         update_coll_json(ids)
-    query = "SELECT collno, colltitle, docount, carchives, clibrary, \
-            iarchive, youtube, other, incl FROM collections ORDER BY docount DESC;"
-    colls = db.execute(query).fetchall()
     last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
-    n = sum(k for (_,_,k,_,_,_,_,_,_) in colls)
     return render_template('collections.html', 
-                           output=(n, len(colls), colls, None), 
+                           output=read_colls(), 
                            dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
                            url=pub_url+cbase)
 
