@@ -44,7 +44,8 @@ root = tree.getroot()
 ids = list()
 for node in root.findall('.//record/header/identifier', ns):
     ids.append(node.text[65:])
-ids = [str(id) for id in [int(id) for id in ids].sort()]
+ids = [int(id) for id in ids].sort()
+ids = [str(id) for id in ids]
 
 # returns a pretty-printed XML string
 def prettify(elem):
