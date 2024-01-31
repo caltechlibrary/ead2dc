@@ -124,7 +124,7 @@ def collections2():
     db.execute('DELETE FROM totals')
     query='INSERT INTO totals(total,caltecharchives,caltechlibrary,internetarchive,youtube,other) \
             VALUES (?,?,?,?,?,?)'
-    db.execute(query, totals.values())
+    db.execute(query, list(totals.values()))
 
     # isolate collections info
     colls=output[2]
