@@ -50,8 +50,12 @@
 </table>
 </form>
 
-<p>Total number of digital objects: {{ digitalobject_count }}</p>
+{% if digitalobject_count %}
+    <p>Total number of digital objects: {{ digitalobject_count }}</p>
+{% endif %}
 
-<p>Total number of linked archival objects: {{ archivalobject_count }}</p>
+{% if archivalobject_count %}
+    <p>Total number of linked archival objects: {{ archivalobject_count }}</p>
+{% endif %}
 
 {% endblock %}
