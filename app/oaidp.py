@@ -122,7 +122,7 @@ def collections2():
 
     # update totals in db
     db.execute('DELETE FROM totals')
-    query='INSERT INTO totals(total,caltecharchives,caltechlibrary,internetarchive,youtube,other \
+    query='INSERT INTO totals(total,caltecharchives,caltechlibrary,internetarchive,youtube,other) \
             VALUES (?,?,?,?,?,?)'
     db.execute(query, totals.values())
 
