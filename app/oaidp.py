@@ -115,7 +115,7 @@ def collections2():
     # output[1] = number of collections
     # output[2] = a list of collections [coll id, title, stats(dict), incl]
     # output[3] = elapsed time
-    output=update_collections(incl) 
+    output, digitalobject_count, archivalobject_count = update_collections(incl) 
 
     # isolate collections info
     colls=output[2]
@@ -148,7 +148,9 @@ def collections2():
     return render_template('collections.html', 
                            output=read_colls(), 
                            dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
-                           url=pub_url+cbase)
+                           url=pub_url+cbase,
+                           digitalobject_count=digitalobject_count,
+                           archivalobject_count=archivalobject_count)
 
 # read collections data for display
 def read_colls():

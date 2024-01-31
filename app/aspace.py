@@ -48,6 +48,8 @@ def update_collections(ids):
 
     colls = dict()
 
+    archival_ids, digitalobject_ids = set(), set()
+
     # iterate over digital objects in all collections
     for obj in client.get_paged('repositories/2/digital_objects'):
         # select published objects only
@@ -74,6 +76,11 @@ def update_collections(ids):
                                     colls[coll_id]['docount'] = 1
                                 # identify/count domain
                                 colls[coll_id][url_domain(uri)] += 1
+
+                                digitalobject_ids.add(obj['digital_object_id'])
+                                for ref in obj['linked_instances']:
+                                    if '/repositories/2/archival_objects/' in ref['ref']:
+                                        archival_ids.add(ref['ref'])
 
     # remove collections that are suppressed or not published
     for coll in colls:
@@ -108,7 +115,7 @@ def update_collections(ids):
     delta = end - start
     
     # return total number of do's, number of collections, a list of collections [coll id, title, no. of do's, incl], elapsed time
-    return (docount, len(colls), out, round(delta))
+    return (docount, len(colls), out, round(delta)), len(digitalobject_ids), len(archival_ids)
 
 
 # get collection info for a list of collection ids
