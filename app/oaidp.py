@@ -90,11 +90,14 @@ def search():
 # display collections list
 @bp.route('/collections')
 def collections():
-    last_update = get_db().execute('SELECT dt FROM last_update;').fetchone()[0]
+    db = get_db()
+    last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
+    totals = db.execute('SELECT total,caltecharchives,caltechlibrary,internetarchive,youtube,other FROM totals;').fetchone()
     return render_template('collections.html', 
                            output=read_colls(), 
                            dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
-                           url=pub_url+cbase)
+                           url=pub_url+cbase,
+                           totals=totals)
 
 # refresh collections data from ArchivesSpace
 @bp.route('/collections2')
@@ -117,6 +120,12 @@ def collections2():
     # output[3] = elapsed time
     output, digitalobject_count, archivalobject_count, totals = update_collections(incl) 
 
+    # update totals in db
+    db.execute('DELETE FROM totals')
+    query='INSERT INTO totals(total,caltecharchives,caltechlibrary,internetarchive,youtube,other \
+            VALUES (?,?,?,?,?,?)'
+    db.execute(query, totals.values())
+
     # isolate collections info
     colls=output[2]
     
@@ -132,6 +141,9 @@ def collections2():
                     coll[2]['docount'], coll[2]['caltecharchives'], coll[2]['caltechlibrary'], \
                     coll[2]['internetarchive'], coll[2]['youtube'], coll[2]['other'], \
                     coll[3]])
+    
+    # update totals
+    db.execute (query, totals.values())
     
     # update incl field
     query = 'UPDATE collections SET incl=1 WHERE collno=?;'
@@ -188,10 +200,12 @@ def collections3():
         db.commit()
         update_coll_json(ids)
     last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
+    totals = db.execute('SELECT total,caltecharchives,caltechlibrary,internetarchive,youtube,other FROM totals;').fetchone()
     return render_template('collections.html', 
                            output=read_colls(), 
                            dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
-                           url=pub_url+cbase)
+                           url=pub_url+cbase,
+                           totals=totals)
 
 # regenerate XML
 @bp.route('/regen')
