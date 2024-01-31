@@ -77,7 +77,7 @@ def update_collections(ids):
                                 # identify/count domain
                                 colls[coll_id][url_domain(uri)] += 1
 
-                                digitalobject_ids.add(obj['digital_object_id'])
+                                digitalobject_ids.add(obj['uri'])
                                 for ref in obj['linked_instances']:
                                     if '/repositories/2/archival_objects/' in ref['ref']:
                                         archival_ids.add(ref['ref'])
