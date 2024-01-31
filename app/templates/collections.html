@@ -13,10 +13,13 @@
 <form action="{{ url_for('oaidp.collections3') }}" method="POST">
 <table>
 <tr>
-    <th><input type="submit" value="Update"><br>Include</th>
-    <th>No.</th>
-    <th>Title</th>
-    <th>Count</th>
+    <th rowspan="2"><input type="submit" value="Update"><br>Include</th>
+    <th rowspan="2">No.</th>
+    <th rowspan="2">Title</th>
+    <th rowspan="2">Count</th>
+    <th colspan="5">Domain</th>
+</tr>
+<tr>
     <th>Caltech Archives</th>
     <th>Caltech Library</th>
     <th>Internet Archive</th>

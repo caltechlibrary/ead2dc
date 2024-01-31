@@ -12,6 +12,8 @@ td {
 th,
 td {
     padding: 8px;
+    border-color: #96D4D4;
+    border-style: dotted;
 }
 
 .sidenav {
