@@ -215,6 +215,8 @@ def url_domain(url):
         return 'caltechlibrary'
     elif 'youtube.com' in domain:
         return 'youtube'
+    elif 'youtu.be' in domain:
+        return 'youtube'
     else:
         return 'other'
     
