@@ -210,7 +210,8 @@ def regen():
     xmlpath = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
     return render_template("regen.html", 
                            done=False, 
-                           dt=create_datetime(xmlpath))
+                           dt_xml=create_datetime_xml(xmlpath),
+                           dt_coll=create_datetime_coll())
 
 @bp.route('/regen2')
 def regen2():
@@ -219,9 +220,15 @@ def regen2():
     subprocess.run(['python', codepath], capture_output=False)
     return render_template("regen.html", 
                            done=True, 
-                           dt=create_datetime(xmlpath))
+                           dt_xml=create_datetime_xml(xmlpath),
+                           dt_coll=create_datetime_coll())
 
-def create_datetime(path):
+def create_datetime_coll():
+    db = get_db()
+    last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
+    return datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p")
+
+def create_datetime_xml(path):
     # modified time elapsed since EPOCH in float
     dtm = os.path.getmtime(path)
     # converting modified time in seconds to timestamp

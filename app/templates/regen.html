@@ -6,7 +6,9 @@
 
 <p><strong>XML last updated:</strong> {{ dt[0] }} 
     
-    ({{ dt[1][0] }}h {{ dt[1][1] }}m {{ dt[1][2] }}s ago)</p>
+    ({{ dt_xml[1][0] }}h {{ dt_xml[1][1] }}m {{ dt_xml[1][2] }}s ago)</p>
+
+<p><strong>Data last read from ArchivesSpace:</strong> {{ xml_coll }}</p>
 
 {% if not done %}
 
