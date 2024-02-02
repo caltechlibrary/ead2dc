@@ -60,38 +60,37 @@ def update_collections(ids):
     # iterate over digital objects in all collections
     for obj in client.get_paged('repositories/2/digital_objects'):
         # select published objects only
-        #if obj['publish'] and not obj['suppressed']:
-
-        # iterate over file versions in object record
-        counted = False
-        for file_version in obj['file_versions']:
-            # published versions only
-            if file_version['publish']:
-                # http and https links only
-                uri = file_version['file_uri'].strip()
-                if uri[:4]=='http':
-                    # iterate over collection references (usually only one)
-                    for collectionid in obj['collection']:
-                        # filter out accession records
-                        if collectionid['ref'][16:26] != 'accessions' and not counted:
-                            # use object reference as key
-                            coll_id = collectionid['ref']
-                            # if the collection is already in colls, increment
-                            if coll_id in colls.keys():
-                                colls[coll_id]['docount'] += 1
-                            # otherwise initialize count
-                            else:
-                                colls[coll_id] = defaultdict(int)
-                                colls[coll_id]['docount'] = 1
-                            totals['total'] += 1
-                            counted = True
-                            # identify/count domain
-                            colls[coll_id][url_domain(uri)] += 1
-                            totals[url_domain(uri)] += 1
-                            digitalobject_ids.add(obj['uri'])
-                            for ref in obj['linked_instances']:
-                                if '/repositories/2/archival_objects/' in ref['ref']:
-                                    archival_ids.add(ref['ref'])
+        if obj['publish'] and not obj['suppressed']:
+            # iterate over file versions in object record
+            counted = False
+            for file_version in obj['file_versions']:
+                # published versions only
+                if file_version['publish']:
+                    # http and https links only
+                    uri = file_version['file_uri']
+                    if uri[:4]=='http':
+                        # iterate over collection references (usually only one)
+                        for collectionid in obj['collection']:
+                            # filter out accession records
+                            if collectionid['ref'][16:26] != 'accessions' and not counted:
+                                # use object reference as key
+                                coll_id = collectionid['ref']
+                                # if the collection is already in colls, increment
+                                if coll_id in colls.keys():
+                                    colls[coll_id]['docount'] += 1
+                                # otherwise initialize count
+                                else:
+                                    colls[coll_id] = defaultdict(int)
+                                    colls[coll_id]['docount'] = 1
+                                totals['total'] += 1
+                                counted = True
+                                # identify/count domain
+                                colls[coll_id][url_domain(uri)] += 1
+                                totals[url_domain(uri)] += 1
+                                digitalobject_ids.add(obj['uri'])
+                                for ref in obj['linked_instances']:
+                                    if '/repositories/2/archival_objects/' in ref['ref']:
+                                        archival_ids.add(ref['ref'])
 
     # remove collections that are suppressed or not published
     for coll in colls:
