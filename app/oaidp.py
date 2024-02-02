@@ -204,41 +204,45 @@ def collections3():
                            url=pub_url+cbase,
                            totals=totals)
 
-# regenerate XML
+# regenerate info
 @bp.route('/regen')
 def regen():
-    xmlpath = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
+    dt_xml=get_last_update('xml')
+    dt_col=get_last_update('col')
     return render_template("regen.html", 
                            done=False, 
-                           dt_xml=create_datetime_xml(xmlpath),
-                           dt_coll=create_datetime_coll())
+                           dt_xml=dt_xml,
+                           dt_col=dt_col)
 
+# regenerate XML
 @bp.route('/regen2')
 def regen2():
     codepath = Path(Path(__file__).resolve().parent).joinpath('ead2dc.py')
-    xmlpath = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
     subprocess.run(['python', codepath], capture_output=False)
+    dt_xml=write_last_update('xml')
+    dt_col=write_last_update('col')
     return render_template("regen.html", 
                            done=True, 
-                           dt_xml=create_datetime_xml(xmlpath),
-                           dt_coll=create_datetime_coll())
+                           dt_xml=dt_xml,
+                           dt_col=dt_col)
 
-def create_datetime_coll():
+# return formatted last_update
+def get_last_update(fn):
     db = get_db()
-    last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
-    dt_coll = datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p")
-    return dt_coll
+    query = 'SELECT dt FROM last_update WHERE fn=?;'
+    last_update = db.execute(query, [fn]).fetchone()[0]
+    dt = datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p")
+    return dt
 
-def create_datetime_xml(path):
-    # modified time elapsed since EPOCH in float
-    dtm = os.path.getmtime(path)
-    # converting modified time in seconds to timestamp
-    mdt = time.ctime(dtm)
-    # elapsed time
-    delta = str(timedelta(seconds=time.time()-dtm)).split(':')
-    # round seconds to integer
-    delta[2] = str(round(float(delta[2])))
-    return (mdt, delta)
+# write ISO last update; return formatted last_update (i.e. now)
+def write_last_update(fn):
+    db = get_db()
+    query = 'UPDATE last_update SET dt=? WHERE fn=?;'
+    now = datetime.now()
+    last_update = now.isoformat()
+    dt = now.strftime("%b %-d, %Y, %-I:%M%p")
+    db.execute(query, [last_update, fn])
+    return dt
 
 @bp.route('/search2')
 def search2():
