@@ -21,9 +21,7 @@
             <a href="{{ url_for('oaidp.collections') }}">Collections</a>
             <a href="{{ url_for('oaidp.search') }}">Search</a>
             <a href="{{ url_for('oaidp.browse', page_number=1) }}">Browse</a>
-            {% if g.role=='admin' %}
-                <a href="{{ url_for('oaidp.regen') }}">Regenerate XML</a>
-            {% endif %}
+            <a href="{{ url_for('oaidp.regen') }}">Refresh</a>
         {% endif %}
         {% if g.user %}
             <a href="{{ url_for('auth.logout') }}">(logout {{ g.user }})</a>

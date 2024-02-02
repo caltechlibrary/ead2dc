@@ -147,12 +147,11 @@ def collections2():
     for id in incl:
         db.execute(query, [id])
 
-    # record time of update
-    last_update = datetime.now().isoformat()
-    db.execute('UPDATE last_update SET dt=?;', [last_update])
-
     # commit changes
     db.commit()
+    
+    # record time of update
+    write_last_update('col')
     
     return render_template('collections.html', 
                            output=read_colls(), 
@@ -240,8 +239,9 @@ def write_last_update(fn):
     query = 'UPDATE last_update SET dt=? WHERE fn=?;'
     now = datetime.now()
     last_update = now.isoformat()
-    dt = now.strftime("%b %-d, %Y, %-I:%M%p")
     db.execute(query, [last_update, fn])
+    db.commit()
+    dt = now.strftime("%b %-d, %Y, %-I:%M%p")
     return dt
 
 @bp.route('/search2')
