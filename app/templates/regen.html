@@ -16,7 +16,8 @@
                 <p>Last update: {{ dt_col }} </p>
 
                 <p><strong><a href="{{ url_for('oaidp.collections2') }}">Update collection
-                            information from ArchivesSpace</a></strong></p>
+                            information from ArchivesSpace now</a></strong> (loads collections page when done)</p>
+                        
 
             </td>
             <td>
@@ -38,9 +39,14 @@
 
                 <p>Last update: {{ dt_xml }} </p>
 
-                <p><strong><a href="{{ url_for('oaidp.regen2') }}">Write the static repository</a></strong></p>
+                <p><strong><a href="{{ url_for('oaidp.regen2') }}">Write the static repository now</a></strong>
+                </p>
             
-            </td>
+                {% if done %}
+                <p style="color:ForestGreen;"><strong>DONE</strong></p>
+                {% endif %}
+
+</td>
             <td>
                 <ul>
                     <li>Generates EAD Finding Aids for each of the selected collections</li>
@@ -65,22 +71,5 @@
     <li>Each component takes a few mintues to run. Don't navigate away until the process is complete.</li>
     <li>Future plans include running these updates automatically each evening.</li>
 </ul>
-
-<p><strong>XML last updated:</strong> {{ dt_xml }} </p>
-
-<p><strong>Data last read from ArchivesSpace:</strong> {{ dt_col }}</p>
-
-{% if not done %}
-
-
-    <li><a href="{{ url_for('oaidp.collections2') }}">Refresh data from ArchivesSpace</a></li>
-    <li><a href="{{ url_for('oaidp.regen2') }}">Regenerate static XML</a></li>
-</ol>
-
-{% else %}
-
-<p style="color:ForestGreen;"><strong>DONE</strong></p>
-
-{% endif %}
 
 {% endblock %}
