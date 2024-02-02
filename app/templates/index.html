@@ -2,6 +2,41 @@
 
 {% block content %}
 
+<h3>Encoded Archival Description to Dublin Core Conversion</h3>
+
+<p>The Caltech Archives use the Encoded Archival Description (EAD) XML output from ArchivesSpace to create
+    a static XML repository, which in turn is used to provide OAI-PMH access to the digital collections. The static
+    repository
+    is inspired by the OAI Static Repository specification, but does not adhere to it strictly.
+    The static repository contains
+    Dublin Core (DC) records for digital resources found in the finding aid. Only records containing links to digital
+    objects are included.</p>
+
+<p>The OAI Data Provider adheres to the OAI standard and supports all the verbs (Identify, ListMetadataFormats,
+    ListSets,
+    ListIdentifiers, ListRecords, and GetRecord), resumption tokens, and sets. Only DC metadata is provided. Sets
+    correspond
+    to the archival collections in the Caltech Archives.</p>
+
+<h3>ead2dc - Main features and assumptions:</h3>
+
+<ul>
+    <li>Both input and output are OAI-compliant XML files.</li>
+    <li>All 12 levels of EAD container are supported.</li>
+    <li>Titles are inherited down the container hierarchy.</li>
+    <li>All other metadata is mapped from the record containing the digital object references.</li>
+    <li>Records without digital object references are ignored (i.e. not mapped to the output file)</li>
+</ul>
+
+<h3>OAI Data Provider - Main features and assumptions:</h3>
+
+<ul>
+    <li>The OAI Data Provider uses a static repository, i.e. it does not dynamically generate records.</li>
+    <li>DC metadata only.</li>
+    <li>Sets correspond to the archival collections and do not overlap.</li>
+    <li>Records are delivered in batches of 250.</li>
+</ul>
+
 <h3>Example queries</h3>
 
 <p><strong>Base URL:</strong> <a href="oai">https://apps.library.caltech.edu/ead2dc/oai</a></p>

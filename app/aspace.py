@@ -67,7 +67,7 @@ def update_collections(ids):
                 # published versions only
                 if file_version['publish']:
                     # http and https links only
-                    uri = file_version['file_uri']
+                    uri = file_version['file_uri'].strip()
                     if uri[:4]=='http':
                         # iterate over collection references (usually only one)
                         for collectionid in obj['collection']:

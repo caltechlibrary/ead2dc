@@ -230,6 +230,7 @@ no_records = 0
 
 for coll in colls: 
     setid = coll[0]
+    # read EAD for collection
     response = requests.get(coll[1])
     root = ET.fromstring(response.content)
 

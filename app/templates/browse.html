@@ -4,6 +4,12 @@
 
 <h3>Browse</h3>
 
+<p>Browse the harvester by Archival Object ID, with links to the ArchivesSpace 
+    record and to the Data Provider OAI record.
+    The ID returned is the numerical part of the full identifier (e.g. 
+    'collections.archives.caltech.edu/repositories/2/archival_objects/107520')
+</p>
+
 <p>
     <strong>Page {{ page_number }} of {{ pages_total }},
         Items {{ ((page_number - 1) * page_size) + 1 }}-{% if page_number==pages_total %}{{ items_total }}{% else %}{{ page_number * page_size }}{% endif %}
