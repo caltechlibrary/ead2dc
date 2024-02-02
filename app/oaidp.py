@@ -219,7 +219,7 @@ def regen2():
     codepath = Path(Path(__file__).resolve().parent).joinpath('ead2dc.py')
     subprocess.run(['python', codepath], capture_output=False)
     dt_xml=write_last_update('xml')
-    dt_col=write_last_update('col')
+    dt_col=get_last_update('col')
     return render_template("regen.html", 
                            done=True, 
                            dt_xml=dt_xml,
