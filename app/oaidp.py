@@ -151,11 +151,11 @@ def collections2():
     db.commit()
     
     # record time of update
-    write_last_update('col')
+    dt=write_last_update('col')
     
     return render_template('collections.html', 
                            output=read_colls(), 
-                           dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
+                           dt=dt,
                            url=pub_url+cbase,
                            digitalobject_count=digitalobject_count,
                            archivalobject_count=archivalobject_count,
