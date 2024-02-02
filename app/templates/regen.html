@@ -39,12 +39,13 @@
 
                 <p>Last update: {{ dt_xml }} </p>
 
-                <p><strong><a href="{{ url_for('oaidp.regen2') }}">Write the static repository now</a></strong>
-                </p>
-            
                 {% if done %}
-                <p style="color:ForestGreen;"><strong>DONE</strong></p>
+                    <p style="color:ForestGreen;"><strong>DONE</strong></p>
+                {% else %}
+                    <p><strong><a href="{{ url_for('oaidp.regen2') }}">Write the static repository 
+                        now</a></strong></p>
                 {% endif %}
+                
 
 </td>
             <td>
