@@ -7,33 +7,51 @@
 <p>The OAI Data Provider data is stored in a static XML file; a 'static repository'. There are two related, 
     but independent parts to refreshing the data hosted by the Data Provider:</p>
 
-    <ol>
-        <li>Update collection information from ArchivesSpace:
-            <ul>
-                <li>Iterates over all digital objects</li>
-                <li>Ignores unpublished and suppressed objects</li>
-                <li>Ignores objects without HTTP/HTTPS links</li>
-                <li>Ignores objects linked to accessions records</li>
-                <li>Provides counts of objects by collection and domain/host</li>
-                <li>Populates the <a href="{{ url_for('oaidp.collections') }}">collections table</a>
-                    used to select the collections to be available as sets in the Data Provider</li>
-                <li>Last update: {{ dt_col }} </li>
-                <li><strong><a href="{{ url_for('oaidp.collections2') }}">Update collection 
-                    information from ArchivesSpace</a></strong></li>
-            </ul>
-        </li>
-        <li>Write the static repository (an XML file)
-            <ul>
-                <li>Generates EAD Finding Aids for each of the selected collections</li>
-                <li>Iterates over all the container records in the finding aid (all levels)</li>
-                <li>Ignores containers without digital records</li>
-                <li>Writes an OAI Dublin Core record for each container with digital content</li>
-                <li>Saves the resulting static repository file</li>
-                <li>Last update: {{ dt_xml }} </li>
-                <li><strong><a href="{{ url_for('oaidp.regen2') }}">Write the static repository</a></strong></li>
-            </ul>
-        </li>
-    </ol>
+    <table>
+        <tr>
+            <td>
+        
+                <p>Update collection information from ArchivesSpace:</p>
+
+                <p>Last update: {{ dt_col }} </p>
+
+                <p><strong><a href="{{ url_for('oaidp.collections2') }}">Update collection
+                            information from ArchivesSpace</a></strong></p>
+
+            </td>
+            <td>
+                <ul>
+                    <li>Iterates over all digital objects</li>
+                    <li>Ignores unpublished and suppressed objects</li>
+                    <li>Ignores objects without HTTP/HTTPS links</li>
+                    <li>Ignores objects linked to accessions records</li>
+                    <li>Provides counts of objects by collection and domain/host</li>
+                    <li>Populates the <a href="{{ url_for('oaidp.collections') }}">collections table</a>
+                        used to select the collections to be available as sets in the Data Provider</li>
+                </ul>
+            </td>
+              
+        <tr>
+            <td>
+
+                <p>Write the static repository (an XML file):</p>
+
+                <p>Last update: {{ dt_xml }} </p>
+
+                <p><strong><a href="{{ url_for('oaidp.regen2') }}">Write the static repository</a></strong></p>
+            
+            </td>
+            <td>
+                <ul>
+                    <li>Generates EAD Finding Aids for each of the selected collections</li>
+                    <li>Iterates over all the container records in the finding aid (all levels)</li>
+                    <li>Ignores containers without digital records</li>
+                    <li>Writes an OAI Dublin Core record for each container with digital content</li>
+                    <li>Saves the resulting static repository file</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
 
 <p>Notes:</p>
 
