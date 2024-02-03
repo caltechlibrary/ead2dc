@@ -10,10 +10,10 @@
 
 <!--<p>Refresh data from ArchivesSpace? This takes a few minutes. Either <a href="{{ url_for('oaidp.collections2') }}">continue refresh</a>, or choose another option.</p>-->
 
-<form action="{{ url_for('oaidp.collections3') }}" method="POST">
+{% if g.user and g.auth %}<form action="{{ url_for('oaidp.collections3') }}" method="POST">{% endif %}
 <table>
 <tr>
-    <th rowspan="2"><button type="submit">Update OAI<br>data provider</button></th>
+    {% if g.user and g.auth %}<th rowspan="2"><button type="submit">Update OAI<br>data provider</button></th>{% endif %}
     <th rowspan="2">No.</th>
     <th rowspan="2">Title</th>
     <th rowspan="2">Count</th>
@@ -28,7 +28,7 @@
 </tr>
 {% for coll in output[2] %}
     <tr>
-        <td align="center"><input name="include" id="include" type="checkbox" value="{{ coll[0] }}"{% if coll[8] %} checked {% endif %}></td>
+        {% if g.user and g.auth %}<td align="center"><input name="include" id="include" type="checkbox" value="{{ coll[0] }}"{% if coll[8] %} checked {% endif %}></td>{% endif %}
         <td align="right"><a href="{{ url }}{{ coll[0] }}">{{ coll[0] }}</a></td>
         <td>{{ coll[1] }}</td>
         <td align="right"><a href="{{ url }}{{ coll[0] }}/digitized">{{ coll[2] }}</a></td>
@@ -39,7 +39,12 @@
         <td align="right">{{ coll[7] }}</td>
     </tr>
 {% endfor %}
-<tr><th align="right" colspan="3">Totals</th>
+<tr>
+    {% if g.user and g.auth %}
+        <th align="right" colspan="3">Totals</th>
+    {% else %}
+        <th align="right" colspan="2">Totals</th>
+    {% endif %}
     <th align="right">{{ totals['total'] }}</th>
     <th align="right">{{ totals['caltecharchives'] }}</th>
     <th align="right">{{ totals['caltechlibrary'] }}</th>
