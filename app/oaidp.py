@@ -1,12 +1,12 @@
-from app.aspace import update_collections, get_collectioninfo, get_notes
+from app.aspace import update_collections, get_notes
 from app.db import get_db
 
 from flask import Blueprint, request, Response, render_template
-from datetime import datetime, date, timedelta
+from datetime import datetime, date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from pathlib import Path
-import json, subprocess, os, time
+import json, subprocess
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), 'r') as f:
@@ -102,64 +102,22 @@ def collections():
 # refresh collections data from ArchivesSpace
 @bp.route('/collections2')
 def collections2():
-
-    db = get_db()
-
-    # list of collections to include in OAI DP
-    # this is used to update incl field after update
-    incl = list() 
-    for e in db.execute('SELECT collno FROM collections WHERE incl=1;'):
-        incl.append(e[0])
-
-    update_coll_json(incl)
-
-    # get data from ArchivesSpace as list
-    # output[0] = total number of do's
-    # output[1] = number of collections
-    # output[2] = a list of collections [coll id, title, stats(dict), incl]
-    # output[3] = elapsed time
-    output, digitalobject_count, archivalobject_count, totals = update_collections(incl) 
-
-    # update totals in db
-    db.execute('DELETE FROM totals')
-    query='INSERT INTO totals(total,caltecharchives,caltechlibrary,internetarchive,youtube,other) \
-            VALUES (?,?,?,?,?,?)'
-    db.execute(query, list(totals.values()))
-
-    # isolate collections info
-    colls=output[2]
-    
-    # delete collections (easiest way to refresh data)
-    db.execute('DELETE FROM collections')
-
-    # insert updated data from ArchivesSpace into db
-    query = 'INSERT INTO collections(collno,colltitle,docount,carchives,clibrary,\
-                        iarchive,youtube,other,incl) \
-                        VALUES (?,?,?,?,?,?,?,?,?);'
-    for coll in colls:
-        db.execute(query, [coll[0], coll[1], \
-                    coll[2]['docount'], coll[2]['caltecharchives'], coll[2]['caltechlibrary'], \
-                    coll[2]['internetarchive'], coll[2]['youtube'], coll[2]['other'], \
-                    coll[3]])
-    
-    # update incl field
-    query = 'UPDATE collections SET incl=1 WHERE collno=?;'
-    for id in incl:
-        db.execute(query, [id])
-
-    # commit changes
-    db.commit()
-    
-    # record time of update
-    dt=write_last_update('col')
-    
+    codepath = Path(Path(__file__).resolve().parent).joinpath('updcollinfo.py')
+    output=subprocess.run(['python', codepath], capture_output=True, text=True)
     return render_template('collections.html', 
                            output=read_colls(), 
-                           dt=dt,
+                           dt=get_last_update('col'),
                            url=pub_url+cbase,
-                           digitalobject_count=digitalobject_count,
-                           archivalobject_count=archivalobject_count,
-                           totals=totals)
+                           digitalobject_count=output,
+                           archivalobject_count=output,
+                           totals=get_total_counts())
+
+# get total object counts
+def get_total_counts():
+    db = get_db()
+    return db.execute('SELECT total, caltecharchives, caltechlibrary, \
+                      internetarchive, youtube, other \
+                      FROM totals;').fetchone()
 
 # read collections data for display
 def read_colls():
@@ -169,7 +127,7 @@ def read_colls():
     n = sum(k for (_,_,k,_,_,_,_,_,_) in colls)
     return (n, len(colls), colls)
 
-# update collections json
+# query db and update collections json file for list of ids
 def update_coll_json(ids):
     db = get_db()
     # initialize dict for json output

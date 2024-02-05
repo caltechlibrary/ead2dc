@@ -6,14 +6,14 @@ from pathlib import Path
 
 #FUNCTIONS
 
-#returns a pretty-printed XML string for on-screen display
+#returns a "pretty" XML string
 def prettify(elem):
     xml_string = ET.tostring(elem)
     xml_file = dom.parseString(xml_string)
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
 
-# builds xml for each record and adds to ListRecords segment
+# builds XML for each record and adds to ListRecords segment
 def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     global no_records, setid
     #create record element
