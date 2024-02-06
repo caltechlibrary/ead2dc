@@ -25,6 +25,9 @@ pub_url = config['PUBLIC_URL']
 # collection base
 cbase = config['COLLECTION_BASE_URI']
 
+# db file location
+dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.py')
+
 from asnake.client import ASnakeClient
 client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
                       username=config['ASPACE_USERNAME'],
@@ -90,7 +93,7 @@ def url_domain(url):
 
 # return formatted last_update
 def get_last_update(fn):
-    db = sq.connect('../instance/ead2dc.db').cursor()
+    db = sq.connect(dbpath).cursor()
     query = 'SELECT dt FROM last_update WHERE fn=?;'
     last_update = db.execute(query, [fn]).fetchone()[0]
     dt = datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p")
@@ -98,7 +101,7 @@ def get_last_update(fn):
 
 # write ISO last update; return formatted last_update (i.e. now)
 def write_last_update(fn):
-    db = sq.connect('../instance/ead2dc.db').cursor()
+    db = sq.connect(dbpath).cursor()
     query = 'UPDATE last_update SET dt=? WHERE fn=?;'
     now = datetime.now()
     last_update = now.isoformat()
@@ -249,13 +252,13 @@ def get_notes(id):
 def read_colls():
     query = "SELECT collno, colltitle, docount, carchives, clibrary, \
             iarchive, youtube, other, incl FROM collections ORDER BY docount DESC;"
-    colls = sq.connect('../instance/ead2dc.db').cursor().execute(query).fetchall()
+    colls = sq.connect(dbpath).cursor().execute(query).fetchall()
     n = sum(k for (_,_,k,_,_,_,_,_,_) in colls)
     return (n, len(colls), colls)
 
 # update collections json
 def update_coll_json(ids):
-    db = sq.connect('../instance/ead2dc.db').cursor()
+    db = sq.connect(dbpath).cursor()
     # initialize dict for json output
     coll_dict = dict()
     query = "SELECT colltitle FROM collections WHERE collno=?;"
@@ -270,7 +273,7 @@ def update_coll_json(ids):
 
 # MAIN PROGRAM
 
-db = sq.connect('../instance/ead2dc.db').cursor()
+db = sq.connect(dbpath).cursor()
 
 # list of collections to include in OAI DP
 # this is used to update incl field after update
