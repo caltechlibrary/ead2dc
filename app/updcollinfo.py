@@ -93,7 +93,8 @@ def url_domain(url):
 
 # return formatted last_update
 def get_last_update(fn):
-    db = sq.connect(dbpath).cursor()
+    connection = sq.connect(dbpath)
+    db = connection.cursor()
     query = 'SELECT dt FROM last_update WHERE fn=?;'
     last_update = db.execute(query, [fn]).fetchone()[0]
     dt = datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p")
@@ -101,12 +102,15 @@ def get_last_update(fn):
 
 # write ISO last update; return formatted last_update (i.e. now)
 def write_last_update(fn):
-    db = sq.connect(dbpath).cursor()
+    connection = sq.connect(dbpath)
+    db = connection.cursor()
     query = 'UPDATE last_update SET dt=? WHERE fn=?;'
     now = datetime.now()
     last_update = now.isoformat()
     db.execute(query, [last_update, fn])
-    db.commit()
+    db.close()
+    connection.commit()
+    connection.close()
     dt = now.strftime("%b %-d, %Y, %-I:%M%p")
     return dt
 
