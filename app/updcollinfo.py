@@ -26,7 +26,7 @@ pub_url = config['PUBLIC_URL']
 cbase = config['COLLECTION_BASE_URI']
 
 # db file location
-dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.py')
+dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
 
 from asnake.client import ASnakeClient
 client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
