@@ -1,4 +1,4 @@
-from app.updcollinfo import get_notes, write_last_update, get_last_update
+from app.aspace import get_notes, write_last_update, get_last_update
 from app.db import get_db
 
 from flask import Blueprint, request, Response, render_template
@@ -409,3 +409,4 @@ def oai():
         error.text = "Missing or invalid verb or key."
 
     return Response(ET.tostring(oaixml), mimetype='text/xml')
+

@@ -273,7 +273,8 @@ def update_coll_json(ids):
 
 # MAIN PROGRAM
 
-db = sq.connect(dbpath).cursor()
+connection = sq.connect(dbpath)
+db = connection.cursor()
 
 # list of collections to include in OAI DP
 # this is used to update incl field after update
@@ -324,7 +325,9 @@ for id in incl:
     db.execute(query, [id])
 
 # commit changes
-db.commit()
+db.close()
+connection.commit()
+connection.close()
     
 # record time of update
 dt=write_last_update('col')
