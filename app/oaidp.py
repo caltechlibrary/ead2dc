@@ -164,24 +164,20 @@ def collections3():
 # regenerate info
 @bp.route('/regen')
 def regen():
-    dt_xml=get_last_update('xml')
-    dt_col=get_last_update('col')
     return render_template("regen.html", 
                            done=False, 
-                           dt_xml=dt_xml,
-                           dt_col=dt_col)
+                           dt_xml=get_last_update('xml'),
+                           dt_col=get_last_update('col'))
 
 # regenerate XML
 @bp.route('/regen2')
 def regen2():
     codepath = Path(Path(__file__).resolve().parent).joinpath('ead2dc.py')
     subprocess.run(['python', codepath], capture_output=False)
-    dt_xml=write_last_update('xml')
-    dt_col=get_last_update('col')
     return render_template("regen.html", 
                            done=True, 
-                           dt_xml=dt_xml,
-                           dt_col=dt_col)
+                           dt_xml=get_last_update('xml')l,
+                           dt_col=get_last_update('col'))
 
 @bp.route('/search2')
 def search2():

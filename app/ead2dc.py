@@ -277,3 +277,22 @@ for coll in colls:
 #write to disk
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
+
+#-----------------
+
+import sqlite3 as sq
+from datetime import datetime
+
+# db file location
+dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
+
+# write ISO last update; return formatted last_update (i.e. now)
+query = 'UPDATE last_update SET dt=? WHERE fn=?;'
+now = datetime.now()
+last_update = now.isoformat()
+connection = sq.connect(dbpath)
+db = connection.cursor()
+db.execute(query, [last_update, 'xml'])
+db.close()
+connection.commit()
+connection.close()
