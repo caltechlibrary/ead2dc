@@ -1,5 +1,5 @@
-from aspace import update_collections, get_notes
-from db import get_db
+from app.updcollinfo import get_notes, write_last_update, get_last_update
+from app.db import get_db
 
 from flask import Blueprint, request, Response, render_template
 from datetime import datetime, date
@@ -182,25 +182,6 @@ def regen2():
                            done=True, 
                            dt_xml=dt_xml,
                            dt_col=dt_col)
-
-# return formatted last_update
-def get_last_update(fn):
-    db = get_db()
-    query = 'SELECT dt FROM last_update WHERE fn=?;'
-    last_update = db.execute(query, [fn]).fetchone()[0]
-    dt = datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p")
-    return dt
-
-# write ISO last update; return formatted last_update (i.e. now)
-def write_last_update(fn):
-    db = get_db()
-    query = 'UPDATE last_update SET dt=? WHERE fn=?;'
-    now = datetime.now()
-    last_update = now.isoformat()
-    db.execute(query, [last_update, fn])
-    db.commit()
-    dt = now.strftime("%b %-d, %Y, %-I:%M%p")
-    return dt
 
 @bp.route('/search2')
 def search2():
