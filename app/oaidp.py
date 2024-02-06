@@ -176,7 +176,7 @@ def regen2():
     subprocess.run(['python', codepath], capture_output=False)
     return render_template("regen.html", 
                            done=True, 
-                           dt_xml=get_last_update('xml')l,
+                           dt_xml=get_last_update('xml'),
                            dt_col=get_last_update('col'))
 
 @bp.route('/search2')
