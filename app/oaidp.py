@@ -1,5 +1,5 @@
-from app.aspace import update_collections, get_notes
-from app.db import get_db
+from aspace import update_collections, get_notes
+from db import get_db
 
 from flask import Blueprint, request, Response, render_template
 from datetime import datetime, date
