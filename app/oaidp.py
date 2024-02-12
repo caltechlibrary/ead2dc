@@ -185,6 +185,16 @@ def regen2():
                            dt_xml=get_last_update('xml'),
                            dt_col=get_last_update('col'))
 
+# run both collections (updcollinfo.py) and regen (ead2dc.py) scripts and reload server
+@bp.route('/update')
+def upddate():
+    codepath = Path(Path(__file__).resolve().parent).joinpath('update.sh')
+    subprocess.run(['sh', codepath], capture_output=False)
+    return render_template("regen.html", 
+                           done=True, 
+                           dt_xml=get_last_update('xml'),
+                           dt_col=get_last_update('col'))
+
 @bp.route('/search2')
 def search2():
     try:
