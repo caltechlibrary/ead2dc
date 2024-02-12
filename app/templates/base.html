@@ -12,9 +12,10 @@
 
     <div class="sidenav">
         <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
         <a href="{{ url_for('oaidp.collections') }}">Collections</a>
-        <a href="{{ url_for('oaidp.browse', page_number=1) }}">Browse</a>
-        <a href="{{ url_for('oaidp.search') }}">Search</a>
+        <!--<a href="{{ url_for('oaidp.browse', page_number=1) }}">Browse</a>
+        <a href="{{ url_for('oaidp.search') }}">Search</a>-->
         {% if g.user and g.auth %}
         <a href="{{ url_for('oaidp.regen') }}">Refresh</a>
         {% endif %}

@@ -2,44 +2,17 @@
 
 {% block content %}
 
-<h3>Encoded Archival Description to Dublin Core Conversion</h3>
+<p>This site provides information about, and configuration for the Caltech Archives Open Archives Initiative (OAI) Data Provider (DP).
+    Access to the configuration section requires an Archives login.</p>
 
-<p>The Caltech Archives use the Encoded Archival Description (EAD) XML output from ArchivesSpace to create
-    a static XML repository, which in turn is used to provide OAI-PMH access to the digital collections. The static
-    repository
-    is inspired by the OAI Static Repository specification, but does not adhere to it strictly.
-    The static repository contains
-    Dublin Core (DC) records for digital resources found in the finding aid. Only records containing links to digital
-    objects are included.</p>
+<p>The DP supports the six OAI verbs and their arguments, with a few exceptions, as described below.
+    The service is freely available. Any questions about this service should be directed to <a href="mailto:archives@caltech.edu">archives@caltech.edu</a></p>
 
-<p>The OAI Data Provider adheres to the OAI standard and supports all the verbs (Identify, ListMetadataFormats,
-    ListSets,
-    ListIdentifiers, ListRecords, and GetRecord), resumption tokens, and sets. Only DC metadata is provided. Sets
-    correspond
-    to the archival collections in the Caltech Archives.</p>
-
-<h3>ead2dc - Main features and assumptions:</h3>
-
-<ul>
-    <li>Both input and output are OAI-compliant XML files.</li>
-    <li>All 12 levels of EAD container are supported.</li>
-    <li>Titles are inherited down the container hierarchy.</li>
-    <li>All other metadata is mapped from the record containing the digital object references.</li>
-    <li>Records without digital object references are ignored (i.e. not mapped to the output file)</li>
 </ul>
 
-<h3>OAI Data Provider - Main features and assumptions:</h3>
+<p><strong>DP Base URL:</strong> <a href="oai">https://apps.library.caltech.edu/ead2dc/oai</a></p>
 
-<ul>
-    <li>The OAI Data Provider uses a static repository, i.e. it does not dynamically generate records.</li>
-    <li>DC metadata only.</li>
-    <li>Sets correspond to the archival collections and do not overlap.</li>
-    <li>Records are delivered in batches of 250.</li>
-</ul>
-
-<h3>Example queries</h3>
-
-<p><strong>Base URL:</strong> <a href="oai">https://apps.library.caltech.edu/ead2dc/oai</a></p>
+<h4><strong>Example queries</strong></h4>
 
 <ul>
 <li><strong>Identify</strong>
@@ -55,31 +28,34 @@
 </li>
 <li><strong>ListSets</strong>
     <ul>
-    <li>argument not supported: resumptionToken</li>
-    <li><a href="oai?verb=ListSets">ListSets</a></li>
+    <li><a href="oai?verb=ListSets">ListSets</a>
+    <ul><li>argument not supported: resumptionToken</li></ul></li>
     </ul>
 </li>
 <li><strong>ListIdentifiers</strong>
     <ul>
-    <li>arguments supported: set, from, until, resumptionToken</li>
-    <li>argument not supported: metadataPrefix</li>
+    <li><a href="oai?verb=ListIdentifiers">ListIdentifiers</a></li>
+    <li><a href="oai?verb=ListIdentifiers&set=124">ListIdentifiers&set=124</a></li>
     <li><a href="oai?verb=ListIdentifiers&set=124&from=2023-01-01&until=2024-12-31">ListIdentifiers&set=124&from=2023-01-01&until=2023-12-31</a></li>
-    <li><a href="oai?verb=ListIdentifiers&resumptionToken=124:2023-01-01:2024-12-31:250">ListIdentifiers&resumptionToken=124:2023-01-01:2023-12-31:250</a></li>
+    <li><a href="oai?verb=ListIdentifiers&resumptionToken=124:2023-01-01:2024-12-31:250">ListIdentifiers&resumptionToken=124:2023-01-01:2023-12-31:250</a>
+    <ul><li>arguments supported: set, from, until, resumptionToken</li>
+    <li>argument not supported: metadataPrefix</li></ul></li>
     </ul>
 </li>
 <li><strong>ListRecords</strong>
     <ul>
-    <li>arguments supported: set, from, until, resumptionToken</li>
-    <li>argument not supported: metadataPrefix</li>
+    <li><a href="oai?verb=ListRecords">ListRecords</a></li>
     <li><a href="oai?verb=ListRecords&set=219">ListRecords&set=219</a></li>
-    <li><a href="oai?verb=ListRecords&resumptionToken=219:000-00-00:999-99-99:250">ListRecords&resumptionToken=219:000-00-00:999-99-99:250</a></li>
+    <li><a href="oai?verb=ListRecords&resumptionToken=219:000-00-00:999-99-99:250">ListRecords&resumptionToken=219:000-00-00:999-99-99:250</a>
+    <ul><li>arguments supported: set, from, until, resumptionToken</li>
+    <li>argument not supported: metadataPrefix</li></ul></li>
     </ul>
 </li>
 <li><strong>GetRecord</strong>
     <ul>
-    <li>argument supported: identifier</li>
-    <li>argument not supported: metadataPrefix</li>
-    <li><a href="oai?verb=GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628">GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628</a></li>
+    <li><a href="oai?verb=GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628">GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628</a>
+    <ul><li>argument supported: identifier</li>
+    <li>argument not supported: metadataPrefix</li></ul></li>
     </ul>
 </li>
 </ul>
@@ -106,12 +82,6 @@
 </li>
 </ul>
         
-<p><strong>For more information visit:</strong></p>
-        
-<ul>
-<li><a href="https://www.openarchives.org/OAI/openarchivesprotocol.html">OAI-PMH specification</a></li>
-<li><a href="https://archives.caltech.edu">Caltech Archives website</a></li>
-<li><a href="https://github.com/caltechlibrary/ead2dc">GitHub</a></li>
-</ul>
+
 
 {% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>About</h3>
+
+<p>This OAI Data Provider adheres to the OAI standard and supports all the verbs (Identify, ListMetadataFormats,
+    ListSets, ListIdentifiers, ListRecords, and GetRecord), resumption tokens, and sets. Only DC metadata is provided. 
+    Sets correspond to the archival collections in the Caltech Archives.</p>
+    
+<p>Data is delivered from a static XML repository that is updated from ArchivesSpace daily.
+    The static repository is derived from ArchivesSpace Encoded Archival Description (EAD) output
+    for all collections that contain links to digital content. Collections and records without attached digital content
+    are not included.</p>
+
+
+
+<p><strong>For more information visit:</strong></p>
+
+<ul>
+    <li><a href="https://github.com/caltechlibrary/ead2dc">DP code on GitHub</a></li>
+    <li><a href="https://www.openarchives.org/OAI/openarchivesprotocol.html">OAI-PMH specifications</a></li>
+    <li><a href="https://archives.caltech.edu">Caltech Archives website</a></li>
+
+{% endblock %}

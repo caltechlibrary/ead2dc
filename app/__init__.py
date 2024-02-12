@@ -32,10 +32,6 @@ app.add_url_rule('/', endpoint='index')
 
 @app.route('/')
 def index():
-    try:
-        page_number
-    except:
-        page_number=1
     return render_template('index.html')
 
 @app.route('/login')

@@ -1,6 +1,7 @@
-from app.aspace import get_notes, write_last_update, get_last_update
+# local imports
+from app.aspace import get_notes, get_last_update
 from app.db import get_db
-
+# 
 from flask import Blueprint, request, Response, render_template
 from datetime import datetime, date
 import xml.etree.ElementTree as ET
@@ -52,6 +53,11 @@ def prettify(elem):
     xml_file = dom.parseString(xml_string)
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
+
+# build OAI
+@bp.route('/build')
+def build():
+    return render_template('build.html')
 
 # returns a list of IDs
 @bp.route('/browse/<page_number>')
