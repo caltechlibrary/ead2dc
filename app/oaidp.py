@@ -187,7 +187,7 @@ def regen2():
 
 # run both collections (updcollinfo.py) and regen (ead2dc.py) scripts and reload server
 @bp.route('/update')
-def upddate():
+def update():
     codepath = Path(Path(__file__).resolve().parent).joinpath('update.sh')
     subprocess.run(['sh', codepath], capture_output=False)
     return render_template("regen.html", 
