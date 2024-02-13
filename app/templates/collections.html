@@ -35,7 +35,12 @@
 {% if g.user and g.auth %}<form action="{{ url_for('oaidp.collections3') }}" method="POST">{% endif %}
 <table>
 <tr>
-    <th rowspan="2">{% if g.user and g.auth %}<button type="submit">Update OAI<br>data provider</button>{% endif %}</th>
+    <th rowspan="2">
+        {% if g.user and g.auth %}
+            <button type="submit">Update OAI<br/>Data Provider</button>
+        {% else %}
+            Published<br/>via OAI<br/>Data Provider
+        {% endif %}</th>
     <th rowspan="2">No.</th>
     <th rowspan="2">Title</th>
     <th rowspan="2">Count</th>
