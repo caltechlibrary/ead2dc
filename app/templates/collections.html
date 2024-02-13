@@ -35,7 +35,7 @@
 {% if g.user and g.auth %}<form action="{{ url_for('oaidp.collections3') }}" method="POST">{% endif %}
 <table>
 <tr>
-    {% if g.user and g.auth %}<th rowspan="2"><button type="submit">Update OAI<br>data provider</button></th>{% endif %}
+    <th rowspan="2">{% if g.user and g.auth %}<button type="submit">Update OAI<br>data provider</button>{% endif %}</th>
     <th rowspan="2">No.</th>
     <th rowspan="2">Title</th>
     <th rowspan="2">Count</th>
@@ -50,7 +50,7 @@
 </tr>
 {% for coll in output[2] %}
     <tr>
-        {% if g.user and g.auth %}<td align="center"><input name="include" id="include" type="checkbox" value="{{ coll[0] }}"{% if coll[8] %} checked {% endif %}></td>{% endif %}
+        <td align="center"><input name="include" id="include" type="checkbox" value="{{ coll[0] }}"{% if coll[8] %} checked {% endif %}></td>
         <td align="right"><a href="{{ url }}{{ coll[0] }}">{{ coll[0] }}</a></td>
         <td>{{ coll[1] }}</td>
         <td align="right"><a href="{{ url }}{{ coll[0] }}/digitized">{{ coll[2] }}</a></td>
