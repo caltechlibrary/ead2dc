@@ -24,6 +24,14 @@
         {% else %}
             <a href="{{ url_for('auth.login') }}">(login)</a>
         {% endif %}
+
+        <div class="absolute">
+
+            <a href="https://github.com/caltechlibrary/ead2dc"><img width="20" height="20"
+            src="{{ url_for('static', filename='images/github.svg') }}"></a>
+
+        </div>
+
     </div>
 
     <div class="main">
@@ -39,12 +47,6 @@
         {{ message }}
         {% endfor %}
         </p>
-
-    </div>
-
-    <div class="absolute">
-
-        <a href="https://github.com/caltechlibrary/ead2dc"><img width="20" height="20" src="{{ url_for('static', filename='images/github.svg') }}"></a>
 
     </div>
 
