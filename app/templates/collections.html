@@ -30,6 +30,8 @@
     </tr>
 </table>
 
+<br/>
+
 <!--<p>Refresh data from ArchivesSpace? This takes a few minutes. Either <a href="{{ url_for('oaidp.collections2') }}">continue refresh</a>, or choose another option.</p>-->
 
 {% if g.user and g.auth %}<form action="{{ url_for('oaidp.collections3') }}" method="POST">{% endif %}
