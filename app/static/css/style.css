@@ -17,7 +17,11 @@ td {
 }
 
 tr:nth-child(even) {
-    background-color: #D6EEEE;
+    background-color: #DAE5F4;
+}
+
+tr:nth-child(odd) {
+    background-color: #B8D1F3;
 }
 
 .sidenav {
