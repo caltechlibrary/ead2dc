@@ -71,11 +71,7 @@
     </tr>
 {% endfor %}
 <tr>
-    {% if g.user and g.auth %}
-        <th align="right" colspan="3">Totals</th>
-    {% else %}
-        <th align="right" colspan="2">Totals</th>
-    {% endif %}
+    <th align="right" colspan="3">Totals</th>
     <th align="right">{{ totals['total'] }}</th>
     <th align="right">{{ totals['caltecharchives'] }}</th>
     <th align="right">{{ totals['caltechlibrary'] }}</th>
