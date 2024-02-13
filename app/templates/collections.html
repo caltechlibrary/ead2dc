@@ -6,7 +6,13 @@
 
 <p><strong>{{ output[0] }} digital objects</strong> in <strong>{{ output[1] }} collections</strong>.</p>
 
-<p><strong>Last updated:</strong> {{ dt }}</p>
+<table>
+    <tr>
+        <td align="right"><strong>Data last updated from ArchivesSpce:</strong></td><td>{{ dt_col }}</td>
+    </tr>
+    <tr>
+        <td align="right"><strong>Collection selection last updated:</strong></td><td>{{ dt_act }}</td>
+    </tr>
 
 <!--<p>Refresh data from ArchivesSpace? This takes a few minutes. Either <a href="{{ url_for('oaidp.collections2') }}">continue refresh</a>, or choose another option.</p>-->
 

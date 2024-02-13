@@ -97,11 +97,11 @@ def search():
 @bp.route('/collections')
 def collections():
     db = get_db()
-    last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
     totals = db.execute('SELECT total,caltecharchives,caltechlibrary,internetarchive,youtube,other FROM totals;').fetchone()
     return render_template('collections.html', 
                            output=read_colls(), 
-                           dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
+                           dt_col=get_last_update('col'),
+                           dt_act=get_last_update('act'),
                            url=pub_url+cbase,
                            totals=totals)
 
@@ -156,14 +156,16 @@ def collections3():
         db.execute('UPDATE collections SET incl=0;')
         ids = request.form.getlist('include')
         for id in ids:
-            db.execute('UPDATE collections SET incl=1 WHERE collno=?', [id])
+            db.execute('UPDATE collections SET incl=1 WHERE collno=?;', [id])
+        now = datetime.now().isoformat()
+        db.execute('UPDATE last_update SET dt=? WHERE fn=?;', [now, 'act'])
         db.commit()
         update_coll_json(ids)
-    last_update = db.execute('SELECT dt FROM last_update;').fetchone()[0]
     totals = db.execute('SELECT total,caltecharchives,caltechlibrary,internetarchive,youtube,other FROM totals;').fetchone()
     return render_template('collections.html', 
                            output=read_colls(), 
-                           dt=datetime.fromisoformat(last_update).strftime("%b %-d, %Y, %-I:%M%p"),
+                           dt_col=get_last_update('col'),
+                           dt_act=get_last_update('act'),
                            url=pub_url+cbase,
                            totals=totals)
 
