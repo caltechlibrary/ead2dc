@@ -4,15 +4,31 @@
 
 <h3>Collections</h3>
 
+{% if g.user and g.auth %}
+<p>
+    Data is updated nightly from ArchivesSpace at 3am. 
+    Changes will be reflected in the table below, and in the results of queries to the Data Provider.
+</p>
+<p>
+    Examples of edits in ArchivesSpace that will change collection data and DP responses include:
+</p>
+<ul>
+    <li>Adding/removing digital content to/from collections</li>
+    <li>Changing publication or suppressed status of collections or digital objects</li>
+    <li>Editing archival or digital object metadata</li>
+</ul>
+{% endif %}
+
 <p><strong>{{ output[0] }} digital objects</strong> in <strong>{{ output[1] }} collections</strong>.</p>
 
 <table>
     <tr>
-        <td align="right"><strong>Data last updated from ArchivesSpce:</strong></td><td>{{ dt_col }}</td>
+        <td align="right"><strong>Data last updated from ArchivesSpace:</strong></td><td>{{ dt_col }}</td>
     </tr>
     <tr>
         <td align="right"><strong>Collection selection last updated:</strong></td><td>{{ dt_act }}</td>
     </tr>
+</table>
 
 <!--<p>Refresh data from ArchivesSpace? This takes a few minutes. Either <a href="{{ url_for('oaidp.collections2') }}">continue refresh</a>, or choose another option.</p>-->
 
