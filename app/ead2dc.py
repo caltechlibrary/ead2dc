@@ -240,8 +240,9 @@ for coll in colls:
     archdesc = ead.find('.//archdesc', ns)
     #isolate the dsc portion of the file
     dsc = archdesc.find('.//dsc', ns)
-    #save the collection title
+    #save the collection title & id
     collectiontitle = archdesc.find('.//did/unittitle', ns).text
+    collectionid = archdesc.find('.//did/unitid', ns).text
 
     fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 

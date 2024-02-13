@@ -1,5 +1,5 @@
 # local imports
-from app.aspace import get_notes, get_last_update
+from app.aspace import get_notes, get_last_update, write_last_update
 from app.db import get_db
 # 
 from flask import Blueprint, request, Response, render_template
@@ -157,10 +157,9 @@ def collections3():
         ids = request.form.getlist('include')
         for id in ids:
             db.execute('UPDATE collections SET incl=1 WHERE collno=?;', [id])
-        now = datetime.now().isoformat()
-        db.execute('UPDATE last_update SET dt=? WHERE fn=?;', [now, 'act'])
         db.commit()
         update_coll_json(ids)
+        write_last_update('act')
     totals = db.execute('SELECT total,caltecharchives,caltechlibrary,internetarchive,youtube,other FROM totals;').fetchone()
     return render_template('collections.html', 
                            output=read_colls(), 
