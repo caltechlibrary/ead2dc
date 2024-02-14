@@ -60,7 +60,7 @@ tr:nth-child(odd) {
     /* Same width as the sidebar + left position in px */
     font-size: 14px;
     /* Increased text to enable scrolling */
-    padding: 0px 10px;
+    padding: 20px 10px;
 }
 
 @media screen and (max-height: 450px) {
