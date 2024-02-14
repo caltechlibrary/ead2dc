@@ -1,5 +1,12 @@
 body {
-    font-family: "Lato", sans-serif;
+    font-family: Tahoma,
+        Verdana,
+        sans-serif, sans-serif;
+    line-height: 1.5;
+}
+
+ul, ol {
+    line-height: 2;
 }
 
 table,
