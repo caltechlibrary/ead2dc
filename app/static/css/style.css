@@ -12,15 +12,14 @@ ul, ol {
 table,
 th,
 td {
-    border: 1px solid black;
     border-collapse: collapse;
+    border-style: dotted;
 }
 
 th,
 td {
     padding: 8px;
     border-color: #96D4D4;
-    border-style: dotted;
 }
 
 tr:nth-child(even) {
