@@ -23,7 +23,7 @@ def login():
     g.user = session.get('user_id')
     g.role = session.get('role')
     g.auth = session.get('auth')
-    return render_template('index.html')
+    return redirect(url_for('collections'))
 
 @bp.before_app_request
 def load_logged_in_user():
@@ -34,7 +34,7 @@ def load_logged_in_user():
 @bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('index'))
+    return redirect(url_for('collections'))
 
 def login_required(view):
     @functools.wraps(view)
