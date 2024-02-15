@@ -2,11 +2,13 @@
 
 {% block content %}
 
-<p>This site provides information about, and configuration for the Caltech Archives Open Archives Initiative (OAI) Data Provider (DP).
+<p>This site provides information about, and configuration for the Caltech Archives Open Archives Initiative (OAI) Data
+    Provider (DP).
     Access to the configuration section requires an Archives staff login.</p>
 
 <p>The DP supports the six OAI verbs and their arguments, with a few exceptions, as described below.
-    The service is freely available. Any questions about this service should be directed to <a href="mailto:archives@caltech.edu">archives@caltech.edu</a></p>
+    The service is freely available. Any questions about this service should be directed to <a
+        href="mailto:archives@caltech.edu">archives@caltech.edu</a></p>
 
 </ul>
 
@@ -15,73 +17,94 @@
 <p><strong>Example queries:</strong></p>
 
 <ul>
-<li><strong>Identify</strong>
-    <ul>
-    <li><a href="oai?verb=Identify">Identify</a></li>
-    </ul>
-</li>
-<li><strong>ListMetadataFormats</strong>
-    <ul>
-    <li><a href="oai?verb=ListMetadataFormats">ListMetadataFormats</a></li>
-    <li><a href="oai?verb=ListMetadataFormats&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106578">ListMetadataFormats&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106578</a></li>
-    </ul>
-</li>
-<li><strong>ListSets</strong>
-    <ul>
-    <li><a href="oai?verb=ListSets">ListSets</a>
-    <ul><li>argument not supported: resumptionToken</li></ul></li>
-    </ul>
-</li>
-<li><strong>ListIdentifiers</strong>
-    <ul>
-    <li><a href="oai?verb=ListIdentifiers">ListIdentifiers</a></li>
-    <li><a href="oai?verb=ListIdentifiers&set=124">ListIdentifiers&set=124</a></li>
-    <li><a href="oai?verb=ListIdentifiers&set=124&from=2023-01-01&until=2024-12-31">ListIdentifiers&set=124&from=2023-01-01&until=2023-12-31</a></li>
-    <li><a href="oai?verb=ListIdentifiers&resumptionToken=124:2023-01-01:2024-12-31:250">ListIdentifiers&resumptionToken=124:2023-01-01:2023-12-31:250</a>
-    <ul><li>arguments supported: set, from, until, resumptionToken</li>
-    <li>argument not supported: metadataPrefix</li></ul></li>
-    </ul>
-</li>
-<li><strong>ListRecords</strong>
-    <ul>
-    <li><a href="oai?verb=ListRecords">ListRecords</a></li>
-    <li><a href="oai?verb=ListRecords&set=219">ListRecords&set=219</a></li>
-    <li><a href="oai?verb=ListRecords&resumptionToken=219:000-00-00:999-99-99:250">ListRecords&resumptionToken=219:000-00-00:999-99-99:250</a>
-    <ul><li>arguments supported: set, from, until, resumptionToken</li>
-    <li>argument not supported: metadataPrefix</li></ul></li>
-    </ul>
-</li>
-<li><strong>GetRecord</strong>
-    <ul>
-    <li><a href="oai?verb=GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628">GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628</a>
-    <ul><li>argument supported: identifier</li>
-    <li>argument not supported: metadataPrefix</li></ul></li>
-    </ul>
-</li>
+    <li><strong>Identify</strong>
+        <ul>
+            <li><a href="oai?verb=Identify">Identify</a></li>
+        </ul>
+    </li>
+    <li><strong>ListMetadataFormats</strong>
+        <ul>
+            <li><a href="oai?verb=ListMetadataFormats">ListMetadataFormats</a></li>
+            <li><a
+                    href="oai?verb=ListMetadataFormats&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106578">ListMetadataFormats&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106578</a>
+            </li>
+        </ul>
+    </li>
+    <li><strong>ListSets</strong>
+        <ul>
+            <li><a href="oai?verb=ListSets">ListSets</a>
+                <ul>
+                    <li>argument not supported: resumptionToken</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li><strong>ListIdentifiers</strong>
+        <ul>
+            <li><a href="oai?verb=ListIdentifiers">ListIdentifiers</a></li>
+            <li><a href="oai?verb=ListIdentifiers&set=124">ListIdentifiers&set=124</a></li>
+            <li><a
+                    href="oai?verb=ListIdentifiers&set=124&from=2023-01-01&until=2024-12-31">ListIdentifiers&set=124&from=2023-01-01&until=2023-12-31</a>
+            </li>
+            <li><a
+                    href="oai?verb=ListIdentifiers&resumptionToken=124:2023-01-01:2024-12-31:250">ListIdentifiers&resumptionToken=124:2023-01-01:2023-12-31:250</a>
+                <ul>
+                    <li>arguments supported: set, from, until, resumptionToken</li>
+                    <li>argument not supported: metadataPrefix</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li><strong>ListRecords</strong>
+        <ul>
+            <li><a href="oai?verb=ListRecords">ListRecords</a></li>
+            <li><a href="oai?verb=ListRecords&set=219">ListRecords&set=219</a></li>
+            <li><a
+                    href="oai?verb=ListRecords&resumptionToken=219:000-00-00:999-99-99:250">ListRecords&resumptionToken=219:000-00-00:999-99-99:250</a>
+                <ul>
+                    <li>arguments supported: set, from, until, resumptionToken</li>
+                    <li>argument not supported: metadataPrefix</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+    <li><strong>GetRecord</strong>
+        <ul>
+            <li><a
+                    href="oai?verb=GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628">GetRecord&identifier=collections.archives.caltech.edu/repositories/2/archival_objects/106628</a>
+                <ul>
+                    <li>argument supported: identifier</li>
+                    <li>argument not supported: metadataPrefix</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
 </ul>
 
 <p><strong>Notes:</strong></p>
-        
+
 <ul>
-<li><strong>Metadata</strong> 
-    <ul>
-        <li>Dublin Core is the only metadata standard supported at this time.</li>
-    </ul>
-</li>
-<li><strong>Flow control</strong> 
-    <ul>
-        <li>ListIdentifiers and ListRecords return batches of 250 records, with a resumption token.</li>
-        <li>Resumption tokens are valid indefinitely. Note, however, that <a href="http://www.openarchives.org/OAI/openarchivesprotocol.html#Idempotency">idempotency</a> is not guaranteed as the underlying data may change at any time.</li>
-    </ul>
-</li>
-<li><strong>Sets</strong>
-    <ul>
-        <li>The set structure is flat, not hierarchical.</li>
-        <li>All records belong to one and only one set, so harvesting all sets will capture all records.</li>
-    </ul>
-</li>
+    <li><strong>Metadata</strong>
+        <ul>
+            <li>Dublin Core is the only metadata standard supported at this time.</li>
+        </ul>
+    </li>
+    <li><strong>Flow control</strong>
+        <ul>
+            <li>ListIdentifiers and ListRecords return batches of 250 records, with a resumption token.</li>
+            <li>Resumption tokens are valid indefinitely. Note, however, that <a
+                    href="http://www.openarchives.org/OAI/openarchivesprotocol.html#Idempotency">idempotency</a> is not
+                guaranteed as the underlying data may change at any time.</li>
+        </ul>
+    </li>
+    <li><strong>Sets</strong>
+        <ul>
+            <li>The set structure is flat, not hierarchical.</li>
+            <li>All records belong to one and only one set, so harvesting all sets will capture all records.</li>
+        </ul>
+    </li>
 </ul>
-        
+
 
 
 {% endblock %}
