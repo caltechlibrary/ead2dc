@@ -41,15 +41,16 @@
         {% else %}
             Published<br/>via OAI<br/>Data Provider
         {% endif %}</th>
-    <th rowspan="2">Set ID</th>
+    <th rowspan="2">Set ID<br/>(Collection No.)</th>
     <th rowspan="2">Title</th>
-    <th rowspan="2">Digital Objects</th>
+    <th rowspan="2">Digital<br/>Objects</th>
+    <th rowspan="2">List<br/>Records</th>
     <th colspan="5">Host/Link domain</th>
 </tr>
 <tr>
-    <th>Caltech<br>Archives</th>
-    <th>Caltech<br>Library</th>
-    <th>Internet<br>Archive</th>
+    <th>Caltech<br/>Archives</th>
+    <th>Caltech<br/>Library</th>
+    <th>Internet<br/>Archive</th>
     <th>YouTube</th>
     <th>Other</th>
 </tr>
@@ -65,6 +66,7 @@
         <td align="right">{{ coll[0] }}</td>
         <td><a href="{{ url }}{{ coll[0] }}">{{ coll[1] }}</a></td>
         <td align="right"><a href="{{ url }}{{ coll[0] }}/digitized">{{ coll[2] }}</a></td>
+        <td align="center"><a href="oai?verb=ListRecords&set={{ coll[0] }}"></a></td>
         <td align="right">{{ coll[3] }}</td>
         <td align="right">{{ coll[4] }}</td>
         <td align="right">{{ coll[5] }}</td>
