@@ -41,9 +41,9 @@
         {% else %}
             Published<br/>via OAI<br/>Data Provider
         {% endif %}</th>
-    <th rowspan="2">No.</th>
+    <th rowspan="2">Set ID</th>
     <th rowspan="2">Title</th>
-    <th rowspan="2">Count</th>
+    <th rowspan="2">Digital Objects</th>
     <th colspan="5">Host/Link domain</th>
 </tr>
 <tr>
@@ -62,8 +62,8 @@
                 &#x2713;
             {% endif %}
         </td>
-        <td align="right"><a href="{{ url }}{{ coll[0] }}">{{ coll[0] }}</a></td>
-        <td>{{ coll[1] }}</td>
+        <td align="right">{{ coll[0] }}</td>
+        <td><a href="{{ url }}{{ coll[0] }}">{{ coll[1] }}</a></td>
         <td align="right"><a href="{{ url }}{{ coll[0] }}/digitized">{{ coll[2] }}</a></td>
         <td align="right">{{ coll[3] }}</td>
         <td align="right">{{ coll[4] }}</td>
