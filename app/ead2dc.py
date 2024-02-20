@@ -201,7 +201,9 @@ for key in collection_dict:
                   collection_dict[key]['title'], 
                   collection_dict[key]['description']])
 
-colls = read_colls_from_db()
+colls2 = read_colls_from_db()
+for coll in colls2:
+    print(coll)
 
 # namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 
