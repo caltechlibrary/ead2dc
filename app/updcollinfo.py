@@ -312,7 +312,7 @@ db.execute('DELETE FROM collections')
 # insert updated data from ArchivesSpace into db
 query = 'INSERT INTO collections(collno,colltitle,docount,carchives,clibrary,\
                     iarchive,youtube,other,incl,description,eadurl) \
-                    VALUES (?,?,?,?,?,?,?,?,?);'
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?);'
 for coll in colls:
     id = coll[0]
     title = coll[1]
