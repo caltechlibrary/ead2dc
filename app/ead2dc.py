@@ -1,7 +1,8 @@
 import requests, json
+import sqlite3 as sq
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 #FUNCTIONS
@@ -152,13 +153,39 @@ def locatedao(c):
         return True
     else:
         return False
+    
+#write time of last update to db
+def update_last_update():
+    # write ISO last update
+    now = datetime.now()
+    last_update = now.isoformat()
+    connection = sq.connect(dbpath)
+    db = connection.cursor()
+    query = 'UPDATE last_update SET dt=? WHERE fn=?;'
+    db.execute(query, [last_update, 'xml'])
+    db.close()
+    connection.commit()
+    connection.close()
+    return
 
+#read collection info from db
+def read_colls_from_db():
+    connection = sq.connect(dbpath)
+    db = connection.cursor()
+    query = 'SELECT collno, colltitle, description, eadurl FROM collections'
+    colls = db.execute(query).fetchall()
+    db.close()
+    connection.close()
+    return colls
 
 #MAIN PROGRAM
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
     config = json.load(f)
+
+# db location
+dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
 
 # string form of date to write to each record
 today = date.today().strftime("%Y-%m-%d")
@@ -173,6 +200,8 @@ for key in collection_dict:
                   collection_dict[key]['eadurl'], 
                   collection_dict[key]['title'], 
                   collection_dict[key]['description']])
+
+colls = read_colls_from_db()
 
 # namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 
@@ -279,21 +308,4 @@ for coll in colls:
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
 
-#-----------------
-
-import sqlite3 as sq
-from datetime import datetime
-
-# db file location
-dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
-
-# write ISO last update; return formatted last_update (i.e. now)
-query = 'UPDATE last_update SET dt=? WHERE fn=?;'
-now = datetime.now()
-last_update = now.isoformat()
-connection = sq.connect(dbpath)
-db = connection.cursor()
-db.execute(query, [last_update, 'xml'])
-db.close()
-connection.commit()
-connection.close()
+update_last_update()
