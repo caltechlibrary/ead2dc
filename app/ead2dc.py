@@ -191,6 +191,7 @@ dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
 today = date.today().strftime("%Y-%m-%d")
 
 # load collection info as list of lists
+'''
 with open(Path(Path(__file__).resolve().parent).joinpath('collections.json'), 'r') as f:
     # reading from json file
     collection_dict = json.load(f)
@@ -200,10 +201,8 @@ for key in collection_dict:
                   collection_dict[key]['eadurl'], 
                   collection_dict[key]['title'], 
                   collection_dict[key]['description']])
-
-colls2 = read_colls_from_db()
-for coll in colls2:
-    print(coll)
+'''
+colls = read_colls_from_db()
 
 # namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 
