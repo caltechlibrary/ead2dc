@@ -172,7 +172,7 @@ def update_last_update():
 def read_colls_from_db():
     connection = sq.connect(dbpath)
     db = connection.cursor()
-    query = 'SELECT collno, colltitle, description, eadurl FROM collections'
+    query = 'SELECT collno, eadurl, colltitle, description FROM collections'
     colls = db.execute(query).fetchall()
     db.close()
     connection.close()
