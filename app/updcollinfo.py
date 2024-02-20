@@ -311,13 +311,24 @@ db.execute('DELETE FROM collections')
 
 # insert updated data from ArchivesSpace into db
 query = 'INSERT INTO collections(collno,colltitle,docount,carchives,clibrary,\
-                    iarchive,youtube,other,incl) \
+                    iarchive,youtube,other,incl,description,eadurl) \
                     VALUES (?,?,?,?,?,?,?,?,?);'
 for coll in colls:
-    db.execute(query, [coll[0], coll[1], \
-                coll[2]['docount'], coll[2]['caltecharchives'], coll[2]['caltechlibrary'], \
-                coll[2]['internetarchive'], coll[2]['youtube'], coll[2]['other'], \
-                coll[3]])
+    id = coll[0]
+    title = coll[1]
+    docount = coll[2]['docount']
+    archcount = coll[2]['caltecharchives']
+    libcount = coll[2]['caltechlibrary']
+    iacount = coll[2]['internetarchive']
+    ytcount = coll[2]['youtube']
+    othercount = coll[2]['other']
+    oaiinclude = coll[3]
+    description = get_notes(id)
+    eadurl = pub_url+'oai?verb=GetRecord&identifier=/'+cbase+id+'&metadataPrefix=oai_ead'
+    db.execute(query, [id, title, \
+                docount, archcount, libcount, \
+                iacount, ytcount, othercount, \
+                oaiinclude, description, eadurl])
     
 # update incl field
 query = 'UPDATE collections SET incl=1 WHERE collno=?;'
