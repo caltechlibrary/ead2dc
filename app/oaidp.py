@@ -252,7 +252,7 @@ def oai():
         first = True
     
         # get parameters from request
-        set =  request.args.get('set')
+        set =  '000' if request.args.get('set') is None else request.args.get('set')
         datefrom = '000-00-00' if request.args.get('from') is None else request.args.get('from')
         dateuntil = '999-99-99' if request.args.get('until') is None else request.args.get('until')
         startrec = 0
@@ -352,7 +352,7 @@ def oai():
 
         for recrd in recrds:
 
-            if (recrd.find('.//setSpec', ns).text == set or set is None) and \
+            if (recrd.find('.//setSpec', ns).text == set or set is '000') and \
                 recrd.find('.//setSpec', ns).text in colls:
 
                 if recrd.find('.//datestamp', ns).text >= datefrom and \
