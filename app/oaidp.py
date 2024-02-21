@@ -352,7 +352,7 @@ def oai():
 
         for recrd in recrds:
 
-            if (recrd.find('.//setSpec', ns).text == set or set is '000') and \
+            if (recrd.find('.//setSpec', ns).text == set or set == '000') and \
                 recrd.find('.//setSpec', ns).text in colls:
 
                 if recrd.find('.//datestamp', ns).text >= datefrom and \
