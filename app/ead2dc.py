@@ -269,7 +269,8 @@ for i, coll in enumerate(colls):
     print(coll[1])
 
     if i==4:
-        print(rcontent)
+        with open('4.txt', 'w') as f:
+            f.write(rcontent)
     
     #root = ET.fromstring(response.content)
     root = ET.fromstring(rcontent)
