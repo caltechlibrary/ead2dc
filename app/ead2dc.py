@@ -263,7 +263,7 @@ for i, coll in enumerate(colls):
     # read EAD for collection
     response = requests.get(coll[1])
 
-    rcontent = response.content
+    rcontent = response. text
     print('------------------------------------')
     print(coll[1])
     print(type(rcontent))
@@ -276,6 +276,7 @@ for i, coll in enumerate(colls):
 
         print('ok-1')
         ead = root.find('.//ead', ns)
+        print(ead.text)
         #isolate the archdesc portion of the file
         archdesc = ead.find('.//archdesc', ns)
         #isolate the dsc portion of the file
