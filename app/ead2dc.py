@@ -262,10 +262,10 @@ for i, coll in enumerate(colls):
     setid = coll[0]
     # read EAD for collection
     response = requests.get(coll[1])
-    root = ET.fromstring(str(response.content))
 
-    if i==1:
-        print(root.text)
+    print(type(response))
+
+    root = ET.fromstring(response.content)
 
     #isolate the EAD portion of the file
     ead = root.find('.//ead', ns)
