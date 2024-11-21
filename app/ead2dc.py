@@ -261,9 +261,9 @@ no_records = 0
 for i, coll in enumerate(colls): 
     setid = coll[0]
     # read EAD for collection
-    response = requests.get(coll[1])
+    #response = requests.get(coll[1])
 
-    tree = ET.parse(response)
+    tree = ET.parse(coll[1])
     root = tree.getroot()
 
     #root = ET.fromstring(response.content)
