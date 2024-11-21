@@ -272,7 +272,9 @@ for coll in colls:
     dsc = archdesc.find('.//dsc', ns)
     #save the collection title & id
     collectiontitle = archdesc.find('.//did/unittitle', ns).text
+    print(collectiontitle)
     collectionid = archdesc.find('.//did/unitid', ns).text
+    print(collectionid)
 
     fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 
