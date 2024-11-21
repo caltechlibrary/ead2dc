@@ -263,10 +263,10 @@ for i, coll in enumerate(colls):
     # read EAD for collection
     response = requests.get(coll[1])
 
-    rcontent = response. text
+    rcontent = response.text
     print('------------------------------------')
     print(coll[1])
-    print(type(rcontent))
+    print(rcontent)
     
     root = ET.fromstring(response.content)
 
