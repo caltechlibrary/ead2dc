@@ -291,6 +291,7 @@ for i, coll in enumerate(colls):
         ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'}) 
         #iterate over containers to collect inherited data and build records
         print('ok-2')
+        print(type(ListRecords))
         for c01 in dsc.findall('.//c01', ns):
             print('ok-3')
             inheriteddata = list(tuple())
