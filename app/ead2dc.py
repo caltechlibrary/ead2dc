@@ -264,15 +264,14 @@ for i, coll in enumerate(colls):
     response = requests.get(coll[1])
     root = ET.fromstring(response.content)
 
+    print(type(response.content))
+
     #isolate the EAD portion of the file
     ead = root.find('.//ead', ns)
     #isolate the archdesc portion of the file
     archdesc = ead.find('.//archdesc', ns)
     #isolate the dsc portion of the file
     dsc = archdesc.find('.//dsc', ns)
-
-    if i==1:
-        print(root.text)
 
     #save the collection title & id
     collectiontitle = archdesc.find('.//did/unittitle', ns).text
