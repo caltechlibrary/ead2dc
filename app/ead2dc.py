@@ -272,7 +272,7 @@ for i, coll in enumerate(colls):
     dsc = archdesc.find('.//dsc', ns)
 
     if i==1:
-        print(archdesc.text)
+        print(root.text)
 
     #save the collection title & id
     collectiontitle = archdesc.find('.//did/unittitle', ns).text
