@@ -271,7 +271,7 @@ for i, coll in enumerate(colls):
 
     #isolate the EAD portion of the file
 
-    if type(ead) is not None:
+    try:
 
         ead = root.find('.//ead', ns)
         #isolate the archdesc portion of the file
@@ -313,6 +313,10 @@ for i, coll in enumerate(colls):
                                                     inheritdata(c11, 11)
                                                     for c12 in c11.findall('.//c12', ns):
                                                         inheritdata(c12, 12)
+
+    except:
+
+        print("ead doesn't exist")
 
 #write to disk
 try:
