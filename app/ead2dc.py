@@ -266,8 +266,8 @@ for i, coll in enumerate(colls):
     if i==1:
         print(response.content)
     else:
-        break
-    
+        continue
+
     root = ET.fromstring(response.content)
 
     #isolate the EAD portion of the file
