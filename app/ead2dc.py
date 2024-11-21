@@ -262,8 +262,8 @@ for coll in colls:
     setid = coll[0]
     # read EAD for collection
     response = requests.get(coll[1])
+    print(response.content)
     root = ET.fromstring(response.content)
-    print(root)
 
     #isolate the EAD portion of the file
     ead = root.find('.//ead', ns)
