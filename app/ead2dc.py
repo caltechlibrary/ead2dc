@@ -264,8 +264,9 @@ for i, coll in enumerate(colls):
     response = requests.get(coll[1])
 
     rcontent = response.content
+    print('------------------------------------')
+    print(coll[1])
     print(type(rcontent))
-    print(rcontent)
     
     root = ET.fromstring(response.content)
 
