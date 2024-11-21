@@ -268,7 +268,8 @@ for i, coll in enumerate(colls):
     print(coll[1])
     print(rcontent)
     
-    root = ET.fromstring(response.content)
+    #root = ET.fromstring(response.content)
+    root = ET.fromstring(rcontent)
 
     #isolate the EAD portion of the file
 
