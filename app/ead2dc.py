@@ -258,11 +258,16 @@ for coll in colls:
 
 no_records = 0
 
-for coll in colls: 
+for i, coll in enumerate(colls): 
     setid = coll[0]
     # read EAD for collection
     response = requests.get(coll[1])
-    print(coll, len(response.content))
+
+    if i==1:
+        print(response.content)
+    else:
+        break
+    
     root = ET.fromstring(response.content)
 
     #isolate the EAD portion of the file
