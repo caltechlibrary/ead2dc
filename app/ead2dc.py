@@ -262,12 +262,6 @@ for i, coll in enumerate(colls):
     setid = coll[0]
     # read EAD for collection
     response = requests.get(coll[1])
-
-    if i==1:
-        print(response.content)
-    else:
-        continue
-
     root = ET.fromstring(response.content)
 
     #isolate the EAD portion of the file
@@ -276,6 +270,10 @@ for i, coll in enumerate(colls):
     archdesc = ead.find('.//archdesc', ns)
     #isolate the dsc portion of the file
     dsc = archdesc.find('.//dsc', ns)
+
+    if i==1:
+        print(archdesc.text)
+
     #save the collection title & id
     collectiontitle = archdesc.find('.//did/unittitle', ns).text
     collectionid = archdesc.find('.//did/unitid', ns).text
