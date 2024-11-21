@@ -292,6 +292,7 @@ for i, coll in enumerate(colls):
         #iterate over containers to collect inherited data and build records
         print('ok-2')
         for c01 in dsc.findall('.//c01', ns):
+            print('ok-3')
             inheriteddata = list(tuple())
             inheritdata(c01, 1)
             for c02 in c01.findall('.//c02', ns):
