@@ -259,6 +259,7 @@ for coll in colls:
 no_records = 0
 
 for i, coll in enumerate(colls): 
+
     setid = coll[0]
     # read EAD for collection
     response = requests.get(coll[1])
@@ -266,7 +267,9 @@ for i, coll in enumerate(colls):
     rcontent = response.text
     print('------------------------------------')
     print(coll[1])
-    print(rcontent)
+
+    if i==4:
+        print(rcontent)
     
     #root = ET.fromstring(response.content)
     root = ET.fromstring(rcontent)
