@@ -274,6 +274,7 @@ for i, coll in enumerate(colls):
 
     try:
 
+        print('ok-1')
         ead = root.find('.//ead', ns)
         #isolate the archdesc portion of the file
         archdesc = ead.find('.//archdesc', ns)
@@ -289,6 +290,7 @@ for i, coll in enumerate(colls):
         #build ListRecords segment
         ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'}) 
         #iterate over containers to collect inherited data and build records
+        print('ok-2')
         for c01 in dsc.findall('.//c01', ns):
             inheriteddata = list(tuple())
             inheritdata(c01, 1)
