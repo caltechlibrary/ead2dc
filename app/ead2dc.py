@@ -280,7 +280,7 @@ for i, coll in enumerate(colls):
     try:
 
         print('ok-1')
-        ead = root.find('.//ead', ns)
+        ead = root.find('.//ead')
         print(ead.text)
         #isolate the archdesc portion of the file
         archdesc = ead.find('.//archdesc', ns)
