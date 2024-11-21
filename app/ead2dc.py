@@ -261,12 +261,14 @@ no_records = 0
 for i, coll in enumerate(colls): 
     setid = coll[0]
     # read EAD for collection
-    #response = requests.get(coll[1])
+    response = requests.get(coll[1])
 
-    tree = ET.parse(coll[1])
-    root = tree.getroot()
-
-    #root = ET.fromstring(response.content)
+    if i==1:
+        rcontent = response.content
+        print(type(rcontent))
+        print(rcontent)
+    
+    root = ET.fromstring(response.content)
 
     #isolate the EAD portion of the file
     ead = root.find('.//ead', ns)
