@@ -145,14 +145,6 @@ def inheritdata(c, n):
         buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
     return
 
-#iteration over containers
-def containerloop(container):
-    for c in container.findall('./c', ns):
-        inheritdata(c, n)
-        n += 1
-        containerloop(c)
-    return
-
 #checks if digital object is present
 def locatedao(c):
     if c.find('./did/daogrp/daoloc', ns) is not None:
@@ -288,6 +280,13 @@ for coll in colls:
     ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'}) 
     #iterate over containers to collect inherited data and build records
     n = 1
+    #iteration over containers
+    def containerloop(container):
+        for c in container.findall('./c', ns):
+            inheritdata(c, n)
+            n += 1
+            containerloop(c)
+        return
     for c in dsc.findall('./c', ns):
         inheriteddata = list(tuple())
         inheritdata(c, n)
