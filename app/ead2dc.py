@@ -147,12 +147,14 @@ def inheritdata(c, n):
 
 #loop over c recursively
 def containerloop(container):
-    global first, last, n
-    first, last = True, False
+    global first, n
+    first = True
     for c in container.findall('./c', ns):
         if first:
-            n += 1
+            n.append(0)
             first = False
+        else:
+            n[-1] += 1
         inheritdata(c, n)
         print(n, c.attrib['id'], c.attrib['level'])
         containerloop(c)
@@ -295,14 +297,11 @@ for coll in colls:
     #iteration over containers
     #d = depth
     
-    first, last, n = True, False, 0
-    last = False
+    first, n = True, [0]
     for c in dsc.findall('./c', ns):
-        if first:
-            n += 1
-            first = False
+        n[0] += 1
         inheriteddata = list(tuple())
-        inheritdata(c, n)
+        inheritdata(c, 1)
         containerloop(c)
 
 #write to disk
