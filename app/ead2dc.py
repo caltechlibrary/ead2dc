@@ -145,6 +145,18 @@ def inheritdata(c, n):
         buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
     return
 
+#iteration over containers
+def containerloop(container):
+    for c in container.findall('./c', ns):
+        inheritdata(c, n)
+        n += 1
+        containerloop(c)
+    return
+
+for c01 in dsc.findall('.//c01', ns):
+        inheriteddata = list(tuple())
+        inheritdata(c01, 1)
+        
 #checks if digital object is present
 def locatedao(c):
     if c.find('./did/daogrp/daoloc', ns) is not None:
@@ -272,40 +284,18 @@ for coll in colls:
     dsc = archdesc.find('.//dsc', ns)
     #save the collection title & id
     collectiontitle = archdesc.find('.//did/unittitle', ns).text
-    print(collectiontitle)
     collectionid = archdesc.find('.//did/unitid', ns).text
-    print(collectionid)
 
     fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 
     #build ListRecords segment
     ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'}) 
     #iterate over containers to collect inherited data and build records
-    for c01 in dsc.findall('.//c01', ns):
+    n = 1
+    for c in dsc.findall('./c', ns):
         inheriteddata = list(tuple())
-        inheritdata(c01, 1)
-        for c02 in c01.findall('.//c02', ns):
-            inheritdata(c02, 2)
-            for c03 in c02.findall('.//c03', ns):
-                inheritdata(c03, 3)
-                for c04 in c03.findall('.//c04', ns):
-                    inheritdata(c04, 4)
-                    for c05 in c04.findall('.//c05', ns):
-                        inheritdata(c05, 5)
-                        for c06 in c05.findall('.//c06', ns):
-                            inheritdata(c06, 6)
-                            for c07 in c06.findall('.//c07', ns):
-                                inheritdata(c07, 7)
-                                for c08 in c07.findall('.//c08', ns):
-                                    inheritdata(c08, 8)
-                                    for c09 in c08.findall('.//c09', ns):
-                                        inheritdata(c09, 9)
-                                        for c10 in c09.findall('.//c10', ns):
-                                            inheritdata(c10, 10)
-                                            for c11 in c10.findall('.//c11', ns):
-                                                inheritdata(c11, 11)
-                                                for c12 in c11.findall('.//c12', ns):
-                                                    inheritdata(c12, 12)
+        inheritdata(c, n)
+        containerloop(c)
 
 #write to disk
 with open(fileout, 'w') as f:
