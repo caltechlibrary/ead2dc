@@ -147,10 +147,13 @@ def inheritdata(c, n):
 
 #loop over c recursively
 def containerloop(container):
-    global n
-    n.append(1)
+    global first, last, n
+    first, last = True, False
     for c in container.findall('./c', ns):
-        inheritdata(c, len(n))
+        if first:
+            n += 1
+            first = False
+        inheritdata(c, n)
         print(n, c.attrib['id'], c.attrib['level'])
         containerloop(c)
     return
@@ -290,11 +293,16 @@ for coll in colls:
     ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'}) 
     #iterate over containers to collect inherited data and build records
     #iteration over containers
-    n = [0]
+    #d = depth
+    
+    first, last, n = True, False, 0
+    last = False
     for c in dsc.findall('./c', ns):
-        n[0] += 1
+        if first:
+            n += 1
+            first = False
         inheriteddata = list(tuple())
-        inheritdata(c, len(n))
+        inheritdata(c, n)
         containerloop(c)
 
 #write to disk
