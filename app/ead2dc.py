@@ -153,10 +153,6 @@ def containerloop(container):
         containerloop(c)
     return
 
-for c01 in dsc.findall('.//c01', ns):
-        inheriteddata = list(tuple())
-        inheritdata(c01, 1)
-        
 #checks if digital object is present
 def locatedao(c):
     if c.find('./did/daogrp/daoloc', ns) is not None:
