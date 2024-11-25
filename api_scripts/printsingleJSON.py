@@ -8,4 +8,4 @@ client = ASnakeClient(baseurl = secrets.baseurl,
 
 client.authorize()
 
-print(client.get('repositories/2/archival_objects/4627').json())
+print(client.get('/repositories/2/archival_objects/74627').json())
