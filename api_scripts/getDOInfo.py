@@ -1,21 +1,9 @@
-#inspired by MIT API scripts
-#https://github.com/MITLibraries/archivesspace-api-python-scripts
+from asnake.client import ASnakeClient
+client = ASnakeClient(baseurl="https://collections.archives.caltech.edu/staff/api",
+                      username="webservice",
+                      password="zs~W485A7Y^b")
 
-import json, requests, time
-
-startTime = time.time()
-
-secrets = __import__('secrets')
-
-baseURL = secrets.baseURL
-user = secrets.user
-password = secrets.password
-repository = secrets.repository
-
-auth = requests.post(baseURL + '/users/' + user + '/login?password=' + password).json()
-session = auth['session']
-headers = {'X-ArchivesSpace-Session': session,
-           'Content_Type': 'application/json'}
+client.authorize()
 
 colls=dict()
 
