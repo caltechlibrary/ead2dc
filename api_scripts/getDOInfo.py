@@ -1,7 +1,10 @@
+secrets = __import__('secrets')
+
 from asnake.client import ASnakeClient
-client = ASnakeClient(baseurl="https://collections.archives.caltech.edu/staff/api",
-                      username="webservice",
-                      password="zs~W485A7Y^b")
+
+client = ASnakeClient(baseurl = secrets.baseurl,
+                      username = secrets.username,
+                      password = secrets.password)
 
 client.authorize()
 
