@@ -1,0 +1,71 @@
+{'lock_version': 6, 
+'digital_object_id': 'ST-GH-013', 
+'title': 'Field protractor', 
+'publish': True, 
+'restrictions': False, 
+'created_by': 'pneder', 
+'last_modified_by': 'automaton', 
+'create_time': '2021-12-02T03:14:58Z', 
+'system_mtime': '2023-12-12T16:25:06Z', 
+'user_mtime': '2023-12-12T16:25:06Z', 
+'suppressed': False, 
+'is_slug_auto': True, 
+'digital_object_type': 'still_image', 
+'jsonmodel_type': 'digital_object', 
+'external_ids': [], 
+'subjects': [], 
+'linked_events': [], 
+'extents': [], 
+'lang_materials': [], 
+'dates': [], 
+'external_documents': [], 
+'rights_statements': [], 
+'linked_agents': [], 
+'file_versions': [
+
+{'lock_version': 0, 'file_uri': 'https://img.archives.caltech.edu/iiif/2/collections/Images/ST-GH-013/ST-GH-013/full/200,/0/default.webp', 'publish': True, 'created_by': 'automaton', 'last_modified_by': 'automaton', 'create_time': '2023-12-12T16:25:06Z', 'system_mtime': '2023-12-12T16:25:06Z', 'user_mtime': '2023-12-12T16:25:06Z', 'is_representative': True, 'caption': 'Field protractor', 'use_statement': 'image-thumbnail', 'xlink_show_attribute': 'embed', 'jsonmodel_type': 'file_version', 'identifier': '582204', 'link_uri': 'https://digital.archives.caltech.edu/collections/Images/ST-GH-013'}, 
+
+{'lock_version': 0, 'file_uri': 'https://digital.archives.caltech.edu/collections/Images/ST-GH-013', 'publish': True, 'created_by': 'automaton', 'last_modified_by': 'automaton', 'create_time': '2023-12-12T16:25:06Z', 'system_mtime': '2023-12-12T16:25:06Z', 'user_mtime': '2023-12-12T16:25:06Z', 'caption': 'Field protractor still image', 'use_statement': 'Web-Access', 'jsonmodel_type': 'file_version', 'is_representative': False, 'identifier': '582205'}, 
+
+{'lock_version': 0, 'file_uri': 'https://digital.archives.caltech.edu/islandora/object/image:10500/datastream/TN/view', 'publish': False, 'created_by': 'automaton', 'last_modified_by': 'automaton', 'create_time': '2023-12-12T16:25:06Z', 'system_mtime': '2023-12-12T16:25:06Z', 'user_mtime': '2023-12-12T16:25:06Z', 'use_statement': 'URL-Redirected', 'xlink_show_attribute': 'embed', 'jsonmodel_type': 'file_version', 'is_representative': False, 'identifier': '582206'}, 
+
+{'lock_version': 0, 'file_uri': 'https://digital.archives.caltech.edu/islandora/object/image:10500', 'publish': False, 'created_by': 'automaton', 'last_modified_by': 'automaton', 'create_time': '2023-12-12T16:25:06Z', 'system_mtime': '2023-12-12T16:25:06Z', 'user_mtime': '2023-12-12T16:25:06Z', 'use_statement': 'URL-Redirected', 'jsonmodel_type': 'file_version', 'is_representative': False, 'identifier': '582207'}, 
+
+{'lock_version': 0, 'file_uri': 'http://archives-dc.library.caltech.edu/islandora/object/ct1:6747/datastream/TN/view', 'publish': False, 'created_by': 'automaton', 'last_modified_by': 'automaton', 'create_time': '2023-12-12T16:25:06Z', 'system_mtime': '2023-12-12T16:25:06Z', 'user_mtime': '2023-12-12T16:25:06Z', 'use_statement': 'URL-Redirected', 'xlink_show_attribute': 'embed', 'jsonmodel_type': 'file_version', 'is_representative': False, 'identifier': '582208'}, 
+
+{'lock_version': 0, 'file_uri': 'http://archives-dc.library.caltech.edu/islandora/object/ct1:6747', 'publish': False, 'created_by': 'automaton', 'last_modified_by': 'automaton', 'create_time': '2023-12-12T16:25:06Z', 'system_mtime': '2023-12-12T16:25:06Z', 'user_mtime': '2023-12-12T16:25:06Z', 'use_statement': 'URL-Redirected', 'jsonmodel_type': 'file_version', 'is_representative': False, 'identifier': '582209'}
+
+], 
+
+'classifications': [], 
+'notes': [], 
+'collection': [{'ref': '/repositories/2/resources/219'}], 'linked_instances': 
+[
+{'ref': '/repositories/2/archival_objects/116820'}
+], 
+'metadata_rights_declarations': [], 
+'uri': '/repositories/2/digital_objects/27258', 
+'repository': {'ref': '/repositories/2'}, 
+'tree': {'ref': '/repositories/2/digital_objects/27258/tree'}, 
+'Representative_file_version':
+{
+'lock_version': 0, 
+'file_uri': 'https://img.archives.caltech.edu/iiif/2/collections/Images/ST-GH-013/ST-GH-013/full/200,/0/default.webp', 
+'publish': True, 
+'created_by': 'automaton', 
+'last_modified_by': 'automaton', 
+'create_time': '2023-12-12T16:25:06Z', 
+'system_mtime': '2023-12-12T16:25:06Z', 
+'user_mtime': '2023-12-12T16:25:06Z', 
+'is_representative': True, 
+'caption': 'Field protractor', 
+'use_statement': 'image-thumbnail', 
+'xlink_show_attribute': 'embed', 
+'jsonmodel_type': 'file_version', 
+'identifier': '582204', 
+'link_uri': 'https://digital.archives.caltech.edu/collections/Images/ST-GH-013'
+}
+
+}
+
+
