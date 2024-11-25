@@ -44,7 +44,7 @@ for obj in client.get_paged('repositories/2/digital_objects'):
                             try:
                                 print(v['file_uri'])
                             except:
-                                print('link not found')
+                                print('link not foundd')
                                 not_found += 1
 
 colls = dict(sorted(colls.items(), key=lambda item: item[1], reverse=True))
