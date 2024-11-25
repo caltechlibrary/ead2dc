@@ -32,7 +32,7 @@ for obj in client.get_paged('repositories/2/digital_objects'):
                         # if the collection is already in colls, increment
                         colls[collectionid['ref']] = colls[collectionid['ref']] + 1
                     else:
-                        # otherwise add reference to collection
+                        # otherwise add reference to collectionn
                         colls[collectionid['ref']] = 1
 
                     for v in obj['file_versions']:
