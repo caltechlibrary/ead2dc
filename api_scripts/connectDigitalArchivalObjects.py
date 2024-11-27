@@ -18,7 +18,7 @@ for obj in client.get_paged('repositories/2/digital_objects'):
         multiple += 1
     for linked_instance in linked_instances:
         if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
-            print('-->>', linked_instance['ref'])
+            #print('-->', linked_instance['ref'])
             found += 1
         else:
             print('not found')
