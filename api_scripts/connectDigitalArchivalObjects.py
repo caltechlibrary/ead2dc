@@ -20,8 +20,8 @@ for obj in client.get_paged('repositories/2/digital_objects'):
         multiple += 1
         for linked_instance in linked_instances:
             print('-->', linked_instance['ref'])
+        print('--------------------')
 
-    print('--------------------')
     n += 1
     
 print('links found:', found)
