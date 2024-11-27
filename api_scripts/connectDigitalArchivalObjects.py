@@ -28,5 +28,7 @@ for obj in client.get_paged('repositories/2/digital_objects'):
     
 print('links found:', found)
 print('not found:', not_found)
+print('no links:', zero)
+print('multiple links:', multiple)
 print('total:', n)
         
