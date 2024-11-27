@@ -8,5 +8,9 @@ client = ASnakeClient(baseurl = secrets.baseurl,
 
 client.authorize()
 
+n = 0
 for obj in client.get_paged('repositories/2/digital_objects'):
     print(obj['uri'])
+    n += 1
+
+print(n)
