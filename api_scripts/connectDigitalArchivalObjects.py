@@ -8,6 +8,8 @@ client = ASnakeClient(baseurl = secrets.baseurl,
 
 client.authorize()
 
+links = dict()
+
 for obj in client.get_paged('repositories/2/digital_objects'):
     linked_instances = obj['linked_instances']
     for linked_instance in linked_instances:
