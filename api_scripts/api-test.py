@@ -13,6 +13,10 @@ print(client.get('/repositories/2/archival_objects/74627').json()['title'])
 
 print('------------------------')
 
-#Tp get all objects:
+#To get all objects:
+n=0
 for obj in client.get_paged('repositories/2/digital_objects'):
     print(obj['title'])
+    n += 1
+    if n>10:
+        break
