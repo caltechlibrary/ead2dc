@@ -11,9 +11,11 @@ client.authorize()
 links = dict()
 
 for obj in client.get_paged('repositories/2/digital_objects'):
-    linked_instances = obj['linked_instances']
-    for linked_instance in linked_instances:
+    items = list()
+    for linked_instance in obj['linked_instances']:
         if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
-            print(linked_instance['ref'])
+            items.append(linked_instance['ref'][33:])
+
+print(items)
     
         
