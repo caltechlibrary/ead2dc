@@ -15,7 +15,7 @@ print('------------------------')
 
 #To get all objects:
 n=0
-for obj in client.get_paged('repositories/2/digital_objects'):
+for obj in client.get_paged('/repositories/2/digital_objects'):
     print(obj['title'])
     n += 1
     if n>10:
