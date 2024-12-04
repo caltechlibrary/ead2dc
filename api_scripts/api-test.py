@@ -8,5 +8,5 @@ client = ASnakeClient(baseurl = secrets.baseurl,
 
 client.authorize()
 
-repos = client.get('/repositories').json()['name']
+repos = client.get('/repositories').json()[0]['name']
 print(repos)
