@@ -8,5 +8,11 @@ client = ASnakeClient(baseurl = secrets.baseurl,
 
 client.authorize()
 
-repos = client.get('/repositories/2/archival_objects').json()
-print(repos)
+#To get a single object:
+print(client.get('/repositories/2/archival_objects/74627').json())
+
+print('------------------------')
+
+#Tp get all objects:
+for obj in client.get_paged('repositories/2/digital_objects'):
+    print(obj)
