@@ -22,14 +22,14 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
 print(links1)
 
 for archival_object in archival_objects:
-    links2[archival_object] = set()
+    links2[archival_object[33:]] = set()
 
 for digital_object, archival_objects in links1.items():
     for archival_object in archival_objects:
-        links2[archival_object].add(digital_object)
+        links2[archival_object[33:]].add(digital_object[32:])
 
-for archival_object in links2:
-    links2[archival_object] = list(links2[archival_object])
+for archival_object_id in links2:
+    links2[archival_object_id] = list(links2[archival_object_id])
 
 print(links2)
 
