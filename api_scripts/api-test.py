@@ -20,3 +20,6 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
     n += 1
     if n>10:
         break
+
+#Top collection
+print(client.get('/repositories/2/top_containers/7828').json())
