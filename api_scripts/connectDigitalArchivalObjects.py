@@ -8,15 +8,33 @@ client = ASnakeClient(baseurl = secrets.baseurl,
 
 client.authorize()
 
-links = dict()
+links1, links2 = dict(), dict()
+archival_objects = set()
 
 for obj in client.get_paged('/repositories/2/digital_objects'):
-    items = list()
+    items = set()
     for linked_instance in obj['linked_instances']:
         if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
-            items.append(linked_instance['ref'])
-    links[obj['uri']] = items
+            items.add(linked_instance['ref'])
+            archival_objects.add(linked_instance['ref'])
+    links1[obj['uri']] = items
 
-print(links)
+print(links1)
+
+for archival_object in archival_objects:
+    links2[archival_object] = set()
+
+for digital_object, archival_objects in links1.items():
+    for archival_object in archival_objects:
+        links2[archival_object].add(digital_object)
+
+print(links2)
+
+    
+
+
+
+
+
     
         
