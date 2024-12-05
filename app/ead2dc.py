@@ -5,7 +5,44 @@ import xml.dom.minidom as dom
 from datetime import date, datetime
 from pathlib import Path
 
+# api credentials, client authorization
+secrets = __import__('secrets')
+from asnake.client import ASnakeClient
+client = ASnakeClient(baseurl = secrets.baseurl,
+                      username = secrets.username,
+                      password = secrets.password)
+client.authorize()
+
 #FUNCTIONS
+
+#link digital and archival objects
+#returns a dictionary of archival IDs with values are a list of associated digital IDs
+def linkobjects():
+    #links1 is a dictionary of digital object URIs with linked archival object URIs
+    #links2 is a dictionary of archival object IDs with linked digital object IDs
+    #archival_objects is a set of archival object URIs
+    links1, links2 = dict(), dict()
+    archival_objects = set()
+    #retrieve all digital objects and linked archival objects
+    for obj in client.get_paged('/repositories/2/digital_objects'):
+        items = set()
+        for linked_instance in obj['linked_instances']:
+            if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
+                items.add(linked_instance['ref'])
+                archival_objects.add(linked_instance['ref'])
+        links1[obj['uri']] = items
+    #initalize links2 dictionary
+    for archival_object in archival_objects:
+        links2[archival_object[33:]] = set()
+    #iterate over links1 and populate links2
+    for digital_object, archival_objects in links1.items():
+        for archival_object in archival_objects:
+            links2[archival_object[33:]].add(digital_object[32:])
+    #convert sets of digital objects to lists
+    for archival_object_id in links2:
+        links2[archival_object_id] = list(links2[archival_object_id])
+    #return dictionary of archival objects and linked digital objects
+    return links2        
 
 #returns a "pretty" XML string
 def prettify(elem):
@@ -14,7 +51,7 @@ def prettify(elem):
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
 
-# builds XML for each record and adds to ListRecords segment
+#builds XML for each record and adds to ListRecords segment
 def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     global no_records, setid
     #create record element
