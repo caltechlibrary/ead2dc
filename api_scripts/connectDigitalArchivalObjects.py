@@ -28,6 +28,9 @@ for digital_object, archival_objects in links1.items():
     for archival_object in archival_objects:
         links2[archival_object].add(digital_object)
 
+for archival_object in links2:
+    links2[archival_object] = list(links2[archival_object])
+
 print(links2)
 
     
