@@ -49,10 +49,6 @@ def linkobjects():
     #return dictionary of archival objects and linked digital objects
     return links2
 
-#return list of collections with digital content
-def collections(ao_list):
-    
-
 
 #returns a "pretty" XML string
 def prettify(elem):
@@ -350,8 +346,6 @@ for coll in colls:
     collectiontitle = archdesc.find('.//did/unittitle', ns).text
     collectionid = archdesc.find('.//did/unitid', ns).text
 
-    fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
-
     #build ListRecords segment
     ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'}) 
     #iterate over containers to collect inherited data and build records
@@ -365,6 +359,7 @@ for coll in colls:
         containerloop(c)
 
 #write to disk
+fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
 
