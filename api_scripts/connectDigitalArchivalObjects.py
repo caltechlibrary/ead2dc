@@ -11,15 +11,17 @@ client.authorize()
 links1, links2 = dict(), dict()
 archival_objects = set()
 
+coll_not_found1, coll_not_found2 = 0, 0
 for obj in client.get_paged('/repositories/2/digital_objects'):
-    coll = obj['collection']
+    coll1 = obj.get('collection', 'not found')
+    if coll1 == 'not found':
+        coll_not_found1 += 1
     items = set()
     for linked_instance in obj['linked_instances']:
         if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
-            if obj['collection'] != linked_instance['collection']:
-                print("collection doesn't match:",
-                      obj['collection'], 
-                      linked_instance['collection'])
+            coll2 = linked_instance.get('collection', 'not found')
+            if coll2 == 'not found':
+                coll_not_found2 += 1
             items.add(linked_instance['ref'])
             archival_objects.add(linked_instance['ref'])
     links1[obj['uri']] = items
@@ -38,7 +40,7 @@ for archival_object_id in links2:
 
 print(links2)
 
-
+print('colls not found:', coll_not_found1, coll_not_found2)
 
     
 
