@@ -18,10 +18,11 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
         if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
             items.add(linked_instance['ref'])
             archival_objects.add(linked_instance['ref'])
-    digital_objects[obj['uri']] = items
-    if collections.get(coll):
-        collections[coll] = list()
-    collections[coll].append(digital_objects[obj['uri']])
+    if len(items) > 0:
+        digital_objects[obj['uri']] = items
+        if collections.get(coll):
+            collections[coll] = list()
+        collections[coll].append(digital_objects[obj['uri']])
     
 
 print(collections)
