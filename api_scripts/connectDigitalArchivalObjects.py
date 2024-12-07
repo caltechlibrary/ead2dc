@@ -7,26 +7,21 @@ client = ASnakeClient(baseurl = secrets.baseurl,
                       password = secrets.password)
 
 client.authorize()
-digital_objects = dict()
+links1, links2 = dict(), dict()
 archival_objects = set()
-collections = dict()
+collections = set()
 
 for obj in client.get_paged('/repositories/2/digital_objects'):
     items = set()
     coll = obj['collection'][0]['ref']
     for linked_instance in obj['linked_instances']:
         if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
-            items.add(linked_instance['ref'])
+            items.add((coll, linked_instance['ref']))
             archival_objects.add(linked_instance['ref'])
-    if len(items) > 0:
-        digital_objects[obj['uri']] = items
-        if collections.get(coll):
-            collections[coll] = list()
-        collections[coll].append(digital_objects[obj['uri']])
-    
+    links1[obj['uri']] = items
 
-print(collections)
-'''
+print(links1)
+
 for archival_object in archival_objects:
     links2[archival_object[33:]] = set()
 
@@ -40,7 +35,7 @@ for archival_object_id in links2:
 print(links2)
 
 print('colls not found:', coll_not_found1, coll_not_found2)
-''' 
+ 
 
 
 
