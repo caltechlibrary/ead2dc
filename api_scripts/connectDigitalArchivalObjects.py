@@ -13,7 +13,7 @@ collections = set()
 
 for obj in client.get_paged('/repositories/2/digital_objects'):
     items = set()
-    print(obj['collection'][0])
+    print(obj['collection'][0]['ref'])
     break
     if obj.get('collection'):
         coll = obj['collection'][0]('ref')
