@@ -13,7 +13,7 @@ collections = set()
 
 for obj in client.get_paged('/repositories/2/digital_objects'):
     items = set()
-    print(obj['collection'])
+    print(obj['collection'][0])
     break
     if obj.get('collection'):
         coll = obj['collection'][0]('ref')
@@ -24,7 +24,7 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                 archival_objects.add(linked_instance['ref'])
         links1[obj['uri']] = items
 
-print(links1)
+#print(links1)
 
 for archival_object in archival_objects:
     links2[archival_object[33:]] = set()
@@ -36,7 +36,7 @@ for digital_object, archival_objects in links1.items():
 for archival_object_id in links2:
     links2[archival_object_id] = list(links2[archival_object_id])
 
-print(links2)
+#print(links2)
 
 print('colls not found:', coll_not_found1, coll_not_found2)
  
