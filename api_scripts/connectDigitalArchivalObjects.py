@@ -15,7 +15,7 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
     items = set()
     if obj.get('collection'):
         coll = obj['collection'][0]['ref']
-        if coll[:27] == '/repositories/2/accessions/':
+        if coll[:26] == '/repositories/2/resources/':
             collections.add(coll)
             for linked_instance in obj['linked_instances']:
                 if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
