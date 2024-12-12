@@ -14,7 +14,8 @@ client.authorize()
 resource_id = "30"
 
 resource_tree = client.get(f"/repositories/2/resources/{resource_id}/ordered_records").json()
-print(json.dumps(resource_tree, indent=4, sort_keys=True))
+#print(json.dumps(resource_tree, indent=4, sort_keys=True))
+print(resource_tree)
 
 '''
 with open(f"/tmp/items.csv", mode="w") as csv_file:
