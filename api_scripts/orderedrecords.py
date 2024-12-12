@@ -3,6 +3,8 @@ import json
 
 from asnake.client import ASnakeClient
 
+secrets = __import__('secrets')
+
 client = ASnakeClient(baseurl = secrets.baseurl,
                       username = secrets.username,
                       password = secrets.password)
