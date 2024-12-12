@@ -21,9 +21,6 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                 items.add((coll, linked_instance['ref']))
                 archival_objects.add(linked_instance['ref'])
         links1[obj['uri']] = items
-    else:
-        print(obj)
-        break
 
 print()
 for collection in collections:
