@@ -15,14 +15,19 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
     items = set()
     if obj.get('collection'):
         coll = obj['collection'][0]['ref']
-        print(coll)
+        collections.add(coll)
         for linked_instance in obj['linked_instances']:
             if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
                 items.add((coll, linked_instance['ref']))
                 archival_objects.add(linked_instance['ref'])
         links1[obj['uri']] = items
     else:
-        print('xxxxxxxxxxxxxxxxxx')
+        print(obj)
+        break
+
+print()
+for collection in collections:
+    print(collection)
 
 #print(links1)
 
