@@ -12,6 +12,6 @@ client.authorize()
 
 route = '/repositories/2/archival_objects/74627'
 
-rec = client.get(f"{route}?resolve[]=parent").json()
+rec = client.get(f"{route}?resolve[]=parent&resolve[]=ancestors").json()
 
 print(json.dumps(rec, indent=4, sort_keys=True))
