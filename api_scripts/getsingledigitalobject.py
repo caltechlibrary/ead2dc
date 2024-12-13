@@ -11,6 +11,6 @@ client.authorize()
 
 id = '8889'
 
-obj = client.get('/repositories/2/digital_objects/'+id).json()
+obj = client.get(f'/repositories/2/digital_objects/'+id+'?resolve[]=parent').json()
 
 print(json.dumps(obj, indent=4, sort_keys=True))

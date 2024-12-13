@@ -9,8 +9,8 @@ client = ASnakeClient(baseurl = secrets.baseurl,
 
 client.authorize()
 
-id = '74627'
+route = '/repositories/2/archival_objects/74627'
 
-obj = client.get('/repositories/2/archival_objects/'+id).json()
+obj = client.get(f'{route}?resolve[]=tree').json()
 
 print(json.dumps(obj, indent=4, sort_keys=True))
