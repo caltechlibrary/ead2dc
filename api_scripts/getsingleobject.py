@@ -9,8 +9,16 @@ client = ASnakeClient(baseurl = secrets.baseurl,
 
 client.authorize()
 
-route = '/repositories/2/digital_objects/27551'
+uri = '/repositories/2/digital_objects/27551'
 
-obj = client.get(f'{route}?resolve[]=linked_instances').json()
+obj = client.get(f'{uri}?resolve[]=linked_instances').json()
+
+print(json.dumps(obj, indent=4, sort_keys=True))
+
+print()
+
+uri = '/repositories/2/archival_objects/74627'
+
+obj = client.get(f'{uri}?resolve[]=ancestors').json()
 
 print(json.dumps(obj, indent=4, sort_keys=True))
