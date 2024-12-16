@@ -13,6 +13,8 @@ uri = '/repositories/2/digital_objects/27551'
 
 obj = client.get(f'{uri}?resolve[]=linked_instances').json()
 
+for key in obj.keys:
+    print(key)
 print(json.dumps(obj, indent=4, sort_keys=True))
 
 print()
@@ -21,4 +23,6 @@ uri = '/repositories/2/archival_objects/74627'
 
 obj = client.get(f'{uri}?resolve[]=ancestors').json()
 
+for key in obj.keys:
+    print(key)
 print(json.dumps(obj, indent=4, sort_keys=True))
