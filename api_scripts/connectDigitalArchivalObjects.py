@@ -32,6 +32,8 @@ for collection in collections:
 for archival_object in archival_objects:
     links2[archival_object[33:]] = set()
 
+print(links2)
+'''
 for digital_object, archival_objects in links1.items():
     for archival_object in archival_objects:
         links2[archival_object[33:]].add(digital_object[32:])
@@ -43,7 +45,7 @@ for archival_object_id in links2:
 
 print('colls not found:', coll_not_found1, coll_not_found2)
  
-
+'''
 
 
 
