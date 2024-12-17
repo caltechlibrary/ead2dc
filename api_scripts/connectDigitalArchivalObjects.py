@@ -23,9 +23,9 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                 if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
                     # build dictionary of collections and archival objects
                     if items.get(coll):
-                        items[coll].append(linked_instance['ref'])
+                        items[coll].add(linked_instance['ref'])
                     else:
-                        items[coll] = [linked_instance['ref']]
+                        items[coll] = (linked_instance['ref'])
 #            links1[obj['uri']] = items
 
 for collection in collections:
