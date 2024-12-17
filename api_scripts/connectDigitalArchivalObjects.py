@@ -25,7 +25,7 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                     if items.get(coll):
                         items[coll].add(linked_instance['ref'])
                     else:
-                        items[coll] = (linked_instance['ref'])
+                        items[coll] = {linked_instance['ref']}
 #            links1[obj['uri']] = items
 
 for collection in collections:
