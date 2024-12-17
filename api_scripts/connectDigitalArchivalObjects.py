@@ -10,10 +10,9 @@ client.authorize()
 links1, links2 = dict(), dict()
 archival_objects = set()
 collections = set()
-
+items = dict()
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
-    items = dict()
     # if there is a value for 'collection' add that value to the collections set
     if obj.get('collection'):
         coll = obj['collection'][0]['ref']
@@ -27,7 +26,7 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                         items[coll].append(linked_instance['ref'])
                     else:
                         items[coll] = [linked_instance['ref']]
-            links1[obj['uri']] = items
+#            links1[obj['uri']] = items
 
 for collection in collections:
     print(collection)
