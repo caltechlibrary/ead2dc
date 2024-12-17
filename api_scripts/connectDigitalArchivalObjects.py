@@ -33,7 +33,7 @@ for collection in collections:
     print(collection)
 
 print(items)
-
+'''
 for archival_object in archival_objects:
     links2[archival_object[33:]] = set()
 
