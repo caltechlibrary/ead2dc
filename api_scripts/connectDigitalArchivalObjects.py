@@ -22,16 +22,19 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
             for linked_instance in obj['linked_instances']:
                 if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
                     # build dictionary of collections and archival objects
-                    if items.get(coll):
-                        items[coll].add(linked_instance['ref'])
+                    if items.get(coll[26:]):
+                        items[coll[26:]].add(linked_instance['ref'][33:])
                     else:
-                        items[coll] = {linked_instance['ref']}
+                        items[coll[26:]] = {linked_instance['ref'][33:]}
 #            links1[obj['uri']] = items
 
 for collection in collections:
     print(collection)
 
 print(items)
+
+for collid in items.keys():
+    print(collid)
 '''
 for archival_object in archival_objects:
     links2[archival_object[33:]] = set()
