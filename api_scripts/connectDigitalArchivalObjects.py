@@ -7,10 +7,10 @@ client = ASnakeClient(baseurl = secrets.baseurl,
                       password = secrets.password)
 
 client.authorize()
-links1, links2 = dict(), dict()
-archival_objects = set()
-collections = set()
-items = dict()
+
+collections_dict = dict()
+collections, archival_objects = set(), set()
+
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
     # if there is a value for 'collection' add that value to the collections set
@@ -22,18 +22,15 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
             for linked_instance in obj['linked_instances']:
                 if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
                     # build dictionary of collections and archival objects
-                    if items.get(coll[26:]):
-                        items[coll[26:]].add(linked_instance['ref'][33:])
+                    if collections_dict.get(coll[26:]):
+                        collections_dict[coll[26:]].add(linked_instance['ref'][33:])
                     else:
-                        items[coll[26:]] = {linked_instance['ref'][33:]}
-#            links1[obj['uri']] = items
+                        collections_dict[coll[26:]] = {linked_instance['ref'][33:]}
 
 for collection in collections:
     print(collection)
 
-print(items)
-
-for item in items.items():
+for item in collections_dict.items():
     print(item[0], len(item[1]))
 
 '''
