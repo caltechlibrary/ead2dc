@@ -33,8 +33,9 @@ for collection in collections:
 
 print(items)
 
-for collid in items.keys():
-    print(collid)
+for item in items.items():
+    print(item[0], len(item[1]))
+
 '''
 for archival_object in archival_objects:
     links2[archival_object[33:]] = set()
