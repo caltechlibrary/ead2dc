@@ -5,7 +5,50 @@ import xml.dom.minidom as dom
 from datetime import date, datetime
 from pathlib import Path
 
+# api credentials, client authorization
+secrets = __import__('secrets')
+from asnake.client import ASnakeClient
+client = ASnakeClient(baseurl = secrets.baseurl,
+                      username = secrets.username,
+                      password = secrets.password)
+client.authorize()
+
 #FUNCTIONS
+
+#link digital and archival objects
+#returns a dictionary of archival IDs with values are a list of associated digital IDs
+def linkobjects():
+    #links1 is a dictionary of digital object URIs with linked archival object URIs
+    #links2 is a dictionary of archival object IDs with linked digital object IDs
+    #archival_objects is a set of archival object URIs
+    links1, links2 = dict(), dict()
+    archival_objects = set()
+    
+    #retrieve all digital objects and linked archival objects
+    for obj in client.get_paged('/repositories/2/digital_objects'):
+        items = set()
+        for linked_instance in obj['linked_instances']:
+            if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
+                items.add(linked_instance['ref'])
+                archival_objects.add(linked_instance['ref'])
+        links1[obj['uri']] = items
+    
+    #initalize links2 dictionary
+    for archival_object in archival_objects:
+        links2[archival_object[33:]] = set()
+    
+    #iterate over links1 and populate links2
+    for digital_object, archival_objects in links1.items():
+        for archival_object in archival_objects:
+            links2[archival_object[33:]].add(digital_object[32:])
+    
+    #convert sets of digital objects to lists
+    for archival_object_id in links2:
+        links2[archival_object_id] = list(links2[archival_object_id])
+    
+    #return dictionary of archival objects and linked digital objects
+    return links2
+
 
 #returns a "pretty" XML string
 def prettify(elem):
@@ -14,9 +57,10 @@ def prettify(elem):
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
 
-# builds XML for each record and adds to ListRecords segment
+#builds XML for each record and adds to ListRecords segment
 def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     global no_records, setid
+    
     #create record element
     record = ET.SubElement(listrecords, 'record')
     header = ET.SubElement(record, 'header')
@@ -36,42 +80,51 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
                                            'xmlns:dcterms': 'http://purl.org/dc/terms/'})
+    
     #title = file/item title from current container
     title = ET.SubElement(dc, 'dc:title')
     title.text = inheriteddata[-1][1]
+    
     #collection title
     relation = ET.SubElement(dc, 'dc:relation')
     relation.text = collectiontitle
     relation.attrib = {'label': 'Collection'}
+    
     #inherited titles from parent containers
     for titledata in inheriteddata[:-1]:
         relation = ET.SubElement(dc, 'dc:relation')
         relation.text = titledata[1]
         relation.attrib = {'label': titledata[0].title()}
+    
     #creator (persname) from current container
     for creat in c.findall('.//origination/persname', ns):
         creator = ET.SubElement(dc, 'dc:creator')
         creator.text = creat.text
         if creat.attrib.get('source'):
             creator.attrib = {'scheme': creat.attrib['source']}
+    
     #creator (corpname) from current container
     for creat in c.findall('.//origination/corpname', ns):
         creator = ET.SubElement(dc, 'dc:creator')
         creator.text = creat.text
         if creat.attrib.get('source'):
             creator.attrib = {'scheme': creat.attrib['source']}
+    
     #date from current container
     for unitdate in c.findall('.//unitdate', ns):
         date = ET.SubElement(dc, 'dc:date')
         date.text = unitdate.text
+    
     #format from current container
     for fmt in c.findall('.//physdesc/extent', ns):
         format = ET.SubElement(dc, 'dc:extent')
         format.text = fmt.text
+    
     #description from current container
     for desc in c.findall('.//abstract', ns):
         description = ET.SubElement(dc, 'dc:description')
         description.text = desc.text
+    
     #subjects from current container
     for subj in c.findall('.//controlaccess/subject', ns):
         subject = ET.SubElement(dc, 'dc:subject')
@@ -98,6 +151,7 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
         subject.text = func.text
         if func.attrib.get('source'):
             subject.attrib = {'scheme': func.attrib['source']}
+    
     #identifiers from current container
     for unitid in c.findall('.//unitid', ns):
         identifier = ET.SubElement(dc, 'dc:identifier')
@@ -105,6 +159,7 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
         if text[:14]=='/repositories/':
             text = 'collections.archives.caltech.edu' + text
         identifier.text = text
+    
     #links from current container
     for daoloc in c.findall('.//daoloc', ns):
         identifier = ET.SubElement(dc, 'dc:identifier')
@@ -121,6 +176,7 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
         identifier.text = text
         identifier.attrib = {'scheme': 'URI', 'type': type}
     no_records += 1
+    
     return listrecords
 
 #builds inherited data for each record; XML build is triggered if digital object is present
@@ -141,8 +197,24 @@ def inheritdata(c, n):
             if i >= n:
                 inheriteddata.pop()
         inheriteddata[n-1] = title
-    if locatedao(c):
-        buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
+    #if locatedao(c):
+    buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
+    return
+
+#loop over c recursively
+def containerloop(container):
+    global n
+    first = True
+    for c in container.findall('./c', ns):
+        if first:
+            first = False
+            n += 1
+        #print(n, c.attrib['id'], c.attrib['level'])
+        inheritdata(c, n)
+        containerloop(c)
+        if not first:
+            n -= 1
+            first = True
     return
 
 #checks if digital object is present
@@ -274,38 +346,20 @@ for coll in colls:
     collectiontitle = archdesc.find('.//did/unittitle', ns).text
     collectionid = archdesc.find('.//did/unitid', ns).text
 
-    fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
-
     #build ListRecords segment
     ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'}) 
     #iterate over containers to collect inherited data and build records
-    for c01 in dsc.findall('.//c01', ns):
+    #iteration over containers
+
+    for c in dsc.findall('./c', ns):
+        n = 1
         inheriteddata = list(tuple())
-        inheritdata(c01, 1)
-        for c02 in c01.findall('.//c02', ns):
-            inheritdata(c02, 2)
-            for c03 in c02.findall('.//c03', ns):
-                inheritdata(c03, 3)
-                for c04 in c03.findall('.//c04', ns):
-                    inheritdata(c04, 4)
-                    for c05 in c04.findall('.//c05', ns):
-                        inheritdata(c05, 5)
-                        for c06 in c05.findall('.//c06', ns):
-                            inheritdata(c06, 6)
-                            for c07 in c06.findall('.//c07', ns):
-                                inheritdata(c07, 7)
-                                for c08 in c07.findall('.//c08', ns):
-                                    inheritdata(c08, 8)
-                                    for c09 in c08.findall('.//c09', ns):
-                                        inheritdata(c09, 9)
-                                        for c10 in c09.findall('.//c10', ns):
-                                            inheritdata(c10, 10)
-                                            for c11 in c10.findall('.//c11', ns):
-                                                inheritdata(c11, 11)
-                                                for c12 in c11.findall('.//c12', ns):
-                                                    inheritdata(c12, 12)
+        inheritdata(c, n)
+        #print(n, c.attrib['id'], c.attrib['level'])
+        containerloop(c)
 
 #write to disk
+fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
 
