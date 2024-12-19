@@ -145,6 +145,22 @@ def inheritdata(c, n):
         buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
     return
 
+#loop over c recursively
+def containerloop(container):
+    global n
+    first = True
+    for c in container.findall('./c', ns):
+        if first:
+            first = False
+            n += 1
+        #print(n, c.attrib['id'], c.attrib['level'])
+        inheritdata(c, n)
+        containerloop(c)
+        if not first:
+            n -= 1
+            first = True
+    return
+
 #checks if digital object is present
 def locatedao(c):
     if c.find('./did/daogrp/daoloc', ns) is not None:
@@ -276,9 +292,19 @@ for coll in colls:
 
     fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 
-    #build ListRecords segment
+    # version without enumeration of c
+    for c in dsc.findall('./c', ns):
+        n = 1
+        inheriteddata = list(tuple())
+        inheritdata(c, n)
+        #print(n, c.attrib['id'], c.attrib['level'])
+        containerloop(c)
+
+    # build ListRecords segment
+    # version with enumeration of c
+    '''
     ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'}) 
-    #iterate over containers to collect inherited data and build records
+    # iterate over containers to collect inherited data and build records
     for c01 in dsc.findall('.//c01', ns):
         inheriteddata = list(tuple())
         inheritdata(c01, 1)
@@ -304,7 +330,7 @@ for coll in colls:
                                                 inheritdata(c11, 11)
                                                 for c12 in c11.findall('.//c12', ns):
                                                     inheritdata(c12, 12)
-
+    '''
 #write to disk
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
