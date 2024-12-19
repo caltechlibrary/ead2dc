@@ -141,8 +141,8 @@ def inheritdata(c, n):
             if i >= n:
                 inheriteddata.pop()
         inheriteddata[n-1] = title
-    if locatedao(c):
-        buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
+    #if locatedao(c):
+    buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
     return
 
 #checks if digital object is present
@@ -152,7 +152,7 @@ def locatedao(c):
     elif c.find('./did/dao', ns) is not None:
         return True
     else:
-        return True
+        return False
     
 #write time of last update to db
 def update_last_update():
