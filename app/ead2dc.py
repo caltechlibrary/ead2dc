@@ -152,7 +152,7 @@ def locatedao(c):
     elif c.find('./did/dao', ns) is not None:
         return True
     else:
-        return False
+        return True
     
 #write time of last update to db
 def update_last_update():
