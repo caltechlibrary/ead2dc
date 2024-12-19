@@ -197,8 +197,8 @@ def inheritdata(c, n):
             if i >= n:
                 inheriteddata.pop()
         inheriteddata[n-1] = title
-    #if locatedao(c):
-    buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
+    if locatedao(c):
+        buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
     return
 
 #loop over c recursively
