@@ -32,13 +32,15 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                     else:
                         collections_dict[coll] = {linked_instance['ref']}
 
+print ('Number of collections with digital objects:', len(collections))
+
+'''
 for collection in collections:
     print(collection, client.get(f'{collection}').json()['title'])
 
 for item in collections_dict.items():
     print(client.get(f'{item[0]}').json()['title'], len(item[1]))
 
-'''
 for archival_object in archival_objects:
     links2[archival_object[33:]] = set()
 
