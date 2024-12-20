@@ -161,14 +161,28 @@ def containerloop(container):
             first = True
     return
 
-#checks if digital object is present
-def locatedao(c):
+# checks if digital object is present
+# old version: dao are in OAI
+'''
+def locatedao(c):    
     if c.find('./did/daogrp/daoloc', ns) is not None:
         return True
     elif c.find('./did/dao', ns) is not None:
         return True
     else:
         return False
+'''
+# new version
+def locatedao(c):
+    global dao_count
+    try:
+        id_type = c.find('./did/unitid', ns).attrib['type']
+        if id_type == 'aspace_uri':
+            print(c.find('./did/unitid', ns).text)
+            dao_count += 1
+    except:
+        pass
+    return True
     
 #write time of last update to db
 def update_last_update():
@@ -274,6 +288,8 @@ for coll in colls:
 
 no_records = 0
 
+dao_count = 0
+
 for coll in colls: 
     setid = coll[0]
     # read EAD for collection
@@ -290,20 +306,22 @@ for coll in colls:
     collectiontitle = archdesc.find('.//did/unittitle', ns).text
     collectionid = archdesc.find('.//did/unitid', ns).text
 
-    fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
+    # build ListRecords segment
+    ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
+    # iterate over containers to collect inherited data and build records
+    # iteration over containers
 
     # version without enumeration of c
     for c in dsc.findall('./c', ns):
         n = 1
-        inheriteddata = list(tuple())
+        inheriteddata = list()
         inheritdata(c, n)
         #print(n, c.attrib['id'], c.attrib['level'])
         containerloop(c)
 
-    # build ListRecords segment
+    
     # version with enumeration of c
     '''
-    ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'}) 
     # iterate over containers to collect inherited data and build records
     for c01 in dsc.findall('.//c01', ns):
         inheriteddata = list(tuple())
@@ -331,8 +349,12 @@ for coll in colls:
                                                 for c12 in c11.findall('.//c12', ns):
                                                     inheritdata(c12, 12)
     '''
+
 #write to disk
+fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
 
 update_last_update()
+
+print(dao_count)
