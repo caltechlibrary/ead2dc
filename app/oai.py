@@ -8,7 +8,25 @@ from asnake.client import ASnakeClient
 
 # FUNCTIONS
 
-#read collection info from db
+# write time of last update to db
+# update collections info to db
+# colls = set of collection ids
+def update_db(colls):
+    # write ISO last update
+    now = datetime.now()
+    last_update = now.isoformat()
+    connection = sq.connect(dbpath)
+    db = connection.cursor()
+    query = 'UPDATE last_update SET dt=? WHERE fn=?;'
+    for coll in colls:
+        print(json.dumps(client.get(coll), indent=4, sort_keys=True))
+    db.execute(query, [last_update, 'xml'])
+    db.close()
+    connection.commit()
+    connection.close()
+    return
+
+# read collection info from db
 def read_colls_from_db():
     connection = sq.connect(dbpath)
     db = connection.cursor()
@@ -18,26 +36,12 @@ def read_colls_from_db():
     connection.close()
     return colls
 
-#returns a "pretty" XML string
+# returns a "pretty" XML string
 def prettify(elem):
     xml_string = ET.tostring(elem)
     xml_file = dom.parseString(xml_string)
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
-
-#write time of last update to db
-def update_last_update():
-    # write ISO last update
-    now = datetime.now()
-    last_update = now.isoformat()
-    connection = sq.connect(dbpath)
-    db = connection.cursor()
-    query = 'UPDATE last_update SET dt=? WHERE fn=?;'
-    db.execute(query, [last_update, 'xml'])
-    db.close()
-    connection.commit()
-    connection.close()
-    return
 
 # MAIN
 
@@ -83,6 +87,9 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                         collections_dict[coll] = {linked_instance['ref']}
 
 print ('Number of collections with digital objects:', len(collections))
+
+# update collections info in database
+update_db(collections)
 
 colls = read_colls_from_db()
 
@@ -146,7 +153,5 @@ dao_count = 0
 fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
-
-update_last_update()
 
 print(dao_count)
