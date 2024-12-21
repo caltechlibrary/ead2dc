@@ -20,7 +20,8 @@ def update_db(colls):
     query = 'UPDATE last_update SET dt=? WHERE fn=?;'
     for coll in colls:
         print(coll)
-        print(json.dumps(client.get(coll).json(), indent=4, sort_keys=True))
+        coll_info = client.get(coll).json()
+        print(coll_info['title'])
     db.execute(query, [last_update, 'xml'])
     db.close()
     connection.commit()
