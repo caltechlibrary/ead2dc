@@ -9,6 +9,15 @@ client = ASnakeClient(baseurl = secrets.baseurl,
 
 client.authorize()
 
+uri = '/repositories/2/digital_objects/8889'
+#obj = client.get(f'{uri}?resolve[]=linked_instances').json()
+obj = client.get(f'{uri}').json()
+for key in obj.keys():
+    print(key)
+print(json.dumps(obj, indent=4, sort_keys=True))
+
+print()
+
 uri = '/repositories/2/digital_objects/27551'
 #obj = client.get(f'{uri}?resolve[]=linked_instances').json()
 obj = client.get(f'{uri}').json()
