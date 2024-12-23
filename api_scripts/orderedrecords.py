@@ -35,3 +35,7 @@ with open(f"/tmp/items.csv", mode="w") as csv_file:
             print(json.dumps(row, indent=4), flush=True)
             csv_writer.writerow(row)
 '''
+
+resource_tree = client.get(f"/repositories/2/archival_objects/123246/ordered_records").json()
+print(json.dumps(resource_tree, indent=4, sort_keys=True))
+
