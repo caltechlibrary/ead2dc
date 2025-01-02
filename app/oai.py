@@ -104,6 +104,7 @@ for item in collections_dict.items():
             print(client.get(ao).json()['title'], next(generator).get('file_uri', 'NOT FOUND'))
         except:
             print(client.get(ao).json()['title'], 'NOT FOUND')
+            break
 
 # update collections info in database
 update_db(collections)
