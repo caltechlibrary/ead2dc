@@ -96,7 +96,7 @@ for item in collections_dict.items():
     print(client.get(item[0]).json()['title'], ':', len(item[1]), 'digital objects')
     for do, ao in item[1]:
         # print digital object and archival object URIs
-        print(do, ao)
+        print(client.get(ao).json()['title'], client.get(do).json()['file_versions'][0]['file_uri'])
 
 # update collections info in database
 update_db(collections)
