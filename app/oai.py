@@ -111,7 +111,7 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
 print('Number of collections with digital objects:', len(collections))
 print()
 for item in collections_dict.items():
-    print(client.get(item[0]).json['title'], ':', len(item[1]))
+    print(client.get(item[0]).json()['title'], ':', len(item[1]))
 
 # update collections info in database
 update_db(collections)
