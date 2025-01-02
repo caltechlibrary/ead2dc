@@ -1,4 +1,4 @@
-import requests, json
+import json
 import sqlite3 as sq
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
