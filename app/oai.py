@@ -88,8 +88,10 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                     else:
                         collections_dict[coll] = {linked_instance['ref']}
 
-print ('Number of collections with digital objects:', len(collections))
-print(collections_dict)
+print('Number of collections with digital objects:', len(collections))
+print()
+for item in collections_dict.items():
+    print(item[0], ':', len(item[1]))
 
 # update collections info in database
 update_db(collections)
