@@ -72,9 +72,6 @@ collections_dict = dict()
 # contain collections and archival objects with related digital objects
 collections, archival_objects = set(), set()
 
-# temporary counter
-i = 0
-
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
     # if there is a value for 'collection' add that value to the collections set
@@ -95,7 +92,11 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
 print('Number of collections with digital objects:', len(collections))
 print()
 for item in collections_dict.items():
+    # print title of collection and number of digital objects
     print(client.get(item[0]).json()['title'], ':', len(item[1]), 'digital objects')
+    for do, ao in item[1]:
+        # print digital object and archival object URIs
+        print(do, ao)
 
 # update collections info in database
 update_db(collections)
