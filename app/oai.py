@@ -100,8 +100,8 @@ for item in collections_dict.items():
         generator = (file_version for file_version in client.get(do).json()['file_versions']
                      if file_version['publish'] == True
                      and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
-        if next(generator, None):
-            print(client.get(ao).json()['title'], next(generator).get('file_uri', '****************** no file_uri **********************'))
+        if generator:
+            print(client.get(ao).json()['title'], next(generator)['file_uri'])
 
 # update collections info in database
 update_db(collections)
