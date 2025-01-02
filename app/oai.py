@@ -84,11 +84,13 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                 if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
                     # build dictionary of collections and archival objects
                     if collections_dict.get(coll):
-                        collections_dict[coll].add(linked_instance['ref'])
+                        collections_dict[coll].add((obj['uri'], linked_instance['ref']))
                     else:
-                        collections_dict[coll] = {linked_instance['ref']}
+                        collections_dict[coll] = {(obj['uri'],linked_instance['ref'])}
 
 print('Number of collections with digital objects:', len(collections))
+print()
+print(collections_dict)
 print()
 for item in collections_dict.items():
     print(item[0], ':', len(item[1]))
