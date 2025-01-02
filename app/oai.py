@@ -94,9 +94,12 @@ print()
 for item in collections_dict.items():
     # print title of collection and number of digital objects
     print(client.get(item[0]).json()['title'], ':', len(item[1]), 'digital objects')
+    # iterate over digital objects and archival objects
     for do, ao in item[1]:
-        # print digital object and archival object URIs
-        print(client.get(ao).json()['title'], client.get(do).json()['file_versions'][0]['file_uri'])
+        # print archival object title and digital object URI
+        generator = (file_version for file_version in client.get(do).json()['file_versions']
+                     if file_version['use_statement'] == 'Web-Access')
+        print(client.get(ao).json()['title'], next(generator)['file_uri'])
 
 # update collections info in database
 update_db(collections)
