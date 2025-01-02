@@ -99,7 +99,7 @@ for item in collections_dict.items():
         # print archival object title and digital object URI
         generator = (file_version for file_version in client.get(do).json()['file_versions']
                      if file_version['publish'] == True
-                     and file_version.get('use_statement', None) not in ['image-thumbnail', 'URL-Redirected'])
+                     and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
         print(client.get(ao).json()['title'], next(generator).get('file_uri', '****************** no file_uri **********************'))
 
 # update collections info in database
