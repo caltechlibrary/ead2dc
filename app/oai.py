@@ -98,9 +98,10 @@ for item in collections_dict.items():
     for do, ao in item[1]:
         # print archival object title and digital object URI
         generator = (file_version for file_version in client.get(do).json()['file_versions']
-                     if file_version['publish'] == True)
-                     #and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
-        print(client.get(ao).json()['title'])#, next(generator))
+                     if file_version['publish'] == True
+                     and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
+        if next(generator, None):
+            print(client.get(ao).json()['title'], next(generator).get('file_uri', '****************** no file_uri **********************'))
 
 # update collections info in database
 update_db(collections)
