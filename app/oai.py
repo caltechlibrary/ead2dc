@@ -89,6 +89,7 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                         collections_dict[coll] = {linked_instance['ref']}
 
 print ('Number of collections with digital objects:', len(collections))
+print(collections_dict)
 
 # update collections info in database
 update_db(collections)
