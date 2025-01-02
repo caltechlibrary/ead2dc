@@ -77,29 +77,13 @@ i = 0
 
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
-
-    # temporary counter
-    i += 1
-    if i> 10:
-        break
-
     # if there is a value for 'collection' add that value to the collections set
     if obj.get('collection'):
         coll = obj['collection'][0]['ref']
         if coll[:26] == '/repositories/2/resources/':
             collections.add(coll)
-
-            # temporary counter
-            j = 0
-
             # iterate over the linked instances
             for linked_instance in obj['linked_instances']:
-
-                # temporary counter
-                j += 1
-                if j > 10:
-                    break
-
                 if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
                     # build dictionary of collections, digital objects, and archival objects
                     # dict has the form {collection: {(digital object, archival object)}}
@@ -111,7 +95,7 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
 print('Number of collections with digital objects:', len(collections))
 print()
 for item in collections_dict.items():
-    print(client.get(item[0]).json()['title'], ':', len(item[1]))
+    print(client.get(item[0]).json()['title'], ':', len(item[1]), 'digital objects')
 
 # update collections info in database
 update_db(collections)
