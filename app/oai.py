@@ -101,7 +101,7 @@ for item in collections_dict.items():
                      if file_version['publish'] == True
                      and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
         if generator:
-            print(client.get(ao).json()['title'], next(generator)['file_uri'])
+            print(client.get(ao).json()['title'], next(generator).get('file_uri', 'NOT FOUND'))
 
 # update collections info in database
 update_db(collections)
