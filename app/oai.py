@@ -75,7 +75,7 @@ collections, archival_objects = set(), set()
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
     # if there is a value for 'collection' add that value to the collections set
-    if obj.get('collection'):
+    if obj.get('collection') and obj['publish'] and not obj['suppressed']:
         coll = obj['collection'][0]['ref']
         if coll[:26] == '/repositories/2/resources/':
             collections.add(coll)
@@ -103,8 +103,7 @@ for item in collections_dict.items():
         try:
             print(client.get(ao).json()['title'], next(generator).get('file_uri', 'NOT FOUND'))
         except:
-            print(client.get(ao).json()['title'], 'NOT FOUND')
-            break
+            print(client.get(ao).json()['title'], '************* NOT FOUND *************')
 
 # update collections info in database
 update_db(collections)
