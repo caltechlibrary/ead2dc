@@ -72,6 +72,8 @@ collections_dict = dict()
 # contain collections and archival objects with related digital objects
 collections, archival_objects = set(), set()
 
+dao_count = 0
+
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
     # if there is a value for 'collection' add that value to the collections set
@@ -84,13 +86,18 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                 if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
                     # build dictionary of collections, digital objects, and archival objects
                     # dict has the form {collection: {(digital object, archival object)}}
+                    dao_count += 1
                     if collections_dict.get(coll):
                         collections_dict[coll].add((obj['uri'], linked_instance['ref']))
                     else:
                         collections_dict[coll] = {(obj['uri'],linked_instance['ref'])}
 
+print('Number of digital objects:', dao_count)
 print('Number of collections with digital objects:', len(collections))
 print()
+
+dao_count = 0
+
 for item in collections_dict.items():
     # print title of collection and number of digital objects
     print(client.get(item[0]).json()['title'], ':', len(item[1]), 'digital objects')
@@ -104,6 +111,7 @@ for item in collections_dict.items():
         try:
             do_title = client.get(ao).json()['title']
             file_uri = next(generator)['file_uri']
+            dao_count += 1
         except:
             continue
 
@@ -165,8 +173,6 @@ for coll in colls:
     setDescription.text = coll[3]
 
 no_records = 0
-
-dao_count = 0
 
 #write to disk
 fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
