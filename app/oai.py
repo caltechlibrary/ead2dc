@@ -27,12 +27,19 @@ def update_db(colls):
     last_update = now.isoformat()
     connection = sq.connect(dbpath)
     db = connection.cursor()
+    
     query = 'UPDATE last_update SET dt=? WHERE fn=?;'
-    for coll in colls:
-        print(coll)
-        coll_info = client.get(coll).json()
-        print(coll_info['title'])
     db.execute(query, [last_update, 'xml'])
+    
+    query = 'DELETE FROM collections;'
+    db.execute(query)
+
+    query = 'INSERT INTO collections (collno, eadurl, colltitle, description) VALUES (?, ?, ?, ?);'
+    for coll in colls:
+        coll_info = client.get(coll).json()
+        print('updating dbase:', coll_info['title'])
+        db.execute(query, [coll_info['uri'], coll_info['ead_id'], coll_info['title'], coll_info['description']])
+    
     db.close()
     connection.commit()
     connection.close()
