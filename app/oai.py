@@ -8,6 +8,16 @@ from asnake.client import ASnakeClient
 
 # FUNCTIONS
 
+# read collection info from db
+def read_colls_from_db():
+    connection = sq.connect(dbpath)
+    db = connection.cursor()
+    query = 'SELECT collno, eadurl, colltitle, description FROM collections'
+    colls = db.execute(query).fetchall()
+    db.close()
+    connection.close()
+    return colls
+
 # write time of last update to db
 # update collections info to db
 # colls = set of collection ids
@@ -27,16 +37,6 @@ def update_db(colls):
     connection.commit()
     connection.close()
     return
-
-# read collection info from db
-def read_colls_from_db():
-    connection = sq.connect(dbpath)
-    db = connection.cursor()
-    query = 'SELECT collno, eadurl, colltitle, description FROM collections'
-    colls = db.execute(query).fetchall()
-    db.close()
-    connection.close()
-    return colls
 
 # returns a "pretty" XML string
 def prettify(elem):
@@ -100,10 +100,12 @@ for item in collections_dict.items():
         generator = (file_version for file_version in client.get(do).json()['file_versions']
                      if file_version['publish'] == True
                      and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
+        # print title of archival object and URI of digital object
         try:
-            print(client.get(ao).json()['title'], next(generator).get('file_uri', 'NOT FOUND'))
+            do_title = client.get(ao).json()['title']
+            file_uri = next(generator)['file_uri']
         except:
-            print(client.get(ao).json()['title'], '************* NOT FOUND *************')
+            continue
 
 # update collections info in database
 update_db(collections)
