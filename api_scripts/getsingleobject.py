@@ -36,6 +36,6 @@ print(json.dumps(obj, indent=4, sort_keys=True))
 
 print()
 
-uri = '/repositories/2/resources/228'
+uri = '/repositories/2/resources/49'
 obj = client.get(f'{uri}').json()
 print(json.dumps(obj, indent=4, sort_keys=True))
