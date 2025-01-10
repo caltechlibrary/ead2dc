@@ -38,7 +38,8 @@ def update_db(colls):
     for coll in colls:
         coll_info = client.get(coll).json()
         print('updating dbase:', coll_info['title'])
-        db.execute(query, [coll_info['uri'], coll_info['ead_id'], coll_info['title'], coll_info['description']])
+        db.execute(query, [coll_info['uri'], coll_info['ead_id'], coll_info['title'], 
+            [note for note in coll_info['notes'] if note['type'] == 'scopecontent'][0]])
     
     db.close()
     connection.commit()
