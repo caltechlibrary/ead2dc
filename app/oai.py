@@ -38,8 +38,11 @@ def update_db(colls):
     for coll in colls:
         coll_info = client.get(coll).json()
         print('updating dbase:', coll_info['title'])
-        db.execute(query, [coll_info['uri'], coll_info['ead_id'], coll_info['title'], 
-            [note for note in coll_info['notes'] if note['type'] == 'scopecontent'][0]])
+        collno = coll_info['uri'][26:]
+        eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
+        title = coll_info['title']
+        description = [note for note in coll_info['notes'] if note['type'] == 'scopecontent'][0]
+        db.execute(query, collno, eadurl, title, description)
     
     db.close()
     connection.commit()
