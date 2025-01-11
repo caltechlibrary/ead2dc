@@ -40,9 +40,12 @@ def update_db(colls):
         print('updating dbase:', coll_info['title'])
         collno = coll_info['uri'][26:]
         eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
-        title = coll_info['title']
-        description = [note for note in coll_info['notes'] if note['type'] == 'scopecontent'][0]
-        db.execute(query, collno, eadurl, title, description)
+        colltitle = coll_info['title']
+        try:
+            description = [note for note in coll_info['notes'] if note['type'] == 'scopecontent'][0]
+        except:
+            description = 'No description available'
+        db.execute(query, collno, eadurl, colltitle, description)
     
     db.close()
     connection.commit()
@@ -127,8 +130,11 @@ for item in collections_dict.items():
             continue
 
 # update collections info in database
+# updates collno, colltitle, description, eadurl
+# does not update docount, incl, carchives clibrary, iarchive, youtube, other, collid
 update_db(collections)
 
+# read collections from database
 colls = read_colls_from_db()
 
 # namespace dictionary
