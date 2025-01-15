@@ -37,7 +37,6 @@ def update_db(colls):
     query = 'INSERT INTO collections (collno, eadurl, colltitle, description) VALUES (?, ?, ?, ?);'
     for coll in colls:
         coll_info = client.get(coll).json()
-        print('updating dbase:', coll_info['title'])
         collno = coll_info['uri'][26:]
         eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
         colltitle = coll_info['title']
