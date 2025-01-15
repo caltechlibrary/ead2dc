@@ -42,13 +42,13 @@ def update_db(colls):
         eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
         colltitle = coll_info['title']
         try:
-            description = [note for note in coll_info['notes'] if note['type'] == 'scopecontent'][0]
+            description = [note for note in coll_info['notes'][0] if note['type'] == 'scopecontent'][0]
         except:
             description = 'No description available'
         
         # temp
         print(collno, eadurl, colltitle, description)
-        
+
         db.execute(query, [collno, eadurl, colltitle, description])
     
     db.close()
