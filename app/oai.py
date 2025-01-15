@@ -52,6 +52,7 @@ def update_db(colls):
         description = '(sc) ' + scopecontext + ' (ab) ' + abstract
 
         # temp
+        print('-----------------------------------')
         print(collno, eadurl, colltitle, description)
 
         db.execute(query, [collno, eadurl, colltitle, description])
