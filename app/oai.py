@@ -45,7 +45,7 @@ def update_db(colls):
             description = [note for note in coll_info['notes'] if note['type'] == 'scopecontent'][0]
         except:
             description = 'No description available'
-        db.execute(query, collno, eadurl, colltitle, description)
+        db.execute(query, [collno, eadurl, colltitle, description])
     
     db.close()
     connection.commit()
