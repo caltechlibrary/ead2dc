@@ -45,7 +45,7 @@ def update_db(colls):
         except:
             scopecontext = ''
         try:
-            abstract = [note for note in coll_info['notes'] if note['type'] == 'abstract' and note['publish']][0]['subnotes'][0]['content']
+            abstract = [note for note in coll_info['notes'] if note['type'] == 'abstract' and note['publish']][0]['content']
         except:
             abstract = ''
         description = '(sc) ' + scopecontext + ' (ab) ' + abstract
