@@ -45,6 +45,10 @@ def update_db(colls):
             description = [note for note in coll_info['notes'] if note['type'] == 'scopecontent'][0]
         except:
             description = 'No description available'
+        
+        # temp
+        print(collno, eadurl, colltitle, description)
+        
         db.execute(query, [collno, eadurl, colltitle, description])
     
     db.close()
@@ -116,12 +120,20 @@ for item in collections_dict.items():
     # print title of collection and number of digital objects
     print(client.get(item[0]).json()['title'], ':', len(item[1]), 'digital objects')
     # iterate over digital objects and archival objects
+
+    # temp
+    i = 0
+
     for do, ao in item[1]:
-        # print archival object title and digital object URI
+
+        # temp
+        i += 1
+        if i > 50:
+            break
+
         generator = (file_version for file_version in client.get(do).json()['file_versions']
                      if file_version['publish'] == True
                      and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
-        # print title of archival object and URI of digital object
         try:
             do_title = client.get(ao).json()['title']
             file_uri = next(generator)['file_uri']
