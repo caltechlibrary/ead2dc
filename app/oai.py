@@ -43,6 +43,7 @@ def update_db(colls):
         try:
             description = [note for note in coll_info['notes'] if (note['type'] == 'scopecontent' or note['type'] == 'abstract') and note['publish']]
             print(description)
+            print('*********')
         except:
             description = ''
         if description:
