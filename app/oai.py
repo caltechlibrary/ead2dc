@@ -68,7 +68,7 @@ def update_db(colls):
         else:
             print(type(description))
 
-        #db.execute(query, [collno, eadurl, colltitle, description])
+        db.execute(query, [collno, eadurl, colltitle, description])
     
     db.close()
     connection.commit()
