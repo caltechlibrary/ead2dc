@@ -42,17 +42,16 @@ def update_db(colls):
         colltitle = coll_info['title']
         try:
             description = [note for note in coll_info['notes'] if (note['type'] == 'scopecontent' or note['type'] == 'abstract') and note['publish']]
+            print(description)
         except:
             description = ''
         if description:
             try:
                 notepart1 = ' '.join([note['content'][0] for note in description if note['jsonmodel_type'] == 'note_singlepart'])
-                print(notepart1)
             except:
                 notepart1 = ''
             try:
                 notepart2 = ' '.join([note['subnotes'][0]['content'] for note in description if note['jsonmodel_type'] == 'note_multipart'])
-                print(notepart2)
             except:
                 notepart2 = ''
             description = notepart1 + ' ' + notepart2
