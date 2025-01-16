@@ -41,20 +41,26 @@ def update_db(colls):
         eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
         colltitle = coll_info['title']
         try:
-            scopecontext = [note for note in coll_info['notes'] if note['type'] == 'scopecontent' and note['publish']][0]['subnotes'][0]['content']
+            description = [note for note in coll_info['notes'] if (note['type'] == 'scopecontent' or note['type'] == 'abstract' and note['publish'])]
         except:
-            scopecontext = ''
-        try:
-            abstract = [note for note in coll_info['notes'] if note['type'] == 'abstract' and note['publish']][0]['content']
-        except:
-            abstract = ''
-        description = '(sc) ' + scopecontext + ' (ab) ' + abstract
+            description = ''
+        if description:
+            try:
+                notepart1 = ' '.join([note['content'][0] for note in description if note['jsonmodel_type'] == 'note_singlepart'])
+            except:
+                notepart1 = ''
+            try:
+                notepart2 = ' '.join([note['subnotes'][0]['content'] for note in description if note['jsonmodel_type'] == 'note_multipart'])
+            except:
+                notepart2 = ''
+            description = notepart1 + ' ' + notepart2
 
         # temp
         print('-----------------------------------')
-        print(collno, eadurl, colltitle, description)
+        print(collno, eadurl, colltitle)
+        print(description)
 
-        db.execute(query, [collno, eadurl, colltitle, description])
+        #db.execute(query, [collno, eadurl, colltitle, description])
     
     db.close()
     connection.commit()
