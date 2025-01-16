@@ -45,7 +45,7 @@ def update_db(colls):
             print(description)
             print('*********')
         except:
-            description = ''
+            description = None
         if description:
             try:
                 notepart1 = ' '.join([note['content'][0] for note in description if note['jsonmodel_type'] == 'note_singlepart'])
@@ -56,6 +56,8 @@ def update_db(colls):
             except:
                 notepart2 = ''
             description = notepart1 + ' ' + notepart2
+        else:
+            description = ''
 
         # temp
         print('-----------------------------------')
