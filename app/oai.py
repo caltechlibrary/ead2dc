@@ -57,10 +57,10 @@ def update_db(colls):
 
         # temp
         print('-----------------------------------')
-        print(collno, eadurl, colltitle)
-        print(description)
+        print(type(collno), type(eadurl), type(colltitle))
+        print(type(description))
 
-        db.execute(query, [collno, eadurl, colltitle, description])
+        #db.execute(query, [collno, eadurl, colltitle, description])
     
     db.close()
     connection.commit()
