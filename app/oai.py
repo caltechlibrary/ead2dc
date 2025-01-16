@@ -58,7 +58,11 @@ def update_db(colls):
         # temp
         print('-----------------------------------')
         print(type(collno), type(eadurl), type(colltitle))
-        print(type(description))
+        if type(description) == list:
+            print(type(description))
+            print(description)
+        else:
+            print(type(description))
 
         #db.execute(query, [collno, eadurl, colltitle, description])
     
