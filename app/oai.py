@@ -47,10 +47,12 @@ def update_db(colls):
         if description:
             try:
                 notepart1 = ' '.join([note['content'][0] for note in description if note['jsonmodel_type'] == 'note_singlepart'])
+                print(notepart1)
             except:
                 notepart1 = ''
             try:
                 notepart2 = ' '.join([note['subnotes'][0]['content'] for note in description if note['jsonmodel_type'] == 'note_multipart'])
+                print(notepart2)
             except:
                 notepart2 = ''
             description = notepart1 + ' ' + notepart2
@@ -143,7 +145,7 @@ for item in collections_dict.items():
 
         # temp
         i += 1
-        if i > 50:
+        if i > 5:
             break
 
         generator = (file_version for file_version in client.get(do).json()['file_versions']
