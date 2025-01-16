@@ -41,7 +41,7 @@ def update_db(colls):
         eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
         colltitle = coll_info['title']
         try:
-            description = [note for note in coll_info['notes'] if (note['type'] == 'scopecontent' or note['type'] == 'abstract' and note['publish'])]
+            description = [note for note in coll_info['notes'] if (note['type'] == 'scopecontent' or note['type'] == 'abstract') and note['publish']]
         except:
             description = ''
         if description:
