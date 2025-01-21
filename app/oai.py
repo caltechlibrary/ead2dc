@@ -1,4 +1,4 @@
-import json
+import requests, json
 import sqlite3 as sq
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
@@ -42,8 +42,6 @@ def update_db(colls):
         colltitle = coll_info['title']
         try:
             description = [note for note in coll_info['notes'] if (note['type'] == 'scopecontent' or note['type'] == 'abstract') and note['publish']]
-            print(description)
-            print('*********')
         except:
             description = None
         if description:
@@ -58,16 +56,9 @@ def update_db(colls):
             description = notepart1 + ' ' + notepart2
         else:
             description = ''
-
-        # temp
-        print('-----------------------------------')
-        print(type(collno), type(eadurl), type(colltitle))
-        if type(description) == list:
-            print(type(description))
-            print(description)
-        else:
-            print(type(description))
-
+        # collno text, colltitle text, docount int, incl int, 
+        # carchives int, clibrary int, iarchive int, youtube int, other int, 
+        # collid text, description text, eadurl text
         db.execute(query, [collno, eadurl, colltitle, description])
     
     db.close()
@@ -81,6 +72,138 @@ def prettify(elem):
     xml_file = dom.parseString(xml_string)
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
+
+# builds XML for each record and adds to ListRecords segment
+def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
+    global no_records, setid
+    #create record element
+    record = ET.SubElement(listrecords, 'record')
+    header = ET.SubElement(record, 'header')
+    identifier = ET.SubElement(header, 'identifier')
+    try:
+        #construct id from aspace uri
+        identifier.text = 'collections.archives.caltech.edu' + c.find('./did/unitid[@type="aspace_uri"]', ns).text
+    except:
+        #construct id from aspace id
+        identifier.text = 'archives.caltech.edu:' + c.attrib['id']
+
+    datestamp = ET.SubElement(header, 'datestamp')
+    datestamp.text = today
+    setspec = ET.SubElement(header, 'setSpec')
+    setspec.text = setid
+    metadata = ET.SubElement(record, 'metadata')
+    dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+                                           'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+                                           'xmlns:dcterms': 'http://purl.org/dc/terms/'})
+    #title = file/item title from current container
+    title = ET.SubElement(dc, 'dc:title')
+    title.text = inheriteddata[-1][1]
+    #collection title
+    relation = ET.SubElement(dc, 'dc:relation')
+    relation.text = collectiontitle
+    relation.attrib = {'label': 'Collection'}
+    #inherited titles from parent containers
+    for titledata in inheriteddata[:-1]:
+        relation = ET.SubElement(dc, 'dc:relation')
+        relation.text = titledata[1]
+        relation.attrib = {'label': titledata[0].title()}
+    #creator (persname) from current container
+    for creat in c.findall('.//origination/persname', ns):
+        creator = ET.SubElement(dc, 'dc:creator')
+        creator.text = creat.text
+        if creat.attrib.get('source'):
+            creator.attrib = {'scheme': creat.attrib['source']}
+    #creator (corpname) from current container
+    for creat in c.findall('.//origination/corpname', ns):
+        creator = ET.SubElement(dc, 'dc:creator')
+        creator.text = creat.text
+        if creat.attrib.get('source'):
+            creator.attrib = {'scheme': creat.attrib['source']}
+    #date from current container
+    for unitdate in c.findall('.//unitdate', ns):
+        date = ET.SubElement(dc, 'dc:date')
+        date.text = unitdate.text
+    #format from current container
+    for fmt in c.findall('.//physdesc/extent', ns):
+        format = ET.SubElement(dc, 'dc:extent')
+        format.text = fmt.text
+    #description from current container
+    for desc in c.findall('.//abstract', ns):
+        description = ET.SubElement(dc, 'dc:description')
+        description.text = desc.text
+    #subjects from current container
+    for subj in c.findall('.//controlaccess/subject', ns):
+        subject = ET.SubElement(dc, 'dc:subject')
+        subject.text = subj.text
+        if subj.attrib.get('source'):
+            subject.attrib = {'scheme': subj.attrib['source']}
+    for geog in c.findall('.//controlaccess/geogname', ns):
+        subject = ET.SubElement(dc, 'dc:subject')
+        subject.text = geog.text
+        if geog.attrib.get('source'):
+            subject.attrib = {'scheme': geog.attrib['source']}
+    for pers in c.findall('.//controlaccess/persname', ns):
+        subject = ET.SubElement(dc, 'dc:subject')
+        subject.text = pers.text
+        if pers.attrib.get('source'):
+            subject.attrib = {'scheme': pers.attrib['source']}
+    for corp in c.findall('.//controlaccess/corpname', ns):
+        subject = ET.SubElement(dc, 'dc:subject')
+        subject.text = corp.text
+        if corp.attrib.get('source'):
+            subject.attrib = {'scheme': corp.attrib['source']}
+    for func in c.findall('.//controlaccess/function', ns):
+        subject = ET.SubElement(dc, 'dc:subject')
+        subject.text = func.text
+        if func.attrib.get('source'):
+            subject.attrib = {'scheme': func.attrib['source']}
+    #identifiers from current container
+    for unitid in c.findall('.//unitid', ns):
+        identifier = ET.SubElement(dc, 'dc:identifier')
+        text = unitid.text
+        if text[:14]=='/repositories/':
+            text = 'collections.archives.caltech.edu' + text
+        identifier.text = text
+    #links from current container
+    for daoloc in c.findall('.//daoloc', ns):
+        identifier = ET.SubElement(dc, 'dc:identifier')
+        text = daoloc.attrib['{http://www.w3.org/1999/xlink}href']
+        identifier.text = text
+        if 'img.archives.caltech.edu' in text:
+            identifier.attrib = {'scheme': 'URI', 'type': 'thumbnail'}
+        else:
+            identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
+    for dao in c.findall('.//dao', ns):
+        identifier = ET.SubElement(dc, 'dc:identifier')
+        text = dao.attrib['{http://www.w3.org/1999/xlink}href']
+        type = dao.attrib['{http://www.w3.org/1999/xlink}type']
+        identifier.text = text
+        identifier.attrib = {'scheme': 'URI', 'type': type}
+    no_records += 1
+    return listrecords
+
+#builds inherited data for each record; XML build is triggered if digital object is present
+#c is the container object
+#n is the level of the container
+def inheritdata(c, n):
+    e = c.find('./did/unittitle', ns)
+    if e is not None:
+        title = (c.attrib['level'], e.text)
+    else:
+        title = ('', '')
+    if len(inheriteddata) < n:
+        inheriteddata.append(title)
+    elif len(inheriteddata) == n:
+        inheriteddata[n-1] = title
+    else:
+        for i in range(len(inheriteddata)):
+            if i >= n:
+                inheriteddata.pop()
+        inheriteddata[n-1] = title
+    if True:
+    #if locatedao(c):
+        buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
+    return
 
 # MAIN
 
@@ -221,6 +344,38 @@ for coll in colls:
     setDescription.text = coll[3]
 
 no_records = 0
+
+dao_count = 0
+
+for coll in colls: 
+    setid = coll[0]
+    # read EAD for collection
+    response = requests.get(coll[1])
+    root = ET.fromstring(response.content)
+
+    #isolate the EAD portion of the file
+    ead = root.find('.//ead', ns)
+    #isolate the archdesc portion of the file
+    archdesc = ead.find('.//archdesc', ns)
+    #isolate the dsc portion of the file
+    dsc = archdesc.find('.//dsc', ns)
+    #save the collection title & id
+    collectiontitle = archdesc.find('.//did/unittitle', ns).text
+    collectionid = archdesc.find('.//did/unitid', ns).text
+
+    # build ListRecords segment
+    ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
+    # iterate over containers to collect inherited data and build records
+    # iteration over containers
+
+    # version without enumeration of c
+    for c in dsc.findall('./c', ns):
+        n = 1
+        inheriteddata = list()
+        inheritdata(c, n)
+        #print(n, c.attrib['id'], c.attrib['level'])
+        containerloop(c)
+
 
 #write to disk
 fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
