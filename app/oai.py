@@ -375,6 +375,9 @@ for coll in colls:
     response = requests.get(coll[1])
     root = ET.fromstring(response.content)
 
+    if root.find('.//archdesc', ns) is None:
+        continue
+
     #isolate the EAD portion of the file
     ead = root.find('.//ead', ns)
     #isolate the archdesc portion of the file
