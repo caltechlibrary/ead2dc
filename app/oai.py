@@ -205,6 +205,22 @@ def inheritdata(c, n):
         buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
     return
 
+#loop over c recursively
+def containerloop(container):
+    global n
+    first = True
+    for c in container.findall('./c', ns):
+        if first:
+            first = False
+            n += 1
+        #print(n, c.attrib['id'], c.attrib['level'])
+        inheritdata(c, n)
+        containerloop(c)
+        if not first:
+            n -= 1
+            first = True
+    return
+
 # MAIN
 
 # read config file
