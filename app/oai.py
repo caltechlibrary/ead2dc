@@ -200,6 +200,8 @@ def inheritdata(c, n):
             if i >= n:
                 inheriteddata.pop()
         inheriteddata[n-1] = title
+    
+    # temp
     if True:
     #if locatedao(c):
         buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
@@ -306,6 +308,10 @@ update_db(collections)
 
 # read collections from database
 colls = read_colls_from_db()
+
+#temp
+for coll in colls:
+    print(coll)
 
 # namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 
