@@ -311,7 +311,7 @@ colls = read_colls_from_db()
 
 #temp
 for coll in colls:
-    print(coll)
+    print(coll[1])
 
 # namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 
