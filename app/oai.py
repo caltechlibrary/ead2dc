@@ -394,7 +394,17 @@ for coll in colls:
     # iteration over containers
 
     # version without enumeration of c
+
+    # temp
+    k = 0
+
     for c in dsc.findall('./c', ns):
+
+        # temp
+        k += 1
+        if k > 5:
+            break
+        
         n = 1
         inheriteddata = list()
         inheritdata(c, n)
