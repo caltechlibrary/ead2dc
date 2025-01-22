@@ -8,64 +8,6 @@ from asnake.client import ASnakeClient
 
 # FUNCTIONS
 
-# read collection info from db
-def read_colls_from_db():
-    connection = sq.connect(dbpath)
-    db = connection.cursor()
-    query = 'SELECT collno, eadurl, colltitle, description FROM collections'
-    colls = db.execute(query).fetchall()
-    db.close()
-    connection.close()
-    return colls
-
-# write time of last update to db
-# update collections info to db
-# colls = set of collection ids
-def update_db(colls):
-    # write ISO last update
-    now = datetime.now()
-    last_update = now.isoformat()
-    connection = sq.connect(dbpath)
-    db = connection.cursor()
-    
-    query = 'UPDATE last_update SET dt=? WHERE fn=?;'
-    db.execute(query, [last_update, 'xml'])
-    
-    query = 'DELETE FROM collections;'
-    db.execute(query)
-
-    query = 'INSERT INTO collections (collno, eadurl, colltitle, description) VALUES (?, ?, ?, ?);'
-    for coll in colls:
-        coll_info = client.get(coll).json()
-        collno = coll_info['uri'][26:]
-        eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
-        colltitle = coll_info['title']
-        try:
-            description = [note for note in coll_info['notes'] if (note['type'] == 'scopecontent' or note['type'] == 'abstract') and note['publish']]
-        except:
-            description = None
-        if description:
-            try:
-                notepart1 = ' '.join([note['content'][0] for note in description if note['jsonmodel_type'] == 'note_singlepart'])
-            except:
-                notepart1 = ''
-            try:
-                notepart2 = ' '.join([note['subnotes'][0]['content'] for note in description if note['jsonmodel_type'] == 'note_multipart'])
-            except:
-                notepart2 = ''
-            description = notepart1 + ' ' + notepart2
-        else:
-            description = ''
-        # collno text, colltitle text, docount int, incl int, 
-        # carchives int, clibrary int, iarchive int, youtube int, other int, 
-        # collid text, description text, eadurl text
-        db.execute(query, [collno, eadurl, colltitle, description])
-    
-    db.close()
-    connection.commit()
-    connection.close()
-    return
-
 # returns a "pretty" XML string
 def prettify(elem):
     xml_string = ET.tostring(elem)
@@ -222,6 +164,87 @@ def containerloop(container):
             n -= 1
             first = True
     return
+
+# checks if digital object is present
+# old version: dao are in OAI
+'''
+def locatedao(c):    
+    if c.find('./did/daogrp/daoloc', ns) is not None:
+        return True
+    elif c.find('./did/dao', ns) is not None:
+        return True
+    else:
+        return False
+'''
+# new version
+def locatedao(c):
+    global dao_count
+    try:
+        id_type = c.find('./did/unitid', ns).attrib['type']
+        if id_type == 'aspace_uri':
+            print(c.find('./did/unitid', ns).text)
+            dao_count += 1
+    except:
+        pass
+    return True
+    
+# write time of last update to db
+# update collections info to db
+# colls = set of collection ids
+def update_db(colls):
+    # write ISO last update
+    now = datetime.now()
+    last_update = now.isoformat()
+    connection = sq.connect(dbpath)
+    db = connection.cursor()
+    
+    query = 'UPDATE last_update SET dt=? WHERE fn=?;'
+    db.execute(query, [last_update, 'xml'])
+    
+    query = 'DELETE FROM collections;'
+    db.execute(query)
+
+    query = 'INSERT INTO collections (collno, eadurl, colltitle, description) VALUES (?, ?, ?, ?);'
+    for coll in colls:
+        coll_info = client.get(coll).json()
+        collno = coll_info['uri'][26:]
+        eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
+        colltitle = coll_info['title']
+        try:
+            description = [note for note in coll_info['notes'] if (note['type'] == 'scopecontent' or note['type'] == 'abstract') and note['publish']]
+        except:
+            description = None
+        if description:
+            try:
+                notepart1 = ' '.join([note['content'][0] for note in description if note['jsonmodel_type'] == 'note_singlepart'])
+            except:
+                notepart1 = ''
+            try:
+                notepart2 = ' '.join([note['subnotes'][0]['content'] for note in description if note['jsonmodel_type'] == 'note_multipart'])
+            except:
+                notepart2 = ''
+            description = notepart1 + ' ' + notepart2
+        else:
+            description = ''
+        # collno text, colltitle text, docount int, incl int, 
+        # carchives int, clibrary int, iarchive int, youtube int, other int, 
+        # collid text, description text, eadurl text
+        db.execute(query, [collno, eadurl, colltitle, description])
+    
+    db.close()
+    connection.commit()
+    connection.close()
+    return
+
+# read collection info from db
+def read_colls_from_db():
+    connection = sq.connect(dbpath)
+    db = connection.cursor()
+    query = 'SELECT collno, eadurl, colltitle, description FROM collections'
+    colls = db.execute(query).fetchall()
+    db.close()
+    connection.close()
+    return colls
 
 # MAIN
 
