@@ -288,7 +288,7 @@ for item in collections_dict.items():
 
         # temp
         i += 1
-        if i > 5:
+        if i > 2:
             break
 
         generator = (file_version for file_version in client.get(do).json()['file_versions']
@@ -402,9 +402,9 @@ for coll in colls:
 
         # temp
         k += 1
-        if k > 5:
+        if k > 2:
             break
-        
+
         n = 1
         inheriteddata = list()
         inheritdata(c, n)
