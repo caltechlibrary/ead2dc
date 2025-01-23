@@ -394,7 +394,50 @@ no_records = 0
 dao_count = 0
 
 for coll in colls: 
+
     setid = coll[0]
+    collectiontitle = coll[2]
+
+    # build ListRecords segment
+    ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
+
+    for do, ao in collections_dict[coll[0]]:
+        generator = (file_version for file_version in client.get(do).json()['file_versions']
+                     if file_version['publish'] == True
+                     and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
+        try:
+            do_title = client.get(ao).json()['title']
+            file_uri = next(generator)['file_uri']
+            dao_count += 1
+        except:
+            continue
+
+        #create record element
+        record = ET.SubElement(ListRecords, 'record')
+        header = ET.SubElement(record, 'header')
+        identifier = ET.SubElement(header, 'identifier')
+        identifier.text = 'collections.archives.caltech.edu' + do
+        datestamp = ET.SubElement(header, 'datestamp')
+        datestamp.text = today
+        setspec = ET.SubElement(header, 'setSpec')
+        setspec.text = setid
+        metadata = ET.SubElement(record, 'metadata')
+        dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+                                               'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+                                               'xmlns:dcterms': 'http://purl.org/dc/terms/'})
+        title = ET.SubElement(dc, 'dc:title')
+        title.text = do_title
+        relation = ET.SubElement(dc, 'dc:relation')
+        relation.text = collectiontitle
+        relation.attrib = {'label': 'Collection'}
+        description = ET.SubElement(dc, 'dc:description')
+        description.text = 'Digital object in ' + collectiontitle
+        identifier = ET.SubElement(dc, 'dc:identifier')
+        identifier.text = 'collections.archives.caltech.edu' + file_uri
+        identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
+        no_records += 1
+
+'''
     # read EAD for collection
     response = requests.get(coll[1])
     root = ET.fromstring(response.content)
@@ -434,7 +477,7 @@ for coll in colls:
         inheritdata(c, n)
         #print(n, c.attrib['id'], c.attrib['level'])
         containerloop(c)
-
+'''
 
 #write to disk
 fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
