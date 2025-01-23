@@ -437,8 +437,6 @@ for coll in colls:
         identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
         no_records += 1
 
-        print(do, ao)
-
 '''
     # read EAD for collection
     response = requests.get(coll[1])
