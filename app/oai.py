@@ -393,13 +393,13 @@ no_records = 0
 
 dao_count = 0
 
+# build ListRecords segment
+ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
+
 for coll in colls: 
 
     setid = coll[0]
     collectiontitle = coll[2]
-
-    # build ListRecords segment
-    ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
     # temp
     j=0
