@@ -401,7 +401,16 @@ for coll in colls:
     # build ListRecords segment
     ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
+    # temp
+    j=0
+    
     for do, ao in collections_dict[coll[0]]:
+
+        #temp
+        j += 1
+        if j > 5:
+            break
+
         generator = (file_version for file_version in client.get(do).json()['file_versions']
                      if file_version['publish'] == True
                      and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
