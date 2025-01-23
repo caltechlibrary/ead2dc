@@ -310,7 +310,7 @@ for item in collections_dict.items():
     for do, ao in item[1]:
 
         # temp
-        print(do, ao)
+        print(item, do, ao)
         i += 1
         if i > 2:
             break
