@@ -204,7 +204,7 @@ def update_db(colls):
     query = 'DELETE FROM collections;'
     db.execute(query)
 
-    query = 'INSERT INTO collections (collno, eadurl, colltitle, description) VALUES (?, ?, ?, ?);'
+    query = 'INSERT INTO collections (collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);'
     for coll in colls:
         coll_info = client.get(coll).json()
         collno = coll_info['uri']
@@ -229,7 +229,7 @@ def update_db(colls):
         # collno text, colltitle text, docount int, incl int, 
         # carchives int, clibrary int, iarchive int, youtube int, other int, 
         # collid text, description text, eadurl text
-        db.execute(query, [collno, eadurl, colltitle, description])
+        db.execute(query, [collno, eadurl, colltitle, description, collno, 0, 0, 0, 0, 0, 0, 0, 0])
     
     db.close()
     connection.commit()
