@@ -229,7 +229,7 @@ def update_db(colls):
         # collno text, colltitle text, docount int, incl int, 
         # carchives int, clibrary int, iarchive int, youtube int, other int, 
         # collid text, description text, eadurl text
-        db.execute(query, [collno, eadurl, colltitle, description, collno, 0, 0, 0, 0, 0, 0, 0, 0])
+        db.execute(query, [collno, eadurl, colltitle, description, collno, 0, 0, 0, 0, 0, 0, 0])
     
     db.close()
     connection.commit()
