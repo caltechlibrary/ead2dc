@@ -299,21 +299,23 @@ print()
 
 dao_count = 0
 
+print('Collections with digital objects:/n')
+
 for item in collections_dict.items():
     # print title of collection and number of digital objects
     print(client.get(item[0]).json()['title'], ':', len(item[1]), 'digital objects')
     # iterate over digital objects and archival objects
 
     # temp
-    i = 0
+    #i = 0
 
     for do, ao in item[1]:
 
         # temp
-        print(item[0], do, ao)
-        i += 1
-        if i > 2:
-            break
+        #print(item[0], do, ao)
+        #i += 1
+        #if i > 2:
+        #    break
 
         generator = (file_version for file_version in client.get(do).json()['file_versions']
                      if file_version['publish'] == True
@@ -396,20 +398,24 @@ dao_count = 0
 # build ListRecords segment
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
+print('Building static repository:/n')
+
 for coll in colls: 
 
     setid = coll[0]
     collectiontitle = coll[2]
 
+    print(collectiontitle)
+
     # temp
-    j=0
+    #j=0
     
     for do, ao in collections_dict[coll[0]]:
 
         #temp
-        j += 1
-        if j > 5:
-            break
+        #j += 1
+        #if j > 5:
+        #    break
 
         generator = (file_version for file_version in client.get(do).json()['file_versions']
                      if file_version['publish'] == True
