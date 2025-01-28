@@ -1,0 +1,1218 @@
+<?xml version="1.0" ?>
+<OAI-PMH xmlns="http://www.openarchives.org/OAI/2.0/">
+  <Identify>
+    <repositoryName>Caltech Archives Digital Collections</repositoryName>
+    <baseURL>http://apps.library.caltech.edu/ead2dc/oai</baseURL>
+    <protocolVersion>2.0</protocolVersion>
+    <adminEmail>archives@caltech.edu</adminEmail>
+    <deletedRecord>no</deletedRecord>
+    <granularity>YYYY-MM-DD</granularity>
+  </Identify>
+  <ListMetadataFormats>
+    <metadataFormat>
+      <metadataPrefix>oai_dc</metadataPrefix>
+      <schema>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</schema>
+      <metadataNamespace>http://www.openarchives.org/OAI/2.0/oai_dc/</metadataNamespace>
+    </metadataFormat>
+  </ListMetadataFormats>
+  <ListSets>
+    <set>
+      <setSpec>/repositories/2/resources/158</setSpec>
+      <setName>Moving Image Collection</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description/>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/185</setSpec>
+      <setName>Caltech Glee Club Recordings</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description>A collection of audio materials concerning the concerts and tours of the Caltech Glee Club, 1950s-2000. </dc:description>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/34</setSpec>
+      <setName>Donald A. Glaser Papers</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description>Donald Arthur Glaser (1926–2013) earned his PhD in Physics and Mathematics from the California Institute of Technology in 1950 and won the 1960 Nobel Prize in Physics for his invention of the bubble chamber. He then changed his research focus to molecular biology and went on to co-found Cetus Corporation, the first biotechnology company. In the 1980s he again switched his focus to neurobiology and the visual system. The Donald A. Glaser papers consist of research notes and notebooks, manuscripts and printed papers, correspondence, awards, biographical material, photographs, audio-visual material, and born-digital files. This finding aid is an intellectual arrangement of two collections: first portion originally from the University of California Berkeley, Bancroft Library and the second from the Caltech Archives. </dc:description>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/219</setSpec>
+      <setName>Caltech Images Collection</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description> Caltech Images is a collection of over ten thousand images representing Caltech's history and the people who have contributed to the Caltech story. It includes historic and contemporary photographs of people and places, reproductions of historic scientific artifacts and art, and illustrations drawn from Caltech's rare book collection in the history of science and technology.</dc:description>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/197</setSpec>
+      <setName>Paul B. MacCready Papers</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description>Arriving on December 30th 2003, the collection documents most aspects of MacCready's career and many features of his individual character. Constituted within the papers is a diverse array of documents, media, objects, manuscripts and printed material; awards; videos and film; photographs and slides, diaries and notebooks; memorabilia, biographical material and ephemera. While the collection spans over seventy years (ca. 1930-2002), the bulk of material dates from the mid 1960s to the mid '90s. Especially prevalent within the collection are papers and ephemera from 1977 to 1985 during which time MacCready was working on his Gossamers and interest in human-powered flight was at its peak The Paul B. MacCready Papers include documents, media, objects, manuscripts and printed material; awards; videos and film; photographs and slides, diaries and notebooks; memorabilia, biographical material and ephemera.</dc:description>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/80</setSpec>
+      <setName>Theodore von Kármán Papers</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description>This record group documents the career of Theodore von Kármán, Hungarian-born aerodynamicist, science advisor, and first director of the Daniel Guggenheim Aeronautical Laboratory at the California Institute of Technology. It consists primarily of correspondence, speeches, lectures and lecture notes, scientific manuscripts, calculations, reports, photos and technical slides, autobiographical sketches, and school notebooks. The collection includes more than 145,000 pages of letters, scientific manuscripts, reports, unpublished speeches, lecture notes, family papers, medals, and photographs.</dc:description>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/175</setSpec>
+      <setName>GALCIT Records</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description/>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/100</setSpec>
+      <setName>Edward B. Lewis Papers</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description> The Edward B. Lewis papers collection document his professional work as a geneticist. Some materials of interest include Lewis’s lab notebooks regarding his work in Drosophila research, genetics, and radiation studies. The collection also has correspondence with professional colleagues and many archival boxes of material related to his winning of the Nobel Prize, including congratulatory notes and ceremony festivities documents. There are also many photographic prints of scanning electron microscope images of mutant drosophila, and also some personal family photos.</dc:description>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/78</setSpec>
+      <setName>John Todd and Olga Taussky-Todd Papers</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description>The scientific and personal correspondence, teaching notes, writings and talks, biographical papers, and a small collection of audiovisual material form the collection known as the Papers of John Todd and Olga Taussky-Todd in the Archives of the California Institute of Technology (Caltech). Both mathematicians, John Todd and Olga Taussky-Todd arrived at Caltech in 1957, respectively as a professor and a research associate. Olga Taussky-Todd was the first woman to receive a formal Caltech teaching appointment and, in 1971, a full professorship. The Todds stayed at Caltech for the rest of their lives. Upon retirement both became emeritus, but they both remained professionally active until their deaths: Olga Taussky-Todd in 1995 and John Todd in 2007. The John Todd and Olga Taussky-Todd papers where donated to the Caltech Archives without restriction. Two files still under U.S. government classification remain closed pending declassification processing. The papers mostly document John Todd and Olga Taussky-Todd's work in mathematics. </dc:description>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/30</setSpec>
+      <setName>Caltech Oral History Interviews</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description/>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/228</setSpec>
+      <setName>Palomar Observatory Records</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description/>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/81</setSpec>
+      <setName>Gerald J. Wasserburg Papers</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description>The scientific and personal correspondence, organizational and government files, NASA files including Apollo missions and lunar sample analysis, notebooks, biographical materials and audiovisual materials of Gerald J. Wasserburg (b. 1927) form the collection known as the Gerald J. Wasserburg Papers in the Archives of the California Institute of Technology (Caltech). Appointed to the faculty at Caltech in 1955, Wasserburg won the Crafoord Prize in 1986 with Claude J. Allègre for their pioneering work in isotope geochemistry. The Gerald J. Wasserburg papers extend to 172 document boxes. This large, complex and historically rich collection has been organized into nine series, and some series into subseries. The series organization is as follows: SERIES 1: CORRESPONDENCE; SERIES 2: CALTECH AND JET PROPULSION LABORATORY (JPL); SERIES 3: LUNATIC ASYLUM AND SCIENTIFIC RESEARCH; SERIES 4: WRITINGS AND PUBLICATIONS; SERIES 5: TALKS AND CONFERENCES; SERIES 6: NATIONAL AERONAUTICS AND SPACE ADMINISTRATION (NASA); SERIES 7: PROFESSIONAL AND NON-NASA GOVERNMENT ORGANIZATIONS; SERIES 8: BIOGRAPHICAL AND PERSONAL MATERIAL; SERIES 9: PHOTOS, SLIDES AND AUDIOVISUAL MATERIAL
+</dc:description>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/21</setSpec>
+      <setName>Earnest C. Watson Lecture Series</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description>The Earnest C. Watson Lecture Series brings to the public the most innovative scientific research taking place at Caltech. Spotlighting a small selection of the pioneering research the Caltech faculty is conducting, these lectures are geared toward a general audience, part of the Institute's commitment to benefiting the local community through education and outreach. The lectures are given by world renowned Caltech Faculty and in the past have featured also several Nobel Prize winners, such as David Baltimore (1978 Nobel Prize winner for Physiology or Medicine), Hans Bethe (1967 Nobel Prize winner in Physics), William Fowler (1983 Nobel Prize winner in Physics) Murray Gell-Mann (1969 Nobel Prize winner in Physics), David Politzer (2004 Nobel Prize winner in Physics) and Ahmed Zewail (1999 Nobel Prize winner in Chemistry). The collection continues to grow. The collection is arranged by chronological order. This series started in 1922, but the first recording dates back to 1971 and since it is still ongoing, the collection continues to grow, with about 9 new lectures per academic year.
+
+These lectures feature speakers from Caltech and JPL, spotlighting a small selection of the pioneering research conducted in the fields of Biology and Biological Engineering, Chemistry and Chemical Engineering, Engineering and Applied Science, Geological and Planetary Sciences, Humanities and Social Sciences, Physics, Mathematics and Astronomy.
+
+The list of speakers includes also several Nobel Prize winners, such as David Baltimore (1978 Nobel Prize winner for Physiology or Medicine), Hans Bethe (1967 Nobel Prize winner in Physics), William Fowler (1983 Nobel Prize winner in Physics) Murray Gell-Mann (1969 Nobel Prize winner in Physics), David Politzer (2004 Nobel Prize winner in Physics) and Ahmed Zewail (1999 Nobel Prize winner in Chemistry).
+
+Most of the recordings are analog but thanks to the California Audiovisual Preservation Project about 60 among the legacy audiovisuals were digitized and can be accessed now online.
+The newest lectures from the last decade are online as well.
+
+</dc:description>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/140</setSpec>
+      <setName>Avery House Records</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description> This collection represents the collective activities of the student residents of Caltech’s Avery House from 1995 to 2008. It is particularly strong on the organized social activities of the house and on the house’s efforts to document its own history. Those efforts resulted in the development of this collection by student Ryan Hamerly, whose personal notes are included in it. Digital media include approximately 6000 emails to a house discussion list, as well as scanned building plans for Avery House.</dc:description>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/124</setSpec>
+      <setName>George Ellery Hale Papers</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description>&lt;emph&gt;Digitized&lt;/emph&gt;: this collection is available on the web. George Ellery Hale (1868–1938) was an influential astrophysicist and science administrator. This collection of Hale’s scientific, professional, and personal papers documents his roles in inventing the spectrohelioscope; promoting international cooperation among scientists; and founding major observatories, as well as the California Institute of Technology, Huntington Library, &lt;title&gt;Astrophysical Journal&lt;/title&gt;, and National Research Council. This collection provides a thorough record of George Ellery Hale’s activities. A prolific correspondent, Hale kept copies of most of his letters. The collections contains significant material relating to the theoretical and instrumental development of astrophysics, the history of the Mount Wilson and Palomar Observatories, and the early history of the California Institute of Technology. It also documents Hale’s work with the National Academy of Sciences and National Research Council.</dc:description>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/18</setSpec>
+      <setName>Air Talk: The Caltech Edition</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description>AirTalk is the longest-running daily talk show in Southern California, aired for the first time on April, 1985. Starting in 1988, the talk show hosted by Larry Mantle, was devoted to Caltech and JPL on the third Wednesday of every month and had the title “AirTalk: The Caltech Edition”.
+
+The first broadcast of &quot;AirTalk: The Caltech Edition&quot; took to the airwaves on January 20, 1988.
+The program was aired from 6 to 7 PM on KPCC,  the National Public Radio affiliate of Pasadena City College and for a few years (from 1989 to 1992) was also aired on TV channel KPAS.
+
+The show included interviews with Caltech and JPL faculty, staff, students, and alumni; as well as features such as Caltech Almanac -a detailed look at some of the many interesting people, places and discoveries in Caltech’s history-, Caltech Calendar -a listing of upcoming public events on campus- and Caltech in the News.
+
+Among the guests, many world-renowned scientists were interviewed:  Nobel Prize winners William Fowler, David Baltimore, Rudolph Marcus and David Politzer; Crafoord Prize winner Don Anderson; and former eminent administrators Caltech President Thomas Everhart, former JPL Directors Lew Allen and Edward Stone and Caltech Trustees Shirley Hufsteadler -former U.S. Secretary of Education and former judge of the Court of Appeals for the Ninth Circuit- and Peter Fay – judge of the Court of Appeals for the Eleventh Circuit are also
+Each of the interviewee shared with the California public and according to their area of specialty their cutting-edge scientific research, their view on education and the history of Caltech. The program ended in 2002.
+ The collection is divided according to the recording type: audio and video then ordered chronologically. Each recording includes an interview with either Caltech  faculty, administrators, staff, students, alumni, JPL scientists or administrators. It also includes features such as Caltech Almanac -a detailed look at some of the many interesting people, places and discoveries in Caltech’s history-, Caltech Calendar -a listing of upcoming public events on campus- and Caltech in the News.
+
+Among the guests, many world-renowned scientists were interviewed:  Nobel Prize winners William Fowler, David Baltimore, Rudolph Marcus and David Politzer; Crafoord Prize winner Don Anderson; and former eminent administrators Caltech President Thomas Everhart, former JPL Directors Lew Allen and Edward Stone and Caltech Trustees Shirley Hufsteadler -former U.S. Secretary of Education and former judge of the Court of Appeals for the Ninth Circuit- and Peter Fay – judge of the Court of Appeals for the Eleventh Circuit are also
+Each of the interviewee share with the public and according to their area of specialty their cutting-edge scientific research, their view on education and the history of Caltech.</dc:description>
+        </oai_dc>
+      </setDescription>
+    </set>
+    <set>
+      <setSpec>/repositories/2/resources/179</setSpec>
+      <setName>W. C. Crandall Collection</setName>
+      <setDescription>
+        <oai_dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+          <dc:description> This collection consists of correspondence written to and from W. C. Crandall regarding his government sponsored work along the Pacific coast, specifically the Southern California kelp beds and kelp harvesting for potash. Also includes the maps from Potash from Kelp Beds by Frank K. Cameron. The correspondence are arranged in chronological order.
+</dc:description>
+        </oai_dc>
+      </setDescription>
+    </set>
+  </ListSets>
+  <ListRecords metadataPrefix="oai_dc">
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6783</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/158</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Caltech Film Footage</dc:title>
+          <dc:relation label="Collection">Moving Image Collection</dc:relation>
+          <dc:description>Digital object in Moving Image Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000137</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6784</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/158</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Justice Douglas Discusses Civil Liberties</dc:title>
+          <dc:relation label="Collection">Moving Image Collection</dc:relation>
+          <dc:description>Digital object in Moving Image Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000138</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6786</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/158</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>For Every Action...A Reaction (1991 Rose Parade Coverage)</dc:title>
+          <dc:relation label="Collection">Moving Image Collection</dc:relation>
+          <dc:description>Digital object in Moving Image Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000221</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6785</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/158</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Caltech 1942</dc:title>
+          <dc:relation label="Collection">Moving Image Collection</dc:relation>
+          <dc:description>Digital object in Moving Image Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000139</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6787</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/158</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Caltech Nobel Centennial Video</dc:title>
+          <dc:relation label="Collection">Moving Image Collection</dc:relation>
+          <dc:description>Digital object in Moving Image Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000140</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/7601</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/34</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>UC Berkeley Virus Lab: Potassium, Magnesium, Sodium lab experiment files</dc:title>
+          <dc:relation label="Collection">Donald A. Glaser Papers</dc:relation>
+          <dc:description>Digital object in Donald A. Glaser Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/GlaserDA/GlaserDA_06_08_09B_15</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/7256</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/34</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>&quot;Crackpot&quot; letters</dc:title>
+          <dc:relation label="Collection">Donald A. Glaser Papers</dc:relation>
+          <dc:description>Digital object in Donald A. Glaser Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/GlaserDA/GlaserDA_01_05_14B_20</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/7366</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/34</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Consulting and patent regulations (conflict of interest)</dc:title>
+          <dc:relation label="Collection">Donald A. Glaser Papers</dc:relation>
+          <dc:description>Digital object in Donald A. Glaser Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/GlaserDA/GlaserDA_04_01_11B_13</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/7627</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/34</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>UC Berkeley Virus Lab: Potassium, Magnesium, Sodium lab experiment files</dc:title>
+          <dc:relation label="Collection">Donald A. Glaser Papers</dc:relation>
+          <dc:description>Digital object in Donald A. Glaser Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/GlaserDA/GlaserDA_06_08_09B_09</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/7150</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/34</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Temporal aspects of depth contrast, Vision Research Vol. 33, No. 7 1993 May</dc:title>
+          <dc:relation label="Collection">Donald A. Glaser Papers</dc:relation>
+          <dc:description>Digital object in Donald A. Glaser Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/GlaserDA/GlaserDA_07_02_05C_09</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/17089</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/219</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Einstein, standing alone</dc:title>
+          <dc:relation label="Collection">Caltech Images Collection</dc:relation>
+          <dc:description>Digital object in Caltech Images Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Images/1.8-11</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/19698</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/219</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Close up of 200-inch dome with shutters open</dc:title>
+          <dc:relation label="Collection">Caltech Images Collection</dc:relation>
+          <dc:description>Digital object in Caltech Images Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Images/10.18-11</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/27225</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/219</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Antenna, Cosmic Ray Measuring Device</dc:title>
+          <dc:relation label="Collection">Caltech Images Collection</dc:relation>
+          <dc:description>Digital object in Caltech Images Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Images/ST-CR-13.2</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/26883</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/219</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Buda / Citerioris Hvngaricae Capvt</dc:title>
+          <dc:relation label="Collection">Caltech Images Collection</dc:relation>
+          <dc:description>Digital object in Caltech Images Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Images/FA-PR-0134</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/16457</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/219</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Young George Beadle with his father and his sister Ruth</dc:title>
+          <dc:relation label="Collection">Caltech Images Collection</dc:relation>
+          <dc:description>Digital object in Caltech Images Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Images/1.2.01-59</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/9128</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/197</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Hang gliding/Model planes/Judy MacCready</dc:title>
+          <dc:relation label="Collection">Paul B. MacCready Papers</dc:relation>
+          <dc:description>Digital object in Paul B. MacCready Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/MacCreadyPB/MacCreadyPB_07_02_012_09</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/8704</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/197</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>&lt;emph render=&quot;italic&quot;&gt;Innovation in Spite of Education and Organization: Dr. Paul MacCready&lt;/emph&gt;</dc:title>
+          <dc:relation label="Collection">Paul B. MacCready Papers</dc:relation>
+          <dc:description>Digital object in Paul B. MacCready Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/MacCreadyPB/MacCreadyPB_07_03_018_07</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/8733</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/197</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Gossamer Condor: autograph book</dc:title>
+          <dc:relation label="Collection">Paul B. MacCready Papers</dc:relation>
+          <dc:description>Digital object in Paul B. MacCready Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/MacCreadyPB/MacCreadyPB_01_05_010_07</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/7860</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/197</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Precipitation initiation mechanisms and droplet characteristics of some convective cloud cores, &lt;emph render=&quot;italic&quot;&gt;Journal of Applied Meteorology&lt;/emph&gt; Vol. 7, No. 4</dc:title>
+          <dc:relation label="Collection">Paul B. MacCready Papers</dc:relation>
+          <dc:description>Digital object in Paul B. MacCready Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/MacCreadyPB/MacCreadyPB_04_01_004_02</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/8882</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/197</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Blue notebook [no. 76]</dc:title>
+          <dc:relation label="Collection">Paul B. MacCready Papers</dc:relation>
+          <dc:description>Digital object in Paul B. MacCready Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/MacCreadyPB/MacCreadyPB_03_00_010_10</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/514</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/80</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Helen Kármán, Pipö, &lt;emph render=&quot;italic&quot;&gt;et al., &lt;/emph&gt;Paris, Pasadena, New York</dc:title>
+          <dc:relation label="Collection">Theodore von Kármán Papers</dc:relation>
+          <dc:description>Digital object in Theodore von Kármán Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_00008/capsca_00008_r02_access.HD.mov</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/27452</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/80</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Smoke Composer Flow</dc:title>
+          <dc:relation label="Collection">Theodore von Kármán Papers</dc:relation>
+          <dc:description>Digital object in Theodore von Kármán Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000019</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/27454</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/80</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Wind Tunnel Tests of Tacoma Narrows Bridge</dc:title>
+          <dc:relation label="Collection">Theodore von Kármán Papers</dc:relation>
+          <dc:description>Digital object in Theodore von Kármán Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000017</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/464</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/80</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Strasbourg</dc:title>
+          <dc:relation label="Collection">Theodore von Kármán Papers</dc:relation>
+          <dc:description>Digital object in Theodore von Kármán Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://www.youtube.com/watch?v=UCjaoky4PS4</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/27449</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/80</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Kissingen: Rothenburg and Einstein</dc:title>
+          <dc:relation label="Collection">Theodore von Kármán Papers</dc:relation>
+          <dc:description>Digital object in Theodore von Kármán Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000018</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6828</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/175</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Fish Free Surface Water Tunnel</dc:title>
+          <dc:relation label="Collection">GALCIT Records</dc:relation>
+          <dc:description>Digital object in GALCIT Records</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduZ:\GALCIT\Film_Deliverables\galcit_trout_free_surface_water_tunnel\galcit_trout_free_surface_water_tunnel_access.HD.mp4</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6832</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/175</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Trout Free Surface Water Tunnel</dc:title>
+          <dc:relation label="Collection">GALCIT Records</dc:relation>
+          <dc:description>Digital object in GALCIT Records</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduZ:\GALCIT\Film_Deliverables\galcit_trout_free_surface_water_tunnel\galcit_trout_free_surface_water_tunnel_access.HD.mp4</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6826</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/175</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Dr. Bob Knapp Radar</dc:title>
+          <dc:relation label="Collection">GALCIT Records</dc:relation>
+          <dc:description>Digital object in GALCIT Records</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduZ:\GALCIT\Film_Deliverables\galcit_bob_knapp_radar\galcit_bob_knapp_radar_access.HD.mp4</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6831</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/175</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Shock Waves</dc:title>
+          <dc:relation label="Collection">GALCIT Records</dc:relation>
+          <dc:description>Digital object in GALCIT Records</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduZ:\GALCIT\Film_Deliverables\galcit_shock_waves\galcit_shock_waves_access.HD.mp4</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/17867</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/100</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Four-winged fly</dc:title>
+          <dc:relation label="Collection">Edward B. Lewis Papers</dc:relation>
+          <dc:description>Digital object in Edward B. Lewis Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Images/EBL-2</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/17866</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/100</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Two-winged fly</dc:title>
+          <dc:relation label="Collection">Edward B. Lewis Papers</dc:relation>
+          <dc:description>Digital object in Edward B. Lewis Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Images/EBL-1</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/17866</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/100</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Fly slides (12)</dc:title>
+          <dc:relation label="Collection">Edward B. Lewis Papers</dc:relation>
+          <dc:description>Digital object in Edward B. Lewis Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Images/EBL-1</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/17867</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/100</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Fly slides (12)</dc:title>
+          <dc:relation label="Collection">Edward B. Lewis Papers</dc:relation>
+          <dc:description>Digital object in Edward B. Lewis Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Images/EBL-2</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/71</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/78</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Olga Taussky-Todd Memoir</dc:title>
+          <dc:relation label="Collection">John Todd and Olga Taussky-Todd Papers</dc:relation>
+          <dc:description>Digital object in John Todd and Olga Taussky-Todd Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttp://resolver.caltech.edu/CaltechOH:OH_Todd_O</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/27971</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/78</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Olga Taussky-Todd Memoir</dc:title>
+          <dc:relation label="Collection">John Todd and Olga Taussky-Todd Papers</dc:relation>
+          <dc:description>Digital object in John Todd and Olga Taussky-Todd Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttp://resolver.caltech.edu/CaltechOH:OH_Todd_O</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/27884</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/30</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Herbert Bishop Keller Oral History Interview</dc:title>
+          <dc:relation label="Collection">Caltech Oral History Interviews</dc:relation>
+          <dc:description>Digital object in Caltech Oral History Interviews</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttp://resolver.caltech.edu/CaltechOH:OH_Keller_H</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/27815</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/30</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Richard John Bing Oral History Interview</dc:title>
+          <dc:relation label="Collection">Caltech Oral History Interviews</dc:relation>
+          <dc:description>Digital object in Caltech Oral History Interviews</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttp://resolver.caltech.edu/CaltechOH:OH_Bing_R</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/27822</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/30</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>William Bruce Bridges Oral History Interview</dc:title>
+          <dc:relation label="Collection">Caltech Oral History Interviews</dc:relation>
+          <dc:description>Digital object in Caltech Oral History Interviews</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttp://resolver.caltech.edu/CaltechOH:OH_Bridges_W</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/56</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/30</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Robert Phillip Sharp Oral History Interview</dc:title>
+          <dc:relation label="Collection">Caltech Oral History Interviews</dc:relation>
+          <dc:description>Digital object in Caltech Oral History Interviews</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttp://resolver.caltech.edu/CaltechOH:OH_Sharp_1</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/36</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/30</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Rodman W. Paul Oral History Interview</dc:title>
+          <dc:relation label="Collection">Caltech Oral History Interviews</dc:relation>
+          <dc:description>Digital object in Caltech Oral History Interviews</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttp://resolver.caltech.edu/CaltechOH:OH_Paul_R</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/27543</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/228</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>200-Inch Hale Telescope Observing Logbook 8</dc:title>
+          <dc:relation label="Collection">Palomar Observatory Records</dc:relation>
+          <dc:description>Digital object in Palomar Observatory Records</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Palomar/PT200_v08_1984-1990</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/27557</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/228</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>18-Inch Schmidt Telescope Photographic Plate Logbook 6</dc:title>
+          <dc:relation label="Collection">Palomar Observatory Records</dc:relation>
+          <dc:description>Digital object in Palomar Observatory Records</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Palomar/PP18_v06_1945-1947</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/27541</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/228</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>200-Inch Hale Telescope Observing Logbook 11</dc:title>
+          <dc:relation label="Collection">Palomar Observatory Records</dc:relation>
+          <dc:description>Digital object in Palomar Observatory Records</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Palomar/PT200_v11_2005-2012</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/27552</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/228</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>18-Inch Schmidt Telescope Photographic Plate Logbook 25</dc:title>
+          <dc:relation label="Collection">Palomar Observatory Records</dc:relation>
+          <dc:description>Digital object in Palomar Observatory Records</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Palomar/PP18_v25_1990-1990</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/27555</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/228</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>18-Inch Schmidt Telescope Photographic Plate Logbook 27</dc:title>
+          <dc:relation label="Collection">Palomar Observatory Records</dc:relation>
+          <dc:description>Digital object in Palomar Observatory Records</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/Palomar/PP18_v27_1992-1992</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/455</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/81</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>&lt;emph render=&quot;italic&quot;&gt;Isotopic Adventures - Geological, Planetological, and Cosmic &lt;/emph&gt;(2) [autobiography]</dc:title>
+          <dc:relation label="Collection">Gerald J. Wasserburg Papers</dc:relation>
+          <dc:description>Digital object in Gerald J. Wasserburg Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttp://www.annualreviews.org/doi/abs/10.1146/annurev.earth.31.100901.141409</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6773</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/21</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Travels Along the DNA Helix</dc:title>
+          <dc:relation label="Collection">Earnest C. Watson Lecture Series</dc:relation>
+          <dc:description>Digital object in Earnest C. Watson Lecture Series</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000145</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6772</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/21</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Cell Life and Cell Death</dc:title>
+          <dc:relation label="Collection">Earnest C. Watson Lecture Series</dc:relation>
+          <dc:description>Digital object in Earnest C. Watson Lecture Series</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000144</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6761</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/21</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>The Need for Nuclear Power</dc:title>
+          <dc:relation label="Collection">Earnest C. Watson Lecture Series</dc:relation>
+          <dc:description>Digital object in Earnest C. Watson Lecture Series</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000147</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6771</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/21</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Viewing the Birth of Molecules with Lasers</dc:title>
+          <dc:relation label="Collection">Earnest C. Watson Lecture Series</dc:relation>
+          <dc:description>Digital object in Earnest C. Watson Lecture Series</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000166</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/6775</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/21</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>From Dust to Us-The Birth of Stars and Planets</dc:title>
+          <dc:relation label="Collection">Earnest C. Watson Lecture Series</dc:relation>
+          <dc:description>Digital object in Earnest C. Watson Lecture Series</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000161</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/3496</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/140</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Building records</dc:title>
+          <dc:relation label="Collection">Avery House Records</dc:relation>
+          <dc:description>Digital object in Avery House Records</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduGoogleDrive/Team Drives/Archives/Digital Collections/Avery House Records/Building records (DVD)</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/3495</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/140</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>History Files</dc:title>
+          <dc:relation label="Collection">Avery House Records</dc:relation>
+          <dc:description>Digital object in Avery House Records</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduGoogleDrive/Team Drives/Archives/Digital Collections/Avery House Records/History Files (CD)</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/3157</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/124</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Victor Bjerknes</dc:title>
+          <dc:relation label="Collection">George Ellery Hale Papers</dc:relation>
+          <dc:description>Digital object in George Ellery Hale Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/HaleGE/HaleGE_10_00_150_08</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/3072</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/124</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Children’s stories and poems</dc:title>
+          <dc:relation label="Collection">George Ellery Hale Papers</dc:relation>
+          <dc:description>Digital object in George Ellery Hale Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/HaleGE/HaleGE_05_00_092_05</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/2985</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/124</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Proposed popular journal: Science News Service</dc:title>
+          <dc:relation label="Collection">George Ellery Hale Papers</dc:relation>
+          <dc:description>Digital object in George Ellery Hale Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/HaleGE/HaleGE_02_0D_075_01</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/2970</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/124</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>E. K. Wallace</dc:title>
+          <dc:relation label="Collection">George Ellery Hale Papers</dc:relation>
+          <dc:description>Digital object in George Ellery Hale Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/HaleGE/HaleGE_02_0D_073_08</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/2963</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/124</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Pasadena Music and Art Association</dc:title>
+          <dc:relation label="Collection">George Ellery Hale Papers</dc:relation>
+          <dc:description>Digital object in George Ellery Hale Papers</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://digital.archives.caltech.edu/collections/HaleGE/HaleGE_02_0D_073_01</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/359</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/18</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>AirTalk with Steven Bryant and Thomas Everhart</dc:title>
+          <dc:relation label="Collection">Air Talk: The Caltech Edition</dc:relation>
+          <dc:description>Digital object in Air Talk: The Caltech Edition</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000036</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/386</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/18</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>AirTalk with Robert Rosenstone</dc:title>
+          <dc:relation label="Collection">Air Talk: The Caltech Edition</dc:relation>
+          <dc:description>Digital object in Air Talk: The Caltech Edition</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000065</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/378</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/18</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>AirTalk with Ellen Stofan</dc:title>
+          <dc:relation label="Collection">Air Talk: The Caltech Edition</dc:relation>
+          <dc:description>Digital object in Air Talk: The Caltech Edition</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000055</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/368</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/18</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>AirTalk with Gary Lorden and Harold Zirin</dc:title>
+          <dc:relation label="Collection">Air Talk: The Caltech Edition</dc:relation>
+          <dc:description>Digital object in Air Talk: The Caltech Edition</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000045</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/367</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/18</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>AirTalk with Jeffrey Dubin and Morgan Kousser</dc:title>
+          <dc:relation label="Collection">Air Talk: The Caltech Edition</dc:relation>
+          <dc:description>Digital object in Air Talk: The Caltech Edition</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://archive.org/details/capsca_000044</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/28008</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/179</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Kelp graphs and manuscripts</dc:title>
+          <dc:relation label="Collection">W. C. Crandall Collection</dc:relation>
+          <dc:description>Digital object in W. C. Crandall Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://californiarevealed.org/do/26647b99-183f-492d-b10c-cfa4b63890e0</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/28000</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/179</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Correspondence</dc:title>
+          <dc:relation label="Collection">W. C. Crandall Collection</dc:relation>
+          <dc:description>Digital object in W. C. Crandall Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://californiarevealed.org/do/3ee046b9-aaf5-4f4c-b64c-29fde5d01a7c</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/28001</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/179</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Correspondence</dc:title>
+          <dc:relation label="Collection">W. C. Crandall Collection</dc:relation>
+          <dc:description>Digital object in W. C. Crandall Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://californiarevealed.org/do/122c61e7-e99e-48dc-a7a1-be77c4911868</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/28006</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/179</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Correspondence</dc:title>
+          <dc:relation label="Collection">W. C. Crandall Collection</dc:relation>
+          <dc:description>Digital object in W. C. Crandall Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://californiarevealed.org/do/1d138b91-6da7-42f3-aa94-310f3c35caf9</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+    <record>
+      <header>
+        <identifier>collections.archives.caltech.edu/repositories/2/digital_objects/28007</identifier>
+        <datestamp>2025-01-23</datestamp>
+        <setSpec>/repositories/2/resources/179</setSpec>
+      </header>
+      <metadata>
+        <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/">
+          <dc:title>Correspondence</dc:title>
+          <dc:relation label="Collection">W. C. Crandall Collection</dc:relation>
+          <dc:description>Digital object in W. C. Crandall Collection</dc:description>
+          <dc:identifier scheme="URI" type="resource">collections.archives.caltech.eduhttps://californiarevealed.org/do/87066699-defc-4a65-b030-ae32280b8f21</dc:identifier>
+        </oai_dc:dc>
+      </metadata>
+    </record>
+  </ListRecords>
+</OAI-PMH>
