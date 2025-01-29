@@ -336,9 +336,11 @@ def oai():
         listsets = ET.SubElement(oaixml, 'ListSets')
         for node in elem:
             # check that set is in list of collections to include
-            if node.find('./setSpec', ns).text in colls:
-                listsets.append(node)
-                count = 1
+            #if node.find('./setSpec', ns).text in colls:
+            #    listsets.append(node)
+            #    count = 1
+            # temp
+            listsets.append(node)
 
     elif verb == 'ListRecords' or verb == 'ListIdentifiers':
 
