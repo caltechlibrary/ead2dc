@@ -223,7 +223,7 @@ def oai():
     # list of collections to include
     db = get_db()
     query = "SELECT collno FROM collections WHERE incl;"
-    colls = [coll[0] for coll in db.execute(query).fetchall()]
+    colls = ['/repositories/2/resources/'+coll[0] for coll in db.execute(query).fetchall()]
 
     # empty list for errors
     errors = list()
@@ -336,11 +336,9 @@ def oai():
         listsets = ET.SubElement(oaixml, 'ListSets')
         for node in elem:
             # check that set is in list of collections to include
-            #if node.find('./setSpec', ns).text in colls:
-            #    listsets.append(node)
-            #    count = 1
-            # temp
-            listsets.append(node)
+            if node.find('./setSpec', ns).text in colls:
+                listsets.append(node)
+                count = 1
 
     elif verb == 'ListRecords' or verb == 'ListIdentifiers':
 
