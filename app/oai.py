@@ -275,7 +275,7 @@ collections, archival_objects = set(), set()
 
 dao_count = 0
 
-print('Building collections dictionary:\n')
+print('\nBuilding collections dictionary...')
 
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
@@ -295,13 +295,13 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                     else:
                         collections_dict[coll] = {(obj['uri'],linked_instance['ref'])}
 
-print('Number of digital objects:', dao_count)
+print('Number of digital objects:', dao_count, '\n')
 print('Number of collections with digital objects:', len(collections), '\n')
 print()
 
 dao_count = 0
 
-print('Collections with digital objects:\n')
+print('Collections with digital objects:...')
 
 for item in collections_dict.items():
     # print title of collection and number of digital objects
@@ -400,7 +400,7 @@ dao_count = 0
 # build ListRecords segment
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
-print('Building static repository:\n')
+print('\nBuilding static repository...\n')
 
 for coll in colls: 
 
