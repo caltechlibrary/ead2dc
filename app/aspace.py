@@ -34,31 +34,32 @@ def get_notes(id):
     uri = '/repositories/2/resources/'+id
     collection = client.get(uri)
 
-    for note in collection.json()['notes']:
-        note_type = note['type']
-        note_list = list()
-        if note['jsonmodel_type']=='note_multipart':
-            try:
-                for subnote in note['subnotes']:
-                    note_list.append(subnote['content'])
-            except:
+    try:
+        for note in collection.json()['notes']:
+            note_type = note['type']
+            note_list = list()
+            if note['jsonmodel_type']=='note_multipart':
+                try:
+                    for subnote in note['subnotes']:
+                        note_list.append(subnote['content'])
+                except:
+                    continue
+            elif note['jsonmodel_type']=='note_singlepart':
+                try:
+                    for content in note['content']:
+                        note_list.append(content)
+                except:
+                    continue
+            else:
                 continue
-        elif note['jsonmodel_type']=='note_singlepart':
-            try:
-                for content in note['content']:
-                    note_list.append(content)
-            except:
-                continue
-        else:
-            continue
 
-        if description == '' and note_type == 'abstract':
-            description = ' '.join(note_list)
-        elif description == '' and note_type == 'scopecontent':
-            description = ' '.join(note_list)
-
-        #description = description + ' (' + note_type + ') ' + ' '.join(note_list)
-
+            if description == '' and note_type == 'abstract':
+                description = ' '.join(note_list)
+            elif description == '' and note_type == 'scopecontent':
+                description = ' '.join(note_list)
+    except:
+        pass
+            #description = description + ' (' + note_type + ') ' + ' '.join(note_list)
     return description
 
 # return formatted last_update
