@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from datetime import date, datetime
 from pathlib import Path
+from urllib.parse import urlparse
 from asnake.client import ASnakeClient
 
 # FUNCTIONS
@@ -300,10 +301,7 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
 
 print('Number of digital objects:', dao_count)
 print('Number of collections with digital objects:', len(collections))
-print('Collections with digital objects:...')
-
-dao_count = 0
-do_dict = dict()
+print('Collections with digital objects...')
 
 for item in collections_dict.items():
     # print title of collection and number of digital objects
@@ -331,7 +329,6 @@ for item in collections_dict.items():
             print('no title')
         try:
             file_uri = next(generator)['file_uri']
-            dao_count += 1
         except:
             print('no file uri')
 
@@ -399,9 +396,8 @@ for coll in colls:
                                            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'}), 'dc:description')
     setDescription.text = coll[3]
 
-no_records = 0
-
 dao_count = 0
+dao_dict = dict()
 
 # build ListRecords segment
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
@@ -410,60 +406,71 @@ print('Building static repository...')
 
 for coll in colls: 
 
-    setid = coll[0]
-    collectiontitle = coll[2]
+    try:
+        setid = coll[0]
+        collectiontitle = coll[2]
+        dao_dict[setid] = dict() # initialize dictionary for collection's statistics; dictionary has the form 
+                             # {carchives: n, clibrary: n, iarchive: n, youtube: n, other: n}
+        dao_urls = set()
 
-    print(collectiontitle)
+        print(collectiontitle)
 
-    # temp
-    #j=0
+        # temp
+        #j=0
     
-    for do, ao in collections_dict[coll[0]]:
+        for do, ao in collections_dict[setid]:
 
-        #temp
-        #j += 1
-        #if j > 5:
-        #    break
+            #temp
+            #j += 1
+            #if j > 5:
+            #    break
 
-        generator = (file_version for file_version in client.get(do).json()['file_versions']
-                     if file_version['publish'] == True
-                     and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
-        try:
-            do_title = client.get(ao).json()['title']
-        except:
-            do_title = 'no title'
-            print('no title')
-        try:
-            file_uri = next(generator)['file_uri']
-            dao_count += 1
+            generator = (file_version for file_version in client.get(do).json()['file_versions']
+                         if file_version['publish'] == True
+                         and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
+            try:
+                do_title = client.get(ao).json()['title']
+            except:
+                do_title = 'no title'
+                print('no title')
+            try:
+                file_uri = next(generator)['file_uri']
+                url = urlparse(file_uri).hostname
+                if url not in dao_urls:
+                    dao_urls.add(url)
+                    if dao_dict[setid].get(url):
+                        dao_dict[setid][url] += 1
+                    else:
+                        dao_dict[setid][url] = 1
+                dao_count += 1
 
-            #create record element
-            record = ET.SubElement(ListRecords, 'record')
-            header = ET.SubElement(record, 'header')
-            identifier = ET.SubElement(header, 'identifier')
-            identifier.text = 'collections.archives.caltech.edu' + do
-            datestamp = ET.SubElement(header, 'datestamp')
-            datestamp.text = today
-            setspec = ET.SubElement(header, 'setSpec')
-            setspec.text = setid
-            metadata = ET.SubElement(record, 'metadata')
-            dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
-                                                   'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-                                                   'xmlns:dcterms': 'http://purl.org/dc/terms/'})
-            title = ET.SubElement(dc, 'dc:title')
-            title.text = do_title
-            relation = ET.SubElement(dc, 'dc:relation')
-            relation.text = collectiontitle
-            relation.attrib = {'label': 'Collection'}
-            description = ET.SubElement(dc, 'dc:description')
-            description.text = 'Digital object in ' + collectiontitle
-            identifier = ET.SubElement(dc, 'dc:identifier')
-            identifier.text = 'collections.archives.caltech.edu' + file_uri
-            identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
-            no_records += 1
-        except:
-            print('no file uri, record not created')
-
+                #create record element
+                record = ET.SubElement(ListRecords, 'record')
+                header = ET.SubElement(record, 'header')
+                identifier = ET.SubElement(header, 'identifier')
+                identifier.text = 'collections.archives.caltech.edu' + do
+                datestamp = ET.SubElement(header, 'datestamp')
+                datestamp.text = today
+                setspec = ET.SubElement(header, 'setSpec')
+                setspec.text = setid
+                metadata = ET.SubElement(record, 'metadata')
+                dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+                                                       'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+                                                       'xmlns:dcterms': 'http://purl.org/dc/terms/'})
+                title = ET.SubElement(dc, 'dc:title')
+                title.text = do_title
+                relation = ET.SubElement(dc, 'dc:relation')
+                relation.text = collectiontitle
+                relation.attrib = {'label': 'Collection'}
+                description = ET.SubElement(dc, 'dc:description')
+                description.text = 'Digital object in ' + collectiontitle
+                identifier = ET.SubElement(dc, 'dc:identifier')
+                identifier.text = 'collections.archives.caltech.edu' + file_uri
+                identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
+            except:
+                print('no file uri, record not created')
+    except:
+        print('error: collection not processed')
 
 '''
     # read EAD for collection
@@ -513,3 +520,5 @@ with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
 
 print(dao_count)
+
+print(dao_dict)
