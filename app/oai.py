@@ -185,7 +185,7 @@ def locatedao(c):
             print(c.find('./did/unitid', ns).text)
             dao_count += 1
     except:
-        pass
+        print('error: no aspace_uri')
     return True
     
 # write time of last update to db
@@ -249,16 +249,19 @@ def read_colls_from_db():
 # MAIN
 
 # read config file
+print('Reading config file...')
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
     config = json.load(f)
 
 # db location
+print('Reading database location...')
 dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
 
 # string form of date to write to each record
 today = date.today().strftime("%Y-%m-%d")
 
 # establish API connection
+print('Establishing API connection...')
 secrets = __import__('secrets')
 client = ASnakeClient(baseurl = secrets.baseurl,
                       username = secrets.username,
@@ -275,7 +278,7 @@ collections, archival_objects = set(), set()
 
 dao_count = 0
 
-print('\nBuilding collections dictionary...')
+print('Building collections dictionary...')
 
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
@@ -295,13 +298,11 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                     else:
                         collections_dict[coll] = {(obj['uri'],linked_instance['ref'])}
 
-print('Number of digital objects:', dao_count, '\n')
-print('Number of collections with digital objects:', len(collections), '\n')
-print()
+print('Number of digital objects:', dao_count)
+print('Number of collections with digital objects:', len(collections))
+print('Collections with digital objects:...')
 
 dao_count = 0
-
-print('Collections with digital objects:...')
 
 for item in collections_dict.items():
     # print title of collection and number of digital objects
@@ -327,7 +328,7 @@ for item in collections_dict.items():
             file_uri = next(generator)['file_uri']
             dao_count += 1
         except:
-            continue
+            print('error: failed to find title or file uri')
 
 # update collections info in database
 # updates collno, colltitle, description, eadurl
@@ -427,7 +428,7 @@ for coll in colls:
             file_uri = next(generator)['file_uri']
             dao_count += 1
         except:
-            continue
+            print('error: failed to find title or file uri')
 
         #create record element
         record = ET.SubElement(ListRecords, 'record')
