@@ -327,6 +327,10 @@ for item in collections_dict.items():
             do_title = client.get(ao).json()['title']
             file_uri = next(generator)['file_uri']
             dao_count += 1
+
+            # temp
+            print(do_title)
+            print(file_uri)
         except:
             print('error: failed to find title or file uri')
 
@@ -401,7 +405,7 @@ dao_count = 0
 # build ListRecords segment
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
-print('\nBuilding static repository...\n')
+print('Building static repository...')
 
 for coll in colls: 
 
