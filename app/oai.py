@@ -303,6 +303,7 @@ print('Number of collections with digital objects:', len(collections))
 print('Collections with digital objects:...')
 
 dao_count = 0
+do_dict = dict()
 
 for item in collections_dict.items():
     # print title of collection and number of digital objects
@@ -325,14 +326,14 @@ for item in collections_dict.items():
                      and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
         try:
             do_title = client.get(ao).json()['title']
+        except:
+            do_title = 'no title'
+            print('no title')
+        try:
             file_uri = next(generator)['file_uri']
             dao_count += 1
-
-            # temp
-            print(do_title)
-            print(file_uri)
         except:
-            print('error: failed to find title or file uri')
+            print('no file uri')
 
 # update collections info in database
 # updates collno, colltitle, description, eadurl
@@ -429,35 +430,40 @@ for coll in colls:
                      and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
         try:
             do_title = client.get(ao).json()['title']
+        except:
+            do_title = 'no title'
+            print('no title')
+        try:
             file_uri = next(generator)['file_uri']
             dao_count += 1
-        except:
-            print('error: failed to find title or file uri')
 
-        #create record element
-        record = ET.SubElement(ListRecords, 'record')
-        header = ET.SubElement(record, 'header')
-        identifier = ET.SubElement(header, 'identifier')
-        identifier.text = 'collections.archives.caltech.edu' + do
-        datestamp = ET.SubElement(header, 'datestamp')
-        datestamp.text = today
-        setspec = ET.SubElement(header, 'setSpec')
-        setspec.text = setid
-        metadata = ET.SubElement(record, 'metadata')
-        dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
-                                               'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-                                               'xmlns:dcterms': 'http://purl.org/dc/terms/'})
-        title = ET.SubElement(dc, 'dc:title')
-        title.text = do_title
-        relation = ET.SubElement(dc, 'dc:relation')
-        relation.text = collectiontitle
-        relation.attrib = {'label': 'Collection'}
-        description = ET.SubElement(dc, 'dc:description')
-        description.text = 'Digital object in ' + collectiontitle
-        identifier = ET.SubElement(dc, 'dc:identifier')
-        identifier.text = 'collections.archives.caltech.edu' + file_uri
-        identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
-        no_records += 1
+            #create record element
+            record = ET.SubElement(ListRecords, 'record')
+            header = ET.SubElement(record, 'header')
+            identifier = ET.SubElement(header, 'identifier')
+            identifier.text = 'collections.archives.caltech.edu' + do
+            datestamp = ET.SubElement(header, 'datestamp')
+            datestamp.text = today
+            setspec = ET.SubElement(header, 'setSpec')
+            setspec.text = setid
+            metadata = ET.SubElement(record, 'metadata')
+            dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+                                                   'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+                                                   'xmlns:dcterms': 'http://purl.org/dc/terms/'})
+            title = ET.SubElement(dc, 'dc:title')
+            title.text = do_title
+            relation = ET.SubElement(dc, 'dc:relation')
+            relation.text = collectiontitle
+            relation.attrib = {'label': 'Collection'}
+            description = ET.SubElement(dc, 'dc:description')
+            description.text = 'Digital object in ' + collectiontitle
+            identifier = ET.SubElement(dc, 'dc:identifier')
+            identifier.text = 'collections.archives.caltech.edu' + file_uri
+            identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
+            no_records += 1
+        except:
+            print('no file uri, record not created')
+
 
 '''
     # read EAD for collection
