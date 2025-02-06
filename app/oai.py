@@ -260,7 +260,7 @@ def update_db(collectionids):
         # carchives int, clibrary int, iarchive int, youtube int, other int, 
         # collid text, description text, eadurl text
         db.execute(query, [collno, eadurl, colltitle, description, collid, 0, 
-                           includedcollections[collno], 0, 0, 0, 0, 0]])
+                           includedcollections[collno], 0, 0, 0, 0, 0])
     
     db.close()
     connection.commit()
