@@ -410,7 +410,6 @@ metadataNamespace.text = "http://www.openarchives.org/OAI/2.0/oai_dc/"
 ListSets = ET.SubElement(oaixml, 'ListSets')
                          
 for coll in colls:
-    print(coll)
     oaiset = ET.SubElement(ListSets, 'set')
     setSpec = ET.SubElement(oaiset, 'setSpec')
     setSpec.text = coll[0]
@@ -431,8 +430,8 @@ print('Building static repository...')
 
 urls = set()
 
-for coll in colls: 
-    
+for coll in colls:
+
     setid = '/repositories/2/resources/' + coll[0]
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
@@ -440,17 +439,16 @@ for coll in colls:
     print(':', collectiontitle)
 
     # temp
-    j=0
+    #j=0
 
     if collections_dict.get(setid):
-        print('> found setid')
     
         for do, ao in collections_dict[setid]:
 
             #temp
-            j += 1
-            if j > 5:
-                break
+            #j += 1
+            #if j > 5:
+            #    break
 
             generator = (file_version for file_version in client.get(do).json()['file_versions']
                          if file_version['publish'] == True
