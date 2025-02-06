@@ -125,6 +125,7 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     no_records += 1
     return listrecords
 
+'''
 #builds inherited data for each record; XML build is triggered if digital object is present
 #c is the container object
 #n is the level of the container
@@ -168,7 +169,7 @@ def containerloop(container):
 
 # checks if digital object is present
 # old version: dao are in OAI
-'''
+
 def locatedao(c):    
     if c.find('./did/daogrp/daoloc', ns) is not None:
         return True
@@ -176,7 +177,7 @@ def locatedao(c):
         return True
     else:
         return False
-'''
+
 # new version
 def locatedao(c):
     global dao_count
@@ -188,6 +189,7 @@ def locatedao(c):
     except:
         print('error: no aspace_uri')
     return True
+'''
     
 # read collection info from db
 def read_colls_from_db():
@@ -198,6 +200,18 @@ def read_colls_from_db():
     db.close()
     connection.close()
     return colls
+
+# retrieve included collections from db
+def read_incl_from_db():
+    connection = sq.connect(dbpath)
+    db = connection.cursor()
+    query = 'SELECT collno,incl FROM collections'
+    incl_dict = dict()
+    for row in db.execute(query).fetchall():
+        incl_dict[row[0]] = row[1]
+    db.close()
+    connection.close()
+    return incl_dict
 
 # write time of last update to db
 # update collections info to db
@@ -302,9 +316,9 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                         collections_dict[coll] = {(obj['uri'],linked_instance['ref'])}
                         print('> added', coll, client.get(coll).json()['title'])
 
-print(':', dao_count, 'digital objects')
-print(':', len(collections), 'collections with digital objects')
-print('Collections with digital objects...')
+print('>', dao_count, 'digital objects')
+print('>', len(collections), 'collections with digital objects')
+
 '''
 for item in collections_dict.items():
     # print title of collection and number of digital objects
