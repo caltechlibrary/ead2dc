@@ -415,7 +415,7 @@ for coll in colls:
 
     # temp
     print('test')
-    dao_urls = set()
+    #dao_urls = set()
 
     print(collectiontitle)
 
