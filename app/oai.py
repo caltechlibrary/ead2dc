@@ -189,6 +189,16 @@ def locatedao(c):
         print('error: no aspace_uri')
     return True
     
+# read collection info from db
+def read_colls_from_db():
+    connection = sq.connect(dbpath)
+    db = connection.cursor()
+    query = 'SELECT collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other FROM collections'
+    colls = db.execute(query).fetchall()
+    db.close()
+    connection.close()
+    return colls
+
 # write time of last update to db
 # update collections info to db
 # colls = set of collection ids
@@ -208,7 +218,7 @@ def update_db(colls):
     query = 'INSERT INTO collections (collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);'
     for coll in colls:
         coll_info = client.get(coll).json()
-        collno = coll_info['uri']
+        collid = coll_info['uri']
         eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
         colltitle = coll_info['title']
         try:
@@ -230,22 +240,13 @@ def update_db(colls):
         # collno text, colltitle text, docount int, incl int, 
         # carchives int, clibrary int, iarchive int, youtube int, other int, 
         # collid text, description text, eadurl text
-        db.execute(query, [collno[26:], eadurl, colltitle, description, collno, 0, 0, 0, 0, 0, 0, 0])
+        db.execute(query, [collid[26:], eadurl, colltitle, description, collid, coll[5], 
+                           coll[6], coll[7], coll[8], coll[9], coll[10], coll[11]])
     
     db.close()
     connection.commit()
     connection.close()
     return
-
-# read collection info from db
-def read_colls_from_db():
-    connection = sq.connect(dbpath)
-    db = connection.cursor()
-    query = 'SELECT collno, eadurl, colltitle, description FROM collections'
-    colls = db.execute(query).fetchall()
-    db.close()
-    connection.close()
-    return colls
 
 # MAIN
 
@@ -386,6 +387,7 @@ metadataNamespace.text = "http://www.openarchives.org/OAI/2.0/oai_dc/"
 ListSets = ET.SubElement(oaixml, 'ListSets')
                          
 for coll in colls:
+    print(coll)
     oaiset = ET.SubElement(ListSets, 'set')
     setSpec = ET.SubElement(oaiset, 'setSpec')
     setSpec.text = coll[0]
