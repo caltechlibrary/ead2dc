@@ -333,7 +333,7 @@ for item in collections_dict.items():
         try:
             file_uri = next(generator)['file_uri']
         except:
-            print('no file uri')
+            print('> no file uri')
 
 # update collections info in database
 # updates collno, colltitle, description, eadurl
@@ -416,7 +416,7 @@ for coll in colls:
 
     urls = set()
 
-    print(collectiontitle)
+    print(':', collectiontitle)
 
     # temp
     j=0
