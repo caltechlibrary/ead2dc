@@ -415,7 +415,7 @@ for coll in colls:
 
     # temp
     print('test')
-    urls = set()
+    s = set()
 
     print(collectiontitle)
 
@@ -443,8 +443,8 @@ for coll in colls:
             try:
                 file_uri = next(generator)['file_uri']
                 url = urlparse(file_uri).hostname
-                if url not in urls:
-                    urls.add(url)
+                if url not in s:
+                    s.add(url)
                     if dao_dict[setid].get(url):
                         dao_dict[setid][url] += 1
                     else:
