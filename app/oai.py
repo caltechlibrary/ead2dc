@@ -325,8 +325,6 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
 print('> summary', dao_count, 'digital objects')
 print('> summary', len(collections), 'collections with digital objects')
 
-
-
 '''
 for item in collections_dict.items():
     # print title of collection and number of digital objects
@@ -431,13 +429,13 @@ ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
 print('Building static repository...')
 
+urls = set()
+
 for coll in colls: 
     
     setid = coll[0]
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
-
-    urls = set()
 
     print(':', collectiontitle)
 
@@ -553,3 +551,5 @@ with open(fileout, 'w') as f:
 print(dao_count)
 
 print(dao_dict)
+
+print(urls)
