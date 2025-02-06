@@ -422,7 +422,7 @@ for coll in colls:
     j=0
 
     if collections_dict.get(setid):
-        print('found setid')
+        print('> found setid')
     
         for do, ao in collections_dict[setid]:
 
@@ -438,7 +438,7 @@ for coll in colls:
                 do_title = client.get(ao).json()['title']
             except:
                 do_title = 'no title'
-                print('no title')
+                print('> no title')
             try:
                 file_uri = next(generator)['file_uri']
                 url = urlparse(file_uri).hostname
@@ -475,10 +475,10 @@ for coll in colls:
                 identifier.text = 'collections.archives.caltech.edu' + file_uri
                 identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
             except:
-                print('no file uri, record not created')
+                print('> no file uri, record not created')
 
     else:
-        print('no setid')
+        print('> no setid')
 
 '''
     # read EAD for collection
