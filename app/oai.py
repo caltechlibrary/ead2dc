@@ -406,6 +406,9 @@ print('Building static repository...')
 
 for coll in colls: 
 
+    # temp
+    print(coll)
+    
     setid = coll[0]
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
@@ -414,14 +417,14 @@ for coll in colls:
     print(collectiontitle)
 
     # temp
-    #j=0
+    j=0
     
     for do, ao in collections_dict[setid]:
 
         #temp
-        #j += 1
-        #if j > 5:
-        #    break
+        j += 1
+        if j > 5:
+            break
 
         generator = (file_version for file_version in client.get(do).json()['file_versions']
                      if file_version['publish'] == True
