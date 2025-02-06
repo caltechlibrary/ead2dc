@@ -219,6 +219,7 @@ def update_db(colls):
     for coll in colls:
         coll_info = client.get(coll).json()
         collid = coll_info['uri']
+        collno = collid[:26]
         eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
         colltitle = coll_info['title']
         try:
@@ -240,7 +241,7 @@ def update_db(colls):
         # collno text, colltitle text, docount int, incl int, 
         # carchives int, clibrary int, iarchive int, youtube int, other int, 
         # collid text, description text, eadurl text
-        db.execute(query, [collid[26:], eadurl, colltitle, description, collid, coll[5], 
+        db.execute(query, [collno, eadurl, colltitle, description, collid, coll[5], 
                            coll[6], coll[7], coll[8], coll[9], coll[10], coll[11]])
     
     db.close()
@@ -299,7 +300,7 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                         collections_dict[coll].add((obj['uri'], linked_instance['ref']))
                     else:
                         collections_dict[coll] = {(obj['uri'],linked_instance['ref'])}
-                        print('added', coll, obj['uri'], linked_instance['ref'])
+                        print('> added', coll)
 
 print('Number of digital objects:', dao_count)
 print('Number of collections with digital objects:', len(collections))
