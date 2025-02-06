@@ -428,11 +428,13 @@ dao_dict = dict()
 # build ListRecords segment
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
-print('Elapsed time:', time.time() - start)
+print('Elapsed time:', round(time.time() - start, 1), 'secs')
 
 print('Building static repository...')
 
 urls = set()
+
+intertime = time.time()
 
 for coll in colls:
 
@@ -440,7 +442,7 @@ for coll in colls:
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
-    print(':', collectiontitle)
+    print('*', collectiontitle)
 
     # temp
     #j=0
@@ -502,7 +504,8 @@ for coll in colls:
     else:
         print('> no setid')
 
-    print('Elapsed time:', time.time() - start)
+    print('>', round(time.time() - intertime, 1), 'secs')
+    intertime = time.time()
 
     '''
     # read EAD for collection
