@@ -309,15 +309,15 @@ for item in collections_dict.items():
     # iterate over digital objects and archival objects
 
     # temp
-    #i = 0
+    i = 0
 
     for do, ao in item[1]:
 
         # temp
         #print(item[0], do, ao)
-        #i += 1
-        #if i > 2:
-        #    break
+        i += 1
+        if i > 2:
+            break
 
         generator = (file_version for file_version in client.get(do).json()['file_versions']
                      if file_version['publish'] == True
@@ -409,8 +409,7 @@ for coll in colls:
     try:
         setid = coll[0]
         collectiontitle = coll[2]
-        dao_dict[setid] = dict() # initialize dictionary for collection's statistics; dictionary has the form 
-                             # {carchives: n, clibrary: n, iarchive: n, youtube: n, other: n}
+        dao_dict[setid] = dict() # initialize dictionary for collection's statistics
         dao_urls = set()
 
         print(collectiontitle)
