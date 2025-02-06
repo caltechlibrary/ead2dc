@@ -438,6 +438,9 @@ intertime = time.time()
 
 for coll in colls:
 
+    recs_created = 0
+    recs_skipped = 0
+
     setid = '/repositories/2/resources/' + coll[0]
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
@@ -498,11 +501,18 @@ for coll in colls:
                 identifier = ET.SubElement(dc, 'dc:identifier')
                 identifier.text = 'collections.archives.caltech.edu' + file_uri
                 identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
+
+                recs_created += 1
+
             except:
-                print('> no file uri, record not created')
+                
+                recs_skipped += 1
 
     else:
         print('> no setid')
+
+    print('>', recs_created, 'records created')
+    print('>', recs_skipped, 'records skipped')
 
     print('>', round(time.time() - intertime, 1), 'secs')
     intertime = time.time()
