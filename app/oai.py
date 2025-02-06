@@ -190,7 +190,7 @@ def locatedao(c):
         print('error: no aspace_uri')
     return True
 '''
-    
+
 # read collection info from db
 def read_colls_from_db():
     connection = sq.connect(dbpath)
@@ -216,7 +216,11 @@ def read_incl_from_db():
 # write time of last update to db
 # update collections info to db
 # colls = set of collection ids
-def update_db(colls):
+def update_db(collectionids):
+
+    # read included collections from db
+    includedcollections = read_incl_from_db()
+
     # write ISO last update
     now = datetime.now()
     last_update = now.isoformat()
@@ -230,8 +234,8 @@ def update_db(colls):
     db.execute(query)
 
     query = 'INSERT INTO collections (collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);'
-    for coll in colls:
-        coll_info = client.get(coll).json()
+    for collectionid in collectionids:
+        coll_info = client.get(collectionid).json()
         collid = coll_info['uri']
         collno = collid[:26]
         eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
@@ -255,8 +259,8 @@ def update_db(colls):
         # collno text, colltitle text, docount int, incl int, 
         # carchives int, clibrary int, iarchive int, youtube int, other int, 
         # collid text, description text, eadurl text
-        db.execute(query, [collno, eadurl, colltitle, description, collid, coll[5], 
-                           coll[6], coll[7], coll[8], coll[9], coll[10], coll[11]])
+        db.execute(query, [collno, eadurl, colltitle, description, collid, 0, 
+                           includedcollections[collno], 0, 0, 0, 0, 0]])
     
     db.close()
     connection.commit()
@@ -316,8 +320,8 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                         collections_dict[coll] = {(obj['uri'],linked_instance['ref'])}
                         print('> added', coll, client.get(coll).json()['title'])
 
-print('>', dao_count, 'digital objects')
-print('>', len(collections), 'collections with digital objects')
+print('> summary', dao_count, 'digital objects')
+print('> summary', len(collections), 'collections with digital objects')
 
 '''
 for item in collections_dict.items():
