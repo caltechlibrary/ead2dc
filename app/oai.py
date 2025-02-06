@@ -386,13 +386,13 @@ metadataNamespace.text = "http://www.openarchives.org/OAI/2.0/oai_dc/"
 ListSets = ET.SubElement(oaixml, 'ListSets')
                          
 for coll in colls:
-    set = ET.SubElement(ListSets, 'set')
-    setSpec = ET.SubElement(set, 'setSpec')
+    oaiset = ET.SubElement(ListSets, 'set')
+    setSpec = ET.SubElement(oaiset, 'setSpec')
     setSpec.text = coll[0]
-    setName = ET.SubElement(set, 'setName')
+    setName = ET.SubElement(oaiset, 'setName')
     setName.text = coll[2]
     setDescription = ET.SubElement(ET.SubElement(ET.SubElement(
-        set, 'setDescription'), 'oai_dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+        oaiset, 'setDescription'), 'oai_dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'}), 'dc:description')
     setDescription.text = coll[3]
 
@@ -413,9 +413,7 @@ for coll in colls:
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
-    # temp
-    print('test')
-    s = set()
+    urls = set()
 
     print(collectiontitle)
 
@@ -443,8 +441,8 @@ for coll in colls:
             try:
                 file_uri = next(generator)['file_uri']
                 url = urlparse(file_uri).hostname
-                if url not in s:
-                    s.add(url)
+                if url not in urls:
+                    urls.add(url)
                     if dao_dict[setid].get(url):
                         dao_dict[setid][url] += 1
                     else:
