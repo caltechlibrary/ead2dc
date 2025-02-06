@@ -300,12 +300,12 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                         collections_dict[coll].add((obj['uri'], linked_instance['ref']))
                     else:
                         collections_dict[coll] = {(obj['uri'],linked_instance['ref'])}
-                        print('> added', coll)
+                        print('> added', coll, client.get(coll).json()['title'])
 
-print('Number of digital objects:', dao_count)
-print('Number of collections with digital objects:', len(collections))
+print(':', dao_count, 'digital objects')
+print(':', len(collections), 'collections with digital objects')
 print('Collections with digital objects...')
-
+'''
 for item in collections_dict.items():
     # print title of collection and number of digital objects
     print(client.get(item[0]).json()['title'], ':', len(item[1]), 'digital objects')
@@ -334,7 +334,8 @@ for item in collections_dict.items():
             file_uri = next(generator)['file_uri']
         except:
             print('> no file uri')
-
+'''
+            
 # update collections info in database
 # updates collno, colltitle, description, eadurl
 # does not update docount, incl, carchives clibrary, iarchive, youtube, other, collid
