@@ -434,6 +434,7 @@ urls = set()
 for coll in colls: 
     
     setid = coll[0]
+    collid = '/repositories/2/resources/' + setid
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
