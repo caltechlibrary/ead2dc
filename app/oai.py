@@ -299,6 +299,7 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                         collections_dict[coll].add((obj['uri'], linked_instance['ref']))
                     else:
                         collections_dict[coll] = {(obj['uri'],linked_instance['ref'])}
+                        print('added', coll, obj['uri'], linked_instance['ref'])
 
 print('Number of digital objects:', dao_count)
 print('Number of collections with digital objects:', len(collections))
