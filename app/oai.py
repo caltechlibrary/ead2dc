@@ -192,6 +192,7 @@ def locatedao(c):
 '''
 
 # read collection info from db
+# returns list of collection tuples
 def read_colls_from_db():
     connection = sq.connect(dbpath)
     db = connection.cursor()
@@ -202,6 +203,7 @@ def read_colls_from_db():
     return colls
 
 # retrieve included collections from db
+# returns dictionary of collection numbers and inclusion status
 def read_incl_from_db():
     connection = sq.connect(dbpath)
     db = connection.cursor()
@@ -215,7 +217,7 @@ def read_incl_from_db():
 
 # write time of last update to db
 # update collections info to db
-# colls = set of collection ids
+# collectionids = set of collection ids
 def update_db(collectionids):
 
     # read included collections from db
@@ -237,7 +239,7 @@ def update_db(collectionids):
     for collectionid in collectionids:
         coll_info = client.get(collectionid).json()
         collid = coll_info['uri']
-        collno = collid[:26]
+        collno = collid[26:]
         eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
         colltitle = coll_info['title']
         try:
