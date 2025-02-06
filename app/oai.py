@@ -1,4 +1,4 @@
-import requests, json
+import requests, json, time
 import sqlite3 as sq
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
@@ -271,6 +271,8 @@ def update_db(collectionids):
 
 # MAIN
 
+start = time.time()
+
 # read config file
 print('Reading config file...')
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
@@ -426,6 +428,8 @@ dao_dict = dict()
 # build ListRecords segment
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
+print('Elapsed time:', time.time() - start)
+
 print('Building static repository...')
 
 urls = set()
@@ -461,7 +465,6 @@ for coll in colls:
             try:
                 file_uri = next(generator)['file_uri']
                 url = urlparse(file_uri).hostname
-                print(url)
                 if url not in urls:
                     urls.add(url)
                     if dao_dict[setid].get(url):
@@ -499,7 +502,9 @@ for coll in colls:
     else:
         print('> no setid')
 
-'''
+    print('Elapsed time:', time.time() - start)
+
+    '''
     # read EAD for collection
     response = requests.get(coll[1])
     root = ET.fromstring(response.content)
@@ -551,3 +556,7 @@ print(dao_count)
 print(dao_dict)
 
 print(urls)
+
+print('Elapsed time:', time.time() - start)
+
+print('Done.')
