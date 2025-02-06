@@ -405,9 +405,6 @@ ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 print('Building static repository...')
 
 for coll in colls: 
-
-    # temp
-    print(coll)
     
     setid = coll[0]
     collectiontitle = coll[2]
@@ -441,6 +438,7 @@ for coll in colls:
             try:
                 file_uri = next(generator)['file_uri']
                 url = urlparse(file_uri).hostname
+                print(url)
                 if url not in urls:
                     urls.add(url)
                     if dao_dict[setid].get(url):
