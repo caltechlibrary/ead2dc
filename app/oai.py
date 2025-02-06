@@ -473,6 +473,9 @@ for coll in colls:
             except:
                 print('no file uri, record not created')
 
+    else:
+        print('no setid')
+
 '''
     # read EAD for collection
     response = requests.get(coll[1])
