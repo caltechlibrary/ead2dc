@@ -412,6 +412,9 @@ for coll in colls:
     setid = coll[0]
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
+
+    # temp
+    print('test')
     dao_urls = set()
 
     print(collectiontitle)
