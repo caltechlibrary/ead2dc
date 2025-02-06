@@ -262,7 +262,7 @@ def update_db(collectionids):
         # carchives int, clibrary int, iarchive int, youtube int, other int, 
         # collid text, description text, eadurl text
         db.execute(query, [collno, eadurl, colltitle, description, collid, 0, 
-                           includedcollections[collno], 0, 0, 0, 0, 0])
+                           1, 0, 0, 0, 0, 0])
     
     db.close()
     connection.commit()
@@ -324,6 +324,8 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
 
 print('> summary', dao_count, 'digital objects')
 print('> summary', len(collections), 'collections with digital objects')
+
+
 
 '''
 for item in collections_dict.items():
