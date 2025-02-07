@@ -125,72 +125,6 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     no_records += 1
     return listrecords
 
-'''
-#builds inherited data for each record; XML build is triggered if digital object is present
-#c is the container object
-#n is the level of the container
-def inheritdata(c, n):
-    e = c.find('./did/unittitle', ns)
-    if e is not None:
-        title = (c.attrib['level'], e.text)
-    else:
-        title = ('', '')
-    if len(inheriteddata) < n:
-        inheriteddata.append(title)
-    elif len(inheriteddata) == n:
-        inheriteddata[n-1] = title
-    else:
-        for i in range(len(inheriteddata)):
-            if i >= n:
-                inheriteddata.pop()
-        inheriteddata[n-1] = title
-    
-    # temp
-    if True:
-    #if locatedao(c):
-        buildrecordxml(ListRecords, c, collectiontitle, inheriteddata)
-    return
-
-#loop over c recursively
-def containerloop(container):
-    global n
-    first = True
-    for c in container.findall('./c', ns):
-        if first:
-            first = False
-            n += 1
-        #print(n, c.attrib['id'], c.attrib['level'])
-        inheritdata(c, n)
-        containerloop(c)
-        if not first:
-            n -= 1
-            first = True
-    return
-
-# checks if digital object is present
-# old version: dao are in OAI
-
-def locatedao(c):    
-    if c.find('./did/daogrp/daoloc', ns) is not None:
-        return True
-    elif c.find('./did/dao', ns) is not None:
-        return True
-    else:
-        return False
-
-# new version
-def locatedao(c):
-    global dao_count
-    try:
-        id_type = c.find('./did/unitid', ns).attrib['type']
-        if id_type == 'aspace_uri':
-            print(c.find('./did/unitid', ns).text)
-            dao_count += 1
-    except:
-        print('error: no aspace_uri')
-    return True
-'''
-
 # read collection info from db
 # returns list of collection tuples
 def read_colls_from_db():
@@ -326,37 +260,6 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
 
 print('> summary', dao_count, 'digital objects')
 print('> summary', len(collections), 'collections with digital objects')
-
-'''
-for item in collections_dict.items():
-    # print title of collection and number of digital objects
-    print(client.get(item[0]).json()['title'], ':', len(item[1]), 'digital objects')
-    # iterate over digital objects and archival objects
-
-    # temp
-    i = 0
-
-    for do, ao in item[1]:
-
-        # temp
-        #print(item[0], do, ao)
-        i += 1
-        if i > 2:
-            break
-
-        generator = (file_version for file_version in client.get(do).json()['file_versions']
-                     if file_version['publish'] == True
-                     and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
-        try:
-            do_title = client.get(ao).json()['title']
-        except:
-            do_title = 'no title'
-            print('no title')
-        try:
-            file_uri = next(generator)['file_uri']
-        except:
-            print('> no file uri')
-'''
             
 # update collections info in database
 # updates collno, colltitle, description, eadurl
@@ -423,6 +326,7 @@ for coll in colls:
     setDescription.text = coll[3]
 
 dao_count = 0
+dao_skipped = 0
 dao_dict = dict()
 
 # build ListRecords segment
@@ -445,7 +349,7 @@ for coll in colls:
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
-    print('*', collectiontitle)
+    print(collectiontitle)
 
     # temp
     #j=0
@@ -472,10 +376,10 @@ for coll in colls:
                 url = urlparse(file_uri).hostname
                 if url not in urls:
                     urls.add(url)
-                    if dao_dict[setid].get(url):
-                        dao_dict[setid][url] += 1
-                    else:
-                        dao_dict[setid][url] = 1
+                if dao_dict[setid].get(url):
+                    dao_dict[setid][url] += 1
+                else:
+                    dao_dict[setid][url] = 1
                 dao_count += 1
 
                 #create record element
@@ -507,6 +411,7 @@ for coll in colls:
             except:
                 
                 recs_skipped += 1
+                dao_skipped += 1
 
     else:
         print('> no setid')
@@ -517,59 +422,18 @@ for coll in colls:
     print('>', round(time.time() - intertime, 1), 'secs')
     intertime = time.time()
 
-    '''
-    # read EAD for collection
-    response = requests.get(coll[1])
-    root = ET.fromstring(response.content)
-
-    if root.find('.//archdesc', ns) is None:
-        continue
-
-    #isolate the EAD portion of the file
-    ead = root.find('.//ead', ns)
-    #isolate the archdesc portion of the file
-    archdesc = ead.find('.//archdesc', ns)
-    #isolate the dsc portion of the file
-    dsc = archdesc.find('.//dsc', ns)
-    #save the collection title & id
-    collectiontitle = archdesc.find('.//did/unittitle', ns).text
-    collectionid = archdesc.find('.//did/unitid', ns).text
-
-    # build ListRecords segment
-    ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
-    # iterate over containers to collect inherited data and build records
-    # iteration over containers
-
-    # version without enumeration of c
-
-    # temp
-    k = 0
-
-    for c in dsc.findall('./c', ns):
-
-        # temp
-        k += 1
-        if k > 2:
-            break
-
-        n = 1
-        inheriteddata = list()
-        inheritdata(c, n)
-        #print(n, c.attrib['id'], c.attrib['level'])
-        containerloop(c)
-'''
-
 #write to disk
 fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
 
-print(dao_count)
+print(dao_count, 'total records created')
+print(dao_skipped, 'total records skipped')
 
 print(dao_dict)
 
 print(urls)
 
-print('Elapsed time:', time.time() - start)
+print('Total elapsed time:', round(time.time() - start, 1))
 
 print('Done.')
