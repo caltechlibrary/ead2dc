@@ -214,7 +214,7 @@ query = 'DELETE FROM collections;'
 db.execute(query)
 
 query = 'INSERT INTO collections (collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);'
-for collectionid in collectionids:
+for collectionid in collections:
     coll_info = client.get(collectionid).json()
     collid = coll_info['uri']
     collno = collid[26:]
