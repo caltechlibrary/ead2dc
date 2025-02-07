@@ -125,84 +125,6 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     no_records += 1
     return listrecords
 
-# read collection info from db
-# returns list of collection tuples
-def read_colls_from_db():
-    connection = sq.connect(dbpath)
-    db = connection.cursor()
-    query = 'SELECT collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other FROM collections'
-    colls = db.execute(query).fetchall()
-    db.close()
-    connection.close()
-    return colls
-
-# retrieve included collections from db
-# returns dictionary of collection numbers and inclusion status
-def read_incl_from_db():
-    connection = sq.connect(dbpath)
-    db = connection.cursor()
-    query = 'SELECT collno,incl FROM collections'
-    incl_dict = dict()
-    for row in db.execute(query).fetchall():
-        incl_dict[row[0]] = row[1]
-    db.close()
-    connection.close()
-    return incl_dict
-
-# write time of last update to db
-# update collections info to db
-# collectionids = set of collection ids
-def update_db(collectionids):
-
-    # read included collections from db
-    includedcollections = read_incl_from_db()
-
-    # write ISO last update
-    now = datetime.now()
-    last_update = now.isoformat()
-    connection = sq.connect(dbpath)
-    db = connection.cursor()
-    
-    query = 'UPDATE last_update SET dt=? WHERE fn=?;'
-    db.execute(query, [last_update, 'xml'])
-    
-    query = 'DELETE FROM collections;'
-    db.execute(query)
-
-    query = 'INSERT INTO collections (collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);'
-    for collectionid in collectionids:
-        coll_info = client.get(collectionid).json()
-        collid = coll_info['uri']
-        collno = collid[26:]
-        eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
-        colltitle = coll_info['title']
-        try:
-            description = [note for note in coll_info['notes'] if (note['type'] == 'scopecontent' or note['type'] == 'abstract') and note['publish']]
-        except:
-            description = None
-        if description:
-            try:
-                notepart1 = ' '.join([note['content'][0] for note in description if note['jsonmodel_type'] == 'note_singlepart'])
-            except:
-                notepart1 = ''
-            try:
-                notepart2 = ' '.join([note['subnotes'][0]['content'] for note in description if note['jsonmodel_type'] == 'note_multipart'])
-            except:
-                notepart2 = ''
-            description = notepart1 + ' ' + notepart2
-        else:
-            description = ''
-        # collno text, colltitle text, docount int, incl int, 
-        # carchives int, clibrary int, iarchive int, youtube int, other int, 
-        # collid text, description text, eadurl text
-        db.execute(query, [collno, eadurl, colltitle, description, collid, 0, 
-                           1, 0, 0, 0, 0, 0])
-    
-    db.close()
-    connection.commit()
-    connection.close()
-    return
-
 # MAIN
 
 start = time.time()
@@ -264,10 +186,74 @@ print('> summary', len(collections), 'collections with digital objects')
 # update collections info in database
 # updates collno, colltitle, description, eadurl
 # does not update docount, incl, carchives clibrary, iarchive, youtube, other, collid
-update_db(collections)
+# write time of last update to db
+# collectionids = set of collection ids
 
-# read collections from database
-colls = read_colls_from_db()
+# read included collections from db
+# retrieve included collections from db
+# returns dictionary of collection numbers and inclusion status
+connection = sq.connect(dbpath)
+db = connection.cursor()
+query = 'SELECT collno,incl FROM collections'
+includedcollections = dict()
+for row in db.execute(query).fetchall():
+    includedcollections[row[0]] = row[1]
+db.close()
+connection.close()
+
+# write ISO last update
+now = datetime.now()
+last_update = now.isoformat()
+connection = sq.connect(dbpath)
+db = connection.cursor()
+    
+query = 'UPDATE last_update SET dt=? WHERE fn=?;'
+db.execute(query, [last_update, 'xml'])
+  
+query = 'DELETE FROM collections;'
+db.execute(query)
+
+query = 'INSERT INTO collections (collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);'
+for collectionid in collectionids:
+    coll_info = client.get(collectionid).json()
+    collid = coll_info['uri']
+    collno = collid[26:]
+    eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
+    colltitle = coll_info['title']
+    try:
+        description = [note for note in coll_info['notes'] if (note['type'] == 'scopecontent' or note['type'] == 'abstract') and note['publish']]
+    except:
+        description = None
+    if description:
+        try:
+            notepart1 = ' '.join([note['content'][0] for note in description if note['jsonmodel_type'] == 'note_singlepart'])
+        except:
+            notepart1 = ''
+        try:
+            notepart2 = ' '.join([note['subnotes'][0]['content'] for note in description if note['jsonmodel_type'] == 'note_multipart'])
+        except:
+            notepart2 = ''
+        description = notepart1 + ' ' + notepart2
+    else:
+        description = ''
+    # collno text, colltitle text, docount int, incl int, 
+    # carchives int, clibrary int, iarchive int, youtube int, other int, 
+    # collid text, description text, eadurl text
+    db.execute(query, [collno, eadurl, colltitle, description, collid, 0, 
+                       1, 0, 0, 0, 0, 0])
+    
+db.close()
+connection.commit()
+connection.close()
+
+# read collection info from db
+# colls is a list of tuples
+connection = sq.connect(dbpath)
+db = connection.cursor()
+query = 'SELECT collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other FROM collections'
+colls = db.execute(query).fetchall()
+db.close()
+connection.close()
 
 #temp
 #for coll in colls:
