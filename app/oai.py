@@ -130,9 +130,9 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
 start = time.time()
 
 # read config file
-print('Reading config file...')
-with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
-    config = json.load(f)
+#print('Reading config file...')
+#with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
+#    config = json.load(f)
 
 # db location
 print('Reading database location...')
@@ -198,14 +198,10 @@ query = 'SELECT collno,incl FROM collections'
 includedcollections = dict()
 for row in db.execute(query).fetchall():
     includedcollections[row[0]] = row[1]
-db.close()
-connection.close()
 
 # write ISO last update
 now = datetime.now()
 last_update = now.isoformat()
-connection = sq.connect(dbpath)
-db = connection.cursor()
     
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
 db.execute(query, [last_update, 'xml'])
@@ -242,14 +238,8 @@ for collectionid in collections:
     db.execute(query, [collno, eadurl, colltitle, description, collid, 0, 
                        1, 0, 0, 0, 0, 0])
     
-db.close()
-connection.commit()
-connection.close()
-
 # read collection info from db
 # colls is a list of tuples
-connection = sq.connect(dbpath)
-db = connection.cursor()
 query = 'SELECT collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other FROM collections'
 colls = db.execute(query).fetchall()
 db.close()
