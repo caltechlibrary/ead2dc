@@ -129,11 +129,6 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
 
 start = time.time()
 
-# read config file
-#print('Reading config file...')
-#with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
-#    config = json.load(f)
-
 # db location
 print('Reading database location...')
 dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
@@ -206,6 +201,7 @@ last_update = now.isoformat()
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
 db.execute(query, [last_update, 'xml'])
   
+# delete all records from db
 query = 'DELETE FROM collections;'
 db.execute(query)
 
@@ -236,13 +232,14 @@ for collectionid in collections:
     # carchives int, clibrary int, iarchive int, youtube int, other int, 
     # collid text, description text, eadurl text
     db.execute(query, [collno, eadurl, colltitle, description, collid, 0, 
-                       1, 0, 0, 0, 0, 0])
+                       includedcollections[collectionid], 0, 0, 0, 0, 0])
     
 # read collection info from db
 # colls is a list of tuples
 query = 'SELECT collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other FROM collections'
 colls = db.execute(query).fetchall()
 db.close()
+connection.commit()
 connection.close()
 
 #temp
@@ -398,10 +395,37 @@ for coll in colls:
     print('>', round(time.time() - intertime, 1), 'secs')
     intertime = time.time()
 
+connection = sq.connect(dbpath)
+db = connection.cursor()
+for collid in dao_dict:
+    for url in dao_dict[collid]:
+        if url == 'digital.archives.caltech.edu' or url == 'californiarevealed.org':
+            domain = 'carchives'
+            dcount = dao_dict[collid]['digital.archives.caltech.edu']+dao_dict[collid]['californiarevealed.org']
+        elif url == 'archive.org':
+            domain = 'iarchive'
+            dcount = dao_dict[collid][url]
+        elif url == 'youtube.com' or url == 'youtu.be':
+            domain = 'youtube'
+            dcount = dao_dict[collid]['youtube.com']+dao_dict[collid]['youtu.be']
+        elif url == 'resolver.caltech.edu' or url == 'www.annualreviews.org':
+            domain = 'clibrary'
+            dcount = dao_dict[collid]['resolver.caltech.edu']+dao_dict[collid]['www.annualreviews.org']
+        query = 'UPDATE collections SET '+domain+'=? WHERE collid=?;'
+        db.execute(query, [dcount, collid])
+query = 'UPDATE last_update SET dt=? WHERE fn=?;'
+db.execute(query, [last_update, 'xml'])
+db.close()
+connection.commit()
+connection.close()
+
 #write to disk
 fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
+
+for item in dao_dict:
+
 
 print(dao_count, 'total records created')
 print(dao_skipped, 'total records skipped')
