@@ -424,7 +424,11 @@ fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
 
-for item in dao_dict:
+for collection in dao_dict:
+    print(collection)
+    for url in dao_dict[collection]:
+        print('>', url, dao_dict[collection][url])
+
 
 
 print(dao_count, 'total records created')
