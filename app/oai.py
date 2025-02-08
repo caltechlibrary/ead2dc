@@ -411,6 +411,9 @@ for collid in dao_dict:
         elif url == 'resolver.caltech.edu' or url == 'www.annualreviews.org':
             domain = 'clibrary'
             dcount = dao_dict[collid]['resolver.caltech.edu']+dao_dict[collid]['www.annualreviews.org']
+        else:
+            domain = 'other'
+            dcount = dao_dict[collid][url]
         query = 'UPDATE collections SET '+domain+'=? WHERE collid=?;'
         db.execute(query, [dcount, collid])
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
