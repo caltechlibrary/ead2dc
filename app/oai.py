@@ -338,7 +338,8 @@ for coll in colls:
 
             generator = (file_version for file_version in client.get(do).json()['file_versions']
                          if file_version['publish'] == True
-                         and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'])
+                         and file_version.get('use_statement', 'ok') 
+                         not in ['image-thumbnail', 'URL-Redirected'])
             try:
                 do_title = client.get(ao).json()['title']
             except:
@@ -347,12 +348,22 @@ for coll in colls:
             try:
                 file_uri = next(generator)['file_uri']
                 url = urlparse(file_uri).hostname
+                if url == 'resolver.caltech.edu' or url == 'www.annualreviews.org':
+                    hostcategory = 'clibrary'
+                elif url == 'archive.org':
+                    hostcategory = 'iarchive'
+                elif url == 'digital.archives.caltech.edu' or url == 'californiarevealed.org':
+                    hostcategory = 'carchives'
+                elif url == 'youtube.com' or url == 'youtu.be':
+                    hostcategory = 'youtube'
+                else:
+                    hostcategory = 'other'
                 if url not in urls:
                     urls.add(url)
-                if dao_dict[setid].get(url):
-                    dao_dict[setid][url] += 1
+                if dao_dict[setid].get(hostcategory):
+                    dao_dict[setid][hostcategory] += 1
                 else:
-                    dao_dict[setid][url] = 1
+                    dao_dict[setid][hostcategory] = 1
                 dao_count += 1
 
                 #create record element
@@ -398,24 +409,9 @@ for coll in colls:
 connection = sq.connect(dbpath)
 db = connection.cursor()
 for collid in dao_dict:
-    for url in dao_dict[collid]:
-        if url == 'digital.archives.caltech.edu' or url == 'californiarevealed.org':
-            domain = 'carchives'
-            dcount = dao_dict[collid]['digital.archives.caltech.edu']+dao_dict[collid]['californiarevealed.org']
-        elif url == 'archive.org':
-            domain = 'iarchive'
-            dcount = dao_dict[collid][url]
-        elif url == 'youtube.com' or url == 'youtu.be':
-            domain = 'youtube'
-            dcount = dao_dict[collid]['youtube.com']+dao_dict[collid]['youtu.be']
-        elif url == 'resolver.caltech.edu' or url == 'www.annualreviews.org':
-            domain = 'clibrary'
-            dcount = dao_dict[collid]['resolver.caltech.edu']+dao_dict[collid]['www.annualreviews.org']
-        else:
-            domain = 'other'
-            dcount = dao_dict[collid][url]
-        query = 'UPDATE collections SET '+domain+'=? WHERE collid=?;'
-        db.execute(query, [dcount, collid])
+    for hostcategory in dao_dict[collid]:
+        query = 'UPDATE collections SET '+hostcategory+'=? WHERE collid=?;'
+        db.execute(query, [dao_dict[collid][hostcategory], collid])
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
 db.execute(query, [last_update, 'xml'])
 db.close()
