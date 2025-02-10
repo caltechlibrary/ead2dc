@@ -319,6 +319,7 @@ for coll in colls:
     recs_skipped = 0
 
     setid = '/repositories/2/resources/' + coll[0]
+    setspec = coll[0]
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
@@ -374,7 +375,7 @@ for coll in colls:
                 datestamp = ET.SubElement(header, 'datestamp')
                 datestamp.text = today
                 setspec = ET.SubElement(header, 'setSpec')
-                setspec.text = setid
+                setspec.text = setspec
                 metadata = ET.SubElement(record, 'metadata')
                 dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                                        'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
