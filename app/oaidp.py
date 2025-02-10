@@ -101,7 +101,9 @@ def search():
 @bp.route('/collections')
 def collections():
     db = get_db()
-    totals = db.execute('SELECT total,caltecharchives,caltechlibrary,internetarchive,youtube,other FROM totals;').fetchone()
+    query = "SELECT total, caltecharchives, caltechlibrary, \
+                    internetarchive, youtube, other FROM totals;"
+    totals = db.execute(query).fetchone()
     return render_template('collections.html', 
                            output=read_colls(), 
                            dt_col=get_last_update('col'),
@@ -223,7 +225,7 @@ def oai():
     # list of collections to include
     db = get_db()
     query = "SELECT collno FROM collections WHERE incl;"
-    colls = ['/repositories/2/resources/'+coll[0] for coll in db.execute(query).fetchall()]
+    colls = db.execute(query).fetchall()
 
     # empty list for errors
     errors = list()
