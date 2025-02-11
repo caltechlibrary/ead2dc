@@ -343,7 +343,7 @@ def oai():
 
     elif verb == 'ListRecords' or verb == 'ListIdentifiers':
 
-        elem = root.find('.//ListRecords', ns)
+        elem = root.find('./ListRecords', ns)
         # create OAI-PMH XML object
         oaixml = ET.Element('OAI-PMH')
         respDate = ET.SubElement(oaixml, 'responseDate')
@@ -353,8 +353,7 @@ def oai():
         rquest.text = dpurl
         listrecords = ET.SubElement(oaixml, 'ListRecords')
         listrecords.attrib = {'metadataPrefix': 'oai_dc'}
-        #recrds = root.findall('.//{http://www.openarchives.org/OAI/2.0/}record')
-        recrds = elem.findall('.//{http://www.openarchives.org/OAI/2.0/}record')
+        recrds = elem.findall('./{http://www.openarchives.org/OAI/2.0/}record')
 
         for recrd in recrds:
 
@@ -411,7 +410,7 @@ def oai():
             rquest.attrib = {'verb': 'GetRecord', 'identifier': identifier, 'metaDataPrefix': 'oai_dc'}
             rquest.text = dpurl
             getrecord = ET.SubElement(oaixml, 'GetRecord')
-            if root.find('.//ListRecords/record/header/setSpec', ns).text in colls:
+            if root.find('./ListRecords/record/header/setSpec', ns).text in colls:
                 try:
                     record = root.find(f'.//identifier[.="{identifier}"]/../../.', ns)
                     getrecord.append(record)
