@@ -358,12 +358,11 @@ def oai():
 
         for recrd in recrds:
 
-            if (recrd.find('.//setSpec', ns).text == set or set == '000') and \
-                recrd.find('.//setSpec', ns).text in colls:
-            #if recrd.find('.//setSpec', ns).text in colls:
+            if (recrd.find('./header/setSpec', ns).text == set or set == '000') and \
+                recrd.find('./header/setSpec', ns).text in colls:
 
-                if recrd.find('.//datestamp', ns).text >= datefrom and \
-                   recrd.find('.//datestamp', ns).text <= dateuntil:
+                if recrd.find('./header/datestamp', ns).text >= datefrom and \
+                   recrd.find('./header/datestamp', ns).text <= dateuntil:
 
                     cursor += 1
 
