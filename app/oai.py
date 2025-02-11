@@ -33,7 +33,7 @@ def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
     datestamp = ET.SubElement(header, 'datestamp')
     datestamp.text = today
     setspec = ET.SubElement(header, 'setSpec')
-    setspec.text = setid
+    setspec.text = setid[26:]
     metadata = ET.SubElement(record, 'metadata')
     dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
@@ -290,7 +290,7 @@ ListSets = ET.SubElement(oaixml, 'ListSets')
 for coll in colls:
     oaiset = ET.SubElement(ListSets, 'set')
     setSpec = ET.SubElement(oaiset, 'setSpec')
-    setSpec.text = coll[4]
+    setSpec.text = coll[0]
     setName = ET.SubElement(oaiset, 'setName')
     setName.text = coll[2]
     setDescription = ET.SubElement(ET.SubElement(ET.SubElement(
@@ -374,7 +374,7 @@ for coll in colls:
                 datestamp = ET.SubElement(header, 'datestamp')
                 datestamp.text = today
                 setspec = ET.SubElement(header, 'setSpec')
-                setspec.text = coll[4]
+                setspec.text = coll[0]
                 metadata = ET.SubElement(record, 'metadata')
                 dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                                        'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
