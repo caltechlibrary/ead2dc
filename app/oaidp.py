@@ -226,6 +226,7 @@ def oai():
     db = get_db()
     query = "SELECT collno FROM collections WHERE incl;"
     colls = [collno[0] for collno in db.execute(query).fetchall()]
+    print(colls)
 
     # empty list for errors
     errors = list()
