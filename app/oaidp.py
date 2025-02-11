@@ -226,7 +226,6 @@ def oai():
     db = get_db()
     query = "SELECT collno FROM collections WHERE incl;"
     colls = [collno[0] for collno in db.execute(query).fetchall()]
-    print(colls)
 
     # empty list for errors
     errors = list()
@@ -339,8 +338,8 @@ def oai():
         listsets = ET.SubElement(oaixml, 'ListSets')
         for node in elem:
             # check that set is in list of collections to include
-            print(node.find('./setSpec', ns).text)
-            print(colls)
+            #print(node.find('./setSpec', ns).text)
+            #print(colls)
             if node.find('./setSpec', ns).text in colls:
                 listsets.append(node)
                 count = 1
@@ -361,8 +360,9 @@ def oai():
 
         for recrd in recrds:
 
-            if (recrd.find('.//setSpec', ns).text == set or set == '000') and \
-                recrd.find('.//setSpec', ns).text in colls:
+            #if (recrd.find('.//setSpec', ns).text == set or set == '000') and \
+            #    recrd.find('.//setSpec', ns).text in colls:
+            if recrd.find('.//setSpec', ns).text in colls:
 
                 if recrd.find('.//datestamp', ns).text >= datefrom and \
                    recrd.find('.//datestamp', ns).text <= dateuntil:
