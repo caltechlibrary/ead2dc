@@ -354,7 +354,7 @@ def oai():
         listrecords = ET.SubElement(oaixml, 'ListRecords')
         listrecords.attrib = {'metadataPrefix': 'oai_dc'}
         #recrds = root.findall('.//{http://www.openarchives.org/OAI/2.0/}record')
-        recrds = elem.findall('.//record')
+        recrds = elem.findall('.//{http://www.openarchives.org/OAI/2.0/}record')
 
         for recrd in recrds:
 
