@@ -337,9 +337,6 @@ def oai():
         rquest.text = dpurl
         listsets = ET.SubElement(oaixml, 'ListSets')
         for node in elem:
-            # check that set is in list of collections to include
-            #print(node.find('./setSpec', ns).text)
-            #print(colls)
             if node.find('./setSpec', ns).text in colls:
                 listsets.append(node)
                 count = 1
@@ -356,7 +353,8 @@ def oai():
         rquest.text = dpurl
         listrecords = ET.SubElement(oaixml, 'ListRecords')
         listrecords.attrib = {'metadataPrefix': 'oai_dc'}
-        recrds = root.findall('.//{http://www.openarchives.org/OAI/2.0/}record')
+        #recrds = root.findall('.//{http://www.openarchives.org/OAI/2.0/}record')
+        recrds = elem.findall('.//record')
 
         for recrd in recrds:
 
