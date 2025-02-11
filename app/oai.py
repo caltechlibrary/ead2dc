@@ -290,7 +290,7 @@ ListSets = ET.SubElement(oaixml, 'ListSets')
 for coll in colls:
     oaiset = ET.SubElement(ListSets, 'set')
     setSpec = ET.SubElement(oaiset, 'setSpec')
-    setSpec.text = coll[0]
+    setSpec.text = coll[4]
     setName = ET.SubElement(oaiset, 'setName')
     setName.text = coll[2]
     setDescription = ET.SubElement(ET.SubElement(ET.SubElement(
@@ -319,7 +319,6 @@ for coll in colls:
     recs_skipped = 0
 
     setid = '/repositories/2/resources/' + coll[0]
-    setspec = coll[0]
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
@@ -375,7 +374,7 @@ for coll in colls:
                 datestamp = ET.SubElement(header, 'datestamp')
                 datestamp.text = today
                 setspec = ET.SubElement(header, 'setSpec')
-                setspec.text = setspec
+                setspec.text = coll[4]
                 metadata = ET.SubElement(record, 'metadata')
                 dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                                        'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
