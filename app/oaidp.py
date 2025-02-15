@@ -127,9 +127,10 @@ def collections2():
 # get total object counts
 def get_total_counts():
     db = get_db()
-    return db.execute('SELECT total, caltecharchives, caltechlibrary, \
-                      internetarchive, youtube, other \
-                      FROM totals;').fetchone()
+    return db.execute('SELECT sum(docount) as tot_docount, sum(carchives) as tot_carchives, \
+                      sum(clibrary) as tot_clibrary, sum(iarchive) as tot_iarchive, \
+                      sum(youtube) tot_youtube, sum(other) as tot_other \
+                      FROM collections;').fetchone()
 
 # read collections data for display
 def read_colls():
