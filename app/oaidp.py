@@ -101,8 +101,10 @@ def search():
 @bp.route('/collections')
 def collections():
     db = get_db()
-    query = "SELECT total, caltecharchives, caltechlibrary, \
-                    internetarchive, youtube, other FROM totals;"
+    query = 'SELECT sum(docount) as tot_docount, sum(carchives) as tot_carchives, \
+                      sum(clibrary) as tot_clibrary, sum(iarchive) as tot_iarchive, \
+                      sum(youtube) tot_youtube, sum(other) as tot_other \
+                      FROM collections;'
     totals = db.execute(query).fetchone()
     return render_template('collections.html', 
                            output=read_colls(), 
