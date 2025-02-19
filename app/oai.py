@@ -409,9 +409,13 @@ for coll in colls:
 connection = sq.connect(dbpath)
 db = connection.cursor()
 for collid in dao_dict:
+    docount = 0
     for hostcategory in dao_dict[collid]:
         query = 'UPDATE collections SET '+hostcategory+'=? WHERE collid=?;'
         db.execute(query, [dao_dict[collid][hostcategory], collid])
+        docount += dao_dict[collid][hostcategory]
+    query = 'UPDATE collections SET docount=? WHERE collid=?;'
+    db.execute(query, [docount, collid])
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
 db.execute(query, [last_update, 'xml'])
 db.close()
@@ -429,13 +433,12 @@ for collection in dao_dict:
         print('>', url, dao_dict[collection][url])
 
 
-
 print(dao_count, 'total records created')
 print(dao_skipped, 'total records skipped')
 
-print(dao_dict)
+#print(dao_dict)
 
-print(urls)
+#print(urls)
 
 print('Total elapsed time:', round(time.time() - start, 1))
 
