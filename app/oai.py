@@ -387,7 +387,7 @@ for coll in colls:
                 description = ET.SubElement(dc, 'dc:description')
                 description.text = 'Digital object in ' + collectiontitle
                 identifier = ET.SubElement(dc, 'dc:identifier')
-                identifier.text = 'collections.archives.caltech.edu' + file_uri
+                identifier.text = file_uri
                 identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
 
                 recs_created += 1
