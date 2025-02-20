@@ -1,7 +1,7 @@
 # local imports
 from app.aspace import get_notes, get_last_update, write_last_update
 from app.db import get_db
-# 
+# other imports
 from flask import Blueprint, request, Response, render_template
 from datetime import datetime, date
 import xml.etree.ElementTree as ET

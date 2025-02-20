@@ -188,10 +188,10 @@ print('> summary', len(collections), 'collections with digital objects')
 # retrieve included collections from db
 # returns dictionary of collection numbers and inclusion status
 connection = sq.connect(dbpath)
-db = connection.cursor()
+cursor = connection.cursor()
 query = 'SELECT collno,incl FROM collections'
 includedcollections = dict()
-for row in db.execute(query).fetchall():
+for row in cursor.execute(query).fetchall():
     includedcollections[row[0]] = row[1]
 
 # write ISO last update
@@ -199,11 +199,11 @@ now = datetime.now()
 last_update = now.isoformat()
     
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
-db.execute(query, [last_update, 'xml'])
+cursor.execute(query, [last_update, 'xml'])
   
 # delete all records from db
 query = 'DELETE FROM collections;'
-db.execute(query)
+cursor.execute(query)
 
 query = 'INSERT INTO collections (collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);'
 for collectionid in collections:
@@ -231,15 +231,17 @@ for collectionid in collections:
     # collno text, colltitle text, docount int, incl int, 
     # carchives int, clibrary int, iarchive int, youtube int, other int, 
     # collid text, description text, eadurl text
-    db.execute(query, [collno, eadurl, colltitle, description, collid, 0, 
+    cursor.execute(query, [collno, eadurl, colltitle, description, collid, 0, 
             includedcollections.get(collectionid[:26], 0), 0, 0, 0, 0, 0])
-    
+
+# commit changes to db before reading
+connection.commit()
+
 # read collection info from db
 # colls is a list of tuples
 query = 'SELECT collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other FROM collections'
-colls = db.execute(query).fetchall()
-db.close()
-connection.commit()
+colls = cursor.execute(query).fetchall()
+cursor.close()
 connection.close()
 
 #temp
