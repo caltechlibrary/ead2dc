@@ -416,8 +416,12 @@ for collid in dao_dict:
         query = 'UPDATE collections SET '+hostcategory+'=? WHERE collid=?;'
         db.execute(query, [dao_dict[collid][hostcategory], collid])
         docount += dao_dict[collid][hostcategory]
-    query = 'UPDATE collections SET docount=? WHERE collid=?;'
-    db.execute(query, [docount, collid])
+    if docount == 0:
+        query = 'DELETE FROM collections WHERE collid=?;'
+        db.execute(query, [collid])
+    else:
+        query = 'UPDATE collections SET docount=? WHERE collid=?;'
+        db.execute(query, [docount, collid])
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
 db.execute(query, [last_update, 'xml'])
 db.close()
@@ -429,11 +433,12 @@ fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
 
+'''
 for collection in dao_dict:
     print(collection)
     for url in dao_dict[collection]:
         print('>', url, dao_dict[collection][url])
-
+'''
 
 print(dao_count, 'total records created')
 print(dao_skipped, 'total records skipped')
