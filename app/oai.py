@@ -46,7 +46,7 @@ collections, archival_objects = set(), set()
 
 dao_count = 0
 
-print('Building collections dictionary...')
+print('Finding digital content...')
 
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
@@ -124,7 +124,7 @@ for collectionid in collections:
     # carchives int, clibrary int, iarchive int, youtube int, other int, 
     # collid text, description text, eadurl text
     cursor.execute(query, [collno, eadurl, colltitle, description, collid, 0, 
-            includedcollections.get(collectionid[:26], 0), 0, 0, 0, 0, 0])
+            includedcollections.get(collectionid[:26], 0), 0, 0, 0, 0])
 
 # commit changes to db before reading
 connection.commit()
