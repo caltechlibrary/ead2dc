@@ -174,7 +174,7 @@ def collections3():
         db.commit()
         update_coll_json(ids)
         write_last_update('act')
-    totals = db.execute('SELECT total,caltecharchives,caltechlibrary,internetarchive,youtube,other FROM totals;').fetchone()
+    totals = db.execute('SELECT total,caltechlibrary,internetarchive,youtube,other FROM totals;').fetchone()
     return render_template('collections.html', 
                            output=read_colls(), 
                            dt_col=get_last_update('col'),
