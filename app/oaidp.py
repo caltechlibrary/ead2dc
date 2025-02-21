@@ -101,10 +101,11 @@ def search():
 @bp.route('/collections')
 def collections():
     db = get_db()
-    query = 'SELECT sum(docount) as tot_docount, sum(carchives) as tot_carchives, \
-                      sum(clibrary) as tot_clibrary, sum(iarchive) as tot_iarchive, \
-                      sum(youtube) tot_youtube, sum(other) as tot_other \
-                      FROM collections;'
+    query = 'SELECT sum(docount) as tot_docount, \
+                    sum(caltechlibrary) as tot_clibrary, \
+                    sum(internetarchive) as tot_iarchive, \
+                    sum(youtube) tot_youtube, sum(other) as tot_other \
+                FROM collections;'
     totals = db.execute(query).fetchone()
     return render_template('collections.html', 
                            output=read_colls(), 
@@ -129,15 +130,19 @@ def collections2():
 # get total object counts
 def get_total_counts():
     db = get_db()
-    return db.execute('SELECT sum(docount) as tot_docount, sum(carchives) as tot_carchives, \
-                      sum(clibrary) as tot_clibrary, sum(iarchive) as tot_iarchive, \
-                      sum(youtube) tot_youtube, sum(other) as tot_other \
-                      FROM collections;').fetchone()
+    query = 'SELECT sum(docount) as tot_docount, \
+                    sum(caltechlibrary) as tot_clibrary, \
+                    sum(internetarchive) as tot_iarchive, \
+                    sum(youtube) tot_youtube, sum(other) as tot_other \
+                FROM collections;'
+    return db.execute(query).fetchone()
 
 # read collections data for display
 def read_colls():
-    query = "SELECT collno, colltitle, docount, carchives, clibrary, \
-            iarchive, youtube, other, incl FROM collections ORDER BY docount DESC;"
+    query = "SELECT collno, colltitle, docount, caltechlibrary, \
+                    internetarchive, youtube, other, incl \
+            FROM collections \
+            ORDER BY docount DESC;"
     colls = get_db().execute(query).fetchall()
     n = sum(k for (_,_,k,_,_,_,_,_,_) in colls)
     return (n, len(colls), colls)
