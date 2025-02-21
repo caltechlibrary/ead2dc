@@ -97,7 +97,7 @@ cursor.execute(query, [last_update, 'xml'])
 query = 'DELETE FROM collections;'
 cursor.execute(query)
 
-query = 'INSERT INTO collections (collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);'
+query = 'INSERT INTO collections (collno,eadurl,colltitle,description,collid,docount,incl,caltechlibrary,internetarchive,youtube,other) VALUES (?,?,?,?,?,?,?,?,?,?,?);'
 for collectionid in collections:
     coll_info = client.get(collectionid).json()
     collid = coll_info['uri']
@@ -131,7 +131,7 @@ connection.commit()
 
 # read collection info from db
 # colls is a list of tuples
-query = 'SELECT collno,eadurl,colltitle,description,collid,docount,incl,carchives,clibrary,iarchive,youtube,other FROM collections'
+query = 'SELECT collno,eadurl,colltitle,description,collid,docount,incl,caltechlibrary,internetarchive,youtube,other FROM collections'
 colls = cursor.execute(query).fetchall()
 cursor.close()
 connection.close()
