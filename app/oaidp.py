@@ -144,7 +144,7 @@ def read_colls():
             FROM collections \
             ORDER BY docount DESC;"
     colls = get_db().execute(query).fetchall()
-    n = sum(k for (_,_,k,_,_,_,_,_,_) in colls)
+    n = sum(k for (_,_,k,_,_,_,_,_) in colls)
     return (n, len(colls), colls)
 
 # query db and update collections json file for list of ids
