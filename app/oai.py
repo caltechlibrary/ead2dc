@@ -16,114 +16,6 @@ def prettify(elem):
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
 
-# builds XML for each record and adds to ListRecords segment
-def buildrecordxml(listrecords, c, collectiontitle, inheriteddata):
-    global no_records, setid
-    #create record element
-    record = ET.SubElement(listrecords, 'record')
-    header = ET.SubElement(record, 'header')
-    identifier = ET.SubElement(header, 'identifier')
-    try:
-        #construct id from aspace uri
-        identifier.text = 'collections.archives.caltech.edu' + c.find('./did/unitid[@type="aspace_uri"]', ns).text
-    except:
-        #construct id from aspace id
-        identifier.text = 'archives.caltech.edu:' + c.attrib['id']
-
-    datestamp = ET.SubElement(header, 'datestamp')
-    datestamp.text = today
-    setspec = ET.SubElement(header, 'setSpec')
-    setspec.text = setid[26:]
-    metadata = ET.SubElement(record, 'metadata')
-    dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
-                                           'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-                                           'xmlns:dcterms': 'http://purl.org/dc/terms/'})
-    #title = file/item title from current container
-    title = ET.SubElement(dc, 'dc:title')
-    title.text = inheriteddata[-1][1]
-    #collection title
-    relation = ET.SubElement(dc, 'dc:relation')
-    relation.text = collectiontitle
-    relation.attrib = {'label': 'Collection'}
-    #inherited titles from parent containers
-    for titledata in inheriteddata[:-1]:
-        relation = ET.SubElement(dc, 'dc:relation')
-        relation.text = titledata[1]
-        relation.attrib = {'label': titledata[0].title()}
-    #creator (persname) from current container
-    for creat in c.findall('.//origination/persname', ns):
-        creator = ET.SubElement(dc, 'dc:creator')
-        creator.text = creat.text
-        if creat.attrib.get('source'):
-            creator.attrib = {'scheme': creat.attrib['source']}
-    #creator (corpname) from current container
-    for creat in c.findall('.//origination/corpname', ns):
-        creator = ET.SubElement(dc, 'dc:creator')
-        creator.text = creat.text
-        if creat.attrib.get('source'):
-            creator.attrib = {'scheme': creat.attrib['source']}
-    #date from current container
-    for unitdate in c.findall('.//unitdate', ns):
-        date = ET.SubElement(dc, 'dc:date')
-        date.text = unitdate.text
-    #format from current container
-    for fmt in c.findall('.//physdesc/extent', ns):
-        format = ET.SubElement(dc, 'dc:extent')
-        format.text = fmt.text
-    #description from current container
-    for desc in c.findall('.//abstract', ns):
-        description = ET.SubElement(dc, 'dc:description')
-        description.text = desc.text
-    #subjects from current container
-    for subj in c.findall('.//controlaccess/subject', ns):
-        subject = ET.SubElement(dc, 'dc:subject')
-        subject.text = subj.text
-        if subj.attrib.get('source'):
-            subject.attrib = {'scheme': subj.attrib['source']}
-    for geog in c.findall('.//controlaccess/geogname', ns):
-        subject = ET.SubElement(dc, 'dc:subject')
-        subject.text = geog.text
-        if geog.attrib.get('source'):
-            subject.attrib = {'scheme': geog.attrib['source']}
-    for pers in c.findall('.//controlaccess/persname', ns):
-        subject = ET.SubElement(dc, 'dc:subject')
-        subject.text = pers.text
-        if pers.attrib.get('source'):
-            subject.attrib = {'scheme': pers.attrib['source']}
-    for corp in c.findall('.//controlaccess/corpname', ns):
-        subject = ET.SubElement(dc, 'dc:subject')
-        subject.text = corp.text
-        if corp.attrib.get('source'):
-            subject.attrib = {'scheme': corp.attrib['source']}
-    for func in c.findall('.//controlaccess/function', ns):
-        subject = ET.SubElement(dc, 'dc:subject')
-        subject.text = func.text
-        if func.attrib.get('source'):
-            subject.attrib = {'scheme': func.attrib['source']}
-    #identifiers from current container
-    for unitid in c.findall('.//unitid', ns):
-        identifier = ET.SubElement(dc, 'dc:identifier')
-        text = unitid.text
-        if text[:14]=='/repositories/':
-            text = 'collections.archives.caltech.edu' + text
-        identifier.text = text
-    #links from current container
-    for daoloc in c.findall('.//daoloc', ns):
-        identifier = ET.SubElement(dc, 'dc:identifier')
-        text = daoloc.attrib['{http://www.w3.org/1999/xlink}href']
-        identifier.text = text
-        if 'img.archives.caltech.edu' in text:
-            identifier.attrib = {'scheme': 'URI', 'type': 'thumbnail'}
-        else:
-            identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
-    for dao in c.findall('.//dao', ns):
-        identifier = ET.SubElement(dc, 'dc:identifier')
-        text = dao.attrib['{http://www.w3.org/1999/xlink}href']
-        type = dao.attrib['{http://www.w3.org/1999/xlink}type']
-        identifier.text = text
-        identifier.attrib = {'scheme': 'URI', 'type': type}
-    no_records += 1
-    return listrecords
 
 # MAIN
 
@@ -315,6 +207,118 @@ urls = set()
 
 intertime = time.time()
 
+'''
+# builds XML for each record and adds to ListRecords segment
+
+    #create record element
+    record = ET.SubElement(listrecords, 'record')
+    header = ET.SubElement(record, 'header')
+    identifier = ET.SubElement(header, 'identifier')
+    try:
+        #construct id from aspace uri
+        identifier.text = 'collections.archives.caltech.edu' + c.find('./did/unitid[@type="aspace_uri"]', ns).text
+    except:
+        #construct id from aspace id
+        identifier.text = 'archives.caltech.edu:' + c.attrib['id']
+
+    datestamp = ET.SubElement(header, 'datestamp')
+    datestamp.text = today
+    setspec = ET.SubElement(header, 'setSpec')
+    setspec.text = setid[26:]
+    metadata = ET.SubElement(record, 'metadata')
+    dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+                                           'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+                                           'xmlns:dcterms': 'http://purl.org/dc/terms/'})
+    #title = file/item title from current container
+    title = ET.SubElement(dc, 'dc:title')
+    title.text = inheriteddata[-1][1]
+    #collection title
+    relation = ET.SubElement(dc, 'dc:relation')
+    relation.text = collectiontitle
+    relation.attrib = {'label': 'Collection'}
+    #inherited titles from parent containers
+    for titledata in inheriteddata[:-1]:
+        relation = ET.SubElement(dc, 'dc:relation')
+        relation.text = titledata[1]
+        relation.attrib = {'label': titledata[0].title()}
+    #creator (persname) from current container
+    for creat in c.findall('.//origination/persname', ns):
+        creator = ET.SubElement(dc, 'dc:creator')
+        creator.text = creat.text
+        if creat.attrib.get('source'):
+            creator.attrib = {'scheme': creat.attrib['source']}
+    #creator (corpname) from current container
+    for creat in c.findall('.//origination/corpname', ns):
+        creator = ET.SubElement(dc, 'dc:creator')
+        creator.text = creat.text
+        if creat.attrib.get('source'):
+            creator.attrib = {'scheme': creat.attrib['source']}
+    #date from current container
+    for unitdate in c.findall('.//unitdate', ns):
+        date = ET.SubElement(dc, 'dc:date')
+        date.text = unitdate.text
+    #format from current container
+    for fmt in c.findall('.//physdesc/extent', ns):
+        format = ET.SubElement(dc, 'dc:extent')
+        format.text = fmt.text
+    #description from current container
+    for desc in c.findall('.//abstract', ns):
+        description = ET.SubElement(dc, 'dc:description')
+        description.text = desc.text
+    #subjects from current container
+    for subj in c.findall('.//controlaccess/subject', ns):
+        subject = ET.SubElement(dc, 'dc:subject')
+        subject.text = subj.text
+        if subj.attrib.get('source'):
+            subject.attrib = {'scheme': subj.attrib['source']}
+    for geog in c.findall('.//controlaccess/geogname', ns):
+        subject = ET.SubElement(dc, 'dc:subject')
+        subject.text = geog.text
+        if geog.attrib.get('source'):
+            subject.attrib = {'scheme': geog.attrib['source']}
+    for pers in c.findall('.//controlaccess/persname', ns):
+        subject = ET.SubElement(dc, 'dc:subject')
+        subject.text = pers.text
+        if pers.attrib.get('source'):
+            subject.attrib = {'scheme': pers.attrib['source']}
+    for corp in c.findall('.//controlaccess/corpname', ns):
+        subject = ET.SubElement(dc, 'dc:subject')
+        subject.text = corp.text
+        if corp.attrib.get('source'):
+            subject.attrib = {'scheme': corp.attrib['source']}
+    for func in c.findall('.//controlaccess/function', ns):
+        subject = ET.SubElement(dc, 'dc:subject')
+        subject.text = func.text
+        if func.attrib.get('source'):
+            subject.attrib = {'scheme': func.attrib['source']}
+    #identifiers from current container
+    for unitid in c.findall('.//unitid', ns):
+        identifier = ET.SubElement(dc, 'dc:identifier')
+        text = unitid.text
+        if text[:14]=='/repositories/':
+            text = 'collections.archives.caltech.edu' + text
+        identifier.text = text
+    #links from current container
+    for daoloc in c.findall('.//daoloc', ns):
+        identifier = ET.SubElement(dc, 'dc:identifier')
+        text = daoloc.attrib['{http://www.w3.org/1999/xlink}href']
+        identifier.text = text
+        if 'img.archives.caltech.edu' in text:
+            identifier.attrib = {'scheme': 'URI', 'type': 'thumbnail'}
+        else:
+            identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
+    for dao in c.findall('.//dao', ns):
+        identifier = ET.SubElement(dc, 'dc:identifier')
+        text = dao.attrib['{http://www.w3.org/1999/xlink}href']
+        type = dao.attrib['{http://www.w3.org/1999/xlink}type']
+        identifier.text = text
+        identifier.attrib = {'scheme': 'URI', 'type': type}
+    no_records += 1
+    return listrecords
+
+'''
+
+
 for coll in colls:
 
     recs_created = 0
@@ -350,12 +354,10 @@ for coll in colls:
             try:
                 file_uri = next(generator)['file_uri']
                 url = urlparse(file_uri).hostname
-                if url == 'resolver.caltech.edu' or url == 'www.annualreviews.org':
-                    hostcategory = 'clibrary'
+                if url == 'resolver.caltech.edu' or url == 'digital.archives.caltech.edu' or url == 'californiarevealed.org':
+                    hostcategory = 'caltechlibrary'
                 elif url == 'archive.org':
-                    hostcategory = 'iarchive'
-                elif url == 'digital.archives.caltech.edu' or url == 'californiarevealed.org':
-                    hostcategory = 'carchives'
+                    hostcategory = 'internetarchive'
                 elif url == 'youtube.com' or url == 'youtu.be':
                     hostcategory = 'youtube'
                 else:
@@ -377,6 +379,8 @@ for coll in colls:
                 datestamp.text = today
                 setspec = ET.SubElement(header, 'setSpec')
                 setspec.text = coll[0]
+                setspec = ET.SubElement(header, 'setSpec')
+                setspec.text = hostcategory
                 metadata = ET.SubElement(record, 'metadata')
                 dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                                        'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
@@ -391,6 +395,7 @@ for coll in colls:
                 identifier = ET.SubElement(dc, 'dc:identifier')
                 identifier.text = file_uri
                 identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
+
 
                 recs_created += 1
 

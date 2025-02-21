@@ -48,9 +48,8 @@
     <th colspan="5">Host/Link domain</th>
 </tr>
 <tr>
-    <th>Caltech<br/>Archives</th>
-    <th>Caltech<br/>Library</th>
-    <th>Internet<br/>Archive</th>
+    <th>Caltech Library</th>
+    <th>Internet Archive</th>
     <th>YouTube</th>
     <th>Other</th>
 </tr>
@@ -71,14 +70,12 @@
         <td align="right">{{ coll[4] }}</td>
         <td align="right">{{ coll[5] }}</td>
         <td align="right">{{ coll[6] }}</td>
-        <td align="right">{{ coll[7] }}</td>
     </tr>
 {% endfor %}
 <tr>
     <th align="right" colspan="3">Totals</th>
     <th align="right">{{ totals['tot_docount'] }}</th>
     <th></th>
-    <th align="right">{{ totals['tot_carchives'] }}</th>
     <th align="right">{{ totals['tot_clibrary'] }}</th>
     <th align="right">{{ totals['tot_iarchive'] }}</th>
     <th align="right">{{ totals['tot_youtube'] }}</th>
