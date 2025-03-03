@@ -379,8 +379,6 @@ for coll in colls:
                 datestamp.text = today
                 setspec = ET.SubElement(header, 'setSpec')
                 setspec.text = coll[0]
-                setspec = ET.SubElement(header, 'setSpec')
-                setspec.text = hostcategory
                 metadata = ET.SubElement(record, 'metadata')
                 dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                                        'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
