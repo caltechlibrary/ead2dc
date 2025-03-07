@@ -28,11 +28,11 @@ else:
         proceed = False
 
 if proceed:
-    if args[1] == 'digital':
+    if args[0] == 'digital':
         uri = f'/repositories/2/digital_objects/{args[1]}'
-    elif args[1] == 'archival':
+    elif args[0] == 'archival':
         uri = f'/repositories/2/archival_objects/{args[1]}'
-    elif args[1] == 'resource':
+    elif args[0] == 'resource':
         uri = f'/repositories/2/resources/{args[1]}'
     obj = client.get(f'{uri}').json()
     print(json.dumps(obj, indent=4, sort_keys=True))
