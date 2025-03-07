@@ -14,8 +14,9 @@ args = sys.argv[1:]
 proceed = True
 
 if len(args) != 3:
-    print('Invalid number of arguments. Must be 3.')
-    proceed = False
+    #print('Invalid number of arguments. Must be 3.')
+    #proceed = False
+    pass
 else:
     if args[1] not in ['digital', 'archival', 'resource']:
         print('Invalid type. Must be "digital", "archival", or "resource"')
