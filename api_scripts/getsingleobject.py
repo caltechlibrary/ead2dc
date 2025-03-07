@@ -14,27 +14,26 @@ print(args)
 
 proceed = True
 
-if len(args) != 3:
-    #print('Invalid number of arguments. Must be 3.')
-    #proceed = False
-    pass
+if len(args) != 2:
+    print('Invalid number of arguments. Must be 2.')
+    proceed = False
 else:
-    if args[1] not in ['digital', 'archival', 'resource']:
+    if args[0] not in ['digital', 'archival', 'resource']:
         print('Invalid type. Must be "digital", "archival", or "resource"')
         proceed = False
     try:
-        int(args[2])
+        int(args[1])
     except:
         print('Invalid ID. Must be an integer.')
         proceed = False
 
 if proceed:
     if args[1] == 'digital':
-        uri = f'/repositories/2/digital_objects/{args[2]}'
+        uri = f'/repositories/2/digital_objects/{args[1]}'
     elif args[1] == 'archival':
-        uri = f'/repositories/2/archival_objects/{args[2]}'
+        uri = f'/repositories/2/archival_objects/{args[1]}'
     elif args[1] == 'resource':
-        uri = f'/repositories/2/resources/{args[2]}'
+        uri = f'/repositories/2/resources/{args[1]}'
     obj = client.get(f'{uri}').json()
     print(json.dumps(obj, indent=4, sort_keys=True))
 
