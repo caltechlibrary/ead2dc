@@ -34,7 +34,7 @@ if proceed:
         uri = f'/repositories/2/archival_objects/{args[1]}'
     elif args[0] == 'resource':
         uri = f'/repositories/2/resources/{args[1]}'
-    obj = client.get(f'{uri}').json()
+    obj = client.get(f'{uri}?resolve[]=linked_instances').json()
     print(json.dumps(obj, indent=4, sort_keys=True))
 
 '''
