@@ -10,7 +10,6 @@ client = ASnakeClient(baseurl = secrets.baseurl,
 client.authorize()
 
 args = sys.argv[1:]
-print(args)
 
 proceed = True
 
