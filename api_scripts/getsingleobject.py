@@ -1,6 +1,6 @@
 secrets = __import__('secrets')
 
-import json, sys, argparse
+import json, argparse
 from asnake.client import ASnakeClient
 
 client = ASnakeClient(baseurl = secrets.baseurl,
@@ -9,22 +9,19 @@ client = ASnakeClient(baseurl = secrets.baseurl,
 
 client.authorize()
 
-args = sys.argv[1:]
+# Initialize parser
+parser = argparse.ArgumentParser()
+parser.add_argument('-o', '--object_type', default='')
+parser.add_argument('-i', '--identifier', default='')
+
+# Read arguments from command line
+args = parser.parse_args()
 
 proceed = True
 
-if len(args) != 2:
-    print('Invalid number of arguments. Must be 2.')
+if not isinstance(args.identifier, int) or args.object_type not in ['digital', 'archival', 'resource']:
+    print('Invalid arguments. Must provide object type ("digital", "archival", or "resource") and identifier (integer).')
     proceed = False
-else:
-    if args[0] not in ['digital', 'archival', 'resource']:
-        print('Invalid type. Must be "digital", "archival", or "resource"')
-        proceed = False
-    try:
-        int(args[1])
-    except:
-        print('Invalid ID. Must be an integer.')
-        proceed = False
 
 if proceed:
     if args[0] == 'digital':
