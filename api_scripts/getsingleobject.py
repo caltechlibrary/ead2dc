@@ -20,6 +20,8 @@ args = parser.parse_args()
 proceed = True
 
 if not isinstance(args.identifier, int) or args.object_type not in ['digital', 'archival', 'resource']:
+    print(args.identifier, args.object_type)
+    print(type(args.identifier), type(args.object_type))
     print('Invalid arguments. Must provide object type ("digital", "archival", or "resource") and identifier (integer).')
     proceed = False
 
