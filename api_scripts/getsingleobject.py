@@ -13,6 +13,7 @@ client.authorize()
 parser = argparse.ArgumentParser()
 parser.add_argument('-o', '--object_type', default='')
 parser.add_argument('-i', '--identifier', default='')
+parser.add_argument('-r', '--resolve_linked_instances', default='')
 
 # Read arguments from command line
 args = parser.parse_args()
@@ -29,14 +30,18 @@ if identifier == 0:
     print('Invalid arguments. Must provide an identifier.')
     proceed = False
 
+if object_type == 'digital':
+    uri = f'/repositories/2/digital_objects/'
+elif object_type == 'archival': 
+    uri = f'/repositories/2/archival_objects/'
+elif object_type == 'resource':
+    uri = f'/repositories/2/resources/'
+else:
+    proceed = False
+
 if proceed:
-    if object_type == 'digital':
-        uri = f'/repositories/2/digital_objects/{identifier}'
-    elif object_type == 'archival':
-        uri = f'/repositories/2/archival_objects/{identifier}'
-    elif object_type == 'resource':
-        uri = f'/repositories/2/resources/{identifier}'
-    obj = client.get(f'{uri}?resolve[]=linked_instances').json()
+
+    obj = client.get(f'{uri}{identifier}?resolve[]=linked_instances').json()
     print(json.dumps(obj, indent=4, sort_keys=True))
 
 '''
