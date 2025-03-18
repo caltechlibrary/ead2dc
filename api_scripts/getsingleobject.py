@@ -12,23 +12,30 @@ client.authorize()
 # Initialize parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-o', '--object_type', default='')
-parser.add_argument('-i', '--identifier', default=0)
-parser.add_argument('-r', '--resolve_linked_instances', default='')
+parser.add_argument('-i', '--identifier', default='0')
+parser.add_argument('-r', '--resolve_linked_instances', default='0')
 
 proceed = True
 
 # Read arguments from command line
 args = parser.parse_args()
 object_type = args.object_type
-identifier = int(args.identifier)
+try:
+    identifier = int(args.identifier)
+except:
+    identifier = 0
+try:
+    resolve_linked_instances = int(args.resolve_linked_instances)
+except:
+    resolve_linked_instances = 0
 
 
 if object_type not in ['digital', 'archival', 'resource']:
-    print('Invalid arguments. Must provide object type ("digital", "archival", or "resource").')
+    print('Invalid object type. Must be "digital", "archival", or "resource".')
     proceed = False
 
 if identifier == 0:
-    print('Invalid arguments. Must provide an identifier.')
+    print('Invalid identifier. Must be an integer.')
     proceed = False
 
 if object_type == 'digital':
@@ -42,7 +49,11 @@ else:
 
 if proceed:
 
-    obj = client.get(f'{uri}{identifier}?resolve[]=linked_instances').json()
+    if resolve_linked_instances:
+        obj = client.get(f'{uri}{identifier}?resolve[]=linked_instances').json()
+    else:
+        obj = client.get(f'{uri}{identifier}').json()
+        
     print(json.dumps(obj, indent=4, sort_keys=True))
 
 '''
