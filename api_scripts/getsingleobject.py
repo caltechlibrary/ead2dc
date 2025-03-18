@@ -12,15 +12,16 @@ client.authorize()
 # Initialize parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-o', '--object_type', default='')
-parser.add_argument('-i', '--identifier', default='')
+parser.add_argument('-i', '--identifier', default=0)
 parser.add_argument('-r', '--resolve_linked_instances', default='')
+
+proceed = True
 
 # Read arguments from command line
 args = parser.parse_args()
 object_type = args.object_type
 identifier = int(args.identifier)
 
-proceed = True
 
 if object_type not in ['digital', 'archival', 'resource']:
     print('Invalid arguments. Must provide object type ("digital", "archival", or "resource").')
