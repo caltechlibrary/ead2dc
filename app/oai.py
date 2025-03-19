@@ -205,7 +205,7 @@ dao_dict = dict()
 # build ListRecords segment
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
-print('Elapsed time:', round(time.time() - start, 1), 'secs', '('+time.strftime("%Y-%m-%d %H:%M:%S", time.time())+')')
+print('Elapsed time:', round(time.time() - start, 1), 'secs')
 
 print('Building static repository...')
 
@@ -454,7 +454,7 @@ for coll in colls:
     print('>', recs_created, 'records created')
     print('>', recs_skipped, 'records skipped')
 
-    print('>', round(time.time() - intertime, 1), 'secs')
+    print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
     intertime = time.time()
 
 connection = sq.connect(dbpath)
