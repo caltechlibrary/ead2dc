@@ -30,15 +30,15 @@ except:
     resolve_linked_instances = -1
 
 if object_type not in ['digital', 'archival', 'resource']:
-    print('Invalid object type. Must be "digital", "archival", or "resource".')
+    print('Invalid or missing object type. Must be "digital", "archival", or "resource".')
     proceed = False
 
 if identifier == 0:
-    print('Invalid identifier. Must be an integer.')
+    print('Invalid or missing identifier. Must be an integer.')
     proceed = False
 
 if resolve_linked_instances not in [0, 1]:
-    print('Invalid resolve_linked_instances. Must be 0 (false) or 1 (true).')
+    print('Invalid or missing resolve_linked_instances. Must be 0 (false, default) or 1 (true).')
     proceed = False
 
 if proceed:
