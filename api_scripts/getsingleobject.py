@@ -27,8 +27,7 @@ except:
 try:
     resolve_linked_instances = int(args.resolve_linked_instances)
 except:
-    resolve_linked_instances = 0
-
+    resolve_linked_instances = -1
 
 if object_type not in ['digital', 'archival', 'resource']:
     print('Invalid object type. Must be "digital", "archival", or "resource".')
@@ -38,22 +37,22 @@ if identifier == 0:
     print('Invalid identifier. Must be an integer.')
     proceed = False
 
-if object_type == 'digital':
-    uri = f'/repositories/2/digital_objects/'
-elif object_type == 'archival': 
-    uri = f'/repositories/2/archival_objects/'
-elif object_type == 'resource':
-    uri = f'/repositories/2/resources/'
-else:
+if resolve_linked_instances not in [0, 1]:
+    print('Invalid resolve_linked_instances. Must be 0 (false) or 1 (true).')
     proceed = False
 
 if proceed:
 
-    if resolve_linked_instances:
-        obj = client.get(f'{uri}{identifier}?resolve[]=linked_instances').json()
-    else:
-        obj = client.get(f'{uri}{identifier}').json()
-        
+    if object_type == 'digital':
+        uri = f'/repositories/2/digital_objects/'
+    elif object_type == 'archival': 
+        uri = f'/repositories/2/archival_objects/'
+    elif object_type == 'resource':
+        uri = f'/repositories/2/resources/'
+    
+    params = '?resolve[]=linked_instances' if resolve_linked_instances else ''
+    
+    obj = client.get(f'{uri}{identifier}{params}').json()    
     print(json.dumps(obj, indent=4, sort_keys=True))
 
 '''
