@@ -51,19 +51,25 @@ print('Finding digital content...')
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
     # if there is a value for 'collection' add that value to the collections set
+    # only include objects that are published and not suppressed
     if obj.get('collection') and obj['publish'] and not obj['suppressed']:
+        # capture the id of the collections
         coll = obj['collection'][0]['ref']
+        # verify the form '/repositories/2/resources/' to ensure a collection id
+        # add to collections set
         if coll[:26] == '/repositories/2/resources/':
             collections.add(coll)
-            # iterate over the linked instances
+            # iterate over the linked instances to find archival records
             for linked_instance in obj['linked_instances']:
                 if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
                     # build dictionary of collections, digital objects, and archival objects
                     # dict has the form {collection: {(digital object, archival object)}}
                     dao_count += 1
                     if collections_dict.get(coll):
+                        # add to existing collection
                         collections_dict[coll].add((obj['uri'], linked_instance['ref']))
                     else:
+                        # create new collection
                         collections_dict[coll] = {(obj['uri'],linked_instance['ref'])}
                         print('> added', coll, client.get(coll).json()['title'])
 
@@ -335,6 +341,8 @@ for coll in colls:
 
     if collections_dict.get(setid):
     
+        # iterate over collection
+        # do = digital object, ao = archival object
         for do, ao in collections_dict[setid]:
 
             #temp
@@ -346,11 +354,11 @@ for coll in colls:
                          if file_version['publish'] == True
                          and file_version.get('use_statement', 'ok') 
                          not in ['image-thumbnail', 'URL-Redirected'])
-            try:
-                do_title = client.get(ao).json()['title']
-            except:
-                do_title = 'no title'
-                print('> no title')
+            #try:
+            #    do_title = client.get(ao).json()['title']
+            #except:
+            #    do_title = 'no title'
+            #    print('> no title')
             try:
                 file_uri = next(generator)['file_uri']
                 url = urlparse(file_uri).hostname
@@ -370,26 +378,64 @@ for coll in colls:
                     dao_dict[setid][hostcategory] = 1
                 dao_count += 1
 
-                #create record element
+                # record element
                 record = ET.SubElement(ListRecords, 'record')
+
+                # header element
                 header = ET.SubElement(record, 'header')
+
+                # identifier elements
                 identifier = ET.SubElement(header, 'identifier')
                 identifier.text = 'collections.archives.caltech.edu' + do
+                identifier.attrib = {'type': 'digital'}
+
+                identifier = ET.SubElement(header, 'identifier')
+                identifier.text = 'collections.archives.caltech.edu' + ao
+                identifier.attrib = {'type': 'archival'}
+
+                identifier = ET.SubElement(header, 'identifier')
+                identifier.text = 'collections.archives.caltech.edu' + setid
+                identifier.attrib = {'type': 'collection'}
+
+                # datestamp element
                 datestamp = ET.SubElement(header, 'datestamp')
                 datestamp.text = today
+
+                # setSpec element
                 setspec = ET.SubElement(header, 'setSpec')
                 setspec.text = coll[0]
+
+                # metadata element
                 metadata = ET.SubElement(record, 'metadata')
+
+                # dc element
                 dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
                                                        'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
                                                        'xmlns:dcterms': 'http://purl.org/dc/terms/'})
+                
+                # title elements
                 title = ET.SubElement(dc, 'dc:title')
-                title.text = do_title
+                title.text = client.get(do).json()['title']
+                title.attrib = {'type': 'digital'}
+
+                title = ET.SubElement(dc, 'dc:title')
+                title.text = client.get(ao).json()['title']
+                title.attrib = {'type': 'archival'}
+
+                title = ET.SubElement(dc, 'dc:title')
+                title.text = client.get(setid).json()['title']
+                title.attrib = {'type': 'collection'}
+
+                # relation element
                 relation = ET.SubElement(dc, 'dc:relation')
                 relation.text = collectiontitle
                 relation.attrib = {'label': 'Collection'}
+
+                # description element
                 description = ET.SubElement(dc, 'dc:description')
                 description.text = 'Digital object in ' + collectiontitle
+
+                # identifier element
                 identifier = ET.SubElement(dc, 'dc:identifier')
                 identifier.text = file_uri
                 identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
