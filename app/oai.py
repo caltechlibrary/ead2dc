@@ -385,17 +385,17 @@ for coll in colls:
                 header = ET.SubElement(record, 'header')
 
                 # identifier elements
-                identifier = ET.SubElement(header, 'identifier')
-                identifier.text = 'collections.archives.caltech.edu' + do
-                identifier.attrib = {'type': 'digital'}
+                identifier0 = ET.SubElement(header, 'identifier')
+                identifier0.text = 'collections.archives.caltech.edu' + do
+                identifier0.attrib = {'type': 'digital'}
 
-                identifier = ET.SubElement(header, 'identifier')
-                identifier.text = 'collections.archives.caltech.edu' + ao
-                identifier.attrib = {'type': 'archival'}
+                identifier1 = ET.SubElement(header, 'identifier')
+                identifier1.text = 'collections.archives.caltech.edu' + ao
+                identifier1.attrib = {'type': 'archival'}
 
-                identifier = ET.SubElement(header, 'identifier')
-                identifier.text = 'collections.archives.caltech.edu' + setid
-                identifier.attrib = {'type': 'collection'}
+                identifier2 = ET.SubElement(header, 'identifier')
+                identifier2.text = 'collections.archives.caltech.edu' + setid
+                identifier2.attrib = {'type': 'collection'}
 
                 # datestamp element
                 datestamp = ET.SubElement(header, 'datestamp')
@@ -414,17 +414,17 @@ for coll in colls:
                                                        'xmlns:dcterms': 'http://purl.org/dc/terms/'})
                 
                 # title elements
-                title = ET.SubElement(dc, 'dc:title')
-                title.text = client.get(do).json()['title']
-                title.attrib = {'type': 'digital'}
+                title0 = ET.SubElement(dc, 'dc:title')
+                title0.text = client.get(do).json()['title']
+                title0.attrib = {'type': 'digital'}
 
-                title = ET.SubElement(dc, 'dc:title')
-                title.text = client.get(ao).json()['title']
-                title.attrib = {'type': 'archival'}
+                title1 = ET.SubElement(dc, 'dc:title')
+                title1.text = client.get(ao).json()['title']
+                title1.attrib = {'type': 'archival'}
 
-                title = ET.SubElement(dc, 'dc:title')
-                title.text = client.get(setid).json()['title']
-                title.attrib = {'type': 'collection'}
+                title2 = ET.SubElement(dc, 'dc:title')
+                title2.text = client.get(setid).json()['title']
+                title2.attrib = {'type': 'collection'}
 
                 # relation element
                 relation = ET.SubElement(dc, 'dc:relation')
@@ -436,9 +436,9 @@ for coll in colls:
                 description.text = 'Digital object in ' + collectiontitle
 
                 # identifier element
-                identifier = ET.SubElement(dc, 'dc:identifier')
-                identifier.text = file_uri
-                identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
+                identifierURI = ET.SubElement(dc, 'dc:identifier')
+                identifierURI.text = file_uri
+                identifierURI.attrib = {'scheme': 'URI', 'type': 'resource'}
 
 
                 recs_created += 1
