@@ -443,7 +443,7 @@ for coll in colls:
 
 
                 recs_created += 1
-                print(recs_created end='\r')
+                print(recs_created, end='\r')
 
             except:
                 
