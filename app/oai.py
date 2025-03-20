@@ -347,7 +347,7 @@ for coll in colls:
 
             #temp
             j += 1
-            if j > 500:
+            if j > 50:
                 break
 
             generator = (file_version for file_version in client.get(do).json()['file_versions']
