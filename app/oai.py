@@ -335,7 +335,6 @@ for coll in colls:
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     print(collectiontitle)
-    print()
 
     #temp
     j=0
