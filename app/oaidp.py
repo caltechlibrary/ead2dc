@@ -110,7 +110,7 @@ def collections():
     return render_template('collections.html', 
                            output=read_colls(), 
                            dt_col=get_last_update('col'),
-                           dt_act=get_last_update('act'),
+                           dt_xml=get_last_update('xml'),
                            url=pub_url+cbase,
                            totals=totals)
 
@@ -178,7 +178,7 @@ def collections3():
     return render_template('collections.html', 
                            output=read_colls(), 
                            dt_col=get_last_update('col'),
-                           dt_act=get_last_update('act'),
+                           dt_xml=get_last_update('xml'),
                            url=pub_url+cbase,
                            totals=totals)
 
