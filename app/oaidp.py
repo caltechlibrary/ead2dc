@@ -173,7 +173,7 @@ def collections3():
             db.execute('UPDATE collections SET incl=1 WHERE collno=?;', [id])
         db.commit()
         update_coll_json(ids)
-        write_last_update('act')
+        write_last_update('col')
     totals = db.execute('SELECT total,caltechlibrary,internetarchive,youtube,other FROM totals;').fetchone()
     return render_template('collections.html', 
                            output=read_colls(), 
