@@ -136,7 +136,7 @@ for collectionid in collections:
             includedcollections.get(collectionid[26:], 0), 0, 0, 0, 0])
     
     #temp
-    print('temp:', collectionid[:26])
+    print('temp:', collectionid[26:])
 
 # commit changes to db before reading
 connection.commit()
