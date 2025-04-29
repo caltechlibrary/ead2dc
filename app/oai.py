@@ -133,7 +133,7 @@ for collectionid in collections:
     # carchives int, clibrary int, iarchive int, youtube int, other int, 
     # collid text, description text, eadurl text
     cursor.execute(query, [collno, eadurl, colltitle, description, collid, 0, 
-            includedcollections.get(collectionid[:26], 0), 0, 0, 0, 0])
+            includedcollections.get(collectionid[26:], 0), 0, 0, 0, 0])
     
     #temp
     print('temp:', collectionid[:26])
