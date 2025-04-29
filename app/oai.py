@@ -92,6 +92,9 @@ includedcollections = dict()
 for row in cursor.execute(query).fetchall():
     includedcollections[row[0]] = row[1]
 
+#temp
+print(includedcollections)
+
 # write ISO last update
 now = datetime.now()
 last_update = now.isoformat()
@@ -337,7 +340,7 @@ for coll in colls:
     print(collectiontitle)
 
     #temp
-    #j=0
+    j=0
 
     if collections_dict.get(setid):
     
@@ -346,9 +349,9 @@ for coll in colls:
         for do, ao in collections_dict[setid]:
 
             #temp
-            #j += 1
-            #if j > 50:
-            #    break
+            j += 1
+            if j > 5:
+                break
 
             generator = (file_version for file_version in client.get(do).json()['file_versions']
                          if file_version['publish'] == True
