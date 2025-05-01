@@ -1,4 +1,18 @@
-import requests, json, time
+# -*- coding: utf-8 -*-
+#
+# xml-build.py
+#
+# Generates static OAI-PMH XML for Caltech Archives digital objects
+# Data source is ArchivesSpace API
+# Output is a single XML file: caltecharchives.xml
+# Only archival objects with digital objects are included
+# An SQLite3 database, instance/ead2dc.db, is used to store collection information
+# Tables: 
+#   logs - logs data provider requests
+#   collections - records data about collections with digital content
+#   last_update - records dates of last updates of XML file and collection selection
+
+import time
 import sqlite3 as sq
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
@@ -220,6 +234,8 @@ urls = set()
 intertime = time.time()
 
 '''
+# this is legacy code
+# it is not used in the current version of the script
 # builds XML for each record and adds to ListRecords segment
 
     #create record element
