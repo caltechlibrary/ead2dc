@@ -94,16 +94,19 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
         notsuppressed += 1
 
     # capture the id of the collections
-    coll = obj['collection'][0]['ref']
-
-    # verify the form '/repositories/2/resources/' to ensure a collection id
-    # add to collections set
-    if coll[:26] == '/repositories/2/resources/':
-        collections.add(coll)
-    else:
+    try:
+        coll = obj['collection'][0]['ref']
+        # verify the form '/repositories/2/resources/' to ensure a collection id
+        # add to collections set
+        if coll[:26] == '/repositories/2/resources/':
+            collections.add(coll)
+        else:
+            keep = False
+            print('> no collection id (1)')
+    except:
         keep = False
-        print('> no collection id')
-
+        print('> no collection id (2)')
+    
     # iterate over the linked instances to find archival records
     for linked_instance in obj['linked_instances']:
         if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
