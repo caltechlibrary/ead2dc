@@ -62,33 +62,70 @@ dao_count = 0
 
 print('Finding digital content...')
 
+published = 0
+notpublished = 0
+suppressed = 0
+notsuppressed = 0
+orphandigitalobjects = 0
+
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
+
+    keep = True
+
     # if there is a value for 'collection' add that value to the collections set
     # only include objects that are published and not suppressed
-    if obj.get('collection') and obj['publish'] and not obj['suppressed']:
-        # capture the id of the collections
-        coll = obj['collection'][0]['ref']
-        # verify the form '/repositories/2/resources/' to ensure a collection id
-        # add to collections set
-        if coll[:26] == '/repositories/2/resources/':
-            collections.add(coll)
-            # iterate over the linked instances to find archival records
-            for linked_instance in obj['linked_instances']:
-                if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
-                    # build dictionary of collections, digital objects, and archival objects
-                    # dict has the form {collection: {(digital object, archival object)}}
-                    dao_count += 1
-                    if collections_dict.get(coll):
-                        # add to existing collection
-                        collections_dict[coll].add((obj['uri'], linked_instance['ref']))
-                    else:
-                        # create new collection
-                        collections_dict[coll] = {(obj['uri'],linked_instance['ref'])}
-                        print('> added', coll, client.get(coll).json()['title'])
+    if not obj.get('collection'):
+        keep = False
+        orphandigitalobjects += 1
 
-print('> summary', dao_count, 'digital objects')
-print('> summary', len(collections), 'collections with digital objects')
+    # check for published
+    if obj.get('publish') == False:
+        notpublished += 1
+        keep = False
+    else:
+        published += 1
+
+    # check for suppressed
+    if obj.get('suppressed') == True:
+        suppressed += 1
+        keep = False
+    else:
+        notsuppressed += 1
+
+    # capture the id of the collections
+    coll = obj['collection'][0]['ref']
+
+    # verify the form '/repositories/2/resources/' to ensure a collection id
+    # add to collections set
+    if coll[:26] == '/repositories/2/resources/':
+        collections.add(coll)
+    else:
+        keep = False
+        print('> no collection id')
+
+    # iterate over the linked instances to find archival records
+    for linked_instance in obj['linked_instances']:
+        if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
+            # build dictionary of collections, digital objects, and archival objects
+            # dict has the form {collection: {(digital object, archival object, keep)}}
+            dao_count += 1
+            if collections_dict.get(coll):
+                # add to existing collection
+                collections_dict[coll].add((obj['uri'], linked_instance['ref'], keep))
+            else:
+                # create new collection
+                collections_dict[coll] = {(obj['uri'],linked_instance['ref'], keep)}
+                print('> added', coll, client.get(coll).json()['title'])
+
+print('> summary:')
+print('>', dao_count, 'digital objects')
+print('>', len(collections), 'collections with digital objects')
+print('>', published, 'published')
+print('>', notpublished, 'not published')
+print('>', suppressed, 'suppressed')
+print('>', notsuppressed, 'not suppressed')
+print('>', orphandigitalobjects, 'orphan digital objects')
             
 # update collections info in database
 # updates collno, colltitle, description, eadurl
@@ -233,120 +270,6 @@ urls = set()
 
 intertime = time.time()
 
-'''
-# this is legacy code
-# it is not used in the current version of the script
-# builds XML for each record and adds to ListRecords segment
-
-    #create record element
-    record = ET.SubElement(listrecords, 'record')
-    header = ET.SubElement(record, 'header')
-    identifier = ET.SubElement(header, 'identifier')
-    try:
-        #construct id from aspace uri
-        identifier.text = 'collections.archives.caltech.edu' + c.find('./did/unitid[@type="aspace_uri"]', ns).text
-    except:
-        #construct id from aspace id
-        identifier.text = 'archives.caltech.edu:' + c.attrib['id']
-
-    datestamp = ET.SubElement(header, 'datestamp')
-    datestamp.text = today
-    setspec = ET.SubElement(header, 'setSpec')
-    setspec.text = setid[26:]
-    metadata = ET.SubElement(record, 'metadata')
-    dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
-                                           'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-                                           'xmlns:dcterms': 'http://purl.org/dc/terms/'})
-    #title = file/item title from current container
-    title = ET.SubElement(dc, 'dc:title')
-    title.text = inheriteddata[-1][1]
-    #collection title
-    relation = ET.SubElement(dc, 'dc:relation')
-    relation.text = collectiontitle
-    relation.attrib = {'label': 'Collection'}
-    #inherited titles from parent containers
-    for titledata in inheriteddata[:-1]:
-        relation = ET.SubElement(dc, 'dc:relation')
-        relation.text = titledata[1]
-        relation.attrib = {'label': titledata[0].title()}
-    #creator (persname) from current container
-    for creat in c.findall('.//origination/persname', ns):
-        creator = ET.SubElement(dc, 'dc:creator')
-        creator.text = creat.text
-        if creat.attrib.get('source'):
-            creator.attrib = {'scheme': creat.attrib['source']}
-    #creator (corpname) from current container
-    for creat in c.findall('.//origination/corpname', ns):
-        creator = ET.SubElement(dc, 'dc:creator')
-        creator.text = creat.text
-        if creat.attrib.get('source'):
-            creator.attrib = {'scheme': creat.attrib['source']}
-    #date from current container
-    for unitdate in c.findall('.//unitdate', ns):
-        date = ET.SubElement(dc, 'dc:date')
-        date.text = unitdate.text
-    #format from current container
-    for fmt in c.findall('.//physdesc/extent', ns):
-        format = ET.SubElement(dc, 'dc:extent')
-        format.text = fmt.text
-    #description from current container
-    for desc in c.findall('.//abstract', ns):
-        description = ET.SubElement(dc, 'dc:description')
-        description.text = desc.text
-    #subjects from current container
-    for subj in c.findall('.//controlaccess/subject', ns):
-        subject = ET.SubElement(dc, 'dc:subject')
-        subject.text = subj.text
-        if subj.attrib.get('source'):
-            subject.attrib = {'scheme': subj.attrib['source']}
-    for geog in c.findall('.//controlaccess/geogname', ns):
-        subject = ET.SubElement(dc, 'dc:subject')
-        subject.text = geog.text
-        if geog.attrib.get('source'):
-            subject.attrib = {'scheme': geog.attrib['source']}
-    for pers in c.findall('.//controlaccess/persname', ns):
-        subject = ET.SubElement(dc, 'dc:subject')
-        subject.text = pers.text
-        if pers.attrib.get('source'):
-            subject.attrib = {'scheme': pers.attrib['source']}
-    for corp in c.findall('.//controlaccess/corpname', ns):
-        subject = ET.SubElement(dc, 'dc:subject')
-        subject.text = corp.text
-        if corp.attrib.get('source'):
-            subject.attrib = {'scheme': corp.attrib['source']}
-    for func in c.findall('.//controlaccess/function', ns):
-        subject = ET.SubElement(dc, 'dc:subject')
-        subject.text = func.text
-        if func.attrib.get('source'):
-            subject.attrib = {'scheme': func.attrib['source']}
-    #identifiers from current container
-    for unitid in c.findall('.//unitid', ns):
-        identifier = ET.SubElement(dc, 'dc:identifier')
-        text = unitid.text
-        if text[:14]=='/repositories/':
-            text = 'collections.archives.caltech.edu' + text
-        identifier.text = text
-    #links from current container
-    for daoloc in c.findall('.//daoloc', ns):
-        identifier = ET.SubElement(dc, 'dc:identifier')
-        text = daoloc.attrib['{http://www.w3.org/1999/xlink}href']
-        identifier.text = text
-        if 'img.archives.caltech.edu' in text:
-            identifier.attrib = {'scheme': 'URI', 'type': 'thumbnail'}
-        else:
-            identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
-    for dao in c.findall('.//dao', ns):
-        identifier = ET.SubElement(dc, 'dc:identifier')
-        text = dao.attrib['{http://www.w3.org/1999/xlink}href']
-        type = dao.attrib['{http://www.w3.org/1999/xlink}type']
-        identifier.text = text
-        identifier.attrib = {'scheme': 'URI', 'type': type}
-    no_records += 1
-    return listrecords
-
-'''
-
-
 for coll in colls:
 
     recs_created = 0
@@ -365,7 +288,7 @@ for coll in colls:
     
         # iterate over collection
         # do = digital object, ao = archival object
-        for do, ao in collections_dict[setid]:
+        for do, ao, keep in collections_dict[setid]:
 
             #temp
             #j += 1
@@ -373,7 +296,8 @@ for coll in colls:
             #    break
 
             generator = (file_version for file_version in client.get(do).json()['file_versions']
-                         if file_version['publish'] == True
+                         if keep
+                         and file_version['publish'] == True
                          and file_version.get('use_statement', 'ok') 
                          not in ['image-thumbnail', 'URL-Redirected'])
             #try:
