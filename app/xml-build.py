@@ -99,20 +99,20 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
         coll = obj['collection'][0]['ref']
         # verify the form '/repositories/2/resources/' to ensure a collection id
         # add to collections set
-        if coll[:26] == '/repositories/2/resources/':
+        if coll[:26] == '/repositories/2/resources/' or  coll[:27] == '/repositories/2/accessions/':
             collections.add(coll)
         else:
             keep = False
-            print('> no collection id (2)', obj['uri'])
+            print('> cannot identify record type:', obj['uri'])
     except:
         keep = False
-        print('> no collection id (1):', obj['uri'])
+        print('> cannot identify collection:', obj['uri'])
     
     # iterate over the linked instances to find archival records
     for linked_instance in obj['linked_instances']:
         if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
             # build dictionary of collections, digital objects, and archival objects
-            # dict has the form {collection: {(digital object, archival object, keep)}}
+            # dict has the form {collection: {(digital object, archival object, type, keep)}}
             dao_count += 1
             if collections_dict.get(coll):
                 # add to existing collection
@@ -292,7 +292,7 @@ for coll in colls:
     
         # iterate over collection
         # do = digital object, ao = archival object
-        for do, ao, keep in collections_dict[setid]:
+        for do, ao, type, keep in collections_dict[setid]:
 
             #temp
             #j += 1
@@ -301,6 +301,7 @@ for coll in colls:
 
             generator = (file_version for file_version in client.get(do).json()['file_versions']
                          if keep
+                         and type == 'resource'
                          and file_version['publish'] == True
                          and file_version.get('use_statement', 'ok') 
                          not in ['image-thumbnail', 'URL-Redirected'])
