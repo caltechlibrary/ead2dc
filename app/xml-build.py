@@ -78,6 +78,7 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
     if not obj.get('collection'):
         keep = False
         orphandigitalobjects += 1
+        print('> orphan digital object', obj['uri'])
 
     # check for published
     if obj.get('publish') == False:
@@ -102,10 +103,10 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
             collections.add(coll)
         else:
             keep = False
-            print('> no collection id (1)')
+            print('> no collection id (2)', obj['uri'])
     except:
         keep = False
-        print('> no collection id (2)')
+        print('> no collection id (1):', obj['uri'])
     
     # iterate over the linked instances to find archival records
     for linked_instance in obj['linked_instances']:
