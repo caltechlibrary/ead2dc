@@ -62,6 +62,7 @@ dao_count = 0
 
 print('Finding digital content...')
 
+# counters for various categories of record
 published = 0
 notpublished = 0
 suppressed = 0
@@ -344,6 +345,7 @@ for coll in colls:
  #                           and file_version['publish'] == True
  #                           and file_version.get('use_statement', 'ok') 
  #                           not in ['image-thumbnail', 'URL-Redirected'])
+            print('> type:', type(generator))
             #try:
             #    do_title = client.get(ao).json()['title']
             #except:
