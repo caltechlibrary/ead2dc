@@ -315,12 +315,12 @@ for coll in colls:
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
-    print(collectiontitle)
-
     #temp
     #j=0
 
     if collections_dict.get(setid):
+
+        print(collectiontitle)
     
         # iterate over collection
         # do = digital object, ao = archival object
