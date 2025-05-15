@@ -434,12 +434,8 @@ for coll in colls:
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
-
-    else:
-        print('> not included in XML repository')
-
-    print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
-    intertime = time.time()
+        print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
+        intertime = time.time()
 
 connection = sq.connect(dbpath)
 db = connection.cursor()
