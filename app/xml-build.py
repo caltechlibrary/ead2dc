@@ -339,13 +339,20 @@ for coll in colls:
             if j > 5:
                 break
 
-            generator = (file_version for file_version in client.get(do).json()['file_versions'])
- #                        if keep
- #                           and typ == 'resource'
- #                           and file_version['publish'] == True
- #                           and file_version.get('use_statement', 'ok') 
- #                           not in ['image-thumbnail', 'URL-Redirected'])
-            print('> type:', type(generator))
+            generator = (file_version for file_version in client.get(do).json()['file_versions']
+                         if keep
+                            and typ == 'resource'
+                            and file_version['publish'] == True
+                            and file_version.get('use_statement', 'ok') 
+                            not in ['image-thumbnail', 'URL-Redirected'])
+            while True:
+                try:
+                    print(next(generator))
+                except StopIteration:
+                    break
+                except:
+                    print('> error: cannot get file version')
+                    break
             #try:
             #    do_title = client.get(ao).json()['title']
             #except:
