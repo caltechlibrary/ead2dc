@@ -307,7 +307,7 @@ for coll in colls:
     # coll[9] = youtube
     # coll[10] = other
     # coll[11] = typ
-    
+
     recs_created = 0
     recs_skipped = 0
 
@@ -432,11 +432,11 @@ for coll in colls:
                 recs_skipped += 1
                 dao_skipped += 1
 
-    else:
-        print('> no setid')
+        print('>', recs_created, 'records created')
+        print('>', recs_skipped, 'records skipped')
 
-    print('>', recs_created, 'records created')
-    print('>', recs_skipped, 'records skipped')
+    else:
+        print('> not included in XML repoisitory:')
 
     print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
     intertime = time.time()
