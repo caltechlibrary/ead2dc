@@ -155,7 +155,6 @@ query = 'SELECT collno,incl FROM collections'
 includedcollections = dict()
 for row in cursor.execute(query).fetchall():
     includedcollections[row[0]] = row[1]
-    print('> included collection:', row[0], row[1])
 
 #temp
 #print(includedcollections)
