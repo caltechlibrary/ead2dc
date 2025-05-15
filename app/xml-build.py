@@ -339,13 +339,11 @@ for coll in colls:
                 break
 
             generator = (file_version for file_version in client.get(do).json()['file_versions'])
-'''
-                         if keep
-                            and typ == 'resource'
-                            and file_version['publish'] == True
-                            and file_version.get('use_statement', 'ok') 
-                            not in ['image-thumbnail', 'URL-Redirected']
-'''
+ #                        if keep
+ #                           and typ == 'resource'
+ #                           and file_version['publish'] == True
+ #                           and file_version.get('use_statement', 'ok') 
+ #                           not in ['image-thumbnail', 'URL-Redirected'])
             #try:
             #    do_title = client.get(ao).json()['title']
             #except:
