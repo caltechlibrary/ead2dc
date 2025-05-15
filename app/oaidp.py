@@ -116,7 +116,7 @@ def collections():
 
 # read/write collections data to db
 # display collections list
-@bp.route('/collections')
+@bp.route('/dashboard')
 def collections():
     return render_template('dashboard.html')
 
