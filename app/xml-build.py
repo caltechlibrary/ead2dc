@@ -312,11 +312,15 @@ for coll in colls:
     recs_skipped = 0
 
     setid = '/repositories/2/' + coll[11] + 's/' + coll[0]
+
+    #temp
+    print('>', setid)
+
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     #temp
-    #j=0
+    j=0
 
     if collections_dict.get(setid):
 
@@ -327,9 +331,9 @@ for coll in colls:
         for do, ao, typ, keep in collections_dict[setid]:
 
             #temp
-            #j += 1
-            #if j > 5:
-            #    break
+            j += 1
+            if j > 5:
+                break
 
             generator = (file_version for file_version in client.get(do).json()['file_versions']
                          if keep
