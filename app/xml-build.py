@@ -120,13 +120,14 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
             # build dictionary of collections, digital objects, and archival objects
             # dict has the form {collection: {(digital object, archival object, type, keep)}}
             dao_count += 1
-            if collections_dict.get(coll):
-                # add to existing collection
-                collections_dict[coll].add((obj['uri'], linked_instance['ref'], keep))
-            else:
-                # create new collection
-                collections_dict[coll] = {(obj['uri'],linked_instance['ref'], keep)}
-                print('> added', coll, client.get(coll).json()['title'])
+            if coll != []:
+                if collections_dict.get(coll):
+                    # add to existing collection
+                    collections_dict[coll].add((obj['uri'], linked_instance['ref'], typ, keep))
+                else:
+                    # create new collection
+                    collections_dict[coll] = {(obj['uri'],linked_instance['ref'], typ, keep)}
+                    print('> added', coll, client.get(coll).json()['title'])
 
 print('> summary:')
 print('>', dao_count, 'digital objects')
@@ -300,7 +301,7 @@ for coll in colls:
     
         # iterate over collection
         # do = digital object, ao = archival object
-        for do, ao, type, keep in collections_dict[setid]:
+        for do, ao, typ, keep in collections_dict[setid]:
 
             #temp
             #j += 1
@@ -309,7 +310,7 @@ for coll in colls:
 
             generator = (file_version for file_version in client.get(do).json()['file_versions']
                          if keep
-                         and type == 'resource'
+                         and typ == 'resource'
                          and file_version['publish'] == True
                          and file_version.get('use_statement', 'ok') 
                          not in ['image-thumbnail', 'URL-Redirected'])
