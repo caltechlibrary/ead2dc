@@ -67,8 +67,8 @@ notpublished = 0
 suppressed = 0
 notsuppressed = 0
 orphandigitalobjects = 0
-noresources = 0
-noaccessions = 0
+numbresources = 0
+numbaccessions = 0
 
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
@@ -104,11 +104,11 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
         if coll[:26] == '/repositories/2/resources/':
             collections.add(coll)
             typ = 'resource'
-            noresources += 1
+            numbresources += 1
         elif coll[:27] == '/repositories/2/accessions/':
             collections.add(coll)
             typ = 'accession'
-            noaccessions += 1
+            numbaccessions += 1
             keep = False
         else:
             keep = False
@@ -126,7 +126,7 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
                     collections_dict[coll].add((obj['uri'], linked_instance['ref'], typ, keep))
                 else:
                     # create new collection
-                    collections_dict[coll] = {(obj['uri'],linked_instance['ref'], typ, keep)}
+                    collections_dict[coll] = {(obj['uri'], linked_instance['ref'], typ, keep)}
                     print('> added', coll, client.get(coll).json()['title'])
 
 print('> summary:')
@@ -136,8 +136,8 @@ print('>', published, 'published')
 print('>', notpublished, 'not published')
 print('>', suppressed, 'suppressed')
 print('>', notsuppressed, 'not suppressed')
-print('>', noresources, 'resources')
-print('>', noaccessions, 'accessions')
+print('>', numbresources, 'resources')
+print('>', numbaccessions, 'accessions')
 print('>', orphandigitalobjects, 'orphan digital objects')
             
 # update collections info in database
@@ -155,6 +155,7 @@ query = 'SELECT collno,incl FROM collections'
 includedcollections = dict()
 for row in cursor.execute(query).fetchall():
     includedcollections[row[0]] = row[1]
+    print('> included collection:', row[0], row[1])
 
 #temp
 #print(includedcollections)
@@ -170,11 +171,21 @@ cursor.execute(query, [last_update, 'xml'])
 query = 'DELETE FROM collections;'
 cursor.execute(query)
 
-query = 'INSERT INTO collections (collno,eadurl,colltitle,description,collid,docount,incl,caltechlibrary,internetarchive,youtube,other) VALUES (?,?,?,?,?,?,?,?,?,?,?);'
+query = 'INSERT INTO collections (collno,eadurl,colltitle,description,collid,docount,incl,caltechlibrary,internetarchive,youtube,other,typ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);'
 for collectionid in collections:
     coll_info = client.get(collectionid).json()
     collid = coll_info['uri']
-    collno = collid[26:]
+    if collid[16:25] == 'resources': 
+        typ = 'resource'
+        collno = collid[26:]
+    elif collid[16:26] == 'accessions':
+        typ = 'accession'
+        collno = collid[27:]
+    else:
+        typ = 'unknown'
+        print('> error: cannot identify record type:', collid)
+    # collid is the URI of the collection
+    
     eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
     colltitle = coll_info['title']
     try:
@@ -197,7 +208,7 @@ for collectionid in collections:
     # carchives int, clibrary int, iarchive int, youtube int, other int, 
     # collid text, description text, eadurl text
     cursor.execute(query, [collno, eadurl, colltitle, description, collid, 0, 
-            includedcollections.get(collectionid[26:], 0), 0, 0, 0, 0])
+            includedcollections.get(collno, 0), 0, 0, 0, 0, typ])
     
     #temp
     #print('temp:', collectionid[26:])
