@@ -217,7 +217,7 @@ connection.commit()
 
 # read collection info from db
 # colls is a list of tuples
-query = 'SELECT collno,eadurl,colltitle,description,collid,docount,incl,caltechlibrary,internetarchive,youtube,other FROM collections'
+query = 'SELECT collno,eadurl,colltitle,description,collid,docount,incl,caltechlibrary,internetarchive,youtube,other,typ FROM collections'
 colls = cursor.execute(query).fetchall()
 cursor.close()
 connection.close()
@@ -295,10 +295,23 @@ intertime = time.time()
 
 for coll in colls:
 
+    # coll[0] = collno
+    # coll[1] = eadurl
+    # coll[2] = colltitle
+    # coll[3] = description
+    # coll[4] = collid
+    # coll[5] = docount
+    # coll[6] = incl
+    # coll[7] = caltechlibrary
+    # coll[8] = internetarchive
+    # coll[9] = youtube
+    # coll[10] = other
+    # coll[11] = typ
+    
     recs_created = 0
     recs_skipped = 0
 
-    setid = '/repositories/2/resources/' + coll[0]
+    setid = '/repositories/2/' + coll[11] + 's/' + coll[0]
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
