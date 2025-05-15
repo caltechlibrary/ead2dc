@@ -328,6 +328,9 @@ for coll in colls:
     
         # iterate over collection
         # do = digital object, ao = archival object
+        # typ = type of collection resource|accession
+        # keep = True if the object is published and not suppressed
+        # collections_dict[setid] = {(digital object, archival object, type, keep)}        
         for do, ao, typ, keep in collections_dict[setid]:
 
             #temp
@@ -335,12 +338,14 @@ for coll in colls:
             if j > 5:
                 break
 
-            generator = (file_version for file_version in client.get(do).json()['file_versions']
+            generator = (file_version for file_version in client.get(do).json()['file_versions'])
+'''
                          if keep
-                         and typ == 'resource'
-                         and file_version['publish'] == True
-                         and file_version.get('use_statement', 'ok') 
-                         not in ['image-thumbnail', 'URL-Redirected'])
+                            and typ == 'resource'
+                            and file_version['publish'] == True
+                            and file_version.get('use_statement', 'ok') 
+                            not in ['image-thumbnail', 'URL-Redirected']
+'''
             #try:
             #    do_title = client.get(ao).json()['title']
             #except:
