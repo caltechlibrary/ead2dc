@@ -93,12 +93,11 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
 
     # capture the id of the collections
     coll = obj.get('collection')
-    if coll is None:
+    if coll == []:
         keep = False
         typ = 'orphan'
         orphandigitalobjects += 1
     else:
-        print('> collection:', coll)
         coll = obj['collection'][0]['ref']
         # identify the type of collection
         # add to collections set
