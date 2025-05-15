@@ -67,18 +67,15 @@ notpublished = 0
 suppressed = 0
 notsuppressed = 0
 orphandigitalobjects = 0
+noresources = 0
+noaccessions = 0
 
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
 
     keep = True
 
-    # if there is a value for 'collection' add that value to the collections set
     # only include objects that are published and not suppressed
-    if not obj.get('collection'):
-        keep = False
-        orphandigitalobjects += 1
-        #print('> orphan digital object', obj['uri'])
 
     # check for published
     if obj.get('publish') == False:
@@ -95,18 +92,27 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
         notsuppressed += 1
 
     # capture the id of the collections
-    try:
+    coll = obj.get('collection')
+    if coll is None:
+        keep = False
+        typ = 'orphan'
+        orphandigitalobjects += 1
+    else:
         coll = obj['collection'][0]['ref']
-        # verify the form '/repositories/2/resources/' to ensure a collection id
+        # identify the type of collection
         # add to collections set
-        if coll[:26] == '/repositories/2/resources/' or  coll[:27] == '/repositories/2/accessions/':
+        if coll[:26] == '/repositories/2/resources/':
             collections.add(coll)
+            typ = 'resource'
+            noresources += 1
+        elif coll[:27] == '/repositories/2/accessions/':
+            collections.add(coll)
+            typ = 'accession'
+            noaccessions += 1
+            keep = False
         else:
             keep = False
-            print('> cannot identify record type:', obj['uri'])
-    except:
-        keep = False
-        print('> cannot identify collection:', obj['uri'])
+            print('> error: cannot identify record type:', obj['uri'])
     
     # iterate over the linked instances to find archival records
     for linked_instance in obj['linked_instances']:
@@ -129,6 +135,8 @@ print('>', published, 'published')
 print('>', notpublished, 'not published')
 print('>', suppressed, 'suppressed')
 print('>', notsuppressed, 'not suppressed')
+print('>', noresources, 'resources')
+print('>', noaccessions, 'accessions')
 print('>', orphandigitalobjects, 'orphan digital objects')
             
 # update collections info in database
