@@ -114,6 +114,12 @@ def collections():
                            url=pub_url+cbase,
                            totals=totals)
 
+# read/write collections data to db
+# display collections list
+@bp.route('/collections')
+def collections():
+    return render_template('dashboard.html')
+
 # refresh collections data from ArchivesSpace
 @bp.route('/collections2')
 def collections2():
