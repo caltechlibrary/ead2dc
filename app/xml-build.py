@@ -315,7 +315,7 @@ for coll in colls:
     setid = '/repositories/2/' + coll[11] + 's/' + coll[0]
 
     #temp
-    print('>', setid)
+    #print('>', setid)
 
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
@@ -336,30 +336,16 @@ for coll in colls:
 
             #temp
             j += 1
-            if j > 5:
+            if j > 50:
                 break
 
             generator = (file_version for file_version in client.get(do).json()['file_versions']
                          if keep
                             and typ == 'resource'
-                            and file_version['publish'] == True
+                            #and file_version['publish'] == True
                             and file_version.get('use_statement', 'ok') 
                             not in ['image-thumbnail', 'URL-Redirected'])
-            n = 0
-            while True:
-                n += 1
-                try:
-                    print('> gen:', n, next(generator)['file_uri'])
-                except StopIteration:
-                    break
-                except:
-                    print('> error: cannot get file version')
-                    break
-            #try:
-            #    do_title = client.get(ao).json()['title']
-            #except:
-            #    do_title = 'no title'
-            #    print('> no title')
+
             try:
                 file_uri = next(generator)['file_uri']
                 url = urlparse(file_uri).hostname
