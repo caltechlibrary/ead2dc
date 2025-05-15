@@ -46,5 +46,12 @@ print('Finding digital content...')
 
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
-    print(obj['uri'], obj['collection'][0]['ref'], obj['linked_instances'][0]['ref'])
-    
+    print(obj['uri'])
+    try:
+        print('-->', obj['collection'][0]['ref'])
+    except:
+        print('--> None')
+    try:
+        print('---->', obj['linked_instances'][0]['ref'])
+    except:
+        print('----> None')
