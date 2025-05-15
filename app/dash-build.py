@@ -48,12 +48,17 @@ print('Finding digital content...')
 numb_do = 0 # number of digital objects
 numb_ao = 0 # number of archival objects
 
+cnt = 0
+
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
+    cnt += 1
     numb_do += 1
     li = obj.get('linked_instances', 0)
     if li:
         print(li)
+    if cnt >50:
+        break
 print('Number of digital objects:', numb_do)
 '''    print(obj['uri'], obj['linked_instances'][0]['ref'])
 
