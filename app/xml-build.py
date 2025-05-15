@@ -345,9 +345,11 @@ for coll in colls:
                             and file_version['publish'] == True
                             and file_version.get('use_statement', 'ok') 
                             not in ['image-thumbnail', 'URL-Redirected'])
+            n = 0
             while True:
+                n += 1
                 try:
-                    print('> gen:', next(generator)['file_uri'])
+                    print('> gen:', n, next(generator)['file_uri'])
                 except StopIteration:
                     break
                 except:
