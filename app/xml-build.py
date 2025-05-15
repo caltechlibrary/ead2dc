@@ -436,7 +436,7 @@ for coll in colls:
         print('>', recs_skipped, 'records skipped')
 
     else:
-        print('> not included in XML repoisitory:')
+        print('> not included in XML repository')
 
     print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
     intertime = time.time()
