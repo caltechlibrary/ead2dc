@@ -321,7 +321,7 @@ for coll in colls:
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     #temp
-    j=0
+    #j=0
 
     if collections_dict.get(setid):
 
@@ -335,9 +335,9 @@ for coll in colls:
         for do, ao, typ, keep in collections_dict[setid]:
 
             #temp
-            j += 1
-            if j > 50:
-                break
+            #j += 1
+            #if j > 50:
+            #    break
 
             generator = (file_version for file_version in client.get(do).json()['file_versions']
                          if keep
