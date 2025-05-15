@@ -347,7 +347,7 @@ for coll in colls:
                             not in ['image-thumbnail', 'URL-Redirected'])
             while True:
                 try:
-                    print(next(generator))
+                    print('> gen:', next(generator)['file_uri'])
                 except StopIteration:
                     break
                 except:
