@@ -44,10 +44,19 @@ dao_count = 0
 
 print('Finding digital content...')
 
+
+numb_do = 0 # number of digital objects
+numb_ao = 0 # number of archival objects
+
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
-    print(obj['uri'], obj['linked_instances'][0]['ref'])
-'''
+    numb_do += 1
+    li = obj.get('linked_instances', 0)
+    if li:
+        print(li)
+print('Number of digital objects:', numb_do)
+'''    print(obj['uri'], obj['linked_instances'][0]['ref'])
+
     try:
         print('-->', obj['collection'][0]['ref'])
     except:
