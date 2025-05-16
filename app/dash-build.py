@@ -62,10 +62,10 @@ digital_objects_dict = dict()
 for uri in digital_objects:
     obj = client.get(uri)
     digital_objects_dict[obj.get('uri')] = {'collection': [], 'linked_instances': []}
-    for o in obj.get('linked_instances', []):
-        digital_objects_dict[obj.get('uri')]['linked_instances'].append(o.get('ref'))
-    for o in obj.get('collection', []):
-        digital_objects_dict[obj.get('uri')]['collection'].append(o.get('ref'))
+    for o in obj['linked_instances']:
+        digital_objects_dict[uri]['linked_instances'].append(o['ref'])
+    for o in obj['collection']:
+        digital_objects_dict['uri']['collection'].append(o['ref'])
 
 end = time.time()
 print('Elapsed time:', round(end - start, 2), 'seconds')
