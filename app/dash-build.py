@@ -12,7 +12,6 @@ import xml.dom.minidom as dom
 from datetime import date, datetime
 from pathlib import Path
 from urllib.parse import urlparse
-import pandas as pd
 from asnake.client import ASnakeClient
 
 # FUNCTIONS
