@@ -54,4 +54,18 @@ collections_dict = dict()
 
 # iterate over digital objects
 for obj in client.get_paged('/repositories/2/digital_objects'):
-    
+    numb_do += 1
+    n = len(obj.get('linked_instances', []))
+    m = len(obj.get('collection', []))
+    if linked_dict.get(n):
+        linked_dict[n] += 1
+    else:
+        linked_dict[n] = 1
+    if collections_dict.get(m):
+        collections_dict[m] += 1
+    else:
+        collections_dict[m] = 1
+
+print(numb_do, 'digital objects found')
+print(linked_dict)
+print(collections_dict)
