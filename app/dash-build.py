@@ -42,30 +42,31 @@ dao_count = 0
 print('Reading digital objects...')
 for obj in client.get_paged('/repositories/2/digital_objects'):
     digital_objects.add(obj.get('uri'))
-df = pd.DataFrame(list(digital_objects))
-df.to_pickle('digital_objects.pickle')
 print('Found', len(digital_objects), 'digital objects')
 
 print('Reading archival objects...')
 for obj in client.get_paged('/repositories/2/archival_objects'):
     archival_objects.add(obj.get('uri'))
-df = pd.DataFrame(list(archival_objects))
-df.to_pickle('archival_objects.pickle')
 print('Found', len(archival_objects), 'archival objects')
 
 print('Reading resources...')
 for obj in client.get_paged('/repositories/2/resources'):
     resources.add(obj.get('uri'))
-df = pd.DataFrame(list(resources))
-df.to_pickle('resources.pickle')
 print('Found', len(resources), 'resources')
 
 print('Reading accessions...')
 for obj in client.get_paged('/repositories/2/accessions'):
     accessions.add(obj.get('uri'))
-df = pd.DataFrame(list(accessions))
-df.to_pickle('accessions.pickle')
 print('Found', len(accessions), 'accessions')
+
+digital_objects_dict = dict()
+for uri in digital_objects:
+    obj = client.get(uri)
+    digital_objects_dict[obj.get('uri')] = {'collection': [], 'linked_instances': []}
+    for o in obj.get('linked_instances', []):
+        digital_objects_dict[obj.get('uri')]['linked_instances'].append(o.get('ref'))
+    for o in obj.get('collection', []):
+        digital_objects_dict[obj.get('uri')]['collection'].append(o.get('ref'))
 
 end = time.time()
 print('Elapsed time:', round(end - start, 2), 'seconds')
