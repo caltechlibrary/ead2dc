@@ -74,10 +74,12 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
 
     n = len(obj.get('linked_instances', []))
     if n > 2:
+        print(obj.get('uri'))
         for o in obj.get('linked_instances', []):
-            print(o.get('ref'))
+            print('                    ', o.get('ref'))
 
     m = len(obj.get('collection', []))
     if m > 2:
+        print(obj.get('uri'))
         for o in obj.get('collection', []):
-            print(o.get('ref'))
+            print('                    ', o.get('ref'))
