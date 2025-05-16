@@ -18,7 +18,7 @@ from asnake.client import ASnakeClient
 
 # MAIN
 
-#start = time.time()
+start = time.time()
 
 # db location
 #print('Reading database location...')
@@ -48,6 +48,7 @@ linked_dict = dict()
 collections_dict = dict()
 
 # iterate over digital objects
+'''
 for obj in client.get_paged('/repositories/2/digital_objects'):
     numb_do += 1
     n = len(obj.get('linked_instances', []))
@@ -60,7 +61,7 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
         collections_dict[m] += 1
     else:
         collections_dict[m] = 1
-
+'''
 print(numb_do, 'digital objects found')
 print(dict(sorted(linked_dict.items())), 'digital objects with linked instances')
 print(dict(sorted(collections_dict.items())), 'digital objects with collections')
@@ -93,3 +94,6 @@ print('Found', len(digital_objects), 'digital objects')
 print('Found', len(archival_objects), 'archival objects')
 print('Found', len(resources), 'resources')
 print('Found', len(accessions), 'accessions')
+
+end = time.time()
+print('Elapsed time:', round(end - start, 2), 'seconds')
