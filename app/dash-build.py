@@ -67,5 +67,5 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
         collections_dict[m] = 1
 
 print(numb_do, 'digital objects found')
-print(dict(sorted(dict.items())), 'digital objects with linked instances')
+print(dict(sorted(linked_dict.items())), 'digital objects with linked instances')
 print(dict(sorted(collections_dict.items())), 'digital objects with collections')
