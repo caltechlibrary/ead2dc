@@ -37,18 +37,34 @@ resources, accessions, archival_objects, digital_objects = set(), set(), set(), 
 
 dao_count = 0
 
-print('Finding digital content...')
+# iterate over digital objects
+print('Reading digital objects...')
+for obj in client.get_paged('/repositories/2/digital_objects'):
+    digital_objects.add(obj.get('uri'))
+print('Found', len(digital_objects), 'digital objects')
 
-numb_do = 0 # number of digital objects
-numb_ao = 0 # number of archival objects
-numb_ac = 0 # number of accessions
-numb_re = 0 # number of resources
+print('Reading archival objects...')
+for obj in client.get_paged('/repositories/2/archival_objects'):
+    archival_objects.add(obj.get('uri'))
+print('Found', len(archival_objects), 'archival objects')
 
+print('Reading resources...')
+for obj in client.get_paged('/repositories/2/resources'):
+    resources.add(obj.get('uri'))
+print('Found', len(resources), 'resources')
+
+print('Reading accessions...')
+for obj in client.get_paged('/repositories/2/accessions'):
+    accessions.add(obj.get('uri'))
+print('Found', len(accessions), 'accessions')
+
+end = time.time()
+print('Elapsed time:', round(end - start, 2), 'seconds')
+
+'''
 linked_dict = dict()
 collections_dict = dict()
 
-# iterate over digital objects
-'''
 for obj in client.get_paged('/repositories/2/digital_objects'):
     numb_do += 1
     n = len(obj.get('linked_instances', []))
@@ -61,22 +77,12 @@ for obj in client.get_paged('/repositories/2/digital_objects'):
         collections_dict[m] += 1
     else:
         collections_dict[m] = 1
-'''
+
 print(numb_do, 'digital objects found')
 print(dict(sorted(linked_dict.items())), 'digital objects with linked instances')
 print(dict(sorted(collections_dict.items())), 'digital objects with collections')
+'''
 
-for obj in client.get_paged('/repositories/2/digital_objects'):
-    digital_objects.add(obj.get('uri'))
-
-for obj in client.get_paged('/repositories/2/archival_objects'):
-    archival_objects.add(obj.get('uri'))
-
-for obj in client.get_paged('/repositories/2/resources'):
-    resources.add(obj.get('uri'))
-
-for obj in client.get_paged('/repositories/2/accessions'):
-    accessions.add(obj.get('uri'))
 '''
     n = len(obj.get('linked_instances', []))
     if n > 2:
@@ -90,10 +96,3 @@ for obj in client.get_paged('/repositories/2/accessions'):
         for o in obj.get('collection', []):
             print('                    ', o.get('ref'))
 '''
-print('Found', len(digital_objects), 'digital objects')
-print('Found', len(archival_objects), 'archival objects')
-print('Found', len(resources), 'resources')
-print('Found', len(accessions), 'accessions')
-
-end = time.time()
-print('Elapsed time:', round(end - start, 2), 'seconds')
