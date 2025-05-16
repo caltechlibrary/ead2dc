@@ -9,6 +9,7 @@ import time
 import sqlite3 as sq
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
+import pickle
 from datetime import date, datetime
 from pathlib import Path
 from urllib.parse import urlparse
@@ -61,7 +62,7 @@ print('Found', len(accessions), 'accessions')
 digital_objects_dict = dict()
 for uri in digital_objects:
     obj = client.get(uri)
-    digital_objects_dict[obj.get('uri')] = {'collection': [], 'linked_instances': []}
+    digital_objects_dict[obj['uri']] = {'collection': [], 'linked_instances': []}
     for o in obj['linked_instances']:
         digital_objects_dict[uri]['linked_instances'].append(o['ref'])
     for o in obj['collection']:
