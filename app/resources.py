@@ -32,12 +32,12 @@ resources = set()
 resources_dict = dict()
 
 print('Reading resources...')
-with open('resources.csv', 'w', newline='', encoding='utf-8') as csvfile:
+with open('accessions.csv', 'w', newline='', encoding='utf-8') as csvfile:
     fieldnames = ['uri', 'title', 'publish', 'restrictions', 'repository_processing_note', 'ead_id', 'finding_aid_title', 'finding_aid_filing_title', 'finding_aid_date', 'finding_aid_author', 'created_by', 'last_modified_by', 'create_time', 'system_mtime', 'user_mtime', 'suppressed', 'is_slug_auto', 'id_0', 'level', 'resource_type', 'finding_aid_description_rules', 'finding_aid_language', 'finding_aid_script', 'finding_aid_status', 'jsonmodel_type']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
     
-    for obj in client.get_paged('/repositories/2/resources'):
+    for obj in client.get_paged('/repositories/2/accessions'):
         writer.writerow({fieldname: obj.get(fieldname)for fieldname in fieldnames})
 
 print('Found', len(resources), 'resources')
