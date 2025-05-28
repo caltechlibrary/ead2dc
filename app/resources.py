@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# dash-build.py
+# resources.py
 #
 # Builds data for dashboard
 # Data source is ArchivesSpace API
@@ -34,43 +34,22 @@ client = ASnakeClient(baseurl = secrets.baseurl,
 client.authorize()
 
 # initialize resources, archival object, and digital object sets
-resources, accessions, archival_objects, digital_objects = set(), set(), set(), set()
-
-dao_count = 0
-
-# iterate over digital objects
-print('Reading digital objects...')
-for obj in client.get_paged('/repositories/2/digital_objects'):
-    digital_objects.add(obj.get('uri'))
-
-print('Found', len(digital_objects), 'digital objects')
-
-print('Reading archival objects...')
-for obj in client.get_paged('/repositories/2/archival_objects'):
-    archival_objects.add(obj.get('uri'))
-print('Found', len(archival_objects), 'archival objects')
+resources = set()
+resources_dict = dict()
 
 print('Reading resources...')
 for obj in client.get_paged('/repositories/2/resources'):
     resources.add(obj.get('uri'))
 print('Found', len(resources), 'resources')
 
-print('Reading accessions...')
-for obj in client.get_paged('/repositories/2/accessions'):
-    accessions.add(obj.get('uri'))
-print('Found', len(accessions), 'accessions')
+resources = list(resources)
 
-digital_objects_dict = dict()
-for uri in digital_objects:
+for uri in resources:
     obj = client.get(uri)
-    digital_objects_dict[obj['uri']] = {'collection': [], 'linked_instances': []}
-    for o in obj['linked_instances']:
-        digital_objects_dict[uri]['linked_instances'].append(o['ref'])
-    for o in obj['collection']:
-        digital_objects_dict['uri']['collection'].append(o['ref'])
-
+    resources_dict[obj['uri']] = {'title': obj['title']}
 end = time.time()
 print('Elapsed time:', round(end - start, 2), 'seconds')
+print(resources_dict)
 
 
 
