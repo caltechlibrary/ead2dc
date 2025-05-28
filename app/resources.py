@@ -38,15 +38,7 @@ with open('resources.csv', 'w', newline='', encoding='utf-8') as csvfile:
     writer.writeheader()
     
     for obj in client.get_paged('/repositories/2/resources'):
-        writer.writerow({'uri': obj.get('uri'), 'title': obj.get('title'), 'publish': obj.get('publish'), 
-                        'restrictions': obj.get('restrictions'), 'repository_processing_note': obj.get('repository_processing_note'),
-                        'ead_id': obj.get('ead_id'), 'finding_aid_title': obj.get('finding_aid_title'), 'finding_aid_filing_title': obj.get('finding_aid_filing_title'),
-                        'finding_aid_date': obj.get('finding_aid_date'), 'finding_aid_author': obj.get('finding_aid_author'), 
-                        'created_by': obj.get('created_by'), 'last_modified_by': obj.get('last_modified_by'), 'create_time': obj.get('create_time'), 
-                        'system_mtime': obj.get('system_mtime'), 'user_mtime': obj.get('user_mtime'), 'suppressed': obj.get('suppressed'), 'is_slug_auto': obj.get('is_slug_auto'), 'id_0': obj.get('id_0'),
-                        'level': obj.get(, 'resource_type': obj.get(, 'finding_aid_description_rules': obj.get(, 
-                        'finding_aid_language': obj.get(, 'finding_aid_script': obj.get(, 'finding_aid_status': obj.get(, 
-                        'jsonmodel_type': obj.get('jsonmodel_type')})
+        writer.writerow({fieldname: obj.get(fieldname)for fieldname in fieldnames})
 
 print('Found', len(resources), 'resources')
 
