@@ -6,13 +6,7 @@
 # Data source is ArchivesSpace API
 
 import time
-import sqlite3 as sq
-import xml.etree.ElementTree as ET
-import xml.dom.minidom as dom
-import pickle
-from datetime import date, datetime
-from pathlib import Path
-from urllib.parse import urlparse
+import csv
 from asnake.client import ASnakeClient
 
 # FUNCTIONS
@@ -38,8 +32,14 @@ resources = set()
 resources_dict = dict()
 
 print('Reading resources...')
-for obj in client.get_paged('/repositories/2/resources'):
-    print(obj.get('title'))
+with open('resources.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    fieldnames = ['uri', 'title']
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    
+    for obj in client.get_paged('/repositories/2/resources'):
+        writer.writerow({'uri': obj.get('uri'), 'title': obj.get('title')})
+
 print('Found', len(resources), 'resources')
 
 
