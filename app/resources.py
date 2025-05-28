@@ -39,15 +39,10 @@ resources_dict = dict()
 
 print('Reading resources...')
 for obj in client.get_paged('/repositories/2/resources'):
-    resources.add(obj.get('uri'))
+    print(obj.get('title'))
 print('Found', len(resources), 'resources')
 
-resources = list(resources)
 
-for uri in resources:
-    obj = client.get(uri)
-    print(obj)
-    #resources_dict[obj['uri']] = {'title': obj['title']}
 end = time.time()
 print('Elapsed time:', round(end - start, 2), 'seconds')
 
