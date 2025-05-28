@@ -46,7 +46,8 @@ resources = list(resources)
 
 for uri in resources:
     obj = client.get(uri)
-    resources_dict[obj['uri']] = {'title': obj['title']}
+    print(obj['title'])
+    #resources_dict[obj['uri']] = {'title': obj['title']}
 end = time.time()
 print('Elapsed time:', round(end - start, 2), 'seconds')
 print(resources_dict)
