@@ -37,7 +37,7 @@ with open('resources.csv', 'w', newline='', encoding='utf-8') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
     count = 0
-    for obj in client.get_paged('/repositories/2/accessions'):
+    for obj in client.get_paged('/repositories/2/resources'):
         writer.writerow({fieldname: obj.get(fieldname)for fieldname in fieldnames})
         count += 1
 
