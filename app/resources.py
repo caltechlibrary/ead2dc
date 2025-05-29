@@ -41,7 +41,7 @@ with open('resources.csv', 'w', newline='', encoding='utf-8') as csvfile:
         writer.writerow({fieldname: obj.get(fieldname)for fieldname in fieldnames})
         count += 1
 
-print('Found', count), 'resources')
+print('Found', count, 'resources')
 
 
 end = time.time()
