@@ -7,7 +7,7 @@ from datetime import datetime, date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from pathlib import Path
-import json, subprocess
+import csv, json, subprocess
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), 'r') as f:
@@ -116,9 +116,57 @@ def collections():
 
 # read/write collections data to db
 # display collections list
+# download collections data
 @bp.route('/dashboard')
 def dashboard():
     return render_template('dashboard.html')
+
+@bp.route('/download')
+def download():
+    secrets = __import__('secrets')
+    client = ASnakeClient(baseurl = secrets.baseurl,
+                      username = secrets.username,
+                      password = secrets.password)
+    client.authorize()
+    # initialize resources, archival object, and digital object sets
+    data_dict, data_csv = dict(), ''
+    fieldnames = ['uri', 
+                  'title', 
+                  'publish', 
+                  'restrictions', 
+                  'repository_processing_note', 
+                  'ead_id', 
+                  'finding_aid_title', 
+                  'finding_aid_filing_title', 
+                  'finding_aid_date', 
+                  'finding_aid_author', 
+                  'created_by', 
+                  'last_modified_by', 
+                  'create_time', 
+                  'system_mtime', 
+                  'user_mtime', 
+                  'suppressed', 
+                  'is_slug_auto', 
+                  'id_0', 
+                  'level', 
+                  'resource_type', 
+                  'finding_aid_description_rules', 
+                  'finding_aid_language', 
+                  'finding_aid_script',
+                  'finding_aid_status', 
+                  'jsonmodel_type']
+    print('Reading resources...')
+    with open('accessions.csv', 'w', newline='', encoding='utf-8') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        for obj in client.get_paged('/repositories/2/accessions'):
+            writer.writerow({fieldname: obj.get(fieldname)for fieldname in fieldnames})
+    return
+
+# return the CSV file as a response
+    response = Response(csv_data, mimetype='text/csv')
+    response.headers.set('Content-Disposition', 'attachment', filename='collections.csv')
+    return response
 
 # refresh collections data from ArchivesSpace
 @bp.route('/collections2')
