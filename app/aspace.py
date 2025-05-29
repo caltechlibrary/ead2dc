@@ -2,7 +2,7 @@ from app.db import get_db
 
 from pathlib import Path
 from datetime import datetime
-import json
+import json, csv
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
@@ -23,6 +23,29 @@ from asnake.client import ASnakeClient
 client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
                       username=config['ASPACE_USERNAME'],
                       password=config['ASPACE_PASSWORD'])
+
+
+def csv_gen():
+
+    client.authorize()
+
+    with open('resources.csv', 'w', newline='', encoding='utf-8') as csvfile:
+        fieldnames = ['uri', 'title', 'publish', 'restrictions', 'repository_processing_note', 'ead_id', 'finding_aid_title', 'finding_aid_filing_title', 'finding_aid_date', 'finding_aid_author', 'created_by', 'last_modified_by', 'create_time', 'system_mtime', 'user_mtime', 'suppressed', 'is_slug_auto', 'id_0', 'level', 'resource_type', 'finding_aid_description_rules', 'finding_aid_language', 'finding_aid_script', 'finding_aid_status', 'jsonmodel_type']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        count = 0
+        for obj in client.get_paged('/repositories/2/resources'):
+            writer.writerow({fieldname: obj.get(fieldname)for fieldname in fieldnames})
+            count += 1
+
+
+
+
+
+
+
+
+
 
 # read notes from collection; returns string
 def get_notes(id):
