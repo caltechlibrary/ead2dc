@@ -178,7 +178,7 @@ def dashboard():
         else:
             fields = [field for field in fieldnames if field in fields]
         # generate CSV file
-        rec_count = csv_gen(filename, fieldnames, category)
+        rec_count = csv_gen(filename, fields, category)
         return render_template('dashboard2.html',
                                 category=category,
                                 filename=filename,
