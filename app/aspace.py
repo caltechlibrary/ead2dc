@@ -29,21 +29,15 @@ def csv_gen(filename, fieldnames, category):
 
     client.authorize()
 
+    rec_count = 0
     with open(Path(Path(__file__).resolve().parent).joinpath(filename), 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for obj in client.get_paged('/repositories/2/'+category):
             writer.writerow({fieldname: obj.get(fieldname)for fieldname in fieldnames})
-        
-    return
+            rec_count += 1
 
-
-
-
-
-
-
-
+    return rec_count
 
 
 # read notes from collection; returns string

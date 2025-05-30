@@ -2,7 +2,7 @@
 from app.aspace import get_notes, get_last_update, write_last_update, csv_gen
 from app.db import get_db
 # other imports
-from flask import Blueprint, request, Response, render_template
+from flask import Blueprint, request, Response, render_template, send_file
 from datetime import datetime, date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
@@ -147,55 +147,22 @@ def dashboard():
                         'finding_aid_script',
                         'finding_aid_status', 
                         'jsonmodel_type'   ]
-        csv_gen(filename, fieldnames, category)
-    return render_template('dashboard.html')
+        rec_count = csv_gen(filename, fieldnames, category)
+    return render_template('dashboard2.html',
+                           category=category,
+                           filename=filename,
+                           rec_count=rec_count)
 
 @bp.route('/download')
 def download():
-    secrets = __import__('secrets')
-    client = ASnakeClient(baseurl = secrets.baseurl,
-                      username = secrets.username,
-                      password = secrets.password)
-    client.authorize()
-    # initialize resources, archival object, and digital object sets
-    data_dict, data_csv = dict(), ''
-    fieldnames = ['uri', 
-                  'title', 
-                  'publish', 
-                  'restrictions', 
-                  'repository_processing_note', 
-                  'ead_id', 
-                  'finding_aid_title', 
-                  'finding_aid_filing_title', 
-                  'finding_aid_date', 
-                  'finding_aid_author', 
-                  'created_by', 
-                  'last_modified_by', 
-                  'create_time', 
-                  'system_mtime', 
-                  'user_mtime', 
-                  'suppressed', 
-                  'is_slug_auto', 
-                  'id_0', 
-                  'level', 
-                  'resource_type', 
-                  'finding_aid_description_rules', 
-                  'finding_aid_language', 
-                  'finding_aid_script',
-                  'finding_aid_status', 
-                  'jsonmodel_type']
-    print('Reading resources...')
-    with open('accessions.csv', 'w', newline='', encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for obj in client.get_paged('/repositories/2/accessions'):
-            writer.writerow({fieldname: obj.get(fieldname)for fieldname in fieldnames})
-    return
+    return send_file(path, as_attachment=True)
 
+'''
 # return the CSV file as a response
     response = Response(csv_data, mimetype='text/csv')
     response.headers.set('Content-Disposition', 'attachment', filename='collections.csv')
     return response
+'''
 
 # refresh collections data from ArchivesSpace
 @bp.route('/collections2')
