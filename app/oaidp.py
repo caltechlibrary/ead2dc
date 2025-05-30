@@ -121,7 +121,7 @@ def collections():
 def dashboard():
     if request.method == 'POST':
         category = request.form.get('category')
-        filename = category + '.csv'
+        filename = './' + category + '.csv'
         fieldnames = [  'uri', 
                         'title', 
                         'publish', 
