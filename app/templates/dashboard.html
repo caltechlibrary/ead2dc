@@ -7,9 +7,9 @@
 <p>Select a record type for download:</p>
 
 <form action="{{ url_for('oaidp.dashboard') }}" method="POST">
-    <input type="radio" id="resources" name="category" value="resources"><label for="resources">Resources</label><br>
-    <input type="radio" id="accessions" name="category" value="accessions"><label for="accessions">Accessions</label><br>
-    <button type="submit">Select</button>
+    <input type="radio" id="resources" name="category" value="resources"><label for="resources">Resources</label> (a few seconds)<br>
+    <input type="radio" id="accessions" name="category" value="accessions"><label for="accessions">Accessions</label> (about 20 seconds)<br>
+    <button type="submit">Gather data and save file</button>
 </form>
 
 {% endblock %}
