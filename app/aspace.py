@@ -29,7 +29,7 @@ def csv_gen(filename, fieldnames, category):
 
     client.authorize()
 
-    with open('resources.csv', 'w', newline='', encoding='utf-8') as csvfile:
+    with open(Path(Path(__file__).resolve().parent).joinpath(filename), 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for obj in client.get_paged('/repositories/2/'+category):
