@@ -156,9 +156,9 @@ def dashboard():
         return render_template('dashboard.html')
     
 
-@bp.route('/download')
-def download():
-    return send_file(path, as_attachment=True)
+@bp.route('/download/<filename>')
+def download(filename):
+    return send_file(filename, as_attachment=True)
 
 '''
 # return the CSV file as a response
