@@ -148,10 +148,13 @@ def dashboard():
                         'finding_aid_status', 
                         'jsonmodel_type'   ]
         rec_count = csv_gen(filename, fieldnames, category)
-    return render_template('dashboard2.html',
+        return render_template('dashboard2.html',
                            category=category,
                            filename=filename,
                            rec_count=rec_count)
+    else:
+        return render_template('dashboard.html')
+    
 
 @bp.route('/download')
 def download():
