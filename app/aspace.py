@@ -25,18 +25,17 @@ client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
                       password=config['ASPACE_PASSWORD'])
 
 
-def csv_gen():
+def csv_gen(filename, fieldnames, category):
 
     client.authorize()
 
-    with open('resources.csv', 'w', newline='', encoding='utf-8') as csvfile:
-        fieldnames = ['uri', 'title', 'publish', 'restrictions', 'repository_processing_note', 'ead_id', 'finding_aid_title', 'finding_aid_filing_title', 'finding_aid_date', 'finding_aid_author', 'created_by', 'last_modified_by', 'create_time', 'system_mtime', 'user_mtime', 'suppressed', 'is_slug_auto', 'id_0', 'level', 'resource_type', 'finding_aid_description_rules', 'finding_aid_language', 'finding_aid_script', 'finding_aid_status', 'jsonmodel_type']
+    with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        count = 0
-        for obj in client.get_paged('/repositories/2/resources'):
+        for obj in client.get_paged('/repositories/2/'+category):
             writer.writerow({fieldname: obj.get(fieldname)for fieldname in fieldnames})
-            count += 1
+        
+    return
 
 
 

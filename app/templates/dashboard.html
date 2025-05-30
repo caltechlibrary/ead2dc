@@ -2,44 +2,11 @@
 
 {% block content %}
 
-<h3>Collections</h3>
+<h3>Dashboard</h3>
 
-<p>
-    Data is updated nightly from ArchivesSpace at 3am.
-</p>
-
-<table>
-    <tr>
-        <td align="right"><strong>Data last updated from ArchivesSpace:</strong></td><td>{{ dt_xml }}</td>
-    </tr>
-</table>
-
-<br/>
-
-<table>
-<tr>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-</tr>
-
-    <tr>
-        <td align="center"></td>
-        <td align="right"></td>
-        <td></td>
-        <td align="right"></td>
-        <td align="center"></td>
-        <td align="right"></td>
-        <td align="right"></td>
-        <td align="right"></td>
-        <td align="right"></td>
-    </tr>
-
-
-</table>
+<form action="{{ url_for('oaidp.dashboard') }}" method="POST">
+    <input type="radio" id="resources" name="category" value="resources"><label for="resources">Resources</label><br>
+    <input type="radio" id="accessions" name="category" value="accessions"><label for="accessions">Accessions</label><br>
 </form>
 
 

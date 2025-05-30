@@ -1,5 +1,5 @@
 # local imports
-from app.aspace import get_notes, get_last_update, write_last_update
+from app.aspace import get_notes, get_last_update, write_last_update, csv_gen
 from app.db import get_db
 # other imports
 from flask import Blueprint, request, Response, render_template
@@ -117,8 +117,37 @@ def collections():
 # read/write collections data to db
 # display collections list
 # download collections data
-@bp.route('/dashboard')
+@bp.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
+    if request.method == 'POST':
+        category = request.form.get('category')
+        filename = category + '.csv'
+        fieldnames = [  'uri', 
+                        'title', 
+                        'publish', 
+                        'restrictions', 
+                        'repository_processing_note', 
+                        'ead_id', 
+                        'finding_aid_title', 
+                        'finding_aid_filing_title', 
+                        'finding_aid_date', 
+                        'finding_aid_author', 
+                        'created_by', 
+                        'last_modified_by', 
+                        'create_time', 
+                        'system_mtime', 
+                        'user_mtime', 
+                        'suppressed', 
+                        'is_slug_auto', 
+                        'id_0', 
+                        'level', 
+                        'resource_type', 
+                        'finding_aid_description_rules', 
+                        'finding_aid_language', 
+                        'finding_aid_script',
+                        'finding_aid_status', 
+                        'jsonmodel_type'   ]
+    csv_gen(filename, fieldnames, category)
     return render_template('dashboard.html')
 
 @bp.route('/download')
