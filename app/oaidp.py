@@ -147,7 +147,7 @@ def dashboard():
                         'finding_aid_script',
                         'finding_aid_status', 
                         'jsonmodel_type'   ]
-    csv_gen(filename, fieldnames, category)
+        csv_gen(filename, fieldnames, category)
     return render_template('dashboard.html')
 
 @bp.route('/download')
