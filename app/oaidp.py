@@ -121,9 +121,10 @@ def collections():
 def dashboard():
     if request.method == 'POST':
         category = request.form.get('category')
-        filename = './' + category + '.csv'
+        filename = category + '.csv'
         resources_fieldnames = ['uri', 
                                 'title', 
+                                'suppressed',
                                 'publish', 
                                 'restrictions', 
                                 'repository_processing_note', 
@@ -137,7 +138,6 @@ def dashboard():
                                 'create_time', 
                                 'system_mtime', 
                                 'user_mtime', 
-                                'suppressed', 
                                 'is_slug_auto', 
                                 'id_0', 
                                 'level', 
@@ -147,10 +147,11 @@ def dashboard():
                                 'finding_aid_script',
                                 'finding_aid_status', 
                                 'jsonmodel_type']
-        accessions_fieldnames = ['suppressed',
+        accessions_fieldnames = ['uri',
+                                'suppressed',
+                                'publish',
                                 'title',
                                 'display_string',
-                                'publish',
                                 'content_description',
                                 'provenance',
                                 'general_note',
@@ -167,7 +168,7 @@ def dashboard():
                                 'id_0',
                                 'id_1',
                                 'jsonmodel_type',
-                                'uri']
+                                ]
         if category == 'resources':
             fieldnames = resources_fieldnames
         elif category == 'accessions':

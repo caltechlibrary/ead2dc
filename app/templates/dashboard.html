@@ -2,7 +2,9 @@
 
 {% block content %}
 
-<h3>Dashboard</h3>
+<h3>CSV Download</h3>
+
+<p>Select a record type for download:</p>
 
 <form action="{{ url_for('oaidp.dashboard') }}" method="POST">
     <input type="radio" id="resources" name="category" value="resources"><label for="resources">Resources</label><br>
