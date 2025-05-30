@@ -11,17 +11,23 @@
 <p>Be patient. Gathering resources data takes just a few seconds, but gathering accessions data takes about 20 seconds.</p>
 
 <form action="{{ url_for('oaidp.dashboard') }}" method="POST">
+
     <button type="submit">Gather data and save file</button>
+
     <input type="radio" id="resources" name="category" value="resources"><label for="resources">Resources</label><br>
+    
     {% for field in resources_fieldnames %}
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input name="{{ field }}" id="{{ field }}" type="checkbox" value="{{ 1 }}">{{ field }}<br>
+        <input name="include" id="include" type="checkbox" value="{{ field }}">{{ field }}<br>
     {% endfor %}
+    
     <input type="radio" id="accessions" name="category" value="accessions"><label for="accessions">Accessions</label><br>
+    
     {% for field in accessions_fieldnames %}
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input name="{{ field }}" id="{{ field }}" type="checkbox" value="{{ 1 }}">{{ field }}<br>
+        <input name="include" id="include" type="checkbox" value="{{ field }}">{{ field }}<br>
     {% endfor %}
+
 </form>
 
 {% endblock %}

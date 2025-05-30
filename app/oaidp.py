@@ -167,20 +167,27 @@ def dashboard():
                             'jsonmodel_type']
     if request.method == 'POST':
         category = request.form.get('category')
+        fields = request.form.getlist('include')
         filename = category + '.csv'
         if category == 'resources':
             fieldnames = resources_fieldnames
         elif category == 'accessions':
             fieldnames = accessions_fieldnames
+        if len(fields) == 0:
+            fields = fieldnames
+        else:
+            fields = [field for field in fieldnames if field in fields]
+        # generate CSV file
         rec_count = csv_gen(filename, fieldnames, category)
         return render_template('dashboard2.html',
-                            category=category,
-                            filename=filename,
-                            rec_count=rec_count)
+                                category=category,
+                                filename=filename,
+                                rec_count=rec_count,
+                                fields=fields)
     else:
         return render_template('dashboard.html',
-                            resources_fieldnames=resources_fieldnames,
-                            accessions_fieldnames=accessions_fieldnames)
+                                resources_fieldnames=resources_fieldnames,
+                                accessions_fieldnames=accessions_fieldnames)
     
 
 @bp.route('/download/<filename>')
