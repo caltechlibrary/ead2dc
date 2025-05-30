@@ -9,11 +9,13 @@
 <form action="{{ url_for('oaidp.dashboard') }}" method="POST">
     <input type="radio" id="resources" name="category" value="resources"><label for="resources">Resources</label> (a few seconds)<br>
     {% for field in resources_fieldnames %}
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ field }}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input name="{{ field }}" id="{{ field }}" type="checkbox" value="{{ 1 }}">{{ field }}<br>
     {% endfor %}
     <input type="radio" id="accessions" name="category" value="accessions"><label for="accessions">Accessions</label> (about 20 seconds)<br>
     {% for field in accessions_fieldnames %}
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ field }}<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input name="{{ field }}" id="{{ field }}" type="checkbox" value="{{ 1 }}">{{ field }}<br>
     {% endfor %}
     <button type="submit">Gather data and save file</button>
 </form>
