@@ -119,67 +119,68 @@ def collections():
 # download collections data
 @bp.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
+    resources_fieldnames = ['uri', 
+                            'title', 
+                            'suppressed',
+                            'publish', 
+                            'restrictions', 
+                            'repository_processing_note', 
+                            'ead_id', 
+                            'finding_aid_title', 
+                            'finding_aid_filing_title', 
+                            'finding_aid_date', 
+                            'finding_aid_author', 
+                            'created_by', 
+                            'last_modified_by', 
+                            'create_time', 
+                            'system_mtime', 
+                            'user_mtime', 
+                            'is_slug_auto', 
+                            'id_0', 
+                            'level', 
+                            'resource_type', 
+                            'finding_aid_description_rules', 
+                            'finding_aid_language', 
+                            'finding_aid_script',
+                            'finding_aid_status', 
+                            'jsonmodel_type']
+    accessions_fieldnames = ['uri',
+                            'suppressed',
+                            'publish',
+                            'title',
+                            'display_string',
+                            'content_description',
+                            'provenance',
+                            'general_note',
+                            'accession_date',
+                            'restrictions_apply',
+                            'access_restrictions',
+                            'use_restrictions',
+                            'created_by',
+                            'last_modified_by',
+                            'create_time',
+                            'system_mtime',
+                            'user_mtime',
+                            'is_slug_auto',
+                            'id_0',
+                            'id_1',
+                            'jsonmodel_type']
     if request.method == 'POST':
         category = request.form.get('category')
         filename = category + '.csv'
-        resources_fieldnames = ['uri', 
-                                'title', 
-                                'suppressed',
-                                'publish', 
-                                'restrictions', 
-                                'repository_processing_note', 
-                                'ead_id', 
-                                'finding_aid_title', 
-                                'finding_aid_filing_title', 
-                                'finding_aid_date', 
-                                'finding_aid_author', 
-                                'created_by', 
-                                'last_modified_by', 
-                                'create_time', 
-                                'system_mtime', 
-                                'user_mtime', 
-                                'is_slug_auto', 
-                                'id_0', 
-                                'level', 
-                                'resource_type', 
-                                'finding_aid_description_rules', 
-                                'finding_aid_language', 
-                                'finding_aid_script',
-                                'finding_aid_status', 
-                                'jsonmodel_type']
-        accessions_fieldnames = ['uri',
-                                'suppressed',
-                                'publish',
-                                'title',
-                                'display_string',
-                                'content_description',
-                                'provenance',
-                                'general_note',
-                                'accession_date',
-                                'restrictions_apply',
-                                'access_restrictions',
-                                'use_restrictions',
-                                'created_by',
-                                'last_modified_by',
-                                'create_time',
-                                'system_mtime',
-                                'user_mtime',
-                                'is_slug_auto',
-                                'id_0',
-                                'id_1',
-                                'jsonmodel_type',
-                                ]
         if category == 'resources':
             fieldnames = resources_fieldnames
         elif category == 'accessions':
             fieldnames = accessions_fieldnames
         rec_count = csv_gen(filename, fieldnames, category)
         return render_template('dashboard2.html',
-                           category=category,
-                           filename=filename,
-                           rec_count=rec_count)
+                            category=category,
+                            filename=filename,
+                            rec_count=rec_count)
     else:
-        return render_template('dashboard.html')
+        return render_template('dashboard.html',
+                            resources_fieldnames=resources_fieldnames,
+                            accessions_fieldnames=accessions_fieldnames)
     
 
 @bp.route('/download/<filename>')
