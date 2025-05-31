@@ -166,7 +166,7 @@ def dashboard():
                             'id_1',
                             'jsonmodel_type']
     if request.method == 'POST':
-        category = request.form.get('category')
+        category = request.form.get('category', 'resources')
         fields = request.form.getlist('include')
         filename = g.user + '_' + category + '.csv'
         if category == 'resources':
