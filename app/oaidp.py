@@ -2,7 +2,7 @@
 from app.aspace import get_notes, get_last_update, write_last_update, csv_gen
 from app.db import get_db
 # other imports
-from flask import Blueprint, request, Response, render_template, send_file
+from flask import Blueprint, request, Response, render_template, send_file, g
 from datetime import datetime, date
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
@@ -168,7 +168,7 @@ def dashboard():
     if request.method == 'POST':
         category = request.form.get('category')
         fields = request.form.getlist('include')
-        filename = category + '.csv'
+        filename = g.user + '_' + category + '.csv'
         if category == 'resources':
             fieldnames = resources_fieldnames
         elif category == 'accessions':
