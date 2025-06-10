@@ -196,7 +196,7 @@ def download(filename):
 
 @bp.route('/records', methods=['GET', 'POST'])
 def records():
-    return render_template('records.html')
+    return render_template('index.html')
 
 '''
 # return the CSV file as a response
