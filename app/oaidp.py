@@ -206,7 +206,7 @@ def records():
                                        error='Record not found',
                                        recordtype=recordtype)
             else:
-                with open('record.json', 'w') as file:
+                with open(Path(Path(__file__).resolve().parent).joinpath('record.json'), 'w') as file:
                     json.dump(obj, file, indent=4)
                 return send_file('record.json', as_attachment=True)
         else:
