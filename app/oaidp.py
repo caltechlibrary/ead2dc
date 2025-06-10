@@ -194,6 +194,10 @@ def reports():
 def download(filename):
     return send_file(filename, as_attachment=True)
 
+@bp.route('/records', methods=['GET', 'POST'])
+def records():
+    return render_template('records.html')
+
 '''
 # return the CSV file as a response
     response = Response(csv_data, mimetype='text/csv')
