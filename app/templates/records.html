@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Records</h3>
+
+<p>Select a record type from the dropdown, and enter a record number.</p>
+
+<form action="{{ url_for('oaidp.records') }}" method="POST">
+
+    <select name="recordtype" id="recordtype">
+        <option value="resources">Resources</option>
+        <option value="acquisitions">Acquisitions</option>
+        <option value="archival object">Archival object</option>
+        <option value="digital object">Digital object</option>
+    </select>
+    
+</form>
+
+{% endblock %}
