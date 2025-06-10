@@ -203,19 +203,17 @@ def records():
             obj = get_json(recordtype, recordid)
             if obj is None:
                 return render_template('records.html', 
-                                       error='Record not found')
+                                       error='Record not found.')
             else:
                 filename = recordtype + recordid + '.json'
                 with open(Path(Path(__file__).resolve().parent).joinpath(filename), 'w') as file:
                     json.dump(obj, file, indent=4)
-                return send_file('record.json', as_attachment=True)
+                return send_file(filename, as_attachment=True)
         else:
             return render_template('records.html', 
-                                   error='No record ID provided')
+                                   error='No record ID provided.')
     else:
         return render_template('records.html')
-
-    print(json.dumps(obj, indent=4, sort_keys=True))
 
 '''
 # return the CSV file as a response
