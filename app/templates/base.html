@@ -22,7 +22,6 @@
         {% endif %}-->
         {% if g.user %}
             <a href="{{ url_for('oaidp.reports') }}">Reports</a>
-            <!--<a href="{{ url_for('oaidp.tools') }}">Tools</a>-->
             <a href="{{ url_for('auth.logout') }}">(logout {{ g.user }})</a>
         {% else %}
             <a href="{{ url_for('auth.login') }}">(login)</a>
