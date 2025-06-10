@@ -21,7 +21,8 @@
         <a href="{{ url_for('oaidp.regen') }}">Refresh</a>
         {% endif %}-->
         {% if g.user %}
-            <a href="{{ url_for('oaidp.dashboard') }}">CSV Downloads</a>
+            <a href="{{ url_for('oaidp.') }}">Reports</a>
+            <a href="{{ url_for('oaidp.') }}">Settings</a>
             <a href="{{ url_for('auth.logout') }}">(logout {{ g.user }})</a>
         {% else %}
             <a href="{{ url_for('auth.login') }}">(login)</a>

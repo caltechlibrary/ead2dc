@@ -117,8 +117,8 @@ def collections():
 # read/write collections data to db
 # display collections list
 # download collections data
-@bp.route('/dashboard', methods=['GET', 'POST'])
-def dashboard():
+@bp.route('/reports', methods=['GET', 'POST'])
+def reports():
     resources_fieldnames = ['uri', 
                             'title', 
                             'suppressed',
@@ -179,13 +179,13 @@ def dashboard():
             fields = [field for field in fieldnames if field in fields]
         # generate CSV file
         rec_count = csv_gen(filename, fields, category)
-        return render_template('dashboard2.html',
+        return render_template('reports2.html',
                                 category=category,
                                 filename=filename,
                                 rec_count=rec_count,
                                 fields=fields)
     else:
-        return render_template('dashboard.html',
+        return render_template('reports.html',
                                 resources_fieldnames=resources_fieldnames,
                                 accessions_fieldnames=accessions_fieldnames)
     
