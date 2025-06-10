@@ -205,7 +205,8 @@ def records():
                 return render_template('records.html', 
                                        error='Record not found')
             else:
-                with open(Path(Path(__file__).resolve().parent).joinpath(recordtype+recordid+'.json'), 'w') as file:
+                filename = recordtype + recordid + '.json'
+                with open(Path(Path(__file__).resolve().parent).joinpath(filename), 'w') as file:
                     json.dump(obj, file, indent=4)
                 return send_file('record.json', as_attachment=True)
         else:

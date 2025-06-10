@@ -5,7 +5,7 @@
 <h3>Download JSON Records</h3>
 
 {% if error %}
-    <p>{{ error }}</p>
+    <p><strong>{{ error }}</strong></p>
 {% endif %}
 
 <p>Select a record type and enter a record ID:</p>
@@ -19,8 +19,8 @@
                 <select name="recordtype" id="recordtype">
                     <option value="resources">Resources</option>
                     <option value="acquisitions">Acquisitions</option>
-                    <option value="archival object">Archival object</option>
-                    <option value="digital object">Digital object</option>
+                    <option value="archival">Archival object</option>
+                    <option value="digital">Digital object</option>
                 </select>
             </td>
         </tr>
