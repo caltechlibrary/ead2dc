@@ -2,7 +2,11 @@
 
 {% block content %}
 
-<h3>Records</h3>
+<h3>Download JSON Records</h3>
+
+{% if error %}
+    <p>{{ error }}</p>
+{% endif %}
 
 <p>Select a record type and enter a record ID:</p>
 

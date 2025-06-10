@@ -203,19 +203,16 @@ def records():
             obj = get_json(recordtype, recordid)
             if obj is None:
                 return render_template('records.html', 
-                                       error='Record not found',
-                                       recordtype=recordtype)
+                                       error='Record not found')
             else:
-                with open(Path(Path(__file__).resolve().parent).joinpath('record.json'), 'w') as file:
+                with open(Path(Path(__file__).resolve().parent).joinpath(recordtype+recordid+'.json'), 'w') as file:
                     json.dump(obj, file, indent=4)
                 return send_file('record.json', as_attachment=True)
         else:
             return render_template('records.html', 
-                                   error='No record ID provided',
-                                   recordtype=recordtype)
+                                   error='No record ID provided')
     else:
-        return render_template('records.html', 
-                               recordtype='resources')
+        return render_template('records.html')
 
     print(json.dumps(obj, indent=4, sort_keys=True))
 
