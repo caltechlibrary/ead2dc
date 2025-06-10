@@ -1,5 +1,5 @@
 # local imports
-from app.aspace import get_notes, get_last_update, write_last_update, csv_gen
+from app.aspace import get_notes, get_last_update, write_last_update, csv_gen, get_json
 from app.db import get_db
 # other imports
 from flask import Blueprint, request, Response, render_template, send_file, g
@@ -196,7 +196,28 @@ def download(filename):
 
 @bp.route('/records', methods=['GET', 'POST'])
 def records():
-    return render_template('records.html')
+    if request.method == 'POST':
+        recordtype = request.form.get('recordtype', 'resources')
+        recordid = request.form.get('recordid', None)
+        if recordid:
+            obj = get_json(recordtype, recordid)
+            if obj is None:
+                return render_template('records.html', 
+                                       error='Record not found',
+                                       recordtype=recordtype)
+            else:
+                with open('record.json', 'w') as file:
+                    json.dump(obj, file, indent=4)
+                return send_file('record.json', as_attachment=True)
+        else:
+            return render_template('records.html', 
+                                   error='No record ID provided',
+                                   recordtype=recordtype)
+    else:
+        return render_template('records.html', 
+                               recordtype='resources')
+
+    print(json.dumps(obj, indent=4, sort_keys=True))
 
 '''
 # return the CSV file as a response

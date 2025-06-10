@@ -97,3 +97,9 @@ def write_last_update(fn):
     dt = now.strftime("%b %-d, %Y, %-I:%M%p")
     return dt
 
+def get_json(category, id):
+    client.authorize()
+    uri = '/repositories/2/'+category+'/'+id
+    obj = client.get(uri)
+    return obj.json()
+
