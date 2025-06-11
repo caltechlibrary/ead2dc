@@ -4,6 +4,7 @@ from app.db import get_db
 # other imports
 from flask import Blueprint, request, Response, render_template, send_file, g
 from datetime import datetime, date
+import pandas as pd
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from pathlib import Path
@@ -198,6 +199,7 @@ def download(filename):
 def records():
     if request.method == 'POST':
         recordtype = request.form.get('recordtype', 'resources')
+        saveas = request.form.get('saveas', 'json')
         recordid = request.form.get('recordid', None)
         if recordid:
             obj = get_json(recordtype, recordid)
@@ -205,10 +207,16 @@ def records():
                 return render_template('records.html', 
                                        error='Record not found.')
             else:
-                filename = recordtype + recordid + '.json'
-                with open(Path(Path(__file__).resolve().parent).joinpath(filename), 'w') as file:
+                json_filename = Path(Path(__file__).resolve().parent).joinpath(g.user + '_' + recordtype + recordid + '.json')
+                with open(json_filename, 'w') as file:
                     json.dump(obj, file, indent=4)
-                return send_file(filename, as_attachment=True)
+                if saveas == 'csv':
+                    csv_filename = Path(Path(__file__).resolve().parent).joinpath(g.user + '_' + recordtype + recordid + '.csv')
+                    df = pd.read_json(pd.json_normalize(json_filename))
+                    df.to_csv(csv_filename, index=False)
+                    return send_file(csv_filename, as_attachment=True)
+                elif saveas == 'json':
+                    return send_file(json_filename, as_attachment=True)
         else:
             return render_template('records.html', 
                                    error='No record ID provided.')
