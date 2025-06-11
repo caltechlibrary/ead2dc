@@ -212,7 +212,7 @@ def records():
                     json.dump(obj, file, indent=4)
                 if saveas == 'csv':
                     csv_filename = Path(Path(__file__).resolve().parent).joinpath(g.user + '_' + recordtype + recordid + '.csv')
-                    df = pd.read_json(pd.json_normalize(json_filename))
+                    df = pd.read_json(json_filename)
                     df.to_csv(csv_filename, index=False)
                     return send_file(csv_filename, as_attachment=True)
                 else:
