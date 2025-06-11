@@ -215,7 +215,7 @@ def records():
                     df = pd.read_json(pd.json_normalize(json_filename))
                     df.to_csv(csv_filename, index=False)
                     return send_file(csv_filename, as_attachment=True)
-                elif saveas == 'json':
+                else:
                     return send_file(json_filename, as_attachment=True)
         else:
             return render_template('records.html', 
