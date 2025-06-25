@@ -1,4 +1,5 @@
 # local imports
+from importlib import resources
 from app.aspace import get_notes, get_last_update, write_last_update, csv_gen, get_json
 from app.db import get_db
 # other imports
@@ -120,7 +121,8 @@ def collections():
 # download collections data
 @bp.route('/reports', methods=['GET', 'POST'])
 def reports():
-    resources_fieldnames = ['uri', 
+    fieldnames = {  'resources' :                            
+                           ['uri', 
                             'title', 
                             'suppressed',
                             'publish', 
@@ -144,8 +146,9 @@ def reports():
                             'finding_aid_language', 
                             'finding_aid_script',
                             'finding_aid_status', 
-                            'jsonmodel_type']
-    accessions_fieldnames = ['uri',
+                            'jsonmodel_type'],
+                    'accessions' : 
+                           ['uri',
                             'suppressed',
                             'publish',
                             'title',
@@ -165,19 +168,70 @@ def reports():
                             'is_slug_auto',
                             'id_0',
                             'id_1',
-                            'jsonmodel_type']
+                            'jsonmodel_type'],
+                    'digital_objects' : 
+                           ['uri',
+                            'digital_object_id',
+                            'title',
+                            'publish',
+                            'restrictions',    
+                            'created_by',
+                            'last_modified_by',
+                            'create_time',
+                            'system_mtime',
+                            'user_mtime',
+                            'suppressed',
+                            'is_slug_auto',
+                            'jsonmodel_type',
+                            'external_ids',
+                            'linked_events',
+                            'extents',
+                            'lang_materials',
+                            'external_documents',
+                            'rights_statements',
+                            'linked_agents',
+                            'classifications',
+                            'metadata_rights_declarations'],
+                    'archivalobjects' : 
+                           ['uri',
+                            'position',
+                            'publish',
+                            'ref_id',
+                            'title',
+                            'display_string',
+                            'restrictions_apply',
+                            'created_by',
+                            'last_modified_by',
+                            'create_time',
+                            'system_mtime',
+                            'user_mtime',
+                            'suppressed',
+                            'is_slug_auto',
+                            'level',
+                            'jsonmodel_type',
+                            'external_ids',
+                            'subjects',
+                            'linked_events',
+                            'extents',
+                            'lang_materials',
+                            'dates',
+                            'external_documents',
+                            'rights_statements',
+                            'linked_agents',
+                            'import_previous_arks',
+                            'instances',
+                            'notes',
+                            'accession_links',
+                            'has_unpublished_ancestor']
+                        }           
     if request.method == 'POST':
         category = request.form.get('category', 'resources')
         fields = request.form.getlist('include')
         filename = g.user + '_' + category + '.csv'
-        if category == 'resources':
-            fieldnames = resources_fieldnames
-        elif category == 'accessions':
-            fieldnames = accessions_fieldnames
         if len(fields) == 0:
-            fields = fieldnames
+            fields = fieldnames[category]
         else:
-            fields = [field for field in fieldnames if field in fields]
+            fields = [field for field in fieldnames[category] if field in fields]
         # generate CSV file
         rec_count = csv_gen(filename, fields, category)
         return render_template('reports2.html',
@@ -187,10 +241,9 @@ def reports():
                                 fields=fields)
     else:
         return render_template('reports.html',
-                                resources_fieldnames=resources_fieldnames,
-                                accessions_fieldnames=accessions_fieldnames)
-    
+                                fieldnames=fieldnames)
 
+# download CSV file
 @bp.route('/download/<filename>')
 def download(filename):
     return send_file(filename, as_attachment=True)
