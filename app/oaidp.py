@@ -203,7 +203,7 @@ def reports():
                             'has_unpublished_ancestor']
                         }         
     # remove archival objects from fieldnames (TIMES OUT)
-    fieldnames.pop('archival_objects', None)  
+    #fieldnames.pop('archival_objects', None)  
     
     if request.method == 'POST':
         category = request.form.get('category', 'resources')
