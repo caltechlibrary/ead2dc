@@ -192,7 +192,7 @@ def reports():
                             'linked_agents',
                             'classifications',
                             'metadata_rights_declarations'],
-                    'archivalobjects' : 
+                    'archival_objects' : 
                            ['uri',
                             'position',
                             'publish',

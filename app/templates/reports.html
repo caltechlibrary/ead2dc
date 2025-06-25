@@ -16,7 +16,7 @@
 
     {% for category in fieldnames %}
 
-        <input type="radio" id="{{ category }}" name="category" value="{{ category }}" checked><label for="{{ category }}">{{ category.capitalize() }}</label><br>
+        <input type="radio" id="{{ category }}" name="category" value="{{ category }}"><label for="{{ category }}">{{ category.capitalize() }}</label><br>
 
         {% for field in fieldnames[category] %}
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
