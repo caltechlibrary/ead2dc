@@ -223,7 +223,10 @@ def reports():
                             'notes',
                             'accession_links',
                             'has_unpublished_ancestor']
-                        }           
+                        }         
+    # remove archival objects from fieldnames (TIMES OUT)
+    fieldnames.pop('archival_objects', None)  
+    
     if request.method == 'POST':
         category = request.form.get('category', 'resources')
         fields = request.form.getlist('include')
