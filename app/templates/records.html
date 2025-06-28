@@ -2,15 +2,13 @@
 
 {% block content %}
 
-<h3>Download Records</h3>
+<h3>List Record IDs</h3>
 
-{% if error %}
-    <p><strong>{{ error }}</strong></p>
-{% endif %}
+{% if not ids %}
 
-<p>Select a record type and enter a record ID:</p>
+<p>Select a record type:</p>
 
-<form action="{{ url_for('oaidp.records') }}" method="POST">
+<form action="{{ url_for('oaidp.recordidlist') }}" method="POST">
 
     <table>
         <tr>
@@ -24,19 +22,6 @@
                 </select>
             </td>
         </tr>
-        <tr>
-            <td align="right"><label for="saveas">Save as:</label></td>
-            <td>
-                <select name="saveas" id="saveas">
-                    <option value="json">JSON</option>
-                    <option value="csv">CSV</option>
-                </select>
-            </td>
-        </tr>
-        <tr>
-            <td align="right"><label for="recordid">Record ID:</label></td>
-            <td><input type="text" id="recordid" name="recordid"></td>
-        </tr>
     </table>
     
     <br>
@@ -44,7 +29,22 @@
     
 </form>
 
+{% else %}
+<p>Record IDs for {{ recordtype }}:</p>
+
+<ul>
+    {% for id in ids %}
+        <li>{{ id }}</li>
+    {% endfor %}
+</ul>   
+
+{% endif %}
+
 <h3>Download Records</h3>
+
+{% if error %}
+    <p><strong>{{ error }}</strong></p>
+{% endif %}
 
 <form action="{{ url_for('oaidp.records') }}" method="POST">
 

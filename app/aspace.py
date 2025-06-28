@@ -103,3 +103,10 @@ def get_json(category, id):
     obj = client.get(uri)
     return obj.json()
 
+def get_ids(category):
+    client.authorize()
+    id_list = list()
+    for obj in client.get_paged('/repositories/2/'+category):
+        id_list.append(obj['uri'])
+    return id_list
+

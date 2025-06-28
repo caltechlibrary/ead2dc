@@ -1,6 +1,6 @@
 # local imports
 from importlib import resources
-from app.aspace import get_notes, get_last_update, write_last_update, csv_gen, get_json
+from app.aspace import get_notes, get_last_update, write_last_update, csv_gen, get_json, get_ids
 from app.db import get_db
 # other imports
 from flask import Blueprint, request, Response, render_template, send_file, g
@@ -228,6 +228,15 @@ def reports():
 @bp.route('/download/<filename>')
 def download(filename):
     return send_file(filename, as_attachment=True)
+
+@bp.route('/listrecordids', methods=['GET', 'POST'])
+def listrecordids():
+    if request.method == 'POST':
+        recordtype = request.form.get('recordtype', 'resources')
+        ids = get_ids(recordtype)
+        return render_template('records.html', ids=ids)
+    else:
+        return render_template('records.html')
 
 @bp.route('/records', methods=['GET', 'POST'])
 def records():
