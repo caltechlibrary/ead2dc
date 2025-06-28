@@ -107,7 +107,7 @@ def get_ids(category):
     client.authorize()
     id_list = list()
     for obj in client.get_paged('/repositories/2/'+category):
-        id = obj['uri'][obj['uri'].rfind('/'): ]
+        id = obj['uri'][obj['uri'].rfind('/')+1: ]
         id_list.append((id, obj['uri']))
     return id_list
 
