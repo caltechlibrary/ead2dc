@@ -34,7 +34,7 @@
 
 <p>
     {% for id in ids %}
-        {{ id }}{% if not loop.last %}, {% endif %}
+        {{ id[0] }}{% if not loop.last %}, {% endif %}
     {% endfor %}
 </p>   
 

@@ -234,7 +234,7 @@ def recordidlist():
     if request.method == 'POST':
         recordtype = request.form.get('recordtype', 'resources')
         ids = get_ids(recordtype)
-        return render_template('records.html', ids=ids)
+        return render_template('records.html', ids=ids, recordtype=recordtype)
     else:
         return render_template('records.html')
 
