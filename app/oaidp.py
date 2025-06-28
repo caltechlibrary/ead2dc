@@ -229,8 +229,8 @@ def reports():
 def download(filename):
     return send_file(filename, as_attachment=True)
 
-@bp.route('/listrecordids', methods=['GET', 'POST'])
-def listrecordids():
+@bp.route('/recordidlist', methods=['GET', 'POST'])
+def recordidlist():
     if request.method == 'POST':
         recordtype = request.form.get('recordtype', 'resources')
         ids = get_ids(recordtype)
