@@ -32,11 +32,11 @@
 {% else %}
 <p>Record IDs for {{ recordtype }}:</p>
 
-<ul>
+<p>
     {% for id in ids %}
-        <li>{{ id }}</li>
+        {{ id }}{% if not loop.last %}, {% endif %}
     {% endfor %}
-</ul>   
+</p>   
 
 {% endif %}
 
