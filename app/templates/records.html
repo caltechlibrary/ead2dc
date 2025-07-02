@@ -17,7 +17,6 @@
                 <select name="recordtype" id="recordtype">
                     <option value="resources">Resources</option>
                     <option value="accessions">Accessions</option>
-                    <option value="archival_objects">Archival objects</option>
                     <option value="digital_objects">Digital objects</option>
                 </select>
             </td>
@@ -34,7 +33,7 @@
 
 <p>
     {% for id in ids %}
-        {{ id[0] }}{% if not loop.last %}, {% endif %}
+        <a href="https://collections.archives.caltech.edu/repositories/2/{{ recordtype }}/{{ id[0] }}">{{ id[0] }}</a>{% if not loop.last %}, {% endif %}
     {% endfor %}
 </p>   
 
