@@ -1,6 +1,6 @@
 # local imports
 from importlib import resources
-from app.aspace import get_notes, get_last_update, write_last_update, csv_gen, get_json, get_ids
+from app.aspace import get_notes, get_last_update, write_last_update, csv_gen, get_json, get_ids, get_subjects
 from app.db import get_db
 # other imports
 from flask import Blueprint, request, Response, render_template, send_file, g
@@ -59,13 +59,6 @@ def prettify(elem):
     xml_file = dom.parseString(xml_string)
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
-
-# returns subjects from json file
-def get_subjects(category, id):
-    for ref in get_json(category, id)['subjects']:
-        uri = ref.get('ref', None)
-        print(uri)
-    return
 
 # build OAI
 @bp.route('/build')
