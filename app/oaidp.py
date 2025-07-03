@@ -261,10 +261,10 @@ def records():
                     csv_filename = Path(Path(__file__).resolve().parent).joinpath(g.user + '_' + recordtype + recordid + '.csv')
                     df.to_csv(csv_filename, index=False)
                     send_file(csv_filename, as_attachment=True)
-                    return
+                    return render_template('records.html')
                 else:
                     send_file(json_filename, as_attachment=True)
-                    return
+                    return render_template('records.html')
         else:
             return render_template('records.html', 
                                    error='No record ID provided.')
