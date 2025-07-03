@@ -122,8 +122,7 @@ def get_subjects(category, id):
     print('Record ID:', id)
     obj = get_json(category, id)
     for ref in obj.get('subjects', []):
-        print('Subject:', client.get(ref))
-                
+        print(ref)
     return 
 
 
