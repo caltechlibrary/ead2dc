@@ -93,4 +93,28 @@
     </ul>
 {% endif %}
 
+{% if extents %}
+<h3>Extents</h3>
+
+<p>Extents for <strong>{{ recordtype }} {{ recordid }}</strong>:</p>
+
+<ul>
+    {% for extent in extents %}
+    <li>{{ extent }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if dates %}
+<h3>Dates</h3>
+
+<p>Dates for <strong>{{ recordtype }} {{ recordid }}</strong>:</p>
+
+<ul>
+    {% for date in dates %}
+    <li>{{ date }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% endblock %}
