@@ -111,7 +111,7 @@ def get_ids(category):
         id_list.append((id, obj['uri']))
     return id_list
 
-# returns subjects from json file
+# returns list of subjects from json file
 def get_subjects(category, id):
     subjects = list()
     client.authorize()

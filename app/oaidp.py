@@ -250,10 +250,6 @@ def records():
                 return render_template('records.html', 
                                        error='Record not found.')
             else:
-
-                for subject in get_subjects(recordtype, recordid):
-                    print(subject)
-
                 json_filename = Path(Path(__file__).resolve().parent).joinpath(g.user + '_' + recordtype + recordid + '.json')
                 with open(json_filename, 'w') as file:
                     json.dump(obj, file, indent=4)
@@ -264,9 +260,7 @@ def records():
                     #df = df.rename(columns=lambda x: x.replace('.', '_'))
                     csv_filename = Path(Path(__file__).resolve().parent).joinpath(g.user + '_' + recordtype + recordid + '.csv')
                     df.to_csv(csv_filename, index=False)
-                    return send_file(csv_filename, as_attachment=True)
-                else:
-                    return send_file(json_filename, as_attachment=True)
+                return send_file(csv_filename, as_attachment=True)
         else:
             return render_template('records.html', 
                                    error='No record ID provided.')
