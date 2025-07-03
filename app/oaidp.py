@@ -253,7 +253,8 @@ def records():
 
                 print('Record type:', recordtype)
                 print('Record ID:', recordid)
-                print(get_subjects(recordtype, recordid)['subjects'])
+                for subject in obj.get('subjects', []):
+                    print('Subject:', subject)
 
                 json_filename = Path(Path(__file__).resolve().parent).joinpath(g.user + '_' + recordtype + recordid + '.json')
                 with open(json_filename, 'w') as file:
