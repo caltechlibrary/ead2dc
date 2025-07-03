@@ -266,7 +266,7 @@ def records():
                 elif saveas == 'json':
                     return send_file(json_filename, as_attachment=False, mimetype='application/json')
                 elif saveas == 'subj':
-                    subjects = get_elements(recordtype, recordid)
+                    subjects = get_elements('subjects', recordtype, recordid)
                     return render_template('records.html', 
                                     subjects=subjects, 
                                     recordtype=recordtype,
