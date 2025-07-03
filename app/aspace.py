@@ -117,7 +117,14 @@ def get_subjects(category, id):
     #for ref in get_json(category, id)['subjects']:
     #    uri = ref.get('ref', None)
     #    print(client.get(uri).json().get('title', 'No title found'))
-    return get_json(category, id)
+
+    print('Record type:', category)
+    print('Record ID:', id)
+    obj = get_json(category, id)
+    for ref in obj.get('subjects', []):
+        print('Subject:', ref)
+                
+    return 
 
 
 
