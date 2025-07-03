@@ -263,8 +263,14 @@ def records():
                     return send_file(csv_filename, as_attachment=True, mimetype='text/csv')
                 elif saveas == 'jsonfile':
                     return send_file(json_filename, as_attachment=True, mimetype='application/json')
-                else:
+                elif saveas == 'json':
                     return send_file(json_filename, as_attachment=False, mimetype='application/json')
+                elif saveas == 'subj':
+                    subjects = get_subjects(recordtype, recordid)
+                    render_template('records.html', 
+                                    subjects=subjects, 
+                                    recordtype=recordtype,
+                                    recordid=recordid)
         else:
             return render_template('records.html', 
                                    error='No record ID provided.')

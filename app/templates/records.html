@@ -39,7 +39,7 @@
 
 {% endif %}
 
-<h3>JSON/CSV Records</h3>
+<h3>Records</h3>
 
 {% if error %}
     <p><strong>{{ error }}</strong></p>
@@ -66,6 +66,7 @@
                     <option value="json">Display JSON</option>
                     <option value="jsonfile">Save JSON</option>
                     <option value="csv">Save CSV</option>
+                    <option value="subj">Subjects</option>
                 </select>
             </td>
         </tr>
@@ -79,5 +80,17 @@
     <input type="submit" value="Submit">
 
 </form>
+
+{% if subjects %}
+    <h3>Subjects</h3>
+
+        <p>Subjects for record ID <strong>{{ recordtype }} {{ recordid }}</strong>:</p>
+
+    <ul>
+        {% for subject in subjects %}
+            <li>{{ subject }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
 
 {% endblock %}
