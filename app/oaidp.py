@@ -250,6 +250,9 @@ def records():
                 return render_template('records.html', 
                                        error='Record not found.')
             else:
+
+                get_subjects(recordtype, recordid)
+
                 json_filename = Path(Path(__file__).resolve().parent).joinpath(g.user + '_' + recordtype + recordid + '.json')
                 with open(json_filename, 'w') as file:
                     json.dump(obj, file, indent=4)
