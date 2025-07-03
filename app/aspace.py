@@ -114,9 +114,10 @@ def get_ids(category):
 # returns subjects from json file
 def get_subjects(category, id):
     client.authorize()
-    for ref in get_json(category, id)['subjects']:
-        uri = ref.get('ref', None)
-        print(client.get(uri).json().get('title', 'No title found'))
+    print(get_json(category, id)['subjects'])
+    #for ref in get_json(category, id)['subjects']:
+    #    uri = ref.get('ref', None)
+    #    print(client.get(uri).json().get('title', 'No title found'))
     return
 
 
