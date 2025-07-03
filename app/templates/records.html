@@ -39,7 +39,7 @@
 
 {% endif %}
 
-<h3>Download Records</h3>
+<h3>JSON/CSV Records</h3>
 
 {% if error %}
     <p><strong>{{ error }}</strong></p>
@@ -63,8 +63,8 @@
             <td align="right"><label for="saveas">Save as:</label></td>
             <td>
                 <select name="saveas" id="saveas">
-                    <option value="json">JSON</option>
-                    <option value="csv">CSV</option>
+                    <option value="json">Display JSON</option>
+                    <option value="csv">Save CSV</option>
                 </select>
             </td>
         </tr>

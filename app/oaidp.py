@@ -260,7 +260,7 @@ def records():
                     #df = df.rename(columns=lambda x: x.replace('.', '_'))
                     csv_filename = Path(Path(__file__).resolve().parent).joinpath(g.user + '_' + recordtype + recordid + '.csv')
                     df.to_csv(csv_filename, index=False)
-                    return send_file(csv_filename, as_attachment=False, mimetype='text/csv')
+                    return send_file(csv_filename, as_attachment=True, mimetype='text/csv')
                 else:
                     return send_file(json_filename, as_attachment=False, mimetype='application/json')
         else:
