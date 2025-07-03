@@ -1,6 +1,7 @@
 # local imports
 from importlib import resources
-from app.aspace import get_notes, get_last_update, write_last_update, csv_gen, get_json, get_ids, get_elements
+from app.aspace import get_notes, get_last_update, write_last_update, csv_gen
+from app.aspace import get_json, get_ids, get_subjects, get_extents, get_dates
 from app.db import get_db
 # other imports
 from flask import Blueprint, request, Response, render_template, send_file, g
@@ -266,11 +267,17 @@ def records():
                 elif saveas == 'json':
                     return send_file(json_filename, as_attachment=False, mimetype='application/json')
                 elif saveas == 'subj':
-                    subjects = get_elements('subjects', recordtype, recordid)
+                    subjects = get_subjects(recordtype, recordid)
+                    dates = get_dates(recordtype, recordid)
+                    extents = get_extents(recordtype, recordid)
                     return render_template('records.html', 
                                     subjects=subjects, 
+                                    dates=dates, 
+                                    extents=extents,
                                     recordtype=recordtype,
                                     recordid=recordid)
+                else:
+                    return render_template('records.html')
         else:
             return render_template('records.html', 
                                    error='No record ID provided.')

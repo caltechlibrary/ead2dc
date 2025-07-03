@@ -111,15 +111,28 @@ def get_ids(category):
         id_list.append((id, obj['uri']))
     return id_list
 
-def get_elements(element, category, id):
-    elements = list()
+def get_subjects(category, id):
+    subjects = list()
     client.authorize()
     obj = get_json(category, id)
-    for ref in obj.get(element, []):
+    for ref in obj.get('subject', []):
         uri = ref.get('ref', None)
         if uri:
-            elements.append(client.get(uri).json().get('title', ''))
-    return elements
+            subjects.append(client.get(uri).json().get('title', ''))
+    return subjects
 
+def get_dates(category, id):
+    dates = list()
+    client.authorize()
+    obj = get_json(category, id)
+    for date in obj.get('dates', []):
+        dates.append(date.get('expression', ''))
+    return dates
 
-
+def get_extents(category, id):
+    extents = list()
+    client.authorize()
+    obj = get_json(category, id)
+    for extent in obj.get('extents', []):
+        extents.append(extent.get('number', '') + extent.get('extent_type', ''))
+    return extents
