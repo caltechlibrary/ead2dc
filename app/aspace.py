@@ -111,16 +111,15 @@ def get_ids(category):
         id_list.append((id, obj['uri']))
     return id_list
 
-# returns list of subjects from json file
-def get_subjects(category, id):
-    subjects = list()
+def get_elements(element, category, id):
+    elements = list()
     client.authorize()
     obj = get_json(category, id)
-    for ref in obj.get('subjects', []):
+    for ref in obj.get(element, []):
         uri = ref.get('ref', None)
         if uri:
-            subjects.append(client.get(uri).json().get('title', ''))
-    return subjects
+            elements.append(client.get(uri).json().get('title', ''))
+    return elements
 
 
 

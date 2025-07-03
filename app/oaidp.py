@@ -1,6 +1,6 @@
 # local imports
 from importlib import resources
-from app.aspace import get_notes, get_last_update, write_last_update, csv_gen, get_json, get_ids, get_subjects
+from app.aspace import get_notes, get_last_update, write_last_update, csv_gen, get_json, get_ids, get_elements
 from app.db import get_db
 # other imports
 from flask import Blueprint, request, Response, render_template, send_file, g
@@ -266,7 +266,7 @@ def records():
                 elif saveas == 'json':
                     return send_file(json_filename, as_attachment=False, mimetype='application/json')
                 elif saveas == 'subj':
-                    subjects = get_subjects(recordtype, recordid)
+                    subjects = get_elements(recordtype, recordid)
                     return render_template('records.html', 
                                     subjects=subjects, 
                                     recordtype=recordtype,
