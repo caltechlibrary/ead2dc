@@ -121,8 +121,8 @@ def get_subjects(category, id):
     print('Record type:', category)
     print('Record ID:', id)
     obj = get_json(category, id)
-    for ref in obj.get('subjects', []):
-        print(ref)
+    for uri in obj.get('subjects', []):
+        print(uri.get('ref', 'No reference found'))
     return 
 
 
