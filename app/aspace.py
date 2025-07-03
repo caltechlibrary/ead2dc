@@ -113,19 +113,14 @@ def get_ids(category):
 
 # returns subjects from json file
 def get_subjects(category, id):
+    subjects = list()
     client.authorize()
-    #for ref in get_json(category, id)['subjects']:
-    #    uri = ref.get('ref', None)
-    #    print(client.get(uri).json().get('title', 'No title found'))
-
-    print('Record type:', category)
-    print('Record ID:', id)
     obj = get_json(category, id)
     for ref in obj.get('subjects', []):
         uri = ref.get('ref', None)
         if uri:
-            print(client.get(uri).json().get('title', 'No title found'))
-    return 
+            subjects.append(client.get(uri).json().get('title', ''))
+    return subjects
 
 
 

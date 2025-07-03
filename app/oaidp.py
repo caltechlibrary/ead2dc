@@ -251,7 +251,8 @@ def records():
                                        error='Record not found.')
             else:
 
-                get_subjects(recordtype, recordid)
+                for subject in get_subjects(recordtype, recordid):
+                    print(subject)
 
                 json_filename = Path(Path(__file__).resolve().parent).joinpath(g.user + '_' + recordtype + recordid + '.json')
                 with open(json_filename, 'w') as file:
