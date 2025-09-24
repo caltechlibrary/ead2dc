@@ -119,7 +119,7 @@ def get_subjects(category, id):
         uri = ref.get('ref', None)
         if uri:
             #subjects.append(client.get(uri).json().get('title', ''))
-            subjects.append(client.get(uri))
+            subjects.append(client.get(uri).json())
     return subjects
 
 def get_dates(category, id):
