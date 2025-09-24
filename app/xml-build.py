@@ -20,7 +20,7 @@ from datetime import date, datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
-from app.aspace import get_subjects, get_extents, get_dates
+from aspace import get_subjects, get_extents, get_dates
 
 from asnake.client import ASnakeClient
 
