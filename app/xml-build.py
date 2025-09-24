@@ -324,7 +324,7 @@ for coll in colls:
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     #temp
-    #j=0
+    j=0
 
     if collections_dict.get(setid):
 
@@ -338,9 +338,9 @@ for coll in colls:
         for do, ao, typ, keep in collections_dict[setid]:
 
             #temp
-            #j += 1
-            #if j > 50:
-            #    break
+            j += 1
+            if j > 5:
+                break
 
             generator = (file_version for file_version in client.get(do).json()['file_versions']
                          if keep
@@ -432,6 +432,8 @@ for coll in colls:
 
                 # dates
                 dates = get_dates('archival_objects', ao[33:])
+                print(ao[33:]
+                print(dates)
                 for d in dates:
                     if d != '':
                         date = ET.SubElement(dc, 'dc:date')
@@ -439,6 +441,7 @@ for coll in colls:
 
                 # extents
                 extents = get_extents('archival_objects', ao[33:])
+                print(extents)
                 for e in extents:
                     if e != '':
                         extent = ET.SubElement(dc, 'dc:format')
@@ -446,6 +449,7 @@ for coll in colls:
 
                 # subjects
                 subjects = get_subjects('archival_objects', ao[33:])
+                print(subjects)
                 for s in subjects:
                     if s != '':
                         subject = ET.SubElement(dc, 'dc:subject')
