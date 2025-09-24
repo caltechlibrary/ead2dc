@@ -432,7 +432,7 @@ for coll in colls:
 
                 # dates
                 dates = get_dates('archival_objects', ao[33:])
-                print(ao[33:]
+                print(ao[33:])
                 print(dates)
                 for d in dates:
                     if d != '':
