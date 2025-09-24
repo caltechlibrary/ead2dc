@@ -118,7 +118,8 @@ def get_subjects(category, id):
     for ref in obj.get('subjects', []):
         uri = ref.get('ref', None)
         if uri:
-            subjects.append(client.get(uri).json().get('title', ''))
+            #subjects.append(client.get(uri).json().get('title', ''))
+            subjects.append(uri.get('title', ''))
     return subjects
 
 def get_dates(category, id):
@@ -134,5 +135,5 @@ def get_extents(category, id):
     client.authorize()
     obj = get_json(category, id)
     for extent in obj.get('extents', []):
-        extents.append(extent.get('number', '') + extent.get('extent_type', ''))
+        extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', ''))
     return extents
