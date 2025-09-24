@@ -1,4 +1,4 @@
-from app.db import get_db
+from db import get_db
 
 from pathlib import Path
 from datetime import datetime
