@@ -2,7 +2,7 @@
 from importlib import resources
 from app.aspace import get_notes, get_last_update, write_last_update, csv_gen
 from app.aspace import get_json, get_ids, get_subjects, get_extents, get_dates
-from db import get_db
+from app.db import get_db
 # other imports
 from flask import Blueprint, request, Response, render_template, send_file, g
 from datetime import datetime, date
