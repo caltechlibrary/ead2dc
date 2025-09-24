@@ -118,7 +118,6 @@ def get_subjects(category, id):
     for ref in obj.get('subjects', []):
         uri = ref.get('ref', None)
         if uri:
-            #subjects.append(client.get(uri).json().get('title', ''))
             subjects.append(client.get(uri).json()['title'])
     return subjects
 

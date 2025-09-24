@@ -19,6 +19,9 @@ import xml.dom.minidom as dom
 from datetime import date, datetime
 from pathlib import Path
 from urllib.parse import urlparse
+
+from app.aspace import get_subjects, get_extents, get_dates
+
 from asnake.client import ASnakeClient
 
 # FUNCTIONS
@@ -427,6 +430,26 @@ for coll in colls:
                 identifier.text = file_uri
                 identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
 
+                # dates
+                dates = get_dates('archival_objects', ao[33:])
+                for d in dates:
+                    if d != '':
+                        date = ET.SubElement(dc, 'dc:date')
+                        date.text = d                
+
+                # extents
+                extents = get_extents('archival_objects', ao[33:])
+                for e in extents:
+                    if e != '':
+                        extent = ET.SubElement(dc, 'dc:format')
+                        extent.text = e
+
+                # subjects
+                subjects = get_subjects('archival_objects', ao[33:])
+                for s in subjects:
+                    if s != '':
+                        subject = ET.SubElement(dc, 'dc:subject')
+                        subject.text = s
 
                 recs_created += 1
                 print(recs_created, end='\r')
