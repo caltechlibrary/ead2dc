@@ -115,7 +115,7 @@ def get_subjects(category, id):
     subjects = list()
     client.authorize()
     obj = get_json(category, id)
-    for ref in obj.get('subject', []):
+    for ref in obj.get('subjects', []):
         uri = ref.get('ref', None)
         if uri:
             subjects.append(client.get(uri).json().get('title', ''))
