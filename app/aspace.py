@@ -114,9 +114,9 @@ def get_json(category, id):
         + "&resolve[]=linked_agents" \
         + "&resolve[]=repository" \
         + "&resolve[]=subjects" \
-        + "&resolve[]=top_container"
+        + "&resolve[]=top_container" '''
     obj = client.get(uri)
-    return obj.json()'''
+    return obj.json()
 
 def get_subjects(category, id):
     subjects = list()
