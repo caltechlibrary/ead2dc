@@ -26,23 +26,27 @@ from asnake.client import ASnakeClient
 
 def get_json(category, id):
     client.authorize()
-    uri = '/repositories/2/'+category+'/'+id
+    uri = '/repositories/2/'+category+'/'+id \
+        + "?resolve[]=ancestors" \
+        + "&resolve[]=digital_object" \
+        + "&resolve[]=linked_agents" \
+        + "&resolve[]=repository" \
+        + "&resolve[]=subjects" \
+        + "&resolve[]=top_container"
     obj = client.get(uri)
     return obj.json()
 
 def get_subjects(category, id):
     subjects = list()
-    client.authorize()
+    #client.authorize()
     obj = get_json(category, id)
-    for ref in obj.get('subjects', []):
-        uri = ref.get('ref', None)
-        if uri:
-            subjects.append(client.get(uri).json()['title'])
+    for subject in obj.get('subjects', []):
+        subjects.append(subject['_resolved']['title'])
     return subjects
 
 def get_dates(category, id):
     dates = list()
-    client.authorize()
+    #client.authorize()
     obj = get_json(category, id)
     for date in obj.get('dates', []):
         dates.append(date.get('expression', ''))
@@ -50,7 +54,7 @@ def get_dates(category, id):
 
 def get_extents(category, id):
     extents = list()
-    client.authorize()
+    #client.authorize()
     obj = get_json(category, id)
     for extent in obj.get('extents', []):
         extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', ''))
@@ -438,6 +442,15 @@ for coll in colls:
                 title.text = client.get(setid).json()['title']
                 title.attrib = {'type': 'collection'}
 
+                # ancestor titles if any
+                title = ET.SubElement(dc, 'dc:title')
+                title.text = client.get(setid).json()['title']
+                title.attrib = {'type': 'series'}
+
+                title = ET.SubElement(dc, 'dc:title')
+                title.text = client.get(setid).json()['title']
+                title.attrib = {'type': 'subseries'}
+
                 # relation element
                 relation = ET.SubElement(dc, 'dc:relation')
                 relation.text = collectiontitle
@@ -486,9 +499,9 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            #j += 1
-            #if j > 20:
-            #    break
+            j += 1
+            if j > 20:
+                break
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
