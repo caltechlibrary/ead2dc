@@ -22,7 +22,35 @@ from urllib.parse import urlparse
 
 from asnake.client import ASnakeClient
 
-from helperfunctions import get_subjects, get_dates, get_extents
+# get_subjects, get_extents, get_dates are also in aspace.py
+
+def get_subjects(category, id):
+    subjects = list()
+    client.authorize()
+    obj = get_json(category, id)
+    for ref in obj.get('subjects', []):
+        uri = ref.get('ref', None)
+        if uri:
+            subjects.append(client.get(uri).json()['title'])
+    return subjects
+
+def get_dates(category, id):
+    dates = list()
+    client.authorize()
+    obj = get_json(category, id)
+    for date in obj.get('dates', []):
+        dates.append(date.get('expression', ''))
+    return dates
+
+def get_extents(category, id):
+    extents = list()
+    client.authorize()
+    obj = get_json(category, id)
+    for extent in obj.get('extents', []):
+        extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', ''))
+    return extents
+
+
 
 # returns a "pretty" XML string
 def prettify(elem):
@@ -334,7 +362,7 @@ for coll in colls:
 
             #temp
             j += 1
-            if j > 5:
+            if j > 1:
                 break
 
             generator = (file_version for file_version in client.get(do).json()['file_versions']
