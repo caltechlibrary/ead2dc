@@ -40,10 +40,10 @@ def get_subjects(category, id):
     subjects = list()
     obj = get_json(category, id)
     for subject in obj.get('subjects', []):
-        print(subject.get('_resolved'))
+        #print(subject.get('_resolved'))
         if subject.get('_resolved'):
             if subject['_resolved'].get('title'):
-                subjects.append(subject['_resolved']('title'))
+                subjects.append(subject['_resolved']['title'])
     return subjects
 
 def get_dates(category, id):
