@@ -346,9 +346,6 @@ for coll in colls:
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
-    #temp
-    j=0
-
     if collections_dict.get(setid):
 
         print(collectiontitle)
@@ -359,11 +356,6 @@ for coll in colls:
         # keep = True if the object is published and not suppressed
         # collections_dict[setid] = {(digital object, archival object, type, keep)}        
         for do, ao, typ, keep in collections_dict[setid]:
-
-            #temp
-            j += 1
-            if j > 10:
-                break
 
             generator = (file_version for file_version in client.get(do).json()['file_versions']
                          if keep
@@ -485,6 +477,10 @@ for coll in colls:
                 
                 recs_skipped += 1
                 dao_skipped += 1
+
+            #temp
+            if recs_created > 20:
+                break
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
