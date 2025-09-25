@@ -22,7 +22,13 @@ from urllib.parse import urlparse
 
 from asnake.client import ASnakeClient
 
-# get_subjects, get_extents, get_dates are also in aspace.py
+# get_json, get_subjects, get_extents, get_dates are also in aspace.py
+
+def get_json(category, id):
+    client.authorize()
+    uri = '/repositories/2/'+category+'/'+id
+    obj = client.get(uri)
+    return obj.json()
 
 def get_subjects(category, id):
     subjects = list()
