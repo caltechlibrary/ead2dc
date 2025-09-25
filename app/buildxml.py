@@ -346,6 +346,9 @@ for coll in colls:
     collectiontitle = coll[2]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
+    #temp
+    j=0
+
     if collections_dict.get(setid):
 
         print(collectiontitle)
@@ -479,7 +482,8 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            if recs_created > 20:
+            j += 1
+            if j > 20:
                 break
 
         print('>', recs_created, 'records created')
