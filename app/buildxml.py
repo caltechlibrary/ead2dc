@@ -35,7 +35,6 @@ def get_subjects(category, id):
     client.authorize()
     obj = get_json(category, id)
     for ref in obj.get('subjects', []):
-        print(ref)
         uri = ref.get('ref', None)
         if uri:
             subjects.append(client.get(uri).json()['title'])
@@ -56,8 +55,6 @@ def get_extents(category, id):
     for extent in obj.get('extents', []):
         extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', ''))
     return extents
-
-
 
 # returns a "pretty" XML string
 def prettify(elem):
@@ -457,8 +454,8 @@ for coll in colls:
 
                 # dates
                 dates = get_dates('archival_objects', ao[33:])
-                print(ao[33:])
-                print(dates)
+                #print(ao[33:])
+                #print(dates)
                 for d in dates:
                     if d != '':
                         date = ET.SubElement(dc, 'dc:date')
@@ -466,7 +463,7 @@ for coll in colls:
 
                 # extents
                 extents = get_extents('archival_objects', ao[33:])
-                print(extents)
+                #print(extents)
                 for e in extents:
                     if e != '':
                         extent = ET.SubElement(dc, 'dc:format')
@@ -474,7 +471,7 @@ for coll in colls:
 
                 # subjects
                 subjects = get_subjects('archival_objects', ao[33:])
-                print(subjects)
+                #print(subjects)
                 for s in subjects:
                     if s != '':
                         subject = ET.SubElement(dc, 'dc:subject')
@@ -489,9 +486,9 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            j += 1
-            if j > 20:
-                break
+            #j += 1
+            #if j > 20:
+            #    break
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
