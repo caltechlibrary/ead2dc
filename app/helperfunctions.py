@@ -10,6 +10,8 @@ client = ASnakeClient(baseurl = secrets.baseurl,
                       password = secrets.password)
 client.authorize()
 
+# get_json, get_ids, get_subjects, get_extents, get_dates are also in aspace.py
+
 def get_ids(category):
     client.authorize()
     id_list = list()
