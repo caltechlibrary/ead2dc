@@ -107,14 +107,13 @@ def get_ids(category):
 
 def get_json(category, id):
     client.authorize()
-    uri = '/repositories/2/'+category+'/'+id 
-    '''\
+    uri = '/repositories/2/'+category+'/'+id \
         + "?resolve[]=ancestors" \
         + "&resolve[]=digital_object" \
         + "&resolve[]=linked_agents" \
         + "&resolve[]=repository" \
         + "&resolve[]=subjects" \
-        + "&resolve[]=top_container" '''
+        + "&resolve[]=top_container"
     obj = client.get(uri)
     return obj.json()
 
