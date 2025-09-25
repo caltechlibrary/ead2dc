@@ -10,13 +10,6 @@ client = ASnakeClient(baseurl = secrets.baseurl,
                       password = secrets.password)
 client.authorize()
 
-# returns a "pretty" XML string
-def prettify(elem):
-    xml_string = ET.tostring(elem)
-    xml_file = dom.parseString(xml_string)
-    pretty_xml = xml_file.toprettyxml(indent="  ")
-    return pretty_xml
-
 def get_ids(category):
     client.authorize()
     id_list = list()

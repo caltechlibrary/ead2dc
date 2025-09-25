@@ -24,6 +24,13 @@ from asnake.client import ASnakeClient
 
 from helperfunctions import prettify, get_subjects, get_dates, get_extents
 
+# returns a "pretty" XML string
+def prettify(elem):
+    xml_string = ET.tostring(elem)
+    xml_file = dom.parseString(xml_string)
+    pretty_xml = xml_file.toprettyxml(indent="  ")
+    return pretty_xml
+
 start = time.time()
 
 # db location
