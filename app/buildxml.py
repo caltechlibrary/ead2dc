@@ -449,6 +449,7 @@ for coll in colls:
                 identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
 
                 # dates
+                print('testing dates for', ao[33:])
                 dates = get_dates('archival_objects', ao[33:])
                 print(ao[33:])
                 print(dates)
@@ -458,6 +459,7 @@ for coll in colls:
                         date.text = d                
 
                 # extents
+                print('testing extents for', ao[33:])
                 extents = get_extents('archival_objects', ao[33:])
                 print(extents)
                 for e in extents:
@@ -466,6 +468,7 @@ for coll in colls:
                         extent.text = e
 
                 # subjects
+                print('testing subjects for', ao[33:])
                 subjects = get_subjects('archival_objects', ao[33:])
                 print(subjects)
                 for s in subjects:
