@@ -38,15 +38,16 @@ def get_json(category, id):
 
 def get_subjects(category, id):
     subjects = list()
-    #client.authorize()
     obj = get_json(category, id)
     for subject in obj.get('subjects', []):
-        subjects.append(subject['_resolved']['title'])
+        print(subject)
+        if subject.get('_resolved'):
+            if subject['_resolved'].get('title'):
+                subjects.append(subject['_resolved']['title'])
     return subjects
 
 def get_dates(category, id):
     dates = list()
-    #client.authorize()
     obj = get_json(category, id)
     for date in obj.get('dates', []):
         dates.append(date.get('expression', ''))
@@ -54,7 +55,6 @@ def get_dates(category, id):
 
 def get_extents(category, id):
     extents = list()
-    #client.authorize()
     obj = get_json(category, id)
     for extent in obj.get('extents', []):
         extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', ''))
@@ -499,9 +499,9 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            j += 1
-            if j > 20:
+            if j > 5:
                 break
+            j += 1
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
