@@ -22,7 +22,7 @@ from urllib.parse import urlparse
 
 from asnake.client import ASnakeClient
 
-from helperfunctions import prettify, get_subjects, get_dates, get_extents
+from helperfunctions import get_subjects, get_dates, get_extents
 
 # returns a "pretty" XML string
 def prettify(elem):
