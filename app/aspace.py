@@ -117,19 +117,41 @@ def get_json(category, id):
     obj = client.get(uri)
     return obj.json()
 
+def get_ancestors(category, id):
+    ancestors = list()
+    obj = get_json(category, id)
+    #print(obj)
+    for a in obj.get('ancestors', []):
+        level = a.get('level')
+        #print('level:', level)
+        if a.get('_resolved'):
+            #print('this is _resolved:', a['_resolved'])
+            if a['_resolved'].get('title'):
+                title = a['_resolved']['title']
+                #print('title:', title)
+                #level = a.get['level']
+                #print('level:', level)
+                ancestors.append((title, level))
+    #print(ancestors)
+    return ancestors
+
 def get_subjects(category, id):
     subjects = list()
-    client.authorize()
     obj = get_json(category, id)
-    for ref in obj.get('subjects', []):
-        uri = ref.get('ref', None)
-        if uri:
-            subjects.append(client.get(uri).json()['title'])
+    for s in obj.get('subjects', []):
+        if s.get('_resolved'):
+            if s['_resolved'].get('title'):
+                subject = s['_resolved']['title']
+                if s['_resolved'].get('source'):
+                    source = s['_resolved']['source']
+                else:
+                    source = None
+                subjects.append((subject, source))
+    print('subjects:', subjects)
     return subjects
 
 def get_dates(category, id):
     dates = list()
-    client.authorize()
     obj = get_json(category, id)
     for date in obj.get('dates', []):
         dates.append(date.get('expression', ''))
@@ -137,7 +159,6 @@ def get_dates(category, id):
 
 def get_extents(category, id):
     extents = list()
-    client.authorize()
     obj = get_json(category, id)
     for extent in obj.get('extents', []):
         extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', ''))
