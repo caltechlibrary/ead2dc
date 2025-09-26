@@ -36,14 +36,29 @@ def get_json(category, id):
     obj = client.get(uri)
     return obj.json()
 
+def get_ancestors(category, id):
+    ancestors = list()
+    obj = get_json(category, id)
+    for a in obj.get('ancestors', []):
+        if a.get('_resolved'):
+            if a['_resolved'].get('title'):
+                title = a['_resolved']['title']
+                level = a.get['level']
+                ancestors.append((title, level))
+    return ancestors
+
 def get_subjects(category, id):
     subjects = list()
     obj = get_json(category, id)
-    for subject in obj.get('subjects', []):
-        #print(subject.get('_resolved'))
-        if subject.get('_resolved'):
-            if subject['_resolved'].get('title'):
-                subjects.append(subject['_resolved']['title'])
+    for s in obj.get('subjects', []):
+        if s.get('_resolved'):
+            if s['_resolved'].get('title'):
+                subject = subject['_resolved']['title']
+                if s['_resolved'].get('source'):
+                    source = s['_resolved']['source']
+                else:
+                    source = None
+                subjects.append((subject, source))
     return subjects
 
 def get_dates(category, id):
@@ -442,14 +457,14 @@ for coll in colls:
                 title.text = client.get(setid).json()['title']
                 title.attrib = {'type': 'collection'}
 
-                # ancestor titles if any
-                title = ET.SubElement(dc, 'dc:title')
-                title.text = client.get(setid).json()['title']
-                title.attrib = {'type': 'series'}
-
-                title = ET.SubElement(dc, 'dc:title')
-                title.text = client.get(setid).json()['title']
-                title.attrib = {'type': 'subseries'}
+                # ancestor titles
+                ancestors = get_ancestors('archival_objects', ao[33:])
+                for a in ancestors:
+                    if a:
+                        ancestor = ET.SubElement(dc, 'dc:title')
+                        ancestor.text = a[0]
+                        if a[1]:
+                            ancestor.attrib = {'level': a[1]}
 
                 # relation element
                 relation = ET.SubElement(dc, 'dc:relation')
@@ -486,9 +501,11 @@ for coll in colls:
                 subjects = get_subjects('archival_objects', ao[33:])
                 #print(subjects)
                 for s in subjects:
-                    if s != '':
+                    if s:
                         subject = ET.SubElement(dc, 'dc:subject')
-                        subject.text = s
+                        subject.text = s[0]
+                        if s[1]:
+                            subject.attrib = {'source': s[1]}
 
                 recs_created += 1
                 print(recs_created, end='\r')
