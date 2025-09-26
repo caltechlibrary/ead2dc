@@ -43,10 +43,12 @@ def get_ancestors(category, id):
     for a in obj.get('ancestors', []):
         #print('this is a:', a)
         if a.get('_resolved'):
-            print('this is _resolved:', a['_resolved'])
+            #print('this is _resolved:', a['_resolved'])
             if a['_resolved'].get('title'):
                 title = a['_resolved']['title']
+                print('title:', title)
                 level = a.get['level']
+                print('level:', level)
                 ancestors.append((title, level))
     return ancestors
 
