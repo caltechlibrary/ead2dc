@@ -66,6 +66,7 @@ def get_subjects(category, id):
                 else:
                     source = None
                 subjects.append((subject, source))
+    print('subjects:', subjects)
     return subjects
 
 def get_dates(category, id):
