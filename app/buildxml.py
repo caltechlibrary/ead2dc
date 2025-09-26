@@ -459,6 +459,7 @@ for coll in colls:
 
                 # ancestor titles
                 ancestors = get_ancestors('archival_objects', ao[33:])
+                print(ancestors)
                 for a in ancestors:
                     if a:
                         ancestor = ET.SubElement(dc, 'dc:title')
