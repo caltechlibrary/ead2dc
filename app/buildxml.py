@@ -42,7 +42,7 @@ def get_ancestors(category, id):
     #print(obj)
     for a in obj.get('ancestors', []):
         level = a.get('level')
-        print('level:', level)
+        #print('level:', level)
         if a.get('_resolved'):
             #print('this is _resolved:', a['_resolved'])
             if a['_resolved'].get('title'):
