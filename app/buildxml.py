@@ -39,6 +39,7 @@ def get_json(category, id):
 def get_ancestors(category, id):
     ancestors = list()
     obj = get_json(category, id)
+    print(obj)
     for a in obj.get('ancestors', []):
         if a.get('_resolved'):
             if a['_resolved'].get('title'):
