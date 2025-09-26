@@ -458,6 +458,7 @@ for coll in colls:
                 title.attrib = {'type': 'collection'}
 
                 # ancestor titles
+                print('testing:', ao[33:])
                 ancestors = get_ancestors('archival_objects', ao[33:])
                 print(ancestors)
                 for a in ancestors:
