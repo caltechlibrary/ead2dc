@@ -377,7 +377,7 @@ for coll in colls:
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     #temp
-    j=0
+    #j=0
 
     if collections_dict.get(setid):
 
@@ -467,7 +467,7 @@ for coll in colls:
                 # ancestor titles
                 # print('testing:', ao[33:])
                 ancestors = get_ancestors('archival_objects', ao[33:])
-                print(ancestors)
+                #print(ancestors)
                 for a in ancestors:
                     if a:
                         ancestor = ET.SubElement(dc, 'dc:title')
@@ -525,9 +525,9 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            if j > 5:
-                break
-            j += 1
+            #j += 1
+            #if j >= 5:
+            #    break
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
