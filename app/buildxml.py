@@ -41,14 +41,14 @@ def get_ancestors(category, id):
     obj = get_json(category, id)
     #print(obj)
     for a in obj.get('ancestors', []):
-        #print('this is a:', a)
+        print('this is a["level"]:', a.get('level'))
         if a.get('_resolved'):
             #print('this is _resolved:', a['_resolved'])
             if a['_resolved'].get('title'):
                 title = a['_resolved']['title']
                 #print('title:', title)
                 level = a.get['level']
-                print('level:', level)
+                #print('level:', level)
                 ancestors.append((title, level))
     #print(ancestors)
     return ancestors
@@ -464,7 +464,7 @@ for coll in colls:
                 title.attrib = {'type': 'collection'}
 
                 # ancestor titles
-                print('testing:', ao[33:])
+                # print('testing:', ao[33:])
                 ancestors = get_ancestors('archival_objects', ao[33:])
                 print(ancestors)
                 for a in ancestors:
