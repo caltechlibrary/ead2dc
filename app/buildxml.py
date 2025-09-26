@@ -48,7 +48,7 @@ def get_ancestors(category, id):
             if a['_resolved'].get('title'):
                 title = a['_resolved']['title']
                 print('title:', title)
-                level = a.get['level']
+                #level = a.get['level']
                 print('level:', level)
                 ancestors.append((title, level))
     #print(ancestors)
