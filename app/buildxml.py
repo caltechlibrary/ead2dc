@@ -60,7 +60,7 @@ def get_subjects(category, id):
     for s in obj.get('subjects', []):
         if s.get('_resolved'):
             if s['_resolved'].get('title'):
-                subject = subject['_resolved']['title']
+                subject = s['_resolved']['title']
                 if s['_resolved'].get('source'):
                     source = s['_resolved']['source']
                 else:
