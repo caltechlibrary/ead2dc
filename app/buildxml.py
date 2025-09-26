@@ -63,6 +63,7 @@ def get_subjects(category, id):
             if s['_resolved'].get('title'):
                 subject = s['_resolved']['title']
                 subjects.append((subject, source))
+    print('subjects:', subjects)
     return subjects
 
 def get_dates(category, id):
