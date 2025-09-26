@@ -377,7 +377,7 @@ for coll in colls:
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     #temp
-    #j=0
+    j=0
 
     if collections_dict.get(setid):
 
@@ -525,9 +525,9 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            #j += 1
-            #if j >= 5:
-            #    break
+            j += 1
+            if j >= 5:
+                break
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
