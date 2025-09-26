@@ -41,8 +41,9 @@ def get_ancestors(category, id):
     obj = get_json(category, id)
     #print(obj)
     for a in obj.get('ancestors', []):
-        print('this is a:', a)
+        #print('this is a:', a)
         if a.get('_resolved'):
+            print('this is _resolved:', a['_resolved'])
             if a['_resolved'].get('title'):
                 title = a['_resolved']['title']
                 level = a.get['level']
