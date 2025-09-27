@@ -511,8 +511,8 @@ for coll in colls:
                     if s:
                         subject = ET.SubElement(dc, 'dc:subject')
                         subject.text = s[0]
-                        #if s[1]:
-                        #    subject.attrib = {'source': s[1]}
+                        if s[1]:
+                            subject.attrib = {'source': s[1]}
 
                 recs_created += 1
                 print(recs_created, end='\r')
