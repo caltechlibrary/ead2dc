@@ -25,7 +25,7 @@ from asnake.client import ASnakeClient
 # get_json, get_subjects, get_extents, get_dates are also in aspace.py
 
 def get_json(category, id):
-    client.authorize()
+    #client.authorize()
     uri = '/repositories/2/'+category+'/'+id \
         + "?resolve[]=ancestors" \
         + "&resolve[]=digital_object" \
@@ -39,19 +39,12 @@ def get_json(category, id):
 def get_ancestors(category, id):
     ancestors = list()
     obj = get_json(category, id)
-    #print(obj)
     for a in obj.get('ancestors', []):
         level = a.get('level')
-        #print('level:', level)
         if a.get('_resolved'):
-            #print('this is _resolved:', a['_resolved'])
             if a['_resolved'].get('title'):
                 title = a['_resolved']['title']
-                #print('title:', title)
-                #level = a.get['level']
-                #print('level:', level)
                 ancestors.append((title, level))
-    #print(ancestors)
     return ancestors
 
 def get_subjects(category, id):
