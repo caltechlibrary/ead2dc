@@ -24,54 +24,55 @@ from asnake.client import ASnakeClient
 
 # get_json, get_subjects, get_extents, get_dates are also in aspace.py
 
-def get_json(category, id):
-    #client.authorize()
-    uri = '/repositories/2/'+category+'/'+id \
-        + "?resolve[]=ancestors" \
-        + "&resolve[]=digital_object" \
-        + "&resolve[]=linked_agents" \
-        + "&resolve[]=repository" \
-        + "&resolve[]=subjects" \
-        + "&resolve[]=top_container"
-    obj = client.get(uri)
-    return obj.json()
+#def get_json(category, id):
+    # retrieves and returns a JSON object from ArchivesSpace API
+    # category is the type of record, e.g. 'resources', 'archival_objects', 'digital_objects'
+    # id is the record identifier
+    # includes resolved linked records: ancestors, digital_object, linked_agents, repository, subjects, top_container
+#    uri = '/repositories/2/'+category+'/'+id \
+#        + "?resolve[]=ancestors" \
+#        + "&resolve[]=digital_object" \
+#        + "&resolve[]=linked_agents" \
+#        + "&resolve[]=repository" \
+#        + "&resolve[]=subjects" \
+#        + "&resolve[]=top_container"
+#    return client.get(uri).json()
 
-def get_ancestors(category, id):
-    ancestors = list()
-    obj = get_json(category, id)
-    for a in obj.get('ancestors', []):
-        level = a.get('level')
-        if a.get('_resolved'):
-            if a['_resolved'].get('title'):
-                title = a['_resolved']['title']
-                ancestors.append((title, level))
-    return ancestors
+#def get_ancestors(category, id):
+#    ancestors = list()
+#    obj = get_json(category, id)
+#    for a in obj.get('ancestors', []):
+#        level = a.get('level')
+#        if a.get('_resolved'):
+#            if a['_resolved'].get('title'):
+#                title = a['_resolved']['title']
+#                ancestors.append((title, level))
+#    return ancestors
 
-def get_subjects(category, id):
-    subjects = list()
-    obj = get_json(category, id)
-    for s in obj.get('subjects', []):
-        if s.get('_resolved'):
-            source = s['_resolved'].get('source')
-            if s['_resolved'].get('title'):
-                subject = s['_resolved']['title']
-                subjects.append((subject, source))
-    #print('subjects:', subjects)
-    return subjects
+#def get_subjects(category, id):
+#    subjects = list()
+#    obj = get_json(category, id)
+#    for s in obj.get('subjects', []):
+#        if s.get('_resolved'):
+#            source = s['_resolved'].get('source')
+#            if s['_resolved'].get('title'):
+#                subject = s['_resolved']['title']
+#                subjects.append((subject, source))
+#    return subjects
 
-def get_dates(category, id):
-    dates = list()
-    obj = get_json(category, id)
-    for date in obj.get('dates', []):
-        dates.append(date.get('expression', ''))
-    return dates
+#def get_dates(category, id):
+#    dates = list()
+##    obj = get_json(category, id)
+ #   for date in obj.get('dates', []):
+ #       dates.append(date.get('expression', ''))
+ #   return dates
 
-def get_extents(category, id):
-    extents = list()
-    obj = get_json(category, id)
-    for extent in obj.get('extents', []):
-        extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', ''))
-    return extents
+#def get_extents(category, id):
+#    extents = list()
+#    obj = get_json(category, id)
+#    for extent in obj.get('extents', []):
+#       extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', ''))
+#    return extents
 
 # returns a "pretty" XML string
 def prettify(elem):
@@ -119,7 +120,10 @@ numbresources = 0
 numbaccessions = 0
 
 # iterate over digital objects
-for obj in client.get_paged('/repositories/2/digital_objects'):
+
+digital_objects = client.get_paged('/repositories/2/digital_objects')
+
+for obj in digital_objects:
 
     keep = True
 
@@ -368,7 +372,7 @@ for coll in colls:
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     #temp
-    #j=0
+    j=0
 
     if collections_dict.get(setid):
 
@@ -414,17 +418,17 @@ for coll in colls:
                 header = ET.SubElement(record, 'header')
 
                 # identifier elements
-                identifier = ET.SubElement(header, 'identifier')
-                identifier.text = 'collections.archives.caltech.edu' + do
-                identifier.attrib = {'type': 'digital'}
+                #identifier = ET.SubElement(header, 'identifier')
+                #identifier.text = 'collections.archives.caltech.edu' + do
+                #identifier.attrib = {'type': 'digital'}
 
                 identifier = ET.SubElement(header, 'identifier')
                 identifier.text = 'collections.archives.caltech.edu' + ao
                 identifier.attrib = {'type': 'archival'}
 
-                identifier = ET.SubElement(header, 'identifier')
-                identifier.text = 'collections.archives.caltech.edu' + setid
-                identifier.attrib = {'type': 'collection'}
+                #identifier = ET.SubElement(header, 'identifier')
+                #identifier.text = 'collections.archives.caltech.edu' + setid
+                #identifier.attrib = {'type': 'collection'}
 
                 # datestamp element
                 datestamp = ET.SubElement(header, 'datestamp')
@@ -434,7 +438,16 @@ for coll in colls:
                 setspec = ET.SubElement(header, 'setSpec')
                 setspec.text = coll[0]
 
-                # metadata element
+                # get archival object metadata
+                uri = ao + "?resolve[]=ancestors" \
+                         + "&resolve[]=digital_object" \
+                         + "&resolve[]=linked_agents" \
+                         + "&resolve[]=repository" \
+                         + "&resolve[]=subjects" \
+                         + "&resolve[]=top_container"
+                archival_object_metadata = client.get(uri).json()
+
+                # create metadata element
                 metadata = ET.SubElement(record, 'metadata')
 
                 # dc element
@@ -443,21 +456,29 @@ for coll in colls:
                                                        'xmlns:dcterms': 'http://purl.org/dc/terms/'})
                 
                 # title elements
-                title = ET.SubElement(dc, 'dc:title')
-                title.text = client.get(do).json()['title']
-                title.attrib = {'type': 'digital'}
+                #title = ET.SubElement(dc, 'dc:title')
+                #title.text = client.get(do).json()['title']
+                #title.attrib = {'type': 'digital'}
 
                 title = ET.SubElement(dc, 'dc:title')
-                title.text = client.get(ao).json()['title']
+                title.text = archival_object_metadata['title']
                 title.attrib = {'type': 'archival'}
 
-                title = ET.SubElement(dc, 'dc:title')
-                title.text = client.get(setid).json()['title']
-                title.attrib = {'type': 'collection'}
+                #title = ET.SubElement(dc, 'dc:title')
+                #title.text = client.get(setid).json()['title']
+                #title.attrib = {'type': 'collection'}
 
                 # ancestor titles
                 # print('testing:', ao[33:])
-                ancestors = get_ancestors('archival_objects', ao[33:])
+                # ancestors = get_ancestors('archival_objects', ao[33:])
+                ancestors = list()
+                for a in archival_object_metadata.get('ancestors', []):
+                    level = a.get('level')
+                    if a.get('_resolved'):
+                        if a['_resolved'].get('title'):
+                            title = a['_resolved']['title']
+                            ancestors.append((title, level))
+
                 #print(ancestors)
                 for a in ancestors:
                     if a:
@@ -482,6 +503,12 @@ for coll in colls:
 
                 # dates
                 dates = get_dates('archival_objects', ao[33:])
+
+                dates = list()
+                #obj = get_json(category, id)
+                for date in archival_object_metadata.get('dates', []):
+                    dates.append(date.get('expression', ''))
+
                 #print(ao[33:])
                 #print(dates)
                 for d in dates:
@@ -491,6 +518,12 @@ for coll in colls:
 
                 # extents
                 extents = get_extents('archival_objects', ao[33:])
+
+                extents = list()
+                #obj = get_json(category, id)
+                for extent in archival_object_metadata.get('extents', []):
+                    extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', ''))
+
                 #print(extents)
                 for e in extents:
                     if e != '':
@@ -498,7 +531,17 @@ for coll in colls:
                         extent.text = e
 
                 # subjects
-                subjects = get_subjects('archival_objects', ao[33:])
+                #subjects = get_subjects('archival_objects', ao[33:])
+
+                subjects = list()
+                #obj = get_json(category, id)
+                for s in archival_object_metadata.get('subjects', []):
+                    if s.get('_resolved'):
+                        source = s['_resolved'].get('source')
+                        if s['_resolved'].get('title'):
+                            subject = s['_resolved']['title']
+                            subjects.append((subject, source))
+
                 #print(subjects)
                 for s in subjects:
                     if s:
@@ -516,9 +559,9 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            #j += 1
-            #if j >= 5:
-            #    break
+            j += 1
+            if j >= 5:
+                break
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
