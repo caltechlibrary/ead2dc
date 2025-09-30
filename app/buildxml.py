@@ -62,10 +62,10 @@ from asnake.client import ASnakeClient
 
 #def get_dates(category, id):
 #    dates = list()
-##    obj = get_json(category, id)
- #   for date in obj.get('dates', []):
- #       dates.append(date.get('expression', ''))
- #   return dates
+#    obj = get_json(category, id)
+#    for date in obj.get('dates', []):
+#        dates.append(date.get('expression', ''))
+#    return dates
 
 #def get_extents(category, id):
 #    extents = list()
@@ -502,8 +502,6 @@ for coll in colls:
                 identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
 
                 # dates
-                dates = get_dates('archival_objects', ao[33:])
-
                 dates = list()
                 #obj = get_json(category, id)
                 for date in archival_object_metadata.get('dates', []):
@@ -517,8 +515,6 @@ for coll in colls:
                         date.text = d                
 
                 # extents
-                extents = get_extents('archival_objects', ao[33:])
-
                 extents = list()
                 #obj = get_json(category, id)
                 for extent in archival_object_metadata.get('extents', []):
@@ -559,9 +555,9 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            #j += 1
-            #if j >= 5:
-            #    break
+            j += 1
+            if j >= 20:
+                break
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
