@@ -372,7 +372,7 @@ for coll in colls:
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     #temp
-    j=0
+    #j=0
 
     if collections_dict.get(setid):
 
@@ -462,7 +462,7 @@ for coll in colls:
 
                 title = ET.SubElement(dc, 'dc:title')
                 title.text = archival_object_metadata['title']
-                title.attrib = {'type': 'archival'}
+                #title.attrib = {'type': 'archival'}
 
                 #title = ET.SubElement(dc, 'dc:title')
                 #title.text = client.get(setid).json()['title']
@@ -555,9 +555,9 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            j += 1
-            if j >= 20:
-                break
+            #j += 1
+            #if j >= 20:
+            #    break
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
