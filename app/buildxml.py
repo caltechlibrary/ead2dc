@@ -372,7 +372,7 @@ for coll in colls:
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     #temp
-    #j=0
+    j=0
 
     if collections_dict.get(setid):
 
@@ -424,7 +424,7 @@ for coll in colls:
 
                 identifier = ET.SubElement(header, 'identifier')
                 identifier.text = 'collections.archives.caltech.edu' + ao
-                identifier.attrib = {'type': 'archival'}
+                #identifier.attrib = {'type': 'archival'}
 
                 #identifier = ET.SubElement(header, 'identifier')
                 #identifier.text = 'collections.archives.caltech.edu' + setid
@@ -555,9 +555,9 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            #j += 1
-            #if j >= 20:
-            #    break
+            j += 1
+            if j >= 20:
+                break
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
