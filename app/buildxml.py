@@ -524,11 +524,13 @@ for coll in colls:
                 extents = list()
                 #obj = get_json(category, id)
                 for extent in archival_object_metadata.get('extents', []):
-                    extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', '') + extent.get('physical_details'), '')
+                    extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', '') + ' ' + extent.get('physical_details'), '')
+
+                print('extents:', extents)
 
                 #print(extents)
                 for e in extents:
-                    if e != '':
+                    if e.strip() != '':
                         extent = ET.SubElement(dc, 'dc:format')
                         extent.text = e
 
