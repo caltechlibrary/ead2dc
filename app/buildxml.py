@@ -529,7 +529,9 @@ for coll in colls:
                     print('number:', extent.get('number'))
                     print('details:', extent.get('physical_details'))
                     print('type:', extent.get('extent_type'))
-                    extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', '') + ' ' + extent.get('physical_details'), '')
+                    s = extent.get('number', '') + ' ' + extent.get('extent_type', '') + ' ' + extent.get('physical_details', '')
+                    print('string:', s)
+                    extents.append(s)
 
                 print('extents:', extents)
 
