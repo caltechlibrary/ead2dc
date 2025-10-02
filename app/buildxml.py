@@ -523,6 +523,7 @@ for coll in colls:
                 # extents
                 extents = list()
                 #obj = get_json(category, id)
+                print(archival_object_metadata.get('extents'))
                 for extent in archival_object_metadata.get('extents', []):
                     extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', '') + ' ' + extent.get('physical_details'), '')
 
