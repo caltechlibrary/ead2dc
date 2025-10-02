@@ -526,6 +526,9 @@ for coll in colls:
                 print(archival_object_metadata.get('extents'))
                 for extent in archival_object_metadata.get('extents', []):
                     print(extent)
+                    print('number:', extent.get('number'))
+                    print('details:', extent.get('physical_details'))
+                    print('type:', extent.get('extent_type'))
                     extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', '') + ' ' + extent.get('physical_details'), '')
 
                 print('extents:', extents)
