@@ -502,10 +502,10 @@ for coll in colls:
                 identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
 
                 # identifier element
-                if archival_object_metadata.get('component_id'):
-                    identifier = ET.SubElement(dc, 'dc:identifier')
-                    identifier.text = archival_object_metadata['component_id']
-                    identifier.attrib = {'type': 'localid'}
+                #if archival_object_metadata.get('component_id'):
+                identifier = ET.SubElement(dc, 'dc:identifier')
+                identifier.text = archival_object_metadata.get('component_id', '')
+                identifier.attrib = {'type': 'localid'}
 
                 # dates
                 dates = list()
