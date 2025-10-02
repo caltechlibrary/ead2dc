@@ -539,7 +539,7 @@ for coll in colls:
                 for e in extents:
                     if e.strip() != '':
                         extent = ET.SubElement(dc, 'dc:format')
-                        extent.text = e
+                        extent.text = e.strip()
 
                 # subjects
                 #subjects = get_subjects('archival_objects', ao[33:])
