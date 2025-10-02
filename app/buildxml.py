@@ -372,7 +372,7 @@ for coll in colls:
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     #temp
-    #j=0
+    j=0
 
     if collections_dict.get(setid):
 
@@ -488,24 +488,30 @@ for coll in colls:
                             ancestor.attrib = {'level': a[1]}
 
                 # relation element
-                relation = ET.SubElement(dc, 'dc:relation')
-                relation.text = collectiontitle
-                relation.attrib = {'label': 'Collection'}
+                #relation = ET.SubElement(dc, 'dc:relation')
+                #relation.text = collectiontitle
+                #relation.attrib = {'label': 'Collection'}
 
                 # description element
-                description = ET.SubElement(dc, 'dc:description')
-                description.text = 'Digital object in ' + collectiontitle
+                #description = ET.SubElement(dc, 'dc:description')
+                #description.text = 'Digital object in ' + collectiontitle
 
                 # identifier element
                 identifier = ET.SubElement(dc, 'dc:identifier')
                 identifier.text = file_uri
                 identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
 
+                # identifier element
+                if archival_object_metadata.get('component_id'):
+                    identifier = ET.SubElement(dc, 'dc:identifier')
+                    identifier.text = archival_object_metadata['component_id']
+                    identifier.attrib = {'type': 'localid'}
+
                 # dates
                 dates = list()
                 #obj = get_json(category, id)
                 for date in archival_object_metadata.get('dates', []):
-                    dates.append(date.get('expression', ''))
+                    dates.append(date.get('begin', ''))
 
                 #print(ao[33:])
                 #print(dates)
@@ -555,9 +561,9 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            #j += 1
-            #if j >= 20:
-            #    break
+            j += 1
+            if j >= 20:
+                break
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
