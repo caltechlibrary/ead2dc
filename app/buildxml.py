@@ -525,6 +525,7 @@ for coll in colls:
                 #obj = get_json(category, id)
                 print(archival_object_metadata.get('extents'))
                 for extent in archival_object_metadata.get('extents', []):
+                    print(extent)
                     extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', '') + ' ' + extent.get('physical_details'), '')
 
                 print('extents:', extents)
