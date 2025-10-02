@@ -529,8 +529,8 @@ for coll in colls:
                     #print('number:', extent.get('number'))
                     #print('details:', extent.get('physical_details'))
                     #print('type:', extent.get('extent_type'))
-                    s = extent.get('number', '') + ' ' + extent.get('extent_type', '') + '. ' + extent.get('physical_details', '').strip()
-                    print('string:', s)
+                    s = extent.get('number', '') + ' ' + extent.get('extent_type', '') + ' ' + extent.get('physical_details', '').strip()
+                    #print('string:', s)
                     extents.append(s)
 
                 #print('extents:', extents)
