@@ -372,7 +372,7 @@ for coll in colls:
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     #temp
-    #j=0
+    j=0
 
     if collections_dict.get(setid):
 
@@ -524,7 +524,7 @@ for coll in colls:
                 extents = list()
                 #obj = get_json(category, id)
                 for extent in archival_object_metadata.get('extents', []):
-                    extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', ''))
+                    extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', '') + extent.get('physical_details'), '')
 
                 #print(extents)
                 for e in extents:
@@ -561,9 +561,9 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            #j += 1
-            #if j >= 20:
-            #    break
+            j += 1
+            if j >= 20:
+                break
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
