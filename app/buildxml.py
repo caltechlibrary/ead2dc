@@ -22,58 +22,6 @@ from urllib.parse import urlparse
 
 from asnake.client import ASnakeClient
 
-# get_json, get_subjects, get_extents, get_dates are also in aspace.py
-
-#def get_json(category, id):
-    # retrieves and returns a JSON object from ArchivesSpace API
-    # category is the type of record, e.g. 'resources', 'archival_objects', 'digital_objects'
-    # id is the record identifier
-    # includes resolved linked records: ancestors, digital_object, linked_agents, repository, subjects, top_container
-#    uri = '/repositories/2/'+category+'/'+id \
-#        + "?resolve[]=ancestors" \
-#        + "&resolve[]=digital_object" \
-#        + "&resolve[]=linked_agents" \
-#        + "&resolve[]=repository" \
-#        + "&resolve[]=subjects" \
-#        + "&resolve[]=top_container"
-#    return client.get(uri).json()
-
-#def get_ancestors(category, id):
-#    ancestors = list()
-#    obj = get_json(category, id)
-#    for a in obj.get('ancestors', []):
-#        level = a.get('level')
-#        if a.get('_resolved'):
-#            if a['_resolved'].get('title'):
-#                title = a['_resolved']['title']
-#                ancestors.append((title, level))
-#    return ancestors
-
-#def get_subjects(category, id):
-#    subjects = list()
-#    obj = get_json(category, id)
-#    for s in obj.get('subjects', []):
-#        if s.get('_resolved'):
-#            source = s['_resolved'].get('source')
-#            if s['_resolved'].get('title'):
-#                subject = s['_resolved']['title']
-#                subjects.append((subject, source))
-#    return subjects
-
-#def get_dates(category, id):
-#    dates = list()
-#    obj = get_json(category, id)
-#    for date in obj.get('dates', []):
-#        dates.append(date.get('expression', ''))
-#    return dates
-
-#def get_extents(category, id):
-#    extents = list()
-#    obj = get_json(category, id)
-#    for extent in obj.get('extents', []):
-#       extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', ''))
-#    return extents
-
 # returns a "pretty" XML string
 def prettify(elem):
     xml_string = ET.tostring(elem)
@@ -128,7 +76,6 @@ for obj in digital_objects:
     keep = True
 
     # only include objects that are published and not suppressed
-
     # check for published
     if obj.get('publish') == False:
         notpublished += 1
@@ -171,6 +118,11 @@ for obj in digital_objects:
         if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
             # build dictionary of collections, digital objects, and archival objects
             # dict has the form {collection: {(digital object, archival object, type, keep)}}
+            # i.e. a dictionary where the key is the collection id, and values are sets of tuples
+            # 'digital object' is an id
+            # 'archival object' is an id
+            # 'type' is 'resource' or 'accession'
+            # 'keep' is True or False
             dao_count += 1
             if coll != []:
                 if collections_dict.get(coll):
@@ -372,7 +324,7 @@ for coll in colls:
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     #temp
-    #j=0
+    j=0
 
     if collections_dict.get(setid):
 
@@ -570,9 +522,9 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            #j += 1
-            #if j >= 20:
-            #    break
+            j += 1
+            if j >= 20:
+                break
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
