@@ -534,10 +534,11 @@ def oai():
         respDate = ET.SubElement(oaixml, 'responseDate')
         respDate.text = datetime.now().isoformat().split('.')[0]
         rquest = ET.SubElement(oaixml, 'request')
-        rquest.attrib = {'verb': 'ListRecords'}
+        rquest.attrib = {'verb': 'ListRecords',
+                         'metadataPrefix': 'oai_dc'
+                        }
         rquest.text = dpurl
         listrecords = ET.SubElement(oaixml, 'ListRecords')
-        listrecords.attrib = {'metadataPrefix': 'oai_dc'}
         recrds = elem.findall('./{http://www.openarchives.org/OAI/2.0/}record')
 
         for recrd in recrds:

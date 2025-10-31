@@ -241,7 +241,9 @@ ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
 ET.register_namespace('dc', 'http://purl.org/dc/elements/1.1/')
 
 # create OAI-PMH XML object
-oaixml = ET.Element('OAI-PMH', {'xmlns': 'http://www.openarchives.org/OAI/2.0/'})
+oaixml = ET.Element('OAI-PMH', {'xmlns':'http://www.openarchives.org/OAI/2.0/',
+    'xmlns:xsi':'http://www.w3.org/2001/XMLSchema-instance',
+    'xsi:schemaLocation':'http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd'})
 
 # build Identify segment
 Identify = ET.SubElement(oaixml, 'Identify')
@@ -253,6 +255,7 @@ protocolVersion = ET.SubElement(Identify, 'protocolVersion')
 protocolVersion.text = '2.0'
 adminEmail = ET.SubElement(Identify, 'adminEmail')
 adminEmail.text = 'archives@caltech.edu'
+earliestDatestamp = '2025-01-01'
 deletedRecord = ET.SubElement(Identify, 'deletedRecord')
 deletedRecord.text = 'no'
 granularity = ET.SubElement(Identify, 'granularity')
@@ -277,9 +280,16 @@ for coll in colls:
     setSpec.text = coll[0]
     setName = ET.SubElement(oaiset, 'setName')
     setName.text = coll[2]
-    setDescription = ET.SubElement(ET.SubElement(ET.SubElement(
-        oaiset, 'setDescription'), 'oai_dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
-                                           'xmlns:dc': 'http://purl.org/dc/elements/1.1/'}), 'dc:description')
+    setDescription = ET.SubElement(
+        ET.SubElement(
+            ET.SubElement(oaiset, 'setDescription'), 'oai_dc', {
+                    'xmlns:oai_dc':'http://www.openarchives.org/OAI/2.0/oai_dc/',
+                    'xmlns:dc':'http://purl.org/dc/elements/1.1/',
+                    'xmlns:xsi':'http://www.w3.org/2001/XMLSchema-instance',
+                    'xsi:schemaLocation':'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd'
+            }
+        ), 'dc:description'
+    )
     setDescription.text = coll[3]
 
 dao_count = 0
