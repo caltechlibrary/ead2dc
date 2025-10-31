@@ -417,7 +417,7 @@ def oai():
     errors = list()
 
     # string form of date to write to each record
-    today = date.today().strftime("%Y-%m-%d")
+    #today = date.today().strftime("%Y-%m-%d")
 
     # get verb from request
     verb = request.args.get('verb')
@@ -449,14 +449,13 @@ def oai():
         dateuntil = '999-99-99' if request.args.get('until') is None else request.args.get('until')
         startrec = 0
 
-    
-    now = datetime.now().isoformat()
 
     # log request
     try:
         id = identifier[identifier.rfind('/')+1:]
     except:
         id = identifier
+    now = datetime.now().isoformat().split('.')[0]
     rq = [now, verb, set, id, datefrom, dateuntil]
     log(rq)
 
@@ -474,7 +473,7 @@ def oai():
         # create OAI-PMH XML object
         oaixml = ET.Element('OAI-PMH')
         respDate = ET.SubElement(oaixml, 'responseDate')
-        respDate.text = now
+        respDate.text = datetime.now().isoformat().split('.')[0]
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'Identify'}
         rquest.text = dpurl
@@ -489,7 +488,7 @@ def oai():
         # create OAI-PMH XML object
         oaixml = ET.Element('OAI-PMH')
         respDate = ET.SubElement(oaixml, 'responseDate')
-        respDate.text = now
+        respDate.text = datetime.now().isoformat().split('.')[0]
         rquest = ET.SubElement(oaixml, 'request')
         rquest.text = dpurl
         listmetadataformats = ET.SubElement(oaixml, 'ListMetadataFormats')
@@ -517,7 +516,7 @@ def oai():
         # create OAI-PMH XML object
         oaixml = ET.Element('OAI-PMH')
         respDate = ET.SubElement(oaixml, 'responseDate')
-        respDate.text = now
+        respDate.text = datetime.now().isoformat().split('.')[0]
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'ListSets'}
         rquest.text = dpurl
@@ -533,7 +532,7 @@ def oai():
         # create OAI-PMH XML object
         oaixml = ET.Element('OAI-PMH')
         respDate = ET.SubElement(oaixml, 'responseDate')
-        respDate.text = now
+        respDate.text = datetime.now().isoformat().split('.')[0]
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'ListRecords'}
         rquest.text = dpurl
@@ -591,7 +590,7 @@ def oai():
             # create OAI-PMH XML object
             oaixml = ET.Element('OAI-PMH')
             respDate = ET.SubElement(oaixml, 'responseDate')
-            respDate.text = now
+            respDate.text = datetime.now().isoformat().split('.')[0]
             rquest = ET.SubElement(oaixml, 'request')
             rquest.attrib = {'verb': 'GetRecord', 'identifier': identifier, 'metaDataPrefix': 'oai_dc'}
             rquest.text = dpurl
@@ -608,7 +607,7 @@ def oai():
 
         oaixml = ET.Element('OAI-PMH')
         respDate = ET.SubElement(oaixml, 'responseDate')
-        respDate.text = now
+        respDate.text = datetime.now().isoformat().split('.')[0]
         error = ET.SubElement(oaixml, 'error')
         error.text = "Missing or invalid verb or key."
 
