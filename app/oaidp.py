@@ -474,7 +474,7 @@ def oai():
         # create OAI-PMH XML object
         oaixml = ET.Element('OAI-PMH')
         respDate = ET.SubElement(oaixml, 'responseDate')
-        respDate.text = today
+        respDate.text = now
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'Identify'}
         rquest.text = dpurl
@@ -489,7 +489,7 @@ def oai():
         # create OAI-PMH XML object
         oaixml = ET.Element('OAI-PMH')
         respDate = ET.SubElement(oaixml, 'responseDate')
-        respDate.text = today
+        respDate.text = now
         rquest = ET.SubElement(oaixml, 'request')
         rquest.text = dpurl
         listmetadataformats = ET.SubElement(oaixml, 'ListMetadataFormats')
@@ -517,7 +517,7 @@ def oai():
         # create OAI-PMH XML object
         oaixml = ET.Element('OAI-PMH')
         respDate = ET.SubElement(oaixml, 'responseDate')
-        respDate.text = today
+        respDate.text = now
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'ListSets'}
         rquest.text = dpurl
@@ -533,7 +533,7 @@ def oai():
         # create OAI-PMH XML object
         oaixml = ET.Element('OAI-PMH')
         respDate = ET.SubElement(oaixml, 'responseDate')
-        respDate.text = today
+        respDate.text = now
         rquest = ET.SubElement(oaixml, 'request')
         rquest.attrib = {'verb': 'ListRecords'}
         rquest.text = dpurl
@@ -591,7 +591,7 @@ def oai():
             # create OAI-PMH XML object
             oaixml = ET.Element('OAI-PMH')
             respDate = ET.SubElement(oaixml, 'responseDate')
-            respDate.text = today
+            respDate.text = now
             rquest = ET.SubElement(oaixml, 'request')
             rquest.attrib = {'verb': 'GetRecord', 'identifier': identifier, 'metaDataPrefix': 'oai_dc'}
             rquest.text = dpurl
@@ -608,7 +608,7 @@ def oai():
 
         oaixml = ET.Element('OAI-PMH')
         respDate = ET.SubElement(oaixml, 'responseDate')
-        respDate.text = today
+        respDate.text = now
         error = ET.SubElement(oaixml, 'error')
         error.text = "Missing or invalid verb or key."
 
