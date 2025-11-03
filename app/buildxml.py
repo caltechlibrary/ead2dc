@@ -532,9 +532,9 @@ for coll in colls:
                 dao_skipped += 1
 
             #temp
-            j += 1
-            if j >= 20:
-                break
+            #j += 1
+            #if j >= 20:
+            #    break
 
         print('>', recs_created, 'records created')
         print('>', recs_skipped, 'records skipped')
