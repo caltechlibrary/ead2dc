@@ -564,7 +564,8 @@ connection.close()
 #write to disk
 fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 with open(fileout, 'w') as f:
-    f.write(prettify(oaixml))
+    f.write(oaixml)
+    #f.write(prettify(oaixml))
 
 '''
 for collection in dao_dict:
