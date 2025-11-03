@@ -564,7 +564,7 @@ connection.close()
 #write to disk
 fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 with open(fileout, 'w') as f:
-    f.write(ET.tostring(oaixml))
+    f.write(ET.tostring(oaixml, encoding='unicode', method='xml'))
     #f.write(prettify(oaixml))
 
 '''
