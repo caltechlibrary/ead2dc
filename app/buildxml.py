@@ -307,6 +307,9 @@ urls = set()
 
 intertime = time.time()
 
+# temp
+id_file = Path(Path(__file__).resolve().parent).joinpath('../xml/dev-ids.txt')
+
 for coll in colls:
 
     # temp
@@ -332,6 +335,7 @@ for coll in colls:
     setid = '/repositories/2/' + coll[11] + 's/' + coll[0]
 
     # temp
+    # limit to collection '30' Oral Histories for testing
     if coll[0] != '30':
         continue
 
@@ -542,6 +546,14 @@ for coll in colls:
 
                 recs_created += 1
                 print(recs_created, end='\r')
+
+                # temp
+                
+
+with open(fileout, 'w') as f:
+    f.write(ET.tostring(oaixml, encoding='unicode', method='xml'))
+    #f.write(prettify(oaixml))
+
 
             except:
                 
