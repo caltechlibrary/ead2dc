@@ -372,9 +372,9 @@ for coll in colls:
 
                 # temp
                 # check for duplicates
-                if file_uri in check_for_duplicates:
+                if do in check_for_duplicates:
                     # skip duplicate
-                    print('>> duplicate file_uri found, skipping:', file_uri)
+                    print('>> duplicate "do" found, skipping:', do)
                     duplicate_recs_skipped += 1
                     continue
 
@@ -550,7 +550,7 @@ for coll in colls:
 
                 # temp
                 with open(devtest_textfile, 'a') as dev_f:
-                    dev_f.write(file_uri, end='\n')
+                    dev_f.write(do, end='\n')
                 devrecordcount += 1
 
             except:
