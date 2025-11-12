@@ -309,6 +309,10 @@ intertime = time.time()
 
 for coll in colls:
 
+    # temp
+    check_for_duplicates = set()
+    duplicate_recs_skipped = 0
+
     # coll[0] = collno
     # coll[1] = eadurl
     # coll[2] = colltitle
@@ -326,6 +330,10 @@ for coll in colls:
     recs_skipped = 0
 
     setid = '/repositories/2/' + coll[11] + 's/' + coll[0]
+
+    # temp
+    if coll[0] != '30':
+        continue
 
     #temp
     #print('>', setid)
@@ -356,6 +364,15 @@ for coll in colls:
 
             try:
                 file_uri = next(generator)['file_uri']
+
+                # temp
+                # check for duplicates
+                if file_uri in check_for_duplicates:
+                    # skip duplicate
+                    print('>> duplicate file_uri found, skipping:', file_uri)
+                    duplicate_recs_skipped += 1
+                    continue
+
                 url = urlparse(file_uri).hostname
                 if url == 'resolver.caltech.edu' or url == 'digital.archives.caltech.edu' or url == 'californiarevealed.org':
                     hostcategory = 'caltechlibrary'
@@ -562,7 +579,13 @@ connection.commit()
 connection.close()
 
 #write to disk
-fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
+
+# production file
+#fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
+
+#dev file
+fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives-dev.xml')
+
 with open(fileout, 'w') as f:
     f.write(ET.tostring(oaixml, encoding='unicode', method='xml'))
     #f.write(prettify(oaixml))
