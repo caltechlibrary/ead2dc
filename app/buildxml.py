@@ -308,7 +308,8 @@ urls = set()
 intertime = time.time()
 
 # temp
-id_file = Path(Path(__file__).resolve().parent).joinpath('../xml/dev-ids.txt')
+devtest_textfile = Path(Path(__file__).resolve().parent).joinpath('../xml/devtest_textfile.txt')
+devrecordcount = 0
 
 for coll in colls:
 
@@ -548,12 +549,9 @@ for coll in colls:
                 print(recs_created, end='\r')
 
                 # temp
-                
-
-with open(fileout, 'w') as f:
-    f.write(ET.tostring(oaixml, encoding='unicode', method='xml'))
-    #f.write(prettify(oaixml))
-
+                with open(devtest_textfile, 'a') as dev_f:
+                    dev_f.write(file_uri)
+                devrecordcount += 1
 
             except:
                 
@@ -569,6 +567,9 @@ with open(fileout, 'w') as f:
         print('>', recs_skipped, 'records skipped')
         print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
         intertime = time.time()
+
+# temp
+print('devrecordcount:', devrecordcount)
 
 connection = sq.connect(dbpath)
 db = connection.cursor()
