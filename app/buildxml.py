@@ -308,7 +308,7 @@ urls = set()
 intertime = time.time()
 
 # temp
-devtest_textfile = Path(Path(__file__).resolve().parent).joinpath('../xml/devtest_textfile.txt')
+devtest_textfile = Path(Path(__file__).resolve().parent).joinpath('../xml/devtest_textfile.csv')
 devrecordcount = 0
 
 for coll in colls:
@@ -377,6 +377,8 @@ for coll in colls:
                     print('>> duplicate "do" found, skipping:', do)
                     duplicate_recs_skipped += 1
                     continue
+                else:
+                    check_for_duplicates.add(do)
 
                 url = urlparse(file_uri).hostname
                 if url == 'resolver.caltech.edu' or url == 'digital.archives.caltech.edu' or url == 'californiarevealed.org':
