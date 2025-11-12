@@ -550,7 +550,7 @@ for coll in colls:
 
                 # temp
                 with open(devtest_textfile, 'a') as dev_f:
-                    dev_f.write(file_uri)
+                    dev_f.write(file_uri, end='\n')
                 devrecordcount += 1
 
             except:
