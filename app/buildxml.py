@@ -372,6 +372,7 @@ for coll in colls:
 
                 # temp
                 # check for duplicates
+                print(do, ao, typ, keep)
                 if do in check_for_duplicates:
                     # skip duplicate
                     print('>> duplicate "do" found, skipping:', do)
