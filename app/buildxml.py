@@ -310,6 +310,8 @@ intertime = time.time()
 # temp
 devtest_textfile = Path(Path(__file__).resolve().parent).joinpath('../xml/devtest_textfile.csv')
 devrecordcount = 0
+with open(devtest_textfile, 'w') as f:
+  f.write()
 
 for coll in colls:
 
@@ -380,9 +382,8 @@ for coll in colls:
                 else:
                     check_for_duplicates.add(do)
                     devrecordcount += 1
-                    print(do)
-                    with open(devtest_textfile, 'a') as dev_f:
-                        dev_f.write(do, end='\n')
+                    print("do:", do)
+                    print(do, file = devtest_textfile)
 
                 url = urlparse(file_uri).hostname
                 if url == 'resolver.caltech.edu' or url == 'digital.archives.caltech.edu' or url == 'californiarevealed.org':
