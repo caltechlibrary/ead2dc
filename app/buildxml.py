@@ -383,7 +383,8 @@ for coll in colls:
                     check_for_duplicates.add(do)
                     devrecordcount += 1
                     print("do:", do)
-                    print(do, file = devtest_textfile)
+                    with open(devtest_textfile, 'a') as f:
+                        f.write(do + '\n')
 
                 url = urlparse(file_uri).hostname
                 if url == 'resolver.caltech.edu' or url == 'digital.archives.caltech.edu' or url == 'californiarevealed.org':
