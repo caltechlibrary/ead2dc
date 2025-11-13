@@ -372,7 +372,6 @@ for coll in colls:
 
                 # temp
                 # check for duplicates
-                print(do, ao, typ, keep)
                 if do in check_for_duplicates:
                     # skip duplicate
                     print('>> duplicate "do" found, skipping:', do)
@@ -380,6 +379,10 @@ for coll in colls:
                     continue
                 else:
                     check_for_duplicates.add(do)
+                    devrecordcount += 1
+                    print(do)
+                    with open(devtest_textfile, 'a') as dev_f:
+                        dev_f.write(do, end='\n')
 
                 url = urlparse(file_uri).hostname
                 if url == 'resolver.caltech.edu' or url == 'digital.archives.caltech.edu' or url == 'californiarevealed.org':
@@ -550,11 +553,6 @@ for coll in colls:
 
                 recs_created += 1
                 print(recs_created, end='\r')
-
-                # temp
-                with open(devtest_textfile, 'a') as dev_f:
-                    dev_f.write(do, end='\n')
-                devrecordcount += 1
 
             except:
                 
