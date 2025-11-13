@@ -384,7 +384,7 @@ for coll in colls:
                     devrecordcount += 1
                     print("do:", do)
                     with open(devtest_textfile, 'a') as f:
-                        f.write(do + '\n')
+                        f.write(do + ',' + ao + '\n')
 
                 url = urlparse(file_uri).hostname
                 if url == 'resolver.caltech.edu' or url == 'digital.archives.caltech.edu' or url == 'californiarevealed.org':
