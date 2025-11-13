@@ -12,7 +12,7 @@
 #   collections - records data about collections with digital content
 #   last_update - records dates of last updates of XML file and collection selection
 
-import time
+import time, os
 import sqlite3 as sq
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
@@ -308,10 +308,10 @@ urls = set()
 intertime = time.time()
 
 # temp
-devtest_textfile = Path(Path(__file__).resolve().parent).joinpath('../xml/devtest_textfile.csv')
 devrecordcount = 0
-with open(devtest_textfile, 'w') as f:
-  f.write()
+devtest_textfile = Path(Path(__file__).resolve().parent).joinpath('../xml/devtest_textfile.csv')
+if os.path.exists(devtest_textfile):
+    os.remove(devtest_textfile)
 
 for coll in colls:
 
