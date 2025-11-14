@@ -131,13 +131,17 @@ for obj in digital_objects:
                 else:
                     # create new collection
                     collections_dict[coll] = {(obj['uri'], linked_instance['ref'], typ, keep)}
-                    # print('> added', coll, client.get(coll).json()['title'])
+                    print('> added', coll, client.get(coll).json()['title'], end='\r')
 
 for collection in collections_dict:
     print('Collection:', collection, client.get(collection).json()['title'])
+    coll_dos, coll_aos = set(), set()
     for do, ao, typ, keep in collections_dict[collection]:
-        print('>', do, ao, typ, keep)
+        coll_dos.add(do)
+        coll_aos.add(ao)
+    print('>', len(coll_dos), 'digital objects;', len(coll_aos), 'archival objects')
 
+print()
 print('> summary:')
 print('>', dao_count, 'digital objects')
 print('>', len(collections), 'collections with digital objects')
