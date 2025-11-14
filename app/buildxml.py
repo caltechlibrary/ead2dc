@@ -131,7 +131,8 @@ for obj in digital_objects:
                 else:
                     # create new collection
                     collections_dict[coll] = {(obj['uri'], linked_instance['ref'], typ, keep)}
-                    print('> added', coll, client.get(coll).json()['title'], end='\r')
+                    ttl = client.get(coll).json()['title']
+                    print('> added', coll, ttl, " "*(80-len(ttl)), end='\r')
 
 for collection in collections_dict:
     print('Collection:', collection, client.get(collection).json()['title'])
@@ -391,7 +392,7 @@ for coll in colls:
                 else:
                     check_for_duplicates.add(do)
                     devrecordcount += 1
-                    print("do:", do)
+                    #print("do:", do)
                     with open(devtest_textfile, 'a') as f:
                         f.write(do + ',' + ao + '\n')
 
