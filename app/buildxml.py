@@ -67,12 +67,13 @@ orphandigitalobjects = 0
 numbresources = 0
 numbaccessions = 0
 
-# iterate over digital objects
-
+# retrieve all digital objects
 digital_objects = client.get_paged('/repositories/2/digital_objects')
 
+# iterate over digital objects
 for obj in digital_objects:
 
+    do_uri = obj['uri']
     keep = True
 
     # only include objects that are published and not suppressed
@@ -111,13 +112,18 @@ for obj in digital_objects:
             keep = False
         else:
             keep = False
-            print('> error: cannot identify record type:', obj['uri'])
+            print('> error: cannot identify record type:', do_uri)
     
     # iterate over the linked instances to find archival records
     for linked_instance in obj['linked_instances']:
+
+        # if linked to an archival object
         if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
+
+            ao = linked_instance['ref']
+
             # build dictionary of collections, digital objects, and archival objects
-            # dict has the form {collection: {archival object: (digital object, type, keep)}}
+            # dict has the form {collection: {archival object: {(digital object, type, keep)}}}
             # i.e. a dictionary where the key is the collection id, and values are sets of tuples
             # 'digital object' is an id
             # 'archival object' is an id
@@ -127,15 +133,15 @@ for obj in digital_objects:
             if coll != []:
                 if collections_dict.get(coll):
                     # add to existing collection
-                    if collections_dict[coll].get(linked_instance['ref']):
+                    if collections_dict[coll].get(ao):
                         # add digital object to existing archival object
-                        collections_dict[coll][linked_instance['ref']].add((obj['uri'], typ, keep))
+                        collections_dict[coll][ao].add((do_uri, typ, keep))
                     else:
                         # create new archival object entry
-                        collections_dict[coll][linked_instance['ref']] = {(obj['uri'], typ, keep)}
+                        collections_dict[coll][ao] = {(do_uri, typ, keep)}
                 else:
                     # create new collection
-                    collections_dict[coll] = {linked_instance['ref']: {(obj['uri'], typ, keep)}}
+                    collections_dict[coll] = {ao: {(do_uri, typ, keep)}}
                     ttl = client.get(coll).json()['title']
                     print('> added', coll, ttl, " "*(80-len(ttl)), end='\r')
 
