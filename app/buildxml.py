@@ -143,7 +143,7 @@ for obj in digital_objects:
                     # create new collection
                     collections_dict[coll] = {ao: {(do_uri, typ, keep)}}
                     ttl = client.get(coll).json()['title']
-                    print('> added', coll, ttl, " "*(80-len(ttl)), end='\r')
+                    print('> added', coll, '('+ttl+')')
 
 # print summary of collections and objects found
 for collection in collections_dict:
