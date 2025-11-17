@@ -629,8 +629,8 @@ connection.close()
 fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives-dev.xml')
 
 with open(fileout, 'w') as f:
-    f.write(ET.tostring(oaixml, encoding='unicode', method='xml'))
-    #f.write(prettify(oaixml))
+    #f.write(ET.tostring(oaixml, encoding='unicode', method='xml'))
+    f.write(prettify(oaixml))
 
 '''
 for collection in dao_dict:
