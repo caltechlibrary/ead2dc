@@ -363,8 +363,8 @@ for coll in colls:
 
     # temp
     # limit to collection '30' Oral Histories for testing
-    if coll[0] != '30':
-        continue
+    #if coll[0] != '30':
+    #    continue
 
     #temp
     #print('>', setid)
@@ -601,9 +601,9 @@ for coll in colls:
             print(recs_created, end='\r')
 
             #temp
-            #j += 1
-            #if j >= 20:
-            #    break
+            j += 1
+            if j >= 20:
+                break
 
         print('>', recs_created, 'records created')
         #print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
