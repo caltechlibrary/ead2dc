@@ -517,19 +517,36 @@ for coll in colls:
             #description = ET.SubElement(dc, 'dc:description')
             #description.text = 'Digital object in ' + collectiontitle
 
+            # list of unique hostnames
+            hostnames = list(set([urlparse(file_uri).hostname for file_uri in file_uri_list]))
+
+            if 'https://digital.archives.caltech.edu' in hostnames and 'https://resolver.caltech.edu' in hostnames:
+                hostnames.remove('https://digital.archives.caltech.edu')
+            if 'https://github.com' in hostnames:
+                hostnames.remove('https://github.com')
+            if 'https://www.github.com' in hostnames:
+                hostnames.remove('https://www.github.com')
+            
             for file_uri in file_uri_list: 
 
-                url = urlparse(file_uri).hostname
-                if url == 'resolver.caltech.edu' or url == 'digital.archives.caltech.edu' or url == 'californiarevealed.org':
+                hostname = urlparse(file_uri).hostname
+
+                if hostname in [None, 'github.com', 'www.github.com'] \
+                    or hostname not in hostnames:
+
+                    continue
+
+                # categorize hostname
+                if hostname == 'resolver.caltech.edu' or hostname == 'digital.archives.caltech.edu' or hostname == 'californiarevealed.org':
                     hostcategory = 'caltechlibrary'
-                elif url == 'archive.org':
+                elif hostname == 'archive.org':
                     hostcategory = 'internetarchive'
-                elif url == 'youtube.com' or url == 'youtu.be':
+                elif hostname == 'youtube.com' or hostname == 'youtu.be':
                     hostcategory = 'youtube'
                 else:
                     hostcategory = 'other'
-                if url not in urls:
-                    urls.add(url)
+                if hostname not in urls:
+                    urls.add(hostname)
                 if dao_dict[setid].get(hostcategory):
                     dao_dict[setid][hostcategory] += 1
                 else:
