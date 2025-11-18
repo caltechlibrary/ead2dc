@@ -377,7 +377,7 @@ for coll in colls:
 
     if collections_dict.get(setid):
 
-        print(collectiontitle)
+        print('>', collectiontitle)
     
         # iterate over collection
         # do = digital object, ao = archival object
@@ -514,7 +514,7 @@ for coll in colls:
             #description.text = 'Digital object in ' + collectiontitle
 
             for file_uri in file_uri_list: 
-                
+
                 url = urlparse(file_uri).hostname
                 if url == 'resolver.caltech.edu' or url == 'digital.archives.caltech.edu' or url == 'californiarevealed.org':
                     hostcategory = 'caltechlibrary'
@@ -606,11 +606,11 @@ for coll in colls:
             #    break
 
         print('>', recs_created, 'records created')
-        print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
+        #print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
         intertime = time.time()
 
 # temp
-print('devrecordcount:', devrecordcount)
+#print('devrecordcount:', devrecordcount)
 
 connection = sq.connect(dbpath)
 db = connection.cursor()
@@ -652,7 +652,7 @@ for collection in dao_dict:
 '''
 
 print(dao_count, 'total records created')
-print(dao_skipped, 'total records skipped')
+#print(dao_skipped, 'total records skipped')
 
 #print(dao_dict)
 
