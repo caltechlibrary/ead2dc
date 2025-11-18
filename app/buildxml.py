@@ -599,9 +599,9 @@ for coll in colls:
             print(recs_created, end='\r')
 
             #temp
-            j += 1
-            if j >= 20:
-                break
+            #j += 1
+            #if j >= 20:
+            #    break
 
         print('>', collectiontitle, '('+str(recs_created), 'records created)')
 
