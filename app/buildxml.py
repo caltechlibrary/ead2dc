@@ -426,6 +426,12 @@ for coll in colls:
                             #    with open(devtest_textfile, 'a') as f:
                             #        f.write(do + ',' + ao + '\n')
 
+            # update archival object record count
+            if dao_dict[setid].get('archival_objects'):
+                dao_dict[setid]['archival_objects'] += 1
+            else:
+                dao_dict[setid]['archival_objects'] = 1
+            
             # record element
             record = ET.SubElement(ListRecords, 'record')
 

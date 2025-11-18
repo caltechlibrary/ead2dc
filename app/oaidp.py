@@ -308,22 +308,27 @@ def collections2():
 # get total object counts
 def get_total_counts():
     db = get_db()
-    query = 'SELECT sum(docount) as tot_docount, \
+    query = 'SELECT sum(aocount as tot_aocount, \
+                    sum(docount) as tot_docount, \
                     sum(caltechlibrary) as tot_clibrary, \
                     sum(internetarchive) as tot_iarchive, \
-                    sum(youtube) tot_youtube, sum(other) as tot_other \
+                    sum(youtube) tot_youtube, \
+                    sum(other) as tot_other \
                 FROM collections;'
     return db.execute(query).fetchone()
 
 # read collections data for display
 def read_colls():
-    query = "SELECT collno, colltitle, docount, caltechlibrary, \
+    query = "SELECT collno, colltitle, aocount, docount, caltechlibrary, \
                     internetarchive, youtube, other, incl \
             FROM collections \
             ORDER BY docount DESC;"
     colls = get_db().execute(query).fetchall()
-    n = sum(k for (_,_,k,_,_,_,_,_) in colls)
-    return (n, len(colls), colls)
+    # archival object total
+    n0 = sum(k for (_,_,k,_,_,_,_,_,_) in colls)
+    # digital object total
+    n = sum(k for (_,_,_,k,_,_,_,_,_) in colls)
+    return (n0, n, len(colls), colls)
 
 # query db and update collections json file for list of ids
 def update_coll_json(ids):

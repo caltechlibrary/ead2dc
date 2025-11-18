@@ -43,9 +43,10 @@
         {% endif %}</th>
     <th rowspan="2">Set ID</th>
     <th rowspan="2">Title</th>
+    <th rowspan="2">Archival<br/>Objects</th>
     <th rowspan="2">Digital<br/>Objects</th>
     <th rowspan="2">List<br/>Records</th>
-    <th colspan="5">Host/Link domain</th>
+    <th colspan="4">Host/Link domain</th>
 </tr>
 <tr>
     <th>Caltech Library</th>
@@ -53,27 +54,29 @@
     <th>YouTube</th>
     <th>Other</th>
 </tr>
-{% for coll in output[2] %}
+{% for coll in output[3] %}
     <tr>
         <td align="center">
             {% if g.user and g.auth %}    
-                <input name="include" id="include" type="checkbox" value="{{ coll[0] }}"{% if coll[7] %} checked {% endif %}>
-            {% elif coll[7] %}
+                <input name="include" id="include" type="checkbox" value="{{ coll[0] }}"{% if coll[8] %} checked {% endif %}>
+            {% elif coll[8] %}
                 &#x2713;
             {% endif %}
         </td>
         <td align="right">{{ coll[0] }}</td>
         <td><a href="{{ url }}{{ coll[0] }}">{{ coll[1] }}</a></td>
-        <td align="right"><a href="{{ url }}{{ coll[0] }}/digitized">{{ coll[2] }}</a></td>
-        <td align="center">{% if coll[7] %}<a href="oai?verb=ListRecords&set={{ coll[0] }}"><i class="fas fa-solid fa-link"></i></a>{% endif %}</td>
-        <td align="right">{{ coll[3] }}</td>
+        <td align="right">{{ coll[2] }}</td>
+        <td align="right"><a href="{{ url }}{{ coll[0] }}/digitized">{{ coll[3] }}</a></td>
+        <td align="center">{% if coll[8] %}<a href="oai?verb=ListRecords&set={{ coll[0] }}"><i class="fas fa-solid fa-link"></i></a>{% endif %}</td>
         <td align="right">{{ coll[4] }}</td>
         <td align="right">{{ coll[5] }}</td>
         <td align="right">{{ coll[6] }}</td>
+        <td align="right">{{ coll[7] }}</td>
     </tr>
 {% endfor %}
 <tr>
     <th align="right" colspan="3">Totals</th>
+    <th align="right">{{ totals['tot_aocount'] }}</th>
     <th align="right">{{ totals['tot_docount'] }}</th>
     <th></th>
     <th align="right">{{ totals['tot_clibrary'] }}</th>
