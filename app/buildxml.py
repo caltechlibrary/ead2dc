@@ -70,7 +70,7 @@ numbaccessions = 0
 # retrieve all digital objects
 digital_objects = client.get_paged('/repositories/2/digital_objects')
 
-print("linking archival objects to digital objects...")
+print("Linking archival objects to digital objects...")
 
 # iterate over digital objects
 for obj in digital_objects:
@@ -108,8 +108,8 @@ for obj in digital_objects:
             typ = 'resource'
             numbresources += 1
         elif coll[:27] == '/repositories/2/accessions/':
-            collections.add(coll)
-            typ = 'accession'
+            #collections.add(coll)
+            #typ = 'accession'
             numbaccessions += 1
             keep = False
         else:
@@ -154,19 +154,19 @@ for collection in collections_dict:
         coll_aos.add(ao)
         for (do, typ, keep) in collections_dict[collection][ao]:
             coll_dos.add(do)
-    print('> added', collection, '(' + client.get(collection).json()['title'] + ')', len(coll_dos), 'digital objects;', len(coll_aos), 'archival objects')
+    print('>', collection, '(' + client.get(collection).json()['title'] + ')', len(coll_dos), 'digital objects;', len(coll_aos), 'archival objects')
 
-print()
-print('> summary:')
-print('>', dao_count, 'digital objects')
-print('>', len(collections), 'collections with digital objects')
-print('>', published, 'published')
-print('>', notpublished, 'not published')
-print('>', suppressed, 'suppressed')
-print('>', notsuppressed, 'not suppressed')
-print('>', numbresources, 'resources')
-print('>', numbaccessions, 'accessions')
-print('>', orphandigitalobjects, 'orphan digital objects')
+#print()
+#print('> summary:')
+#print('>', dao_count, 'digital objects')
+#print('>', len(collections), 'collections with digital objects')
+#print('>', published, 'published')
+#print('>', notpublished, 'not published')
+#print('>', suppressed, 'suppressed')
+#print('>', notsuppressed, 'not suppressed')
+#print('>', numbresources, 'resources')
+#print('>', numbaccessions, 'accessions')
+#print('>', orphandigitalobjects, 'orphan digital objects')
             
 # update collections info in database
 # updates collno, colltitle, description, eadurl
