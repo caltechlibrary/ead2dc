@@ -323,7 +323,7 @@ dao_dict = dict()
 # build ListRecords segment
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
-print('Elapsed time:', round(time.time() - start, 1), 'secs')
+#print('Elapsed time:', round(time.time() - start, 1), 'secs')
 
 print('Building static repository...')
 
@@ -386,7 +386,15 @@ for coll in colls:
         # collections_dict[setid] = {(digital object, archival object, type, keep)}        
         for ao in collections_dict[setid]:
 
+            duplicate_dos = set()
+
             for (do, typ, keep) in collections_dict[setid][ao]:
+
+                # skip duplicate digital objects for this archival object
+                if do in duplicate_dos:
+                    continue
+                else:
+                    duplicate_dos.add(do)
 
                 for file_version in client.get(do).json()['file_versions']:
                     
@@ -405,7 +413,6 @@ for coll in colls:
 
                             file_uri = file_version['file_uri']
 
-                            # temp
                             # check for duplicates
                             #if do in check_for_duplicates:
                                 # skip duplicate
@@ -415,7 +422,6 @@ for coll in colls:
                             #else:
                             #    check_for_duplicates.add(do)
                             #    devrecordcount += 1
-                                #print("do:", do)
                             #    with open(devtest_textfile, 'a') as f:
                             #        f.write(do + ',' + ao + '\n')
 
