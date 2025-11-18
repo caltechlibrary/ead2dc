@@ -70,6 +70,8 @@ numbaccessions = 0
 # retrieve all digital objects
 digital_objects = client.get_paged('/repositories/2/digital_objects')
 
+print("linking archival objects to digital objects...")
+
 # iterate over digital objects
 for obj in digital_objects:
 
@@ -143,17 +145,16 @@ for obj in digital_objects:
                     # create new collection
                     collections_dict[coll] = {ao: {(do_uri, typ, keep)}}
                     ttl = client.get(coll).json()['title']
-                    print('> added', coll, '('+ttl+')')
+                    #print('> added', coll, '('+ttl+')')
 
 # print summary of collections and objects found
 for collection in collections_dict:
-    print('Collection:', collection, client.get(collection).json()['title'])
     coll_dos, coll_aos = set(), set()
     for ao in collections_dict[collection]:
         coll_aos.add(ao)
         for (do, typ, keep) in collections_dict[collection][ao]:
             coll_dos.add(do)
-    print('>', len(coll_dos), 'digital objects;', len(coll_aos), 'archival objects')
+    print('> added', collection, '(' + client.get(collection).json()['title'] + ')', len(coll_dos), 'digital objects;', len(coll_aos), 'archival objects')
 
 print()
 print('> summary:')
