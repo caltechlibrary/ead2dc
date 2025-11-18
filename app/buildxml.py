@@ -363,8 +363,8 @@ for coll in colls:
 
     # temp
     # limit to collection '30' Oral Histories for testing
-    #if coll[0] != '30':
-    #    continue
+    if coll[0] != '30':
+        continue
 
     #temp
     #print('>', setid)
