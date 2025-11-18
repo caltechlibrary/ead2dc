@@ -427,10 +427,10 @@ for coll in colls:
                             #        f.write(do + ',' + ao + '\n')
 
             # update archival object record count
-            if dao_dict[setid].get('archival_objects'):
-                dao_dict[setid]['archival_objects'] += 1
+            if dao_dict[setid].get('aocount'):
+                dao_dict[setid]['aocount'] += 1
             else:
-                dao_dict[setid]['archival_objects'] = 1
+                dao_dict[setid]['aocount'] = 1
             
             # record element
             record = ET.SubElement(ListRecords, 'record')
