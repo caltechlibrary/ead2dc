@@ -518,18 +518,20 @@ for coll in colls:
             #description.text = 'Digital object in ' + collectiontitle
 
             # list of unique hostnames
-            hostnames = list(set([urlparse(file_uri).hostname for file_uri in file_uri_list]))
+            hostnames = list(set([urlparse(file_uri).netloc for file_uri in file_uri_list]))
 
-            if 'https://digital.archives.caltech.edu' in hostnames and 'https://resolver.caltech.edu' in hostnames:
-                hostnames.remove('https://digital.archives.caltech.edu')
-            if 'https://github.com' in hostnames:
-                hostnames.remove('https://github.com')
-            if 'https://www.github.com' in hostnames:
-                hostnames.remove('https://www.github.com')
-            
+            if 'digital.archives.caltech.edu' in hostnames and 'resolver.caltech.edu' in hostnames:
+                hostnames.remove('digital.archives.caltech.edu')
+            if 'github.com' in hostnames:
+                hostnames.remove('github.com')
+            if 'www.github.com' in hostnames:
+                hostnames.remove('www.github.com')
+            if 'californiarevealed.org' in hostnames and 'resolver.caltech.edu' in hostnames:
+                hostnames.remove('californiarevealed.org')
+
             for file_uri in file_uri_list: 
 
-                hostname = urlparse(file_uri).hostname
+                hostname = urlparse(file_uri).netloc
 
                 if hostname in [None, 'github.com', 'www.github.com'] \
                     or hostname not in hostnames:
