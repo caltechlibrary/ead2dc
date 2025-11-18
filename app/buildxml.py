@@ -376,8 +376,6 @@ for coll in colls:
     j=0
 
     if collections_dict.get(setid):
-
-        print('>', collectiontitle)
     
         # iterate over collection
         # do = digital object, ao = archival object
@@ -605,7 +603,8 @@ for coll in colls:
             if j >= 20:
                 break
 
-        print('>', recs_created, 'records created')
+        print('>', collectiontitle, '('+str(recs_created), 'records created)')
+
         #print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
         intertime = time.time()
 
@@ -635,10 +634,10 @@ connection.close()
 #write to disk
 
 # production file
-#fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
+fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 
 #dev file
-fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives-dev.xml')
+#fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives-dev.xml')
 
 with open(fileout, 'w') as f:
     #f.write(ET.tostring(oaixml, encoding='unicode', method='xml'))
