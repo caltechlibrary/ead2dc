@@ -22,12 +22,36 @@ from urllib.parse import urlparse
 
 from asnake.client import ASnakeClient
 
+#-----------------------------------------------------------------------#
 # returns a "pretty" XML string
 def prettify(elem):
     xml_string = ET.tostring(elem)
     xml_file = dom.parseString(xml_string)
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
+#-----------------------------------------------------------------------#
+# create collection description from collection notes
+def create_collection_description(coll_info):
+
+    try:
+        description = [note for note in coll_info['notes'] if (note['type'] == 'scopecontent' or note['type'] == 'abstract') and note['publish']]
+    except:
+        description = None
+    if description:
+        try:
+            notepart1 = ' '.join([note['content'][0] for note in description if note['jsonmodel_type'] == 'note_singlepart'])
+        except:
+            notepart1 = ''
+        try:
+            notepart2 = ' '.join([note['subnotes'][0]['content'] for note in description if note['jsonmodel_type'] == 'note_multipart'])
+        except:
+            notepart2 = ''
+        description = notepart1 + ' ' + notepart2
+    else:
+        description = ''
+
+    return description.strip()
+#-----------------------------------------------------------------------#
 
 start = time.time()
 
@@ -147,33 +171,6 @@ for obj in digital_objects:
                     ttl = client.get(coll).json()['title']
                     #print('> added', coll, '('+ttl+')')
 
-# print summary of collections and objects found
-for collection in collections_dict:
-    coll_dos, coll_aos = set(), set()
-    for ao in collections_dict[collection]:
-        coll_aos.add(ao)
-        for (do, typ, keep) in collections_dict[collection][ao]:
-            coll_dos.add(do)
-    print('>', collection, '(' + client.get(collection).json()['title'] + ')', len(coll_dos), 'digital objects;', len(coll_aos), 'archival objects')
-
-#print()
-#print('> summary:')
-#print('>', dao_count, 'digital objects')
-#print('>', len(collections), 'collections with digital objects')
-#print('>', published, 'published')
-#print('>', notpublished, 'not published')
-#print('>', suppressed, 'suppressed')
-#print('>', notsuppressed, 'not suppressed')
-#print('>', numbresources, 'resources')
-#print('>', numbaccessions, 'accessions')
-#print('>', orphandigitalobjects, 'orphan digital objects')
-            
-# update collections info in database
-# updates collno, colltitle, description, eadurl
-# does not update docount, incl, carchives clibrary, iarchive, youtube, other, collid
-# write time of last update to db
-# collectionids = set of collection ids
-
 # read included collections from db
 # retrieve included collections from db
 # returns dictionary of collection numbers and inclusion status
@@ -183,9 +180,6 @@ query = 'SELECT collno,incl FROM collections'
 includedcollections = dict()
 for row in cursor.execute(query).fetchall():
     includedcollections[row[0]] = row[1]
-
-#temp
-#print(includedcollections)
 
 # write ISO last update
 now = datetime.now()
@@ -198,54 +192,47 @@ cursor.execute(query, [last_update, 'xml'])
 query = 'DELETE FROM collections;'
 cursor.execute(query)
 
-query = 'INSERT INTO collections (collno,eadurl,colltitle,description,collid,docount,incl,caltechlibrary,internetarchive,youtube,other,typ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);'
-for collectionid in collections:
-    coll_info = client.get(collectionid).json()
+query = 'INSERT INTO collections \
+            (collno,colltitle,description,collid,aocount,docount,incl,caltechlibrary,internetarchive,youtube,other,typ) \
+         VALUES \
+            (?,?,?,?,?,?,?,?,?,?,?,?);'
+
+# print summary of collections and objects found
+for collection in collections_dict:
+
+    # collection info
+    coll_info = client.get(collection).json()
     collid = coll_info['uri']
-    if collid[16:25] == 'resources': 
-        typ = 'resource'
+    colltitle = coll_info['title']
+    description = create_collection_description(coll_info)
+    coll_dos = set()
+    coll_aos = set()
+
+    if collid[16:25] == 'resources':
+        colltyp = 'resource'
         collno = collid[26:]
     elif collid[16:26] == 'accessions':
-        typ = 'accession'
+        colltyp = 'accession'
         collno = collid[27:]
     else:
-        typ = 'unknown'
+        colltyp = 'unknown'
         print('> error: cannot identify record type:', collid)
     # collid is the URI of the collection
-    
-    eadurl = 'https://collections.archives.caltech.edu/oai?verb=GetRecord&identifier=/repositories/2/resources/'+collno+'&metadataPrefix=oai_ead'
-    colltitle = coll_info['title']
-    try:
-        description = [note for note in coll_info['notes'] if (note['type'] == 'scopecontent' or note['type'] == 'abstract') and note['publish']]
-    except:
-        description = None
-    if description:
-        try:
-            notepart1 = ' '.join([note['content'][0] for note in description if note['jsonmodel_type'] == 'note_singlepart'])
-        except:
-            notepart1 = ''
-        try:
-            notepart2 = ' '.join([note['subnotes'][0]['content'] for note in description if note['jsonmodel_type'] == 'note_multipart'])
-        except:
-            notepart2 = ''
-        description = notepart1 + ' ' + notepart2
-    else:
-        description = ''
-    # collno text, colltitle text, docount int, incl int, 
-    # carchives int, clibrary int, iarchive int, youtube int, other int, 
-    # collid text, description text, eadurl text
-    cursor.execute(query, [collno, eadurl, colltitle, description, collid, 0, 
-            includedcollections.get(collno, 0), 0, 0, 0, 0, typ])
-    
-    #temp
-    #print('temp:', collectionid[26:])
+
+    for ao in collections_dict[collection]:
+        coll_aos.add(ao)
+        for (do, typ, keep) in collections_dict[collection][ao]:
+            coll_dos.add(do)
+
+    cursor.execute(query, [collno, colltitle, description, collid, len(coll_aos), len(coll_dos), includedcollections.get(collno, 0), 0, 0, 0, 0, colltyp])
+    print('>', collection, '(' + client.get(collection).json()['title'] + ')', len(coll_aos), 'archival objects;', len(coll_dos), 'digital objects')
 
 # commit changes to db before reading
 connection.commit()
 
 # read collection info from db
 # colls is a list of tuples
-query = 'SELECT collno,eadurl,colltitle,description,collid,docount,incl,caltechlibrary,internetarchive,youtube,other,typ FROM collections'
+query = 'SELECT collno,colltitle,description,collid,aocount,docount,incl,caltechlibrary,internetarchive,youtube,other,typ FROM collections'
 colls = cursor.execute(query).fetchall()
 cursor.close()
 connection.close()
