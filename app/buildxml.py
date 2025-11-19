@@ -23,13 +23,18 @@ from urllib.parse import urlparse
 from asnake.client import ASnakeClient
 
 #-----------------------------------------------------------------------#
+# FUNCTIONS                                                             #
+#-----------------------------------------------------------------------#
+
 # returns a "pretty" XML string
 def prettify(elem):
     xml_string = ET.tostring(elem)
     xml_file = dom.parseString(xml_string)
     pretty_xml = xml_file.toprettyxml(indent="  ")
     return pretty_xml
+
 #-----------------------------------------------------------------------#
+
 # create collection description from collection notes
 def create_collection_description(coll_info):
 
@@ -51,6 +56,21 @@ def create_collection_description(coll_info):
         description = ''
 
     return description.strip()
+
+#-----------------------------------------------------------------------#
+
+# establish API connection
+def authorize_api():
+    print('Establishing API connection...')
+    secrets = __import__('secrets')
+    client = ASnakeClient(baseurl = secrets.baseurl,
+                        username = secrets.username,
+                        password = secrets.password)
+    client.authorize()
+    return client
+
+#-----------------------------------------------------------------------#
+# START OF SCRIPT                                                       #
 #-----------------------------------------------------------------------#
 
 start = time.time()
@@ -62,13 +82,7 @@ dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
 # string form of date to write to each record
 today = date.today().strftime("%Y-%m-%d")
 
-# establish API connection
-print('Establishing API connection...')
-secrets = __import__('secrets')
-client = ASnakeClient(baseurl = secrets.baseurl,
-                      username = secrets.username,
-                      password = secrets.password)
-client.authorize()
+authorize_api()
 
 # initialize collections dictionary
 # this dictionary references archival objects with related digital objects
@@ -350,8 +364,8 @@ for coll in colls:
 
     # temp
     # limit to collection '30' Oral Histories for testing
-    #if coll[0] != '30':
-    #    continue
+    if coll[0] != '30':
+        continue
 
     #temp
     #print('>', setid)
