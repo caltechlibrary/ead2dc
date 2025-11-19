@@ -82,7 +82,7 @@ dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
 # string form of date to write to each record
 today = date.today().strftime("%Y-%m-%d")
 
-authorize_api()
+client = authorize_api()
 
 # initialize collections dictionary
 # this dictionary references archival objects with related digital objects
