@@ -304,7 +304,7 @@ for coll in colls:
     setSpec = ET.SubElement(oaiset, 'setSpec')
     setSpec.text = coll[0]
     setName = ET.SubElement(oaiset, 'setName')
-    setName.text = coll[2]
+    setName.text = coll[1]
     setDescription = ET.SubElement(
         ET.SubElement(
             ET.SubElement(oaiset, 'setDescription'), 'oai_dc', {
@@ -315,7 +315,7 @@ for coll in colls:
             }
         ), 'dc:description'
     )
-    setDescription.text = coll[3]
+    setDescription.text = coll[2]
 
 dao_count = 0
 dao_skipped = 0
@@ -345,10 +345,10 @@ for coll in colls:
     #duplicate_recs_skipped = 0
 
     # coll[0] = collno
-    # coll[1] = eadurl
-    # coll[2] = colltitle
-    # coll[3] = description
-    # coll[4] = collid
+    # coll[1] = colltitle
+    # coll[2] = description
+    # coll[3] = collid
+    # coll[4] = aocount
     # coll[5] = docount
     # coll[6] = incl
     # coll[7] = caltechlibrary
@@ -370,7 +370,7 @@ for coll in colls:
     #temp
     #print('>', setid)
 
-    collectiontitle = coll[2]
+    collectiontitle = coll[1]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     #temp
