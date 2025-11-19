@@ -363,8 +363,8 @@ for coll in colls:
     setid = '/repositories/2/' + coll[11] + 's/' + coll[0]
 
     # temp
-    # limit to collection '30' Oral Histories for testing
-    if coll[0] != '30':
+    # limit to subset of collections for testing
+    if coll[0] not in ['30', '34', '80']:
         continue
 
     #temp
