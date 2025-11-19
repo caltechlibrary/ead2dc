@@ -108,7 +108,7 @@ numbaccessions = 0
 # retrieve all digital objects
 digital_objects = client.get_paged('/repositories/2/digital_objects')
 
-print("Linking archival objects to digital objects...")
+print("Linking digital objects to archival objects...")
 
 # iterate over digital objects
 for obj in digital_objects:
