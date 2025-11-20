@@ -70,21 +70,8 @@ def authorize_api():
     return client
 
 #-----------------------------------------------------------------------#
-# START OF SCRIPT                                                       #
-#-----------------------------------------------------------------------#
 
-start = time.time()
-
-# db location
-print('Reading database location...')
-dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
-
-# string form of date to write to each record
-today = date.today().strftime("%Y-%m-%d")
-
-print('Authorizing API...')
-client = authorize_api()
-
+# build collections dictionary
 def build_collections_dict():
 
     # initialize collections dictionary
@@ -191,7 +178,25 @@ def build_collections_dict():
     return collections_dict
 
 #-----------------------------------------------------------------------#
+# START OF SCRIPT                                                       #
 #-----------------------------------------------------------------------#
+
+start = time.time()
+
+# db location
+print('Reading database location...')
+dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
+
+# string form of date to write to each record
+today = date.today().strftime("%Y-%m-%d")
+
+print('Authorizing API...')
+client = authorize_api()
+
+
+# build collections dictionary
+print('Building collections dictionary...')
+collections_dict = build_collections_dict()
 
 # read included collections from db
 # retrieve included collections from db
