@@ -170,8 +170,10 @@ def build_collections_dict():
                         #ttl = client.get(coll).json()['title']
                         #print('> added', coll, '('+ttl+')')
     # temp
-    print('Jennings' ,collections_dict['collections.archives.caltech.edu/repositories/2/archival_objects/127779'])
-    print('Brooks:', collections_dict['collections.archives.caltech.edu/repositories/2/archival_objects/70561'])
+    for collection in collections_dict:
+        print(collection)
+    #print('Jennings' ,collections_dict['collections.archives.caltech.edu/repositories/2/archival_objects/127779'])
+    #print('Brooks:', collections_dict['collections.archives.caltech.edu/repositories/2/archival_objects/70561'])
 
     return collections_dict
 
