@@ -61,7 +61,6 @@ def create_collection_description(coll_info):
 
 # establish API connection
 def authorize_api():
-    print('Establishing API connection...')
     secrets = __import__('secrets')
     client = ASnakeClient(baseurl = secrets.baseurl,
                         username = secrets.username,
@@ -360,10 +359,10 @@ urls = set()
 intertime = time.time()
 
 # temp
-devrecordcount = 0
-devtest_textfile = Path(Path(__file__).resolve().parent).joinpath('../xml/devtest_textfile.csv')
-if os.path.exists(devtest_textfile):
-    os.remove(devtest_textfile)
+#devrecordcount = 0
+#devtest_textfile = Path(Path(__file__).resolve().parent).joinpath('../xml/devtest_textfile.csv')
+#if os.path.exists(devtest_textfile):
+#    os.remove(devtest_textfile)
 
 for coll in colls:
 
@@ -378,8 +377,8 @@ for coll in colls:
 
     # temp
     # limit to subset of collections for testing
-    if coll[0] not in ['30', '34', '80']:
-        continue
+    #if coll[0] not in ['30', '34', '80']:
+    #    continue
 
     #temp
     #print('>', setid)
