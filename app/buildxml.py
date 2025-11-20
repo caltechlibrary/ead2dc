@@ -84,8 +84,6 @@ def build_collections_dict():
 
     dao_count = 0
 
-    print('Finding digital content...')
-
     # counters for various categories of record
     #published = 0
     #notpublished = 0
@@ -97,8 +95,6 @@ def build_collections_dict():
 
     # retrieve all digital objects
     digital_objects = client.get_paged('/repositories/2/digital_objects')
-
-    print("Linking digital objects to archival objects...")
 
     # iterate over digital objects
     for obj in digital_objects:
@@ -190,20 +186,21 @@ dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
 # string form of date to write to each record
 today = date.today().strftime("%Y-%m-%d")
 
+# authorize API
 print('Authorizing API...')
 client = authorize_api()
-
 
 # build collections dictionary
 print('Building collections dictionary...')
 collections_dict = build_collections_dict()
 
 # read included collections from db
-# retrieve included collections from db
-# returns dictionary of collection numbers and inclusion status
 connection = sq.connect(dbpath)
 cursor = connection.cursor()
 query = 'SELECT collno,incl FROM collections'
+
+# retrieve included collections from db
+# return dictionary of collection numbers and inclusion status
 includedcollections = dict()
 for row in cursor.execute(query).fetchall():
     includedcollections[row[0]] = row[1]
@@ -211,7 +208,6 @@ for row in cursor.execute(query).fetchall():
 # write ISO last update
 now = datetime.now()
 last_update = now.isoformat()
-    
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
 cursor.execute(query, [last_update, 'xml'])
   
@@ -219,22 +215,28 @@ cursor.execute(query, [last_update, 'xml'])
 query = 'DELETE FROM collections;'
 cursor.execute(query)
 
+# save query to insert collection records into db
 query = 'INSERT INTO collections \
             (collno,colltitle,description,collid,aocount,docount,incl,caltechlibrary,internetarchive,youtube,other,typ) \
          VALUES \
             (?,?,?,?,?,?,?,?,?,?,?,?);'
 
-# print summary of collections and objects found
+# iterate over collections dictionary to insert collection records into db
 for collection in collections_dict:
 
-    # collection info
+    # get collection info
     coll_info = client.get(collection).json()
+
+    # extract collection data
     collid = coll_info['uri']
     colltitle = coll_info['title']
     description = create_collection_description(coll_info)
+
+    # initialize sets to count unique digital objects and archival objects
     coll_dos = set()
     coll_aos = set()
 
+    # identify collection type and number
     if collid[16:25] == 'resources':
         colltyp = 'resource'
         collno = collid[26:]
@@ -244,15 +246,30 @@ for collection in collections_dict:
     else:
         colltyp = 'unknown'
         print('> error: cannot identify record type:', collid)
-    # collid is the URI of the collection
 
+    # iterate over collection to count unique digital objects and archival objects
     for ao in collections_dict[collection]:
         coll_aos.add(ao)
         for (do, typ, keep) in collections_dict[collection][ao]:
             coll_dos.add(do)
 
-    cursor.execute(query, [collno, colltitle, description, collid, len(coll_aos), len(coll_dos), includedcollections.get(collno, 0), 0, 0, 0, 0, colltyp])
-    print('>', collection, '(' + client.get(collection).json()['title'] + ')', len(coll_aos), 'archival objects;', len(coll_dos), 'digital objects')
+    # insert collection record into db
+    cursor.execute(query, [collno,                              # coll[0] = collno (int as str)
+                           colltitle,                           # coll[1] = colltitle (str)
+                           description,                         # coll[2] = description (str)                 
+                           collid,                              # coll[3] = collid (str) 
+                           len(coll_aos),                       # coll[4] = aocount (int) 
+                           len(coll_dos),                       # coll[5] = docount (int) 
+                           includedcollections.get(collno, 0),  # coll[6] = incl (Boolean) 
+                           0,                                   # coll[7] = caltechlibrary (int)
+                           0,                                   # coll[8] = internetarchive (int)
+                           0,                                   # coll[9] = youtube (int) 
+                           0,                                   # coll[10] = other (int) 
+                           colltyp])                            # coll[11] = typ ('resource'|'accession')
+    
+    # print collection summary
+    print('>', collection, '(' + client.get(collection).json()['title'] + ')', 
+          len(coll_aos), 'archival objects;', len(coll_dos), 'digital objects')
 
 # commit changes to db before reading
 connection.commit()
@@ -264,9 +281,8 @@ colls = cursor.execute(query).fetchall()
 cursor.close()
 connection.close()
 
-#temp
-#for coll in colls:
-#    print(coll[1])
+# build XML
+print('Building static repository...')
 
 # namespace dictionary
 ns = {'': 'urn:isbn:1-931666-22-9', 
@@ -339,8 +355,6 @@ ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
 #print('Elapsed time:', round(time.time() - start, 1), 'secs')
 
-print('Building static repository...')
-
 urls = set()
 
 intertime = time.time()
@@ -356,19 +370,6 @@ for coll in colls:
     # temp
     #check_for_duplicates = set()
     #duplicate_recs_skipped = 0
-
-    # coll[0] = collno
-    # coll[1] = colltitle
-    # coll[2] = description
-    # coll[3] = collid
-    # coll[4] = aocount
-    # coll[5] = docount
-    # coll[6] = incl
-    # coll[7] = caltechlibrary
-    # coll[8] = internetarchive
-    # coll[9] = youtube
-    # coll[10] = other
-    # coll[11] = typ
 
     recs_created = 0
     recs_skipped = 0
