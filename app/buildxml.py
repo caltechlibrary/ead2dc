@@ -169,6 +169,9 @@ def build_collections_dict():
                         collections_dict[coll] = {ao: {(do_uri, typ, keep)}}
                         #ttl = client.get(coll).json()['title']
                         #print('> added', coll, '('+ttl+')')
+    # temp
+    print('Jennings' ,collections_dict['collections.archives.caltech.edu/repositories/2/archival_objects/127779'])
+    print('Brooks:', collections_dict['collections.archives.caltech.edu/repositories/2/archival_objects/70561'])
 
     return collections_dict
 
@@ -367,6 +370,11 @@ intertime = time.time()
 for coll in colls:
 
     # temp
+    # limit to subset of collections for testing
+    if coll[0] not in ['30']:
+        continue
+
+    # temp
     #check_for_duplicates = set()
     #duplicate_recs_skipped = 0
 
@@ -374,11 +382,6 @@ for coll in colls:
     recs_skipped = 0
 
     setid = '/repositories/2/' + coll[11] + 's/' + coll[0]
-
-    # temp
-    # limit to subset of collections for testing
-    #if coll[0] not in ['30', '34', '80']:
-    #    continue
 
     #temp
     #print('>', setid)
