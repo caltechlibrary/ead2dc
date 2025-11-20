@@ -82,108 +82,116 @@ dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
 # string form of date to write to each record
 today = date.today().strftime("%Y-%m-%d")
 
+print('Authorizing API...')
 client = authorize_api()
 
-# initialize collections dictionary
-# this dictionary references archival objects with related digital objects
-collections_dict = dict()
+def build_collections_dict():
 
-# initialize collection and archival object sets
-# contain collections and archival objects with related digital objects
-collections, archival_objects = set(), set()
+    # initialize collections dictionary
+    # this dictionary references archival objects with related digital objects
+    collections_dict = dict()
 
-dao_count = 0
+    # initialize collection and archival object sets
+    # contain collections and archival objects with related digital objects
+    collections = set()
 
-print('Finding digital content...')
+    dao_count = 0
 
-# counters for various categories of record
-published = 0
-notpublished = 0
-suppressed = 0
-notsuppressed = 0
-orphandigitalobjects = 0
-numbresources = 0
-numbaccessions = 0
+    print('Finding digital content...')
 
-# retrieve all digital objects
-digital_objects = client.get_paged('/repositories/2/digital_objects')
+    # counters for various categories of record
+    #published = 0
+    #notpublished = 0
+    #suppressed = 0
+    #notsuppressed = 0
+    #orphandigitalobjects = 0
+    #numbresources = 0
+    #numbaccessions = 0
 
-print("Linking digital objects to archival objects...")
+    # retrieve all digital objects
+    digital_objects = client.get_paged('/repositories/2/digital_objects')
 
-# iterate over digital objects
-for obj in digital_objects:
+    print("Linking digital objects to archival objects...")
 
-    do_uri = obj['uri']
-    keep = True
+    # iterate over digital objects
+    for obj in digital_objects:
 
-    # only include objects that are published and not suppressed
-    # check for published
-    if obj.get('publish') == False:
-        notpublished += 1
-        keep = False
-    else:
-        published += 1
+        do_uri = obj['uri']
+        keep = True
 
-    # check for suppressed
-    if obj.get('suppressed') == True:
-        suppressed += 1
-        keep = False
-    else:
-        notsuppressed += 1
-
-    # capture the id of the collections
-    coll = obj.get('collection')
-    if coll == []:
-        keep = False
-        typ = 'orphan'
-        orphandigitalobjects += 1
-    else:
-        coll = obj['collection'][0]['ref']
-        # identify the type of collection
-        # add to collections set
-        if coll[:26] == '/repositories/2/resources/':
-            collections.add(coll)
-            typ = 'resource'
-            numbresources += 1
-        elif coll[:27] == '/repositories/2/accessions/':
-            #collections.add(coll)
-            #typ = 'accession'
-            numbaccessions += 1
+        # only include objects that are published and not suppressed
+        # check for published
+        if obj.get('publish') == False:
+            #notpublished += 1
             keep = False
+        #else:
+        #    published += 1
+
+        # check for suppressed
+        if obj.get('suppressed') == True:
+            #suppressed += 1
+            keep = False
+        #else:
+        #    notsuppressed += 1
+
+        # capture the id of the collections
+        coll = obj.get('collection')
+        if coll == []:
+            keep = False
+            typ = 'orphan'
+        #    orphandigitalobjects += 1
         else:
-            keep = False
-            print('> error: cannot identify record type:', do_uri)
-    
-    # iterate over the linked instances to find archival records
-    for linked_instance in obj['linked_instances']:
+            coll = obj['collection'][0]['ref']
+            # identify the type of collection
+            # add to collections set
+            if coll[:26] == '/repositories/2/resources/':
+                collections.add(coll)
+                typ = 'resource'
+        #        numbresources += 1
+            elif coll[:27] == '/repositories/2/accessions/':
+                #collections.add(coll)
+                #typ = 'accession'
+        #        numbaccessions += 1
+                keep = False
+            else:
+                keep = False
+                print('> error: cannot identify record type:', do_uri)
+        
+        # iterate over the linked instances to find archival records
+        for linked_instance in obj['linked_instances']:
 
-        # if linked to an archival object
-        if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
+            # if linked to an archival object
+            if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
 
-            ao = linked_instance['ref']
+                ao = linked_instance['ref']
 
-            # build dictionary of collections, digital objects, and archival objects
-            # dict has the form {collection: {archival object: {(digital object, type, keep)}}}
-            # i.e. a dictionary where the key is the collection id, and values are sets of tuples
-            # 'digital object' is an id
-            # 'archival object' is an id
-            # 'type' is 'resource' or 'accession'
-            # 'keep' is True or False
-            dao_count += 1
-            if coll != []:
-                if collections_dict.get(coll):
-                    # add to existing collection
-                    if collections_dict[coll].get(ao):
-                        # add digital object to existing archival object
-                        collections_dict[coll][ao].add((do_uri, typ, keep))
+                # build dictionary of collections, digital objects, and archival objects
+                # dict has the form {collection: {archival object: {(digital object, type, keep)}}}
+                # i.e. a dictionary where the key is the collection id, and values are sets of tuples
+                # 'digital object' is an id
+                # 'archival object' is an id
+                # 'type' is 'resource' or 'accession'
+                # 'keep' is True or False
+                dao_count += 1
+                if coll != []:
+                    if collections_dict.get(coll):
+                        # add to existing collection
+                        if collections_dict[coll].get(ao):
+                            # add digital object to existing archival object
+                            collections_dict[coll][ao].add((do_uri, typ, keep))
+                        else:
+                            # create new archival object entry
+                            collections_dict[coll][ao] = {(do_uri, typ, keep)}
                     else:
-                        # create new archival object entry
-                        collections_dict[coll][ao] = {(do_uri, typ, keep)}
-                else:
-                    # create new collection
-                    collections_dict[coll] = {ao: {(do_uri, typ, keep)}}
-                    ttl = client.get(coll).json()['title']
-                    #print('> added', coll, '('+ttl+')')
+                        # create new collection
+                        collections_dict[coll] = {ao: {(do_uri, typ, keep)}}
+                        #ttl = client.get(coll).json()['title']
+                        #print('> added', coll, '('+ttl+')')
+
+    return collections_dict
+
+#-----------------------------------------------------------------------#
+#-----------------------------------------------------------------------#
 
 # read included collections from db
 # retrieve included collections from db
