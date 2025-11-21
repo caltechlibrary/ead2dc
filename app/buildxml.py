@@ -418,7 +418,9 @@ for coll in colls:
                 for file_version in client.get(do).json()['file_versions']:
 
                     # temp
-                    print(file_version, typ, keep)
+                    if ao in['/repositories/2/archival_objects/127779',
+                              '/repositories/2/archival_objects/70561']:
+                        print(file_version, typ, keep)
                     
                     if keep \
                         and typ == 'resource' \
