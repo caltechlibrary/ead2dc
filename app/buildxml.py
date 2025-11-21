@@ -417,17 +417,17 @@ for coll in colls:
 
                 for file_version in client.get(do).json()['file_versions']:
 
-                    # temp
-                    if ao in['/repositories/2/archival_objects/127779',
-                              '/repositories/2/archival_objects/70561']:
-                        print(file_version, typ, keep, '\n')
-                    
                     if keep \
                         and typ == 'resource' \
                         and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected']:
 
                         file_uri_list.append(file_version['file_uri'])
 
+                # temp
+                if ao in['/repositories/2/archival_objects/127779',
+                         '/repositories/2/archival_objects/70561']:
+                    print('file_uri_list:', file_uri_list)
+                    
 #                generator = (file_version for file_version in client.get(do).json()['file_versions']
 #                         if keep
 #                            and typ == 'resource'
