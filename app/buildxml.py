@@ -555,7 +555,8 @@ for coll in colls:
                 if hostname in [None, 'github.com', 'www.github.com'] \
                     or hostname not in hostnames:
 
-                    print('>> skipping hostname:', hostname, 'for digital object:', do, 'archival object:', ao)
+                    if ao.split('/')[-1] == '127779' or ao.split('/')[-1] == '70561':
+                        print('>> including hostname:', hostname, 'for digital object:', do, 'archival object:', ao)
 
                     continue
 
