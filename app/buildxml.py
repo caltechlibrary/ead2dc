@@ -172,8 +172,8 @@ def build_collections_dict():
     # temp
     #for collection in collections_dict:
     #    print(collection)
-    print('Jennings' ,collections_dict['/repositories/2/archival_objects/127779'])
-    print('Brooks:', collections_dict['/repositories/2/archival_objects/70561'])
+    print('Jennings:', collections_dict['/repositories/2/resources/30']['/repositories/2/archival_objects/127779'])
+    print('Brooks:', collections_dict['/repositories/2/resources/30']['/repositories/2/archival_objects/70561'])
 
     return collections_dict
 
