@@ -565,6 +565,8 @@ for coll in colls:
                 if hostname in [None, 'github.com', 'www.github.com'] \
                     or hostname not in hostnames:
 
+                    print('>> skipping hostname:', hostname, 'for file_uri:', file_uri, 'archival object:', ao)
+
                     continue
 
                 # categorize hostname
