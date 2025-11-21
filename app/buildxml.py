@@ -420,7 +420,7 @@ for coll in colls:
                     # temp
                     if ao in['/repositories/2/archival_objects/127779',
                               '/repositories/2/archival_objects/70561']:
-                        print(file_version, typ, keep)
+                        print(file_version, typ, keep, '\n')
                     
                     if keep \
                         and typ == 'resource' \
