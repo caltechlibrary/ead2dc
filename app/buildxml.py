@@ -557,6 +557,11 @@ for coll in colls:
 
                 hostname = urlparse(file_uri).netloc
 
+                # temp
+                if ao in['/repositories/2/archival_objects/127779',
+                         '/repositories/2/archival_objects/70561']:
+                    print('hostname:', hostname)
+
                 if hostname in [None, 'github.com', 'www.github.com'] \
                     or hostname not in hostnames:
 
