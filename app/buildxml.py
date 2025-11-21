@@ -69,7 +69,7 @@ def authorize_api():
     return client
 
 #-----------------------------------------------------------------------#
-
+'''
 # build collections dictionary
 def build_collections_dict():
 
@@ -98,7 +98,7 @@ def build_collections_dict():
     # iterate over digital objects
     for obj in digital_objects:
 
-        do_uri = obj['uri']
+        uri = obj['uri']
         keep = True
 
         # only include objects that are published and not suppressed
@@ -137,7 +137,7 @@ def build_collections_dict():
                 keep = False
             else:
                 keep = False
-                print('> error: cannot identify record type:', do_uri)
+                print('> error: cannot identify record type:', uri)
         
         # iterate over the linked instances to find archival records
         for linked_instance in obj['linked_instances']:
@@ -160,13 +160,13 @@ def build_collections_dict():
                         # add to existing collection
                         if collections_dict[coll].get(ao):
                             # add digital object to existing archival object
-                            collections_dict[coll][ao].add((do_uri, typ, keep))
+                            collections_dict[coll][ao].add((uri, typ, keep))
                         else:
                             # create new archival object entry
-                            collections_dict[coll][ao] = {(do_uri, typ, keep)}
+                            collections_dict[coll][ao] = {(uri, typ, keep)}
                     else:
                         # create new collection
-                        collections_dict[coll] = {ao: {(do_uri, typ, keep)}}
+                        collections_dict[coll] = {ao: {(uri, typ, keep)}}
                         #ttl = client.get(coll).json()['title']
                         #print('> added', coll, '('+ttl+')')
     # temp
@@ -174,6 +174,111 @@ def build_collections_dict():
     #    print(collection)
     print('Jennings:', collections_dict['/repositories/2/resources/30']['/repositories/2/archival_objects/127779'])
     print('Brooks:', collections_dict['/repositories/2/resources/30']['/repositories/2/archival_objects/70561'])
+
+    return collections_dict
+'''
+#-----------------------------------------------------------------------#
+
+# build collections dictionary
+def build_collections_dict():
+
+    # initialize collections dictionary
+    # this dictionary references archival objects with related digital objects
+    collections_dict = dict()
+
+    # initialize collection and archival object sets
+    # contain collections and archival objects with related digital objects
+    collections = set()
+
+    # counters for various categories of record
+    #published = 0
+    #notpublished = 0
+    #suppressed = 0
+    #notsuppressed = 0
+    #orphandigitalobjects = 0
+    #numbresources = 0
+    #numbaccessions = 0
+
+    # retrieve all digital objects
+    archival_objects = client.get_paged('/repositories/2/archival_objects')
+
+    # iterate over digital objects
+    for obj in archival_objects:
+
+        ao = obj['uri']
+        keep_ao = True
+
+        # only include objects that are published and not suppressed
+        # check for published
+        if obj.get('publish') == False:
+            #notpublished += 1
+            keep_ao = False
+        #else:
+        #    published += 1
+
+        # check for suppressed
+        if obj.get('suppressed') == True:
+            #suppressed += 1
+            keep_ao = False
+        #else:
+        #    notsuppressed += 1
+
+        # capture the id of the collection
+        coll = obj.get('resource').get('ref')
+        if coll:
+            coll = obj['collection']['ref']
+            # add to collections set
+            collections.add(coll)
+            typ = 'resource'
+        else:
+            keep_ao = False
+
+        if keep_ao:
+        
+            # iterate over the instances to find digital records
+            for instance in obj['instances']:
+
+                keep_do = True
+
+                # if linked to an archival object
+                if instance.get('digital_object'):
+
+                    do = instance['digital_object']['ref']
+
+                    if not client.get(do).json()['publish']:
+                        keep_do = False
+                    if client.get(do).json()['suppressed']:
+                        keep_do = False
+
+                    # build dictionary of collections, digital objects, and archival objects
+                    # dict has the form {collection: {archival object: {(digital object, type, keep)}}}
+                    # i.e. a dictionary where the key is the collection id, and values are sets of tuples
+                    # 'digital object' is an id
+                    # 'archival object' is an id
+                    # 'type' is 'resource' or 'accession'
+                    # 'keep' is True or False
+
+                    if coll != [] and keep_do:
+
+                        if collections_dict.get(coll):
+
+                            # add to existing collection
+                            if collections_dict[coll].get(ao):
+
+                                # add digital object to existing archival object
+                                collections_dict[coll][ao].add((do, typ, keep_do))
+
+                            else:
+
+                                # create new archival object entry
+                                collections_dict[coll][ao] = {(do, typ, keep_do)}
+
+                        else:
+
+                            # create new collection
+                            collections_dict[coll] = {ao: {(do, typ, keep_do)}}
+                            #ttl = client.get(coll).json()['title']
+                            #print('> added', coll, '('+ttl+')')
 
     return collections_dict
 
