@@ -373,8 +373,8 @@ for coll in colls:
 
     # temp
     # limit to subset of collections for testing
-    if coll[0] not in ['30']:
-        continue
+    #if coll[0] not in ['30']:
+    #    continue
 
     # temp
     #check_for_duplicates = set()
