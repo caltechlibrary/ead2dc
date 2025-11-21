@@ -555,6 +555,8 @@ for coll in colls:
                 if hostname in [None, 'github.com', 'www.github.com'] \
                     or hostname not in hostnames:
 
+                    print('>> skipping hostname:', hostname, 'for digital object:', do)
+
                     continue
 
                 # categorize hostname
