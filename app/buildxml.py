@@ -226,7 +226,7 @@ def build_collections_dict():
         # capture the id of the collection
         coll = obj.get('resource').get('ref')
         if coll:
-            coll = obj['collection']['ref']
+            coll = obj['resource']['ref']
             # add to collections set
             collections.add(coll)
             typ = 'resource'
