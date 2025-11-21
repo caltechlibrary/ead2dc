@@ -548,17 +548,15 @@ for coll in colls:
             if 'californiarevealed.org' in hostnames and 'resolver.caltech.edu' in hostnames:
                 hostnames.remove('californiarevealed.org')
 
+            if ao == '/repositories/2/archival_objects/70561':
+                print(file_uri_list)
+
             for file_uri in file_uri_list: 
 
                 hostname = urlparse(file_uri).netloc
 
                 if hostname in [None, 'github.com', 'www.github.com'] \
                     or hostname not in hostnames:
-
-                    if ao.split('/')[-1] == '127779' or ao.split('/')[-1] == '70561':
-                        print('>> skipping hostname:', hostname, 'for digital object:', do, 'archival object:', ao)
-                        print('   file_uri:', file_uri)
-                        print('   hostnames:', hostnames)
 
                     continue
 
