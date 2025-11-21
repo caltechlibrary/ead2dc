@@ -560,7 +560,7 @@ for coll in colls:
                 # temp
                 if ao in['/repositories/2/archival_objects/127779',
                          '/repositories/2/archival_objects/70561']:
-                    print('hostname:', hostname)
+                    print('hostname:', hostname, 'hostnames:', hostnames)
 
                 if hostname in [None, 'github.com', 'www.github.com'] \
                     or hostname not in hostnames:
