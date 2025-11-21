@@ -416,6 +416,9 @@ for coll in colls:
                 file_uri_list = list()
 
                 for file_version in client.get(do).json()['file_versions']:
+
+                    # temp
+                    print(file_version, typ, keep)
                     
                     if keep \
                         and typ == 'resource' \
@@ -547,9 +550,6 @@ for coll in colls:
                 hostnames.remove('www.github.com')
             if 'californiarevealed.org' in hostnames and 'resolver.caltech.edu' in hostnames:
                 hostnames.remove('californiarevealed.org')
-
-            if ao == '/repositories/2/archival_objects/70561':
-                print(file_uri_list)
 
             for file_uri in file_uri_list: 
 
