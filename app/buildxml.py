@@ -556,7 +556,9 @@ for coll in colls:
                     or hostname not in hostnames:
 
                     if ao.split('/')[-1] == '127779' or ao.split('/')[-1] == '70561':
-                        print('>> including hostname:', hostname, 'for digital object:', do, 'archival object:', ao)
+                        print('>> skipping hostname:', hostname, 'for digital object:', do, 'archival object:', ao)
+                        print('   file_uri:', file_uri)
+                        print('   hostnames:', hostnames)
 
                     continue
 
