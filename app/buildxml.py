@@ -494,7 +494,9 @@ for coll in colls:
 
                 # temp
                 if ao in['/repositories/2/archival_objects/127779',
-                         '/repositories/2/archival_objects/70561']:
+                         '/repositories/2/archival_objects/70561',
+                         '/repositories/2/archival_objects/103773',
+                         '/repositories/2/archival_objects/103774']:
                     print('file_uri_list:', file_uri_list)
                     
                             # check for duplicates
@@ -613,7 +615,8 @@ for coll in colls:
                 hostnames.remove('californiarevealed.org')
 
             for file_uri in file_uri_list: 
-
+                
+'''
                 hostname = urlparse(file_uri).netloc
 
                 # temp
@@ -646,7 +649,7 @@ for coll in colls:
                 else:
                     dao_dict[setid][hostcategory] = 1
                 dao_count += 1
-
+'''
                 # identifier element
                 identifier = ET.SubElement(dc, 'dc:identifier')
                 identifier.text = file_uri
