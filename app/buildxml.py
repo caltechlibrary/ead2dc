@@ -490,7 +490,8 @@ for coll in colls:
                     #    and typ == 'resource' \
                     #    and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected']:
 
-                    file_uri_list.append(file_version['file_uri'])
+                    if file_version.get('publish', True:)
+                        file_uri_list.append(file_version['file_uri'])
 
                 # temp
                 if ao in['/repositories/2/archival_objects/127779',
