@@ -69,7 +69,7 @@ def authorize_api():
     return client
 
 #-----------------------------------------------------------------------#
-'''
+
 # build collections dictionary
 def build_collections_dict():
 
@@ -81,21 +81,9 @@ def build_collections_dict():
     # contain collections and archival objects with related digital objects
     collections = set()
 
-    dao_count = 0
-
-    # counters for various categories of record
-    #published = 0
-    #notpublished = 0
-    #suppressed = 0
-    #notsuppressed = 0
-    #orphandigitalobjects = 0
-    #numbresources = 0
-    #numbaccessions = 0
-
-    # retrieve all digital objects
+    # iterate over digital objects
     digital_objects = client.get_paged('/repositories/2/digital_objects')
 
-    # iterate over digital objects
     for obj in digital_objects:
 
         uri = obj['uri']
@@ -104,40 +92,22 @@ def build_collections_dict():
         # only include objects that are published and not suppressed
         # check for published
         if obj.get('publish') == False:
-            #notpublished += 1
             keep = False
-        #else:
-        #    published += 1
-
         # check for suppressed
         if obj.get('suppressed') == True:
-            #suppressed += 1
             keep = False
-        #else:
-        #    notsuppressed += 1
 
         # capture the id of the collections
         coll = obj.get('collection')
-        if coll == []:
-            keep = False
-            typ = 'orphan'
-        #    orphandigitalobjects += 1
-        else:
+        if coll:
             coll = obj['collection'][0]['ref']
             # identify the type of collection
             # add to collections set
             if coll[:26] == '/repositories/2/resources/':
                 collections.add(coll)
                 typ = 'resource'
-        #        numbresources += 1
-            elif coll[:27] == '/repositories/2/accessions/':
-                #collections.add(coll)
-                #typ = 'accession'
-        #        numbaccessions += 1
-                keep = False
             else:
                 keep = False
-                print('> error: cannot identify record type:', uri)
         
         # iterate over the linked instances to find archival records
         for linked_instance in obj['linked_instances']:
@@ -169,16 +139,11 @@ def build_collections_dict():
                         collections_dict[coll] = {ao: {(uri, typ, keep)}}
                         #ttl = client.get(coll).json()['title']
                         #print('> added', coll, '('+ttl+')')
-    # temp
-    #for collection in collections_dict:
-    #    print(collection)
-    print('Jennings:', collections_dict['/repositories/2/resources/30']['/repositories/2/archival_objects/127779'])
-    print('Brooks:', collections_dict['/repositories/2/resources/30']['/repositories/2/archival_objects/70561'])
 
     return collections_dict
-'''
-#-----------------------------------------------------------------------#
 
+#-----------------------------------------------------------------------#
+'''
 # build collections dictionary
 def build_collections_dict():
 
@@ -281,7 +246,7 @@ def build_collections_dict():
                             #print('> added', coll, '('+ttl+')')
 
     return collections_dict
-
+'''
 #-----------------------------------------------------------------------#
 # START OF SCRIPT                                                       #
 #-----------------------------------------------------------------------#
