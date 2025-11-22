@@ -615,41 +615,40 @@ for coll in colls:
                 hostnames.remove('californiarevealed.org')
 
             for file_uri in file_uri_list: 
-                
-'''
-                hostname = urlparse(file_uri).netloc
+
+#                hostname = urlparse(file_uri).netloc
 
                 # temp
-                if ao in['/repositories/2/archival_objects/127779',
-                         '/repositories/2/archival_objects/70561']:
-                    print('hostname:', hostname, 'hostnames:', hostnames)
+#                if ao in['/repositories/2/archival_objects/127779',
+#                         '/repositories/2/archival_objects/70561']:
+#                    print('hostname:', hostname, 'hostnames:', hostnames)
 
-                if hostname in [None, 'github.com', 'www.github.com'] \
-                    or hostname not in hostnames:
+#                if hostname in [None, 'github.com', 'www.github.com'] \
+#                    or hostname not in hostnames:
 
-                    if ao in['/repositories/2/archival_objects/127779',
-                         '/repositories/2/archival_objects/70561']:
-                        print('>> skipping hostname:', hostname, 'for file_uri:', file_uri, 'archival object:', ao)
+#                    if ao in['/repositories/2/archival_objects/127779',
+#                         '/repositories/2/archival_objects/70561']:
+#                        print('>> skipping hostname:', hostname, 'for file_uri:', file_uri, 'archival object:', ao)
 
-                    continue
+#                    continue
 
                 # categorize hostname
-                if hostname == 'resolver.caltech.edu' or hostname == 'digital.archives.caltech.edu' or hostname == 'californiarevealed.org':
-                    hostcategory = 'caltechlibrary'
-                elif hostname == 'archive.org':
-                    hostcategory = 'internetarchive'
-                elif hostname == 'youtube.com' or hostname == 'youtu.be':
-                    hostcategory = 'youtube'
-                else:
-                    hostcategory = 'other'
-                if hostname not in urls:
-                    urls.add(hostname)
-                if dao_dict[setid].get(hostcategory):
-                    dao_dict[setid][hostcategory] += 1
-                else:
-                    dao_dict[setid][hostcategory] = 1
-                dao_count += 1
-'''
+#                if hostname == 'resolver.caltech.edu' or hostname == 'digital.archives.caltech.edu' or hostname == 'californiarevealed.org':
+#                    hostcategory = 'caltechlibrary'
+#                elif hostname == 'archive.org':
+#                    hostcategory = 'internetarchive'
+#                elif hostname == 'youtube.com' or hostname == 'youtu.be':
+#                    hostcategory = 'youtube'
+#                else:
+#                    hostcategory = 'other'
+#                if hostname not in urls:
+#                    urls.add(hostname)
+#                if dao_dict[setid].get(hostcategory):
+#                    dao_dict[setid][hostcategory] += 1
+#                else:
+#                    dao_dict[setid][hostcategory] = 1
+#                dao_count += 1
+
                 # identifier element
                 identifier = ET.SubElement(dc, 'dc:identifier')
                 identifier.text = file_uri
