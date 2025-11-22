@@ -124,7 +124,6 @@ def build_collections_dict():
                 # 'archival object' is an id
                 # 'type' is 'resource' or 'accession'
                 # 'keep' is True or False
-                dao_count += 1
                 if coll != []:
                     if collections_dict.get(coll):
                         # add to existing collection
