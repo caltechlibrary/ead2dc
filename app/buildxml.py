@@ -428,8 +428,6 @@ ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
 #print('Elapsed time:', round(time.time() - start, 1), 'secs')
 
-urls = set()
-
 intertime = time.time()
 
 # temp
@@ -490,7 +488,9 @@ for coll in colls:
                     #    and typ == 'resource' \
                     #    and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected']:
 
-                    if file_version.get('publish', True):
+                    if file_version.get('publish', True) \
+                       and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected']:
+                        
                         file_uri_list.append(file_version['file_uri'])
 
                 # temp
@@ -617,38 +617,36 @@ for coll in colls:
 
             for file_uri in file_uri_list: 
 
-#                hostname = urlparse(file_uri).netloc
+                hostname = urlparse(file_uri).netloc
 
                 # temp
 #                if ao in['/repositories/2/archival_objects/127779',
 #                         '/repositories/2/archival_objects/70561']:
 #                    print('hostname:', hostname, 'hostnames:', hostnames)
 
-#                if hostname in [None, 'github.com', 'www.github.com'] \
-#                    or hostname not in hostnames:
+                if hostname in ['github.com', 'www.github.com'] \
+                    or hostname not in hostnames:
 
 #                    if ao in['/repositories/2/archival_objects/127779',
 #                         '/repositories/2/archival_objects/70561']:
 #                        print('>> skipping hostname:', hostname, 'for file_uri:', file_uri, 'archival object:', ao)
 
-#                    continue
+                    continue
 
                 # categorize hostname
-#                if hostname == 'resolver.caltech.edu' or hostname == 'digital.archives.caltech.edu' or hostname == 'californiarevealed.org':
-#                    hostcategory = 'caltechlibrary'
-#                elif hostname == 'archive.org':
-#                    hostcategory = 'internetarchive'
-#                elif hostname == 'youtube.com' or hostname == 'youtu.be':
-#                    hostcategory = 'youtube'
-#                else:
-#                    hostcategory = 'other'
-#                if hostname not in urls:
-#                    urls.add(hostname)
-#                if dao_dict[setid].get(hostcategory):
-#                    dao_dict[setid][hostcategory] += 1
-#                else:
-#                    dao_dict[setid][hostcategory] = 1
-#                dao_count += 1
+                if hostname == 'resolver.caltech.edu' or hostname == 'digital.archives.caltech.edu' or hostname == 'californiarevealed.org':
+                    hostcategory = 'caltechlibrary'
+                elif hostname == 'archive.org':
+                    hostcategory = 'internetarchive'
+                elif hostname == 'youtube.com' or hostname == 'youtu.be':
+                    hostcategory = 'youtube'
+                else:
+                    hostcategory = 'other'
+                if dao_dict[setid].get(hostcategory):
+                    dao_dict[setid][hostcategory] += 1
+                else:
+                    dao_dict[setid][hostcategory] = 1
+                dao_count += 1
 
                 # identifier element
                 identifier = ET.SubElement(dc, 'dc:identifier')
@@ -774,8 +772,6 @@ print(dao_count, 'total records created')
 #print(dao_skipped, 'total records skipped')
 
 #print(dao_dict)
-
-#print(urls)
 
 print('Total elapsed time:', round(time.time() - start, 1))
 
