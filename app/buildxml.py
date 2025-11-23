@@ -142,111 +142,6 @@ def build_collections_dict():
     return collections_dict
 
 #-----------------------------------------------------------------------#
-'''
-# build collections dictionary
-def build_collections_dict():
-
-    # initialize collections dictionary
-    # this dictionary references archival objects with related digital objects
-    collections_dict = dict()
-
-    # initialize collection and archival object sets
-    # contain collections and archival objects with related digital objects
-    collections = set()
-
-    # counters for various categories of record
-    #published = 0
-    #notpublished = 0
-    #suppressed = 0
-    #notsuppressed = 0
-    #orphandigitalobjects = 0
-    #numbresources = 0
-    #numbaccessions = 0
-
-    # retrieve all digital objects
-    archival_objects = client.get_paged('/repositories/2/archival_objects')
-
-    # iterate over digital objects
-    for obj in archival_objects:
-
-        ao = obj['uri']
-        keep_ao = True
-
-        # only include objects that are published and not suppressed
-        # check for published
-        if obj.get('publish') == False:
-            #notpublished += 1
-            keep_ao = False
-        #else:
-        #    published += 1
-
-        # check for suppressed
-        if obj.get('suppressed') == True:
-            #suppressed += 1
-            keep_ao = False
-        #else:
-        #    notsuppressed += 1
-
-        # capture the id of the collection
-        coll = obj.get('resource').get('ref')
-        if coll:
-            coll = obj['resource']['ref']
-            # add to collections set
-            collections.add(coll)
-            typ = 'resource'
-        else:
-            keep_ao = False
-
-        if keep_ao:
-        
-            # iterate over the instances to find digital records
-            for instance in obj['instances']:
-
-                keep_do = True
-
-                # if linked to an archival object
-                if instance.get('digital_object'):
-
-                    do = instance['digital_object']['ref']
-
-                    if not client.get(do).json()['publish']:
-                        keep_do = False
-                    if client.get(do).json()['suppressed']:
-                        keep_do = False
-
-                    # build dictionary of collections, digital objects, and archival objects
-                    # dict has the form {collection: {archival object: {(digital object, type, keep)}}}
-                    # i.e. a dictionary where the key is the collection id, and values are sets of tuples
-                    # 'digital object' is an id
-                    # 'archival object' is an id
-                    # 'type' is 'resource' or 'accession'
-                    # 'keep' is True or False
-
-                    if coll != [] and keep_do:
-
-                        if collections_dict.get(coll):
-
-                            # add to existing collection
-                            if collections_dict[coll].get(ao):
-
-                                # add digital object to existing archival object
-                                collections_dict[coll][ao].add((do, typ, keep_do))
-
-                            else:
-
-                                # create new archival object entry
-                                collections_dict[coll][ao] = {(do, typ, keep_do)}
-
-                        else:
-
-                            # create new collection
-                            collections_dict[coll] = {ao: {(do, typ, keep_do)}}
-                            #ttl = client.get(coll).json()['title']
-                            #print('> added', coll, '('+ttl+')')
-
-    return collections_dict
-'''
-#-----------------------------------------------------------------------#
 # START OF SCRIPT                                                       #
 #-----------------------------------------------------------------------#
 
@@ -476,8 +371,8 @@ for coll in colls:
             # iterate over digital objects linked to archival object
             for (do, typ, keep) in collections_dict[setid][ao]:
                 for file_version in client.get(do).json()['file_versions']:
-                    if file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'] \
-                            and file_version.get('publish', True):
+                    if file_version['use_statement'] not in ['image-thumbnail', 'URL-Redirected'] \
+                            and file_version['publish']:
                         file_uris.add(file_version['file_uri'])
                     
             # create hostnames set
