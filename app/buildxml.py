@@ -141,6 +141,41 @@ def build_collections_dict():
 
     return collections_dict
 
+
+#-----------------------------------------------------------------------#
+
+def published_file_uris(do_list):
+
+    # create file_uris set
+    file_uris = set()
+
+    # iterate over digital objects linked to archival object
+    for (do, typ, keep) in do_list:
+        for file_version in client.get(do).json()['file_versions']:
+            if file_version.get('use_statement') not in ['image-thumbnail', 'URL-Redirected'] \
+                    and file_version.get('publish', False):
+                file_uris.add(file_version['file_uri'])
+
+    return file_uris                    
+
+
+#-----------------------------------------------------------------------#
+
+def create_valid_hostnames_set(file_uris):
+
+    hostnames = {urlparse(file_uri).netloc for file_uri in file_uris}
+    # remove github hostnames
+    hostnames.discard('github.com')
+    hostnames.discard('www.github.com')
+    # remove direct targets is resolver.caltech.edu is present
+    if 'digital.archives.caltech.edu' in hostnames and 'resolver.caltech.edu' in hostnames:
+        hostnames.discard('digital.archives.caltech.edu')
+    if 'californiarevealed.org' in hostnames and 'resolver.caltech.edu' in hostnames:
+        hostnames.discard('californiarevealed.org')
+
+    return hostnames
+
+
 #-----------------------------------------------------------------------#
 # START OF SCRIPT                                                       #
 #-----------------------------------------------------------------------#
@@ -365,26 +400,15 @@ for coll in colls:
         # collections_dict[setid] = {(digital object, archival object, type, keep)}        
         for ao in collections_dict[setid]:
 
-            # create file_uris set
-            file_uris = set()
+            # skip archival object if no published digital object file URIs
+            do_list = collections_dict[setid][ao]
+            file_uris = published_file_uris(do_list)
+            if len(file_uris) == 0:
+                print('> warning: no published digital objects, archival object skipped:', ao)
+                continue
 
-            # iterate over digital objects linked to archival object
-            for (do, typ, keep) in collections_dict[setid][ao]:
-                for file_version in client.get(do).json()['file_versions']:
-                    if file_version.get('use_statement') not in ['image-thumbnail', 'URL-Redirected'] \
-                            and file_version.get('publish', False):
-                        file_uris.add(file_version['file_uri'])
-                    
             # create hostnames set
-            hostnames = {urlparse(file_uri).netloc for file_uri in file_uris}
-            # remove github hostnames
-            hostnames.discard('github.com')
-            hostnames.discard('www.github.com')
-            # remove direct targets is resolver.caltech.edu is present
-            if 'digital.archives.caltech.edu' in hostnames and 'resolver.caltech.edu' in hostnames:
-                hostnames.discard('digital.archives.caltech.edu')
-            if 'californiarevealed.org' in hostnames and 'resolver.caltech.edu' in hostnames:
-                hostnames.discard('californiarevealed.org')
+            hostnames = create_valid_hostnames_set(file_uris)
 
             # update archival object record count
             if dao_dict[setid].get('aocount'):
