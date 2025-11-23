@@ -101,7 +101,7 @@ def build_collections_dict():
 
         if colls_list:
 
-            for collection in colls:
+            for collection in colls_list:
                 # add to collections set
                 collections.add(collection['ref'])
         
