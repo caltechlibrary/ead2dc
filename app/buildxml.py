@@ -101,38 +101,40 @@ def build_collections_dict():
 
         if colls_list:
 
-            for collection in colls_list:
-                # add to collections set
-                collections.add(collection['ref'])
+            # iterate over the linked instances to find archival records
+            for linked_instance in obj['linked_instances']:
+
+                # if linked to an archival object
+                if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
+
+                    ao = linked_instance['ref']
+
+                    # build dictionary of collections, digital objects, and archival objects
+                    # dict has the form {collection: {archival object: {(digital object, keep)}}}
+                    # i.e. a dictionary where the key is the (collection id, 'resource'|'accession') and values are a dictionary
+                    # 'archival object' is an id
+                    # 'digital object' is an id
+                    # 'keep' is True or False (i.e. published and not suppressed)
+
+                    for collection in colls_list:
+
+                        # add to collections set
+                        coll = collection['ref']
+                        collections.add(coll)
         
-                # iterate over the linked instances to find archival records
-                for linked_instance in obj['linked_instances']:
-
-                    # if linked to an archival object
-                    if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
-
-                        ao = linked_instance['ref']
-
-                        # build dictionary of collections, digital objects, and archival objects
-                        # dict has the form {collection: {archival object: {(digital object, keep)}}}
-                        # i.e. a dictionary where the key is the (collection id, 'resource'|'accession') and values are a dictionary
-                        # 'archival object' is an id
-                        # 'digital object' is an id
-                        # 'keep' is True or False (i.e. published and not suppressed)
-                        if coll != []:
-                            if collections_dict.get(coll):
-                                # add to existing collection
-                                if collections_dict[coll].get(ao):
-                                    # add digital object to existing archival object
-                                    collections_dict[coll][ao].add((uri, keep))
-                                else:
-                                    # create new archival object entry
-                                    collections_dict[coll][ao] = {(uri, keep)}
+                        if collections_dict.get(coll):
+                            # add to existing collection
+                            if collections_dict[coll].get(ao):
+                                # add digital object to existing archival object
+                                collections_dict[coll][ao].add((uri, keep))
                             else:
-                                # create new collection
-                                collections_dict[coll] = {ao: {(uri, keep)}}
-                                #ttl = client.get(coll).json()['title']
-                                #print('> added', coll, '('+ttl+')')
+                                # create new archival object entry
+                                collections_dict[coll][ao] = {(uri, keep)}
+                        else:
+                            # create new collection
+                            collections_dict[coll] = {ao: {(uri, keep)}}
+                            #ttl = client.get(coll).json()['title']
+                            #print('> added', coll, '('+ttl+')')
 
     return collections_dict
 
