@@ -77,8 +77,7 @@ def build_collections_dict():
     # this dictionary references archival objects with related digital objects
     collections_dict = dict()
 
-    # initialize collection and archival object sets
-    # contain collections and archival objects with related digital objects
+    # initialize collections set
     collections = set()
 
     # iterate over digital objects
@@ -98,46 +97,42 @@ def build_collections_dict():
             keep = False
 
         # capture the id of the collections
-        coll = obj.get('collection')
-        if coll:
-            coll = obj['collection'][0]['ref']
-            # identify the type of collection
-            # add to collections set
-            if coll[:26] == '/repositories/2/resources/':
-                collections.add(coll)
-                typ = 'resource'
-            else:
-                keep = False
+        colls_list = obj.get('collection')
+
+        if colls_list:
+
+            for collection in colls:
+                # add to collections set
+                collections.add(collection['ref'])
         
-        # iterate over the linked instances to find archival records
-        for linked_instance in obj['linked_instances']:
+                # iterate over the linked instances to find archival records
+                for linked_instance in obj['linked_instances']:
 
-            # if linked to an archival object
-            if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
+                    # if linked to an archival object
+                    if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
 
-                ao = linked_instance['ref']
+                        ao = linked_instance['ref']
 
-                # build dictionary of collections, digital objects, and archival objects
-                # dict has the form {collection: {archival object: {(digital object, type, keep)}}}
-                # i.e. a dictionary where the key is the collection id, and values are sets of tuples
-                # 'digital object' is an id
-                # 'archival object' is an id
-                # 'type' is 'resource' or 'accession'
-                # 'keep' is True or False
-                if coll != []:
-                    if collections_dict.get(coll):
-                        # add to existing collection
-                        if collections_dict[coll].get(ao):
-                            # add digital object to existing archival object
-                            collections_dict[coll][ao].add((uri, typ, keep))
-                        else:
-                            # create new archival object entry
-                            collections_dict[coll][ao] = {(uri, typ, keep)}
-                    else:
-                        # create new collection
-                        collections_dict[coll] = {ao: {(uri, typ, keep)}}
-                        #ttl = client.get(coll).json()['title']
-                        #print('> added', coll, '('+ttl+')')
+                        # build dictionary of collections, digital objects, and archival objects
+                        # dict has the form {collection: {archival object: {(digital object, keep)}}}
+                        # i.e. a dictionary where the key is the (collection id, 'resource'|'accession') and values are a dictionary
+                        # 'archival object' is an id
+                        # 'digital object' is an id
+                        # 'keep' is True or False (i.e. published and not suppressed)
+                        if coll != []:
+                            if collections_dict.get(coll):
+                                # add to existing collection
+                                if collections_dict[coll].get(ao):
+                                    # add digital object to existing archival object
+                                    collections_dict[coll][ao].add((uri, keep))
+                                else:
+                                    # create new archival object entry
+                                    collections_dict[coll][ao] = {(uri, keep)}
+                            else:
+                                # create new collection
+                                collections_dict[coll] = {ao: {(uri, keep)}}
+                                #ttl = client.get(coll).json()['title']
+                                #print('> added', coll, '('+ttl+')')
 
     return collections_dict
 
@@ -150,7 +145,7 @@ def published_file_uris(do_list):
     file_uris = set()
 
     # iterate over digital objects linked to archival object
-    for (do, typ, keep) in do_list:
+    for (do, keep) in do_list:
         for file_version in client.get(do).json()['file_versions']:
             if file_version.get('use_statement') not in ['image-thumbnail', 'URL-Redirected'] \
                     and file_version.get('publish', False):
@@ -253,7 +248,7 @@ for collection in collections_dict:
     # iterate over collection to count unique digital objects and archival objects
     for ao in collections_dict[collection]:
         coll_aos.add(ao)
-        for (do, typ, keep) in collections_dict[collection][ao]:
+        for (do, keep) in collections_dict[collection][ao]:
             coll_dos.add(do)
 
     # insert collection record into db
