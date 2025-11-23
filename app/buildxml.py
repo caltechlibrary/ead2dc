@@ -370,26 +370,16 @@ for coll in colls:
 
     # temp
     # limit to subset of collections for testing
-    if coll[0] not in ['30']:
-        continue
-
-    # temp
-    #check_for_duplicates = set()
-    #duplicate_recs_skipped = 0
+    #if coll[0] not in ['30']:
+    #    continue
 
     recs_created = 0
     recs_skipped = 0
 
     setid = '/repositories/2/' + coll[11] + 's/' + coll[0]
 
-    #temp
-    #print('>', setid)
-
     collectiontitle = coll[1]
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
-
-    #temp
-    j=0
 
     if collections_dict.get(setid):
     
@@ -398,7 +388,18 @@ for coll in colls:
         # typ = type of collection resource|accession
         # keep = True if the object is published and not suppressed
         # collections_dict[setid] = {(digital object, archival object, type, keep)}        
+
+        # temp
+        # counter if limiting number of records for testing
+        j=0
+
         for ao in collections_dict[setid]:
+
+            # temp
+            # limit number of records for testing
+            j += 1
+            if j > 20:
+                break
 
             # skip archival object if no published digital object file URIs
             do_list = collections_dict[setid][ao]
@@ -597,11 +598,6 @@ for coll in colls:
 
             recs_created += 1
             print(recs_created, end='\r')
-
-            #temp
-            #j += 1
-            #if j >= 20:
-            #    break
 
         print('>', collectiontitle, '('+str(recs_created), 'records created)')
 
