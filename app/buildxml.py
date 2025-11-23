@@ -440,8 +440,8 @@ for coll in colls:
 
     # temp
     # limit to subset of collections for testing
-    #if coll[0] not in ['30']:
-    #    continue
+    if coll[0] not in ['30']:
+        continue
 
     # temp
     #check_for_duplicates = set()
@@ -470,47 +470,26 @@ for coll in colls:
         # collections_dict[setid] = {(digital object, archival object, type, keep)}        
         for ao in collections_dict[setid]:
 
-            duplicate_dos = set()
+            # create file_uris set
+            file_uris = set()
 
+            # iterate over digital objects linked to archival object
             for (do, typ, keep) in collections_dict[setid][ao]:
-
-                # skip duplicate digital objects for this archival object
-                if do in duplicate_dos:
-                    continue
-                else:
-                    duplicate_dos.add(do)
-
-                file_uri_list = list()
-
                 for file_version in client.get(do).json()['file_versions']:
-
-                    #if keep \
-                    #    and typ == 'resource' \
-                    #    and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected']:
-
-                    if file_version.get('publish', True) \
-                       and file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected']:
-                        
-                        file_uri_list.append(file_version['file_uri'])
-
-                # temp
-                if ao in['/repositories/2/archival_objects/127779',
-                         '/repositories/2/archival_objects/70561',
-                         '/repositories/2/archival_objects/103773',
-                         '/repositories/2/archival_objects/103774']:
-                    print('file_uri_list:', file_uri_list)
+                    if file_version.get('use_statement', 'ok') not in ['image-thumbnail', 'URL-Redirected'] \
+                            and file_version.get('publish', True):
+                        file_uris.add(file_version['file_uri'])
                     
-                            # check for duplicates
-                            #if do in check_for_duplicates:
-                                # skip duplicate
-                            #    print('>> duplicate "do" found, skipping:', do)
-                            #    duplicate_recs_skipped += 1
-                            #    continue
-                            #else:
-                            #    check_for_duplicates.add(do)
-                            #    devrecordcount += 1
-                            #    with open(devtest_textfile, 'a') as f:
-                            #        f.write(do + ',' + ao + '\n')
+            # create hostnames set
+            hostnames = {urlparse(file_uri).netloc for file_uri in file_uris}
+            # remove github hostnames
+            hostnames.discard('github.com')
+            hostnames.discard('www.github.com')
+            # remove direct targets is resolver.caltech.edu is present
+            if 'digital.archives.caltech.edu' in hostnames and 'resolver.caltech.edu' in hostnames:
+                hostnames.discard('digital.archives.caltech.edu')
+            if 'californiarevealed.org' in hostnames and 'resolver.caltech.edu' in hostnames:
+                hostnames.discard('californiarevealed.org')
 
             # update archival object record count
             if dao_dict[setid].get('aocount'):
@@ -603,34 +582,14 @@ for coll in colls:
             #description = ET.SubElement(dc, 'dc:description')
             #description.text = 'Digital object in ' + collectiontitle
 
-            # list of unique hostnames
-            hostnames = list(set([urlparse(file_uri).netloc for file_uri in file_uri_list]))
+            # warning for no file_uris
+            uri_test = False
+            
+            for file_uri in file_uris: 
 
-            if 'digital.archives.caltech.edu' in hostnames and 'resolver.caltech.edu' in hostnames:
-                hostnames.remove('digital.archives.caltech.edu')
-            if 'github.com' in hostnames:
-                hostnames.remove('github.com')
-            if 'www.github.com' in hostnames:
-                hostnames.remove('www.github.com')
-            if 'californiarevealed.org' in hostnames and 'resolver.caltech.edu' in hostnames:
-                hostnames.remove('californiarevealed.org')
-
-            for file_uri in file_uri_list: 
-
+                # skip urls not in hostnames set
                 hostname = urlparse(file_uri).netloc
-
-                # temp
-#                if ao in['/repositories/2/archival_objects/127779',
-#                         '/repositories/2/archival_objects/70561']:
-#                    print('hostname:', hostname, 'hostnames:', hostnames)
-
-                if hostname in ['github.com', 'www.github.com'] \
-                    or hostname not in hostnames:
-
-#                    if ao in['/repositories/2/archival_objects/127779',
-#                         '/repositories/2/archival_objects/70561']:
-#                        print('>> skipping hostname:', hostname, 'for file_uri:', file_uri, 'archival object:', ao)
-
+                if hostname not in hostnames:
                     continue
 
                 # categorize hostname
@@ -652,6 +611,10 @@ for coll in colls:
                 identifier = ET.SubElement(dc, 'dc:identifier')
                 identifier.text = file_uri
                 identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
+                uri_test = True
+            
+            if not uri_test:
+                print('> warning: no file URIs for archival object:', ao)
 
             # identifier element
             if archival_object_metadata.get('component_id'):
