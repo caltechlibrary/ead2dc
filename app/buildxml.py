@@ -371,8 +371,8 @@ for coll in colls:
             # iterate over digital objects linked to archival object
             for (do, typ, keep) in collections_dict[setid][ao]:
                 for file_version in client.get(do).json()['file_versions']:
-                    if file_version['use_statement'] not in ['image-thumbnail', 'URL-Redirected'] \
-                            and file_version['publish']:
+                    if file_version.get('use_statement') not in ['image-thumbnail', 'URL-Redirected'] \
+                            and file_version.get('publish', False):
                         file_uris.add(file_version['file_uri'])
                     
             # create hostnames set
