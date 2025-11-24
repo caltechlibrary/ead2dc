@@ -108,7 +108,8 @@ def collections():
     query = 'SELECT sum(docount) as tot_docount, \
                     sum(caltechlibrary) as tot_clibrary, \
                     sum(internetarchive) as tot_iarchive, \
-                    sum(youtube) tot_youtube, sum(other) as tot_other \
+                    sum(youtube) tot_youtube, \
+                    sum(other) as tot_other \
                 FROM collections;'
     totals = db.execute(query).fetchone()
     return render_template('collections.html', 
@@ -319,7 +320,7 @@ def get_total_counts():
 
 # read collections data for display
 def read_colls():
-    query = "SELECT collno, colltitle, aocount, docount, caltechlibrary, \
+    query = "SELECT typ || '_' || collno, colltitle, aocount, docount, caltechlibrary, \
                     internetarchive, youtube, other, incl \
             FROM collections \
             ORDER BY docount DESC;"
