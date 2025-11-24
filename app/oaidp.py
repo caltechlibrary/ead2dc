@@ -320,15 +320,14 @@ def get_total_counts():
 
 # read collections data for display
 def read_colls():
-    query = "SELECT typ || '_' || collno, colltitle, aocount, docount, caltechlibrary, \
-                    internetarchive, youtube, other, incl \
-            FROM collections \
-            ORDER BY docount DESC;"
+    query = 'SELECT collno, colltitle, aocount, docount, caltechlibrary, internetarchive, youtube, other, incl, typ \
+             FROM collections \
+             ORDER BY docount DESC;'
     colls = get_db().execute(query).fetchall()
     # archival object total
-    n0 = sum(k for (_,_,k,_,_,_,_,_,_) in colls)
+    n0 = sum(k for (_,_,k,_,_,_,_,_,_,_) in colls)
     # digital object total
-    n = sum(k for (_,_,_,k,_,_,_,_,_) in colls)
+    n = sum(k for (_,_,_,k,_,_,_,_,_,_) in colls)
     return (n0, n, len(colls), colls)
 
 # query db and update collections json file for list of ids
@@ -339,8 +338,7 @@ def update_coll_json(ids):
     query = "SELECT colltitle FROM collections WHERE collno=?;"
     for id in ids:
         coll_dict[id] = {'title' : db.execute(query, [id]).fetchone()[0],
-                         'description' : get_notes(id),
-                         'eadurl' : pub_url+'oai?verb=GetRecord&identifier=/'+cbase+id+'&metadataPrefix=oai_ead'}
+                         'description' : get_notes(id)}
     # save included collections to JSON file
     with open(Path(Path(__file__).resolve().parent).joinpath('collections.json'), 'w') as f:
         json.dump(coll_dict, f)
