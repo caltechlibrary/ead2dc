@@ -415,8 +415,8 @@ def oai():
 
     # list of collections to include
     db = get_db()
-    query = "SELECT collno FROM collections WHERE incl;"
-    colls = [collno[0] for collno in db.execute(query).fetchall()]
+    query = "SELECT typ, collno FROM collections WHERE incl;"
+    colls = [setid[0]+'_'+setid[1] for setid in db.execute(query).fetchall()]
 
     # empty list for errors
     errors = list()
