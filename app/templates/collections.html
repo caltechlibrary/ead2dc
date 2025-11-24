@@ -41,6 +41,7 @@
         {% else %}
             Published<br/>via OAI<br/>Data Provider
         {% endif %}</th>
+    <th rowspan="2"></th>
     <th rowspan="2">Set ID</th>
     <th rowspan="2">Title</th>
     <th rowspan="2">Archival<br/>Objects</th>
@@ -63,6 +64,7 @@
                 &#x2713;
             {% endif %}
         </td>
+        <td>{{ coll[9] }}</td>
         <td><a href="{{ url }}{{ coll[9] }}s/{{ coll[0] }}">{{ coll[0] }}</a></td>
         <td><strong>{{ coll[1] }}</strong></td>
         <td align="right">{{ coll[2] }}</td>
@@ -75,7 +77,7 @@
     </tr>
 {% endfor %}
 <tr>
-    <th align="right" colspan="3">Totals</th>
+    <th align="right" colspan="4">Totals</th>
     <th align="right">{{ totals['tot_aocount'] }}</th>
     <th align="right">{{ totals['tot_docount'] }}</th>
     <th></th>
