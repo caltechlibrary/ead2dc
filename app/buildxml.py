@@ -146,10 +146,15 @@ def published_file_uris(do_list):
     # create file_uris set
     file_uris = set()
 
+    # use_statements to exclude
+    # 'image-thumbnail' - thumbnails not full images
+    # 'URL-Redirected' - redirected URLs not direct links
+    use_exclude = ['image-thumbnail', 'URL-Redirected']
+
     # iterate over digital objects linked to archival object
     for (do, keep) in do_list:
         for file_version in client.get(do).json()['file_versions']:
-            if file_version.get('use_statement') not in ['image-thumbnail', 'URL-Redirected'] \
+            if file_version.get('use_statement') not in use_exclude \
                     and file_version.get('publish', False):
                 file_uris.add(file_version['file_uri'])
 
@@ -160,10 +165,17 @@ def published_file_uris(do_list):
 
 def create_valid_hostnames_set(file_uris):
 
+    # hostnames to exclude
+    # github.com - github links are not direct links to digital content
+    # www.github.com - ditto
+    host_exclude = ['github.com', 'www.github.com']
+    
     hostnames = {urlparse(file_uri).netloc for file_uri in file_uris}
-    # remove github hostnames
-    hostnames.discard('github.com')
-    hostnames.discard('www.github.com')
+
+    # remove excluded
+    for host in host_exclude:
+        hostnames.discard(host)
+
     # remove direct targets is resolver.caltech.edu is present
     if 'digital.archives.caltech.edu' in hostnames and 'resolver.caltech.edu' in hostnames:
         hostnames.discard('digital.archives.caltech.edu')
@@ -240,12 +252,9 @@ for collection in collections_dict:
     if collid[16:25] == 'resources':
         colltyp = 'resource'
         collno = collid[26:]
-    elif collid[16:26] == 'accessions':
+    else:
         colltyp = 'accession'
         collno = collid[27:]
-    else:
-        colltyp = 'unknown'
-        print('> error: cannot identify record type:', collid)
 
     # iterate over collection to count unique digital objects and archival objects
     for ao in collections_dict[collection]:
@@ -254,7 +263,7 @@ for collection in collections_dict:
             coll_dos.add(do)
 
     # insert collection record into db
-    cursor.execute(query, [collno,                              # coll[0] = collno (int as str)
+    cursor.execute(query, [collno,                              # coll[0] = collno (str)
                            colltitle,                           # coll[1] = colltitle (str)
                            description,                         # coll[2] = description (str)                 
                            collid,                              # coll[3] = collid (str) 
@@ -331,7 +340,7 @@ ListSets = ET.SubElement(oaixml, 'ListSets')
 for coll in colls:
     oaiset = ET.SubElement(ListSets, 'set')
     setSpec = ET.SubElement(oaiset, 'setSpec')
-    setSpec.text = coll[0]
+    setSpec.text = coll[11]+'_'+coll[0]
     setName = ET.SubElement(oaiset, 'setName')
     setName.text = coll[1]
     setDescription = ET.SubElement(
@@ -394,9 +403,9 @@ for coll in colls:
 
             # temp
             # limit number of records for testing
-            #j += 1
-            #if j > 20:
-            #    break
+            j += 1
+            if j > 20:
+                break
 
             # skip archival object if no published digital object file URIs
             do_list = collections_dict[setid][ao]
@@ -439,7 +448,7 @@ for coll in colls:
 
             # setSpec element
             setspec = ET.SubElement(header, 'setSpec')
-            setspec.text = coll[0]
+            setspec.text = coll[11]+'_'+coll[0]
 
             # get archival object metadata
             uri = ao + "?resolve[]=ancestors" \
