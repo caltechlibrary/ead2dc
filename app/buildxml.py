@@ -124,16 +124,19 @@ def build_collections_dict():
 
                                     # add digital object to existing archival object
                                     collections_dict[coll][ao].append(do)
+                                    print(collections_dict[coll][ao])
 
                                 else:
 
                                     # create new archival object entry
                                     collections_dict[coll][ao] = [do]
+                                    print(collections_dict[coll][ao])
 
                             else:
 
                                 # create new collection
                                 collections_dict[coll] = {ao: [do]}
+                                print(collections_dict[coll][ao])
 
     print('Done building collections dictionary...')
 
