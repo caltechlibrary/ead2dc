@@ -35,7 +35,7 @@ def prettify(elem):
 
 #-----------------------------------------------------------------------#
 
-# create collection description from collection notes
+# create collection description string from collection notes
 def create_collection_description(coll_info):
 
     try:
@@ -76,7 +76,6 @@ def build_collections_dict():
     # initialize collections dictionary
     # this dictionary references archival objects with related digital objects
     collections_dict = dict()
-
     # initialize collections set
     collections = set()
 
@@ -85,58 +84,73 @@ def build_collections_dict():
 
     for obj in digital_objects:
 
-        uri = obj['uri']
-        keep = True
+        do = obj['uri']
 
         # only include objects that are published and not suppressed
-        # check for published
-        if obj.get('publish') == False:
-            keep = False
-        # check for suppressed
-        if obj.get('suppressed') == True:
-            keep = False
+        if obj.get('publish') == True and obj.get('suppressed') == False:
 
-        # capture the id of the collections
-        colls_list = obj.get('collection')
+            # capture the id of the collections
+            colls_list = obj.get('collection')
 
-        if colls_list:
+            if colls_list:
 
-            # iterate over the linked instances to find archival records
-            for linked_instance in obj['linked_instances']:
+                # iterate over the linked instances to find archival records
+                for linked_instance in obj['linked_instances']:
 
-                # if linked to an archival object
-                if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
+                    # if linked to an archival object
+                    if linked_instance['ref'][:33] == '/repositories/2/archival_objects/':
 
-                    ao = linked_instance['ref']
+                        ao = linked_instance['ref']
 
-                    # build dictionary of collections, digital objects, and archival objects
-                    # dict has the form {collection: {archival object: {(digital object, keep)}}}
-                    # i.e. a dictionary where the key is the (collection id, 'resource'|'accession') and values are a dictionary
-                    # 'archival object' is an id
-                    # 'digital object' is an id
-                    # 'keep' is True or False (i.e. published and not suppressed)
+                        # build dictionary of collections, digital objects, and archival objects
+                        # dict has the form {collection: {ao: {do}}}
+                        # ao: 'archival object' is an id
+                        # do: 'digital object' is an id
+                        for collection in colls_list:
 
-                    for collection in colls_list:
+                            # add to collections set
+                            coll = collection['ref']
+                            collections.add(coll)
+            
+                            if collections_dict.get(coll):
 
-                        # add to collections set
-                        coll = collection['ref']
-                        collections.add(coll)
-        
-                        if collections_dict.get(coll):
-                            # add to existing collection
-                            if collections_dict[coll].get(ao):
-                                # add digital object to existing archival object
-                                collections_dict[coll][ao].add((uri, keep))
+                                # add to existing collection
+                                if collections_dict[coll].get(ao):
+
+                                    # add digital object to existing archival object
+                                    collections_dict[coll][ao].append(do)
+
+                                else:
+
+                                    # create new archival object entry
+                                    collections_dict[coll][ao] = [do]
+
                             else:
-                                # create new archival object entry
-                                collections_dict[coll][ao] = {(uri, keep)}
-                        else:
-                            # create new collection
-                            collections_dict[coll] = {ao: {(uri, keep)}}
-                            #ttl = client.get(coll).json()['title']
-                            #print('> added', coll, '('+ttl+')')
 
-    return collections_dict
+                                # create new collection
+                                collections_dict[coll] = {ao: [do]}
+
+    # convert collections dictionary to archival objects dictionary
+    # form: {ao: {'collections': [collection], 'digital_objects': [do]}}
+
+    # initialize archival objects dictionary
+    archival_objects_dict = dict()
+
+    for collection in collections_dict:
+
+        for ao in collection:
+
+            if archival_objects_dict.get(ao):
+
+                archival_objects_dict[ao]['collections'].append(collection)
+                archival_objects_dict[ao]['digital_objects'].append(collections_dict[collection][ao])
+
+            else:
+
+                archival_objects_dict[ao] = {'collections': [collection], 'digital_objects': collections_dict[collection][ao]}
+
+
+    return collections_dict, archival_objects_dict
 
 
 #-----------------------------------------------------------------------#
@@ -204,7 +218,7 @@ client = authorize_api()
 
 # build collections dictionary
 print('Building collections dictionary...')
-collections_dict = build_collections_dict()
+collections_dict, archival_objects_dict = build_collections_dict()
 
 # read included collections from db
 connection = sq.connect(dbpath)
@@ -405,9 +419,9 @@ for coll in colls:
 
             # temp
             # limit number of records for testing
-            #j += 1
-            #if j > 20:
-            #    break
+            j += 1
+            if j > 20:
+                break
 
             # skip archival object if no published digital object file URIs
             do_list = collections_dict[setid][ao]
