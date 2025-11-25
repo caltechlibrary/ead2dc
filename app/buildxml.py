@@ -82,7 +82,12 @@ def build_collections_dict():
     # iterate over digital objects
     digital_objects = client.get_paged('/repositories/2/digital_objects')
 
+    n = 0
+
     for obj in digital_objects:
+
+        n += 1
+        print (n, end='\r')
 
         do = obj['uri']
 
@@ -130,13 +135,20 @@ def build_collections_dict():
                                 # create new collection
                                 collections_dict[coll] = {ao: [do]}
 
+    print('Done building collections dictionary...')
+
     # convert collections dictionary to archival objects dictionary
     # form: {ao: {'collections': [collection], 'digital_objects': [do]}}
 
     # initialize archival objects dictionary
     archival_objects_dict = dict()
 
+    n = 0
+
     for collection in collections_dict:
+
+        n += 1
+        print (n, end='\r')
 
         for ao in collection:
 
@@ -149,7 +161,7 @@ def build_collections_dict():
 
                 archival_objects_dict[ao] = {'collections': [collection], 'digital_objects': collections_dict[collection][ao]}
 
-            print(archival_objects_dict[ao])
+    print('Done building collections dictionary...')
 
  
     return collections_dict, archival_objects_dict
