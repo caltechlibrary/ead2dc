@@ -439,6 +439,7 @@ for coll in colls:
 
             # skip archival object if no published digital object file URIs
             do_list = collections_dict[setid][ao]
+            print('!!!!!!!!!!!!', do_list)
             file_uris = published_file_uris(do_list)
             if len(file_uris) == 0:
                 print('> warning: no published digital objects, archival object skipped:', ao)
