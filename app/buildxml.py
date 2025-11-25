@@ -305,7 +305,7 @@ for collection in collections_dict:
                            0,                                   # coll[10] = other (int) 
                            colltyp])                            # coll[11] = typ ('resource'|'accession')
     
-    # print collection summary
+    print ('Collection summary...')
     print('>', collection, '(' + client.get(collection).json()['title'] + ')', 
           len(coll_aos), 'archival objects;', len(coll_dos), 'digital objects')
 
@@ -411,12 +411,11 @@ for coll in colls:
     collection_number = coll[0]
     collection_title = coll[1]
     collection_type = coll[11]
+    setid = '/repositories/2/' + collection_type + 's/' + collection_number
     dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
     recs_created = 0
     recs_skipped = 0
-
-    setid = '/repositories/2/' + collection_type + 's/' + collection_number
 
     if collections_dict.get(setid):
     
