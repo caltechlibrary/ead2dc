@@ -403,9 +403,9 @@ for coll in colls:
 
             # temp
             # limit number of records for testing
-            j += 1
-            if j > 20:
-                break
+            #j += 1
+            #if j > 20:
+            #    break
 
             # skip archival object if no published digital object file URIs
             do_list = collections_dict[setid][ao]
