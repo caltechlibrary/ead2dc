@@ -149,7 +149,9 @@ def build_collections_dict():
 
                 archival_objects_dict[ao] = {'collections': [collection], 'digital_objects': collections_dict[collection][ao]}
 
+            print(archival_objects_dict[ao])
 
+ 
     return collections_dict, archival_objects_dict
 
 
