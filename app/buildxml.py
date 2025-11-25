@@ -147,14 +147,10 @@ def build_collections_dict():
 
     for collection in collections_dict:
 
-        print('Processing collection:', collection)
-
         n += 1
         print (n, end='\r')
 
         for ao in collections_dict[collection]:
-
-            print('Processing archival object:', ao)
 
             if archival_objects_dict.get(ao):
 
@@ -184,7 +180,7 @@ def published_file_uris(do_list):
     use_exclude = ['image-thumbnail', 'URL-Redirected']
 
     # iterate over digital objects linked to archival object
-    for (do, keep) in do_list:
+    for do in do_list:
         for file_version in client.get(do).json()['file_versions']:
             if file_version.get('use_statement') not in use_exclude \
                     and file_version.get('publish', False):
@@ -291,7 +287,7 @@ for collection in collections_dict:
     # iterate over collection to count unique digital objects and archival objects
     for ao in collections_dict[collection]:
         coll_aos.add(ao)
-        for (do, keep) in collections_dict[collection][ao]:
+        for do in collections_dict[collection][ao]:
             coll_dos.add(do)
 
     # insert collection record into db
