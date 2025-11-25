@@ -123,21 +123,17 @@ def build_collections_dict():
                                 if collections_dict[coll].get(ao):
 
                                     # add digital object to existing archival object
-                                    #print('collections_dict[coll][ao]:', collections_dict[coll][ao])
                                     collections_dict[coll][ao].append(do)
-                                    #print('collections_dict[coll][ao]:', collections_dict[coll][ao])
 
                                 else:
 
                                     # create new archival object entry
                                     collections_dict[coll][ao] = [do]
-                                    #print('collections_dict[coll][ao]:', collections_dict[coll][ao])
 
                             else:
 
                                 # create new collection
                                 collections_dict[coll] = {ao: [do]}
-                                print('collections_dict[coll][ao]:', collections_dict[coll][ao])
 
     print('Done building collections dictionary...')
 
@@ -159,11 +155,11 @@ def build_collections_dict():
             if archival_objects_dict.get(ao):
 
                 archival_objects_dict[ao]['collections'].append(collection)
-                archival_objects_dict[ao]['digital_objects'].append(collections_dict[collection][ao])
+                archival_objects_dict[ao]['digital_objects'].extend(ao)
 
             else:
 
-                archival_objects_dict[ao] = {'collections': [collection], 'digital_objects': collections_dict[collection][ao]}
+                archival_objects_dict[ao] = {'collections': [collection], 'digital_objects': [ao]}
 
     print('Done building archival objects dictionary...')
 
@@ -443,7 +439,6 @@ for coll in colls:
 
             # skip archival object if no published digital object file URIs
             do_list = collections_dict[setid][ao]
-            print('!!!!!!!!!!!!', do_list)
             file_uris = published_file_uris(do_list)
             if len(file_uris) == 0:
                 print('> warning: no published digital objects, archival object skipped:', ao)
