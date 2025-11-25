@@ -379,13 +379,15 @@ for coll in colls:
     #if coll[0] not in ['30']:
     #    continue
 
+    collection_number = coll[0]
+    collection_title = coll[1]
+    collection_type = coll[11]
+    dao_dict[setid] = dict() # initialize dictionary for collection's statistics
+
     recs_created = 0
     recs_skipped = 0
 
-    setid = '/repositories/2/' + coll[11] + 's/' + coll[0]
-
-    collectiontitle = coll[1]
-    dao_dict[setid] = dict() # initialize dictionary for collection's statistics
+    setid = '/repositories/2/' + collection_type + 's/' + collection_number
 
     if collections_dict.get(setid):
     
@@ -448,7 +450,7 @@ for coll in colls:
 
             # setSpec element
             setspec = ET.SubElement(header, 'setSpec')
-            setspec.text = coll[11]+'_'+coll[0]
+            setspec.text = collection_type + '_' + collection_number
 
             # get archival object metadata
             uri = ao + "?resolve[]=ancestors" \
@@ -605,7 +607,7 @@ for coll in colls:
             recs_created += 1
             print(recs_created, end='\r')
 
-        print('>', collectiontitle, '('+str(recs_created), 'records created)')
+        print('>', collection_title, '('+str(recs_created), 'records created)')
 
         #print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
         intertime = time.time()
