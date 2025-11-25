@@ -152,7 +152,7 @@ def build_collections_dict():
         n += 1
         print (n, end='\r')
 
-        for ao in collection:
+        for ao in collections_dict[collection]:
 
             print('Processing archival object:', ao)
 
