@@ -161,7 +161,7 @@ def build_collections_dict():
 
                 archival_objects_dict[ao] = {'collections': [collection], 'digital_objects': collections_dict[collection][ao]}
 
-    print('Done building collections dictionary...')
+    print('Done building archival objects dictionary...')
 
  
     return collections_dict, archival_objects_dict
@@ -287,8 +287,9 @@ for collection in collections_dict:
     # iterate over collection to count unique digital objects and archival objects
     for ao in collections_dict[collection]:
         coll_aos.add(ao)
-        for do in collections_dict[collection][ao]:
-            coll_dos.add(do)
+        for dos in collections_dict[collection][ao]:
+            for do in dos:
+                coll_dos.add(do)
 
     # insert collection record into db
     cursor.execute(query, [collno,                              # coll[0] = collno (str)
