@@ -131,12 +131,13 @@ def build_collections_dict():
 
                                     # create new archival object entry
                                     collections_dict[coll][ao] = [do]
-                                    print('collections_dict[coll][ao]:', collections_dict[coll][ao])
+                                    #print('collections_dict[coll][ao]:', collections_dict[coll][ao])
 
                             else:
 
                                 # create new collection
                                 collections_dict[coll] = {ao: [do]}
+                                print('collections_dict[coll][ao]:', collections_dict[coll][ao])
 
     print('Done building collections dictionary...')
 
