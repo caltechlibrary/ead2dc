@@ -147,10 +147,14 @@ def build_collections_dict():
 
     for collection in collections_dict:
 
+        print('Processing collection:', collection)
+
         n += 1
         print (n, end='\r')
 
         for ao in collection:
+
+            print('Processing archival object:', ao)
 
             if archival_objects_dict.get(ao):
 
