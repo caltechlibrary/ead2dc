@@ -145,21 +145,21 @@ def build_collections_dict():
 
     n = 0
 
-    for collection in collections_dict:
+    for collection, ao_dict in collections_dict.items():
 
         n += 1
         print (n, end='\r')
 
-        for ao in collections_dict[collection]:
+        for ao, do_list in ao_dict.items():
 
             if archival_objects_dict.get(ao):
 
                 archival_objects_dict[ao]['collections'].append(collection)
-                archival_objects_dict[ao]['digital_objects'].extend(ao)
+                archival_objects_dict[ao]['digital_objects'].extend(do_list)
 
             else:
 
-                archival_objects_dict[ao] = {'collections': [collection], 'digital_objects': [ao]}
+                archival_objects_dict[ao] = {'collections': [collection], 'digital_objects': do_list}
 
     print('Done building archival objects dictionary...')
 
