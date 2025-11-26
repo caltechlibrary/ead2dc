@@ -309,8 +309,8 @@ for collection in collections_dict:
                            colltitle,                           # coll[1] = colltitle (str)
                            description,                         # coll[2] = description (str)                 
                            collid,                              # coll[3] = collid (str) 
-                           len(coll_aos),                       # coll[4] = aocount (int) 
-                           len(coll_dos),                       # coll[5] = docount (int) 
+                           0,                                   # coll[4] = aocount (int) 
+                           0,                                   # coll[5] = docount (int) 
                            includedcollections.get(collno, 0),  # coll[6] = incl (Boolean) 
                            0,                                   # coll[7] = caltechlibrary (int)
                            0,                                   # coll[8] = internetarchive (int)
@@ -396,9 +396,8 @@ for coll in colls:
     )
     setDescription.text = coll[2]
 
-dao_count = 0
-dao_skipped = 0
-#dao_dict = dict()
+#dao_count = 0
+#dao_skipped = 0
 
 # build ListRecords segment
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
@@ -412,6 +411,10 @@ intertime = time.time()
 #devtest_textfile = Path(Path(__file__).resolve().parent).joinpath('../xml/devtest_textfile.csv')
 #if os.path.exists(devtest_textfile):
 #    os.remove(devtest_textfile)
+
+# initialize stats_dict for collection statistics
+# {setid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
+stats_dict = dict()
 
 # iterate over archival object dictionary
 # do = digital object, ao = archival object
@@ -473,8 +476,16 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # setSpec element
     for collid in colls_dict['collections']:
+
         setspec = ET.SubElement(header, 'setSpec')
         setspec.text = get_set_id(collid)
+
+        # add archival record to stats_dict
+        # {collid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
+        if stats_dict.get(collid):
+            stats_dict[collid]['archival_objects'] += 1
+        else:
+            stats_dict[collid] = {'archival_objects': 1, 'digital_objects': dict()}
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
@@ -553,11 +564,21 @@ for ao, colls_dict in archival_objects_dict.items():
             hostcategory = 'youtube'
         else:
             hostcategory = 'other'
-        #if dao_dict[setid].get(hostcategory):
-        #    dao_dict[setid][hostcategory] += 1
-        #else:
-        #    dao_dict[setid][hostcategory] = 1
-        dao_count += 1
+
+        # add archival record to stats_dict
+        # {setid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
+        for collid in colls_dict['collections']:
+
+            if stats_dict[collid].get('digital_objects'):
+
+                if stats_dict[collid]['digital_objects'].get(hostcategory):
+                    stats_dict[collid]['digital_objects'][hostcategory] += 1
+
+                else:
+                    stats_dict[collid]['digital_objects'][hostcategory] = 1
+
+            else:
+                stats_dict[collid]['digital_objects'][hostcategory] = 1}
 
         # identifier element
         identifier = ET.SubElement(dc, 'dc:identifier')
@@ -638,27 +659,29 @@ intertime = time.time()
 
 # temp
 #print('devrecordcount:', devrecordcount)
-'''
+
+# update collection statistics in db
+# {collid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
 connection = sq.connect(dbpath)
 db = connection.cursor()
-for collid in dao_dict:
-    docount = 0
-    for hostcategory in dao_dict[collid]:
-        query = 'UPDATE collections SET '+hostcategory+'=? WHERE collid=?;'
-        db.execute(query, [dao_dict[collid][hostcategory], collid])
-        docount += dao_dict[collid][hostcategory]
-    if docount == 0:
-        query = 'DELETE FROM collections WHERE collid=?;'
-        db.execute(query, [collid])
-    else:
-        query = 'UPDATE collections SET docount=? WHERE collid=?;'
-        db.execute(query, [docount, collid])
+for collid, counts_dict in stats_dict.items():
+    query = 'UPDATE collections SET aocount=? WHERE collid=?;'
+    db.execute(query, [ao_count, counts_dict['archival_objects']])
+    for ao_count, do_counts_dict in counts_dict.items():
+        docount = 0
+        for hostcat, hostcatcount in do_counts_dict.items():
+            query = 'UPDATE collections SET '+hostcategory+'=? WHERE collid=?;'
+            db.execute(query, [hostcat, hostcatcount])
+            docount += hostcatcount
+        # update total docount
+        query = 'UPDATE collections SET '+docount+'=? WHERE collid=?;'
+
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
 db.execute(query, [last_update, 'xml'])
 db.close()
 connection.commit()
 connection.close()
-'''
+
 #write to disk
 
 # production file

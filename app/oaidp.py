@@ -322,7 +322,7 @@ def get_total_counts():
 def read_colls():
     query = 'SELECT collno, colltitle, aocount, docount, caltechlibrary, internetarchive, youtube, other, incl, typ \
              FROM collections \
-             ORDER BY docount DESC;'
+             ORDER BY aocount DESC;'
     colls = get_db().execute(query).fetchall()
     # archival object total
     n0 = sum(k for (_,_,k,_,_,_,_,_,_,_) in colls)
