@@ -547,11 +547,16 @@ def oai():
 
         for recrd in recrds:
 
+            # get list of sets for record
             sets_list = [setnode.text for setnode in recrd.findall('./header/setSpec', ns)]
 
-            if (set_request in sets_list or set_request == 'x_000') and \
-                len(set(sets_list).intersection(set(included_sets))) > 0:
+            # check 
+            # - if record is in requested set, or no set specified (x_000)
+            # - and if record is in included (i.e. active) sets
+            if (set_request in sets_list or set_request == 'x_000') \
+                and len(set(sets_list).intersection(set(included_sets))) > 0:
 
+                # check if record is within date range requested
                 if recrd.find('./header/datestamp', ns).text >= datefrom and \
                    recrd.find('./header/datestamp', ns).text <= dateuntil:
 
