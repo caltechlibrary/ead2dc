@@ -667,9 +667,9 @@ intertime = time.time()
 connection = sq.connect(dbpath)
 db = connection.cursor()
 for collid, counts_dict in stats_dict.items():
-    query = 'UPDATE collections SET aocount=? WHERE collid=?;'
-    db.execute(query, [ao_count, counts_dict['archival_objects']])
     for ao_count, do_counts_dict in counts_dict.items():
+        query = 'UPDATE collections SET aocount=? WHERE collid=?;'
+        db.execute(query, [ao_count, counts_dict['archival_objects']])
         docount = 0
         for hostcat, hostcatcount in do_counts_dict.items():
             query = 'UPDATE collections SET '+hostcategory+'=? WHERE collid=?;'
