@@ -421,6 +421,8 @@ stats_dict = dict()
 # archival_objects_dict = {ao: {'collections': [collids], 'digital_objects: [dos]}}        
 for ao, colls_dict in archival_objects_dict.items():
 
+    print(ao, end='\r')
+
     # temp
     # limit to subset of collections for testing
     if len(set(colls_dict['collections']) & set(['/repositories/2/resources/30', '/repositories/2/resources/312'])) == 0:
