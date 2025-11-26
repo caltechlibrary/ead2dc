@@ -425,8 +425,8 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit to subset of collections for testing
-    if len(set(colls_dict['collections']) & set(['/repositories/2/resources/30', '/repositories/2/resources/312'])) == 0:
-        continue
+    #if len(set(colls_dict['collections']) & set(['/repositories/2/resources/30', '/repositories/2/resources/312'])) == 0:
+    #    continue
 
     #collection_number = coll[0]
     #collection_title = coll[1]
@@ -710,6 +710,6 @@ for collection in dao_dict:
 
 #print(dao_dict)
 
-print('Total elapsed time:', round(time.time() - start, 1))
+print('\nTotal elapsed time:', round(time.time() - start, 1))
 
 print('Done.')
