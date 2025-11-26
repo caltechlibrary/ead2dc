@@ -420,8 +420,8 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit to subset of collections for testing
-    if len(set(colls_dict['collections']) & set(['/repositories/2/resources/30', '/repositories/2/resources/312'])) == 0:
-        continue
+    #if len(set(colls_dict['collections']) & set(['/repositories/2/resources/30', '/repositories/2/resources/312'])) == 0:
+    #    continue
 
     #collection_number = coll[0]
     #collection_title = coll[1]
@@ -435,7 +435,6 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # skip archival object if no published digital object file URIs
     do_list = colls_dict['digital_objects']
-    print(do_list)
     file_uris = published_file_uris(do_list)
     if len(file_uris) == 0:
         continue
