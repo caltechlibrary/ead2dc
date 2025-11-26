@@ -214,6 +214,18 @@ def create_valid_hostnames_set(file_uris):
 
 
 #-----------------------------------------------------------------------#
+
+def get_set_id(collection_id):
+
+    id_list = collection_id.split('/')
+    collection_type = id_list[-2][:-1]
+    collection_number = id_list[-1]
+    setid = collection_type + '_' + collection_number
+
+    return setid
+
+
+#-----------------------------------------------------------------------#
 # START OF SCRIPT                                                       #
 #-----------------------------------------------------------------------#
 
@@ -262,6 +274,7 @@ query = 'INSERT INTO collections \
             (?,?,?,?,?,?,?,?,?,?,?,?);'
 
 # iterate over collections dictionary to insert collection records into db
+print ('Collection summary...')
 for collection in collections_dict:
 
     # get collection info
@@ -305,7 +318,6 @@ for collection in collections_dict:
                            0,                                   # coll[10] = other (int) 
                            colltyp])                            # coll[11] = typ ('resource'|'accession')
     
-    print ('Collection summary...')
     print('>', collection, '(' + client.get(collection).json()['title'] + ')', 
           len(coll_aos), 'archival objects;', len(coll_dos), 'digital objects')
 
@@ -386,7 +398,7 @@ for coll in colls:
 
 dao_count = 0
 dao_skipped = 0
-dao_dict = dict()
+#dao_dict = dict()
 
 # build ListRecords segment
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
@@ -401,248 +413,232 @@ intertime = time.time()
 #if os.path.exists(devtest_textfile):
 #    os.remove(devtest_textfile)
 
-for coll in colls:
+# iterate over archival object dictionary
+# do = digital object, ao = archival object
+# archival_objects_dict = {ao: {'collections': [collids], 'digital_objects: [dos]}}        
+for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit to subset of collections for testing
-    #if coll[0] not in ['30']:
-    #    continue
+    if len(set(colls_dict['collections']) & set(['/repositories/2/resources/30', '/repositories/2/resources/312'])) == 0:
+        continue
 
-    collection_number = coll[0]
-    collection_title = coll[1]
-    collection_type = coll[11]
-    setid = '/repositories/2/' + collection_type + 's/' + collection_number
-    dao_dict[setid] = dict() # initialize dictionary for collection's statistics
+    #collection_number = coll[0]
+    #collection_title = coll[1]
+    #collection_type = coll[11]
+    #setid = '/repositories/2/' + collection_type + 's/' + collection_number
+    #dao_dict[setid] = dict() # initialize dictionary for collection's statistics
 
-    recs_created = 0
-    recs_skipped = 0
+    #recs_created = 0
+    #recs_skipped = 0
 
-    if collections_dict.get(setid):
+
+    # skip archival object if no published digital object file URIs
+    do_list = colls_dict['digital_objects']
+    file_uris = published_file_uris(do_list)
+    if len(file_uris) == 0:
+        continue
+
+    # create hostnames set
+    hostnames = create_valid_hostnames_set(file_uris)
+
+    # update archival object record count
+    #if dao_dict[setid].get('aocount'):
+    #    dao_dict[setid]['aocount'] += 1
+    #else:
+    #    dao_dict[setid]['aocount'] = 1
     
-        # iterate over collection
-        # do = digital object, ao = archival object
-        # typ = type of collection resource|accession
-        # keep = True if the object is published and not suppressed
-        # collections_dict[setid] = {(digital object, archival object, type, keep)}        
+    # record element
+    record = ET.SubElement(ListRecords, 'record')
 
-        # temp
-        # counter if limiting number of records for testing
-        j=0
+    # header element
+    header = ET.SubElement(record, 'header')
 
-        for ao in collections_dict[setid]:
+    # identifier elements
+    #identifier = ET.SubElement(header, 'identifier')
+    #identifier.text = 'collections.archives.caltech.edu' + do
+    #identifier.attrib = {'type': 'digital'}
 
-            # temp
-            # limit number of records for testing
-            j += 1
-            if j > 20:
-                break
+    identifier = ET.SubElement(header, 'identifier')
+    identifier.text = 'collections.archives.caltech.edu' + ao
+    #identifier.attrib = {'type': 'archival'}
 
-            # skip archival object if no published digital object file URIs
-            do_list = collections_dict[setid][ao]
-            file_uris = published_file_uris(do_list)
-            if len(file_uris) == 0:
-                print('> warning: no published digital objects, archival object skipped:', ao)
-                continue
+    #identifier = ET.SubElement(header, 'identifier')
+    #identifier.text = 'collections.archives.caltech.edu' + setid
+    #identifier.attrib = {'type': 'collection'}
 
-            # create hostnames set
-            hostnames = create_valid_hostnames_set(file_uris)
+    # datestamp element
+    datestamp = ET.SubElement(header, 'datestamp')
+    datestamp.text = today
 
-            # update archival object record count
-            if dao_dict[setid].get('aocount'):
-                dao_dict[setid]['aocount'] += 1
-            else:
-                dao_dict[setid]['aocount'] = 1
-            
-            # record element
-            record = ET.SubElement(ListRecords, 'record')
+    # setSpec element
+    for collid in colls_dict['collections']:
+        setspec = ET.SubElement(header, 'setSpec')
+        setspec.text = get_set_id(collid)
 
-            # header element
-            header = ET.SubElement(record, 'header')
+    # get archival object metadata
+    uri = ao + "?resolve[]=ancestors" \
+            + "&resolve[]=digital_object" \
+            + "&resolve[]=linked_agents" \
+            + "&resolve[]=repository" \
+            + "&resolve[]=subjects" \
+            + "&resolve[]=top_container"
+    archival_object_metadata = client.get(uri).json()
 
-            # identifier elements
-            #identifier = ET.SubElement(header, 'identifier')
-            #identifier.text = 'collections.archives.caltech.edu' + do
-            #identifier.attrib = {'type': 'digital'}
+    # create metadata element
+    metadata = ET.SubElement(record, 'metadata')
 
-            identifier = ET.SubElement(header, 'identifier')
-            identifier.text = 'collections.archives.caltech.edu' + ao
-            #identifier.attrib = {'type': 'archival'}
+    # dc element
+    dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
+                                        'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+                                        'xmlns:dcterms': 'http://purl.org/dc/terms/'})
+    
+    # title elements
+    #title = ET.SubElement(dc, 'dc:title')
+    #title.text = client.get(do).json()['title']
+    #title.attrib = {'type': 'digital'}
 
-            #identifier = ET.SubElement(header, 'identifier')
-            #identifier.text = 'collections.archives.caltech.edu' + setid
-            #identifier.attrib = {'type': 'collection'}
+    title = ET.SubElement(dc, 'dc:title')
+    title.text = archival_object_metadata['title']
+    #title.attrib = {'type': 'archival'}
 
-            # datestamp element
-            datestamp = ET.SubElement(header, 'datestamp')
-            datestamp.text = today
+    #title = ET.SubElement(dc, 'dc:title')
+    #title.text = client.get(setid).json()['title']
+    #title.attrib = {'type': 'collection'}
 
-            # setSpec element
-            setspec = ET.SubElement(header, 'setSpec')
-            setspec.text = collection_type + '_' + collection_number
+    # ancestor titles
+    # print('testing:', ao[33:])
+    # ancestors = get_ancestors('archival_objects', ao[33:])
+    ancestors = list()
+    for a in archival_object_metadata.get('ancestors', []):
+        level = a.get('level')
+        if a.get('_resolved'):
+            if a['_resolved'].get('title'):
+                title = a['_resolved']['title']
+                ancestors.append((title, level))
 
-            # get archival object metadata
-            uri = ao + "?resolve[]=ancestors" \
-                    + "&resolve[]=digital_object" \
-                    + "&resolve[]=linked_agents" \
-                    + "&resolve[]=repository" \
-                    + "&resolve[]=subjects" \
-                    + "&resolve[]=top_container"
-            archival_object_metadata = client.get(uri).json()
+    #print(ancestors)
+    for a in ancestors:
+        if a:
+            ancestor = ET.SubElement(dc, 'dc:title')
+            ancestor.text = a[0]
+            if a[1]:
+                ancestor.attrib = {'level': a[1]}
 
-            # create metadata element
-            metadata = ET.SubElement(record, 'metadata')
+    # relation element
+    #relation = ET.SubElement(dc, 'dc:relation')
+    #relation.text = collectiontitle
+    #relation.attrib = {'label': 'Collection'}
 
-            # dc element
-            dc = ET.SubElement(metadata, 'oai_dc:dc', {'xmlns:oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
-                                                'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
-                                                'xmlns:dcterms': 'http://purl.org/dc/terms/'})
-            
-            # title elements
-            #title = ET.SubElement(dc, 'dc:title')
-            #title.text = client.get(do).json()['title']
-            #title.attrib = {'type': 'digital'}
+    # description element
+    #description = ET.SubElement(dc, 'dc:description')
+    #description.text = 'Digital object in ' + collectiontitle
 
-            title = ET.SubElement(dc, 'dc:title')
-            title.text = archival_object_metadata['title']
-            #title.attrib = {'type': 'archival'}
+    # warning for no file_uris
+    uri_test = False
+    
+    for file_uri in file_uris: 
 
-            #title = ET.SubElement(dc, 'dc:title')
-            #title.text = client.get(setid).json()['title']
-            #title.attrib = {'type': 'collection'}
+        # skip urls not in hostnames set
+        hostname = urlparse(file_uri).netloc
+        if hostname not in hostnames:
+            continue
 
-            # ancestor titles
-            # print('testing:', ao[33:])
-            # ancestors = get_ancestors('archival_objects', ao[33:])
-            ancestors = list()
-            for a in archival_object_metadata.get('ancestors', []):
-                level = a.get('level')
-                if a.get('_resolved'):
-                    if a['_resolved'].get('title'):
-                        title = a['_resolved']['title']
-                        ancestors.append((title, level))
+        # categorize hostname
+        if hostname == 'resolver.caltech.edu' or hostname == 'digital.archives.caltech.edu' or hostname == 'californiarevealed.org':
+            hostcategory = 'caltechlibrary'
+        elif hostname == 'archive.org':
+            hostcategory = 'internetarchive'
+        elif hostname == 'youtube.com' or hostname == 'youtu.be':
+            hostcategory = 'youtube'
+        else:
+            hostcategory = 'other'
+        #if dao_dict[setid].get(hostcategory):
+        #    dao_dict[setid][hostcategory] += 1
+        #else:
+        #    dao_dict[setid][hostcategory] = 1
+        dao_count += 1
 
-            #print(ancestors)
-            for a in ancestors:
-                if a:
-                    ancestor = ET.SubElement(dc, 'dc:title')
-                    ancestor.text = a[0]
-                    if a[1]:
-                        ancestor.attrib = {'level': a[1]}
+        # identifier element
+        identifier = ET.SubElement(dc, 'dc:identifier')
+        identifier.text = file_uri
+        identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
+        uri_test = True
+    
+    if not uri_test:
+        print('> warning: no file URIs for archival object:', ao)
 
-            # relation element
-            #relation = ET.SubElement(dc, 'dc:relation')
-            #relation.text = collectiontitle
-            #relation.attrib = {'label': 'Collection'}
+    # identifier element
+    if archival_object_metadata.get('component_id'):
+        identifier = ET.SubElement(dc, 'dc:identifier')
+        identifier.text = archival_object_metadata['component_id']
+        identifier.attrib = {'type': 'localid'}
 
-            # description element
-            #description = ET.SubElement(dc, 'dc:description')
-            #description.text = 'Digital object in ' + collectiontitle
+    # dates
+    dates = list()
+    #obj = get_json(category, id)
+    for date in archival_object_metadata.get('dates', []):
+        dates.append(date.get('begin', ''))
 
-            # warning for no file_uris
-            uri_test = False
-            
-            for file_uri in file_uris: 
+    #print(ao[33:])
+    #print(dates)
+    for d in dates:
+        if d != '':
+            date = ET.SubElement(dc, 'dc:date')
+            date.text = d                
 
-                # skip urls not in hostnames set
-                hostname = urlparse(file_uri).netloc
-                if hostname not in hostnames:
-                    continue
+    # extents
+    extents = list()
+    #obj = get_json(category, id)
+    #print(archival_object_metadata.get('extents'))
+    for extent in archival_object_metadata.get('extents', []):
+        #print(extent)
+        #print('number:', extent.get('number'))
+        #print('details:', extent.get('physical_details'))
+        #print('type:', extent.get('extent_type'))
+        s = extent.get('number', '') + ' ' + extent.get('extent_type', '') + ' ' + extent.get('physical_details', '').strip()
+        #print('string:', s)
+        extents.append(s)
 
-                # categorize hostname
-                if hostname == 'resolver.caltech.edu' or hostname == 'digital.archives.caltech.edu' or hostname == 'californiarevealed.org':
-                    hostcategory = 'caltechlibrary'
-                elif hostname == 'archive.org':
-                    hostcategory = 'internetarchive'
-                elif hostname == 'youtube.com' or hostname == 'youtu.be':
-                    hostcategory = 'youtube'
-                else:
-                    hostcategory = 'other'
-                if dao_dict[setid].get(hostcategory):
-                    dao_dict[setid][hostcategory] += 1
-                else:
-                    dao_dict[setid][hostcategory] = 1
-                dao_count += 1
+    #print('extents:', extents)
 
-                # identifier element
-                identifier = ET.SubElement(dc, 'dc:identifier')
-                identifier.text = file_uri
-                identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
-                uri_test = True
-            
-            if not uri_test:
-                print('> warning: no file URIs for archival object:', ao)
+    #print(extents)
+    for e in extents:
+        if e.strip() != '':
+            extent = ET.SubElement(dc, 'dc:format')
+            extent.text = e.strip()
 
-            # identifier element
-            if archival_object_metadata.get('component_id'):
-                identifier = ET.SubElement(dc, 'dc:identifier')
-                identifier.text = archival_object_metadata['component_id']
-                identifier.attrib = {'type': 'localid'}
+    # subjects
+    #subjects = get_subjects('archival_objects', ao[33:])
 
-            # dates
-            dates = list()
-            #obj = get_json(category, id)
-            for date in archival_object_metadata.get('dates', []):
-                dates.append(date.get('begin', ''))
+    subjects = list()
+    #obj = get_json(category, id)
+    for s in archival_object_metadata.get('subjects', []):
+        if s.get('_resolved'):
+            source = s['_resolved'].get('source')
+            if s['_resolved'].get('title'):
+                subject = s['_resolved']['title']
+                subjects.append((subject, source))
 
-            #print(ao[33:])
-            #print(dates)
-            for d in dates:
-                if d != '':
-                    date = ET.SubElement(dc, 'dc:date')
-                    date.text = d                
+    #print(subjects)
+    for s in subjects:
+        if s:
+            subject = ET.SubElement(dc, 'dc:subject')
+            subject.text = s[0]
+            if s[1]:
+                subject.attrib = {'source': s[1]}
 
-            # extents
-            extents = list()
-            #obj = get_json(category, id)
-            #print(archival_object_metadata.get('extents'))
-            for extent in archival_object_metadata.get('extents', []):
-                #print(extent)
-                #print('number:', extent.get('number'))
-                #print('details:', extent.get('physical_details'))
-                #print('type:', extent.get('extent_type'))
-                s = extent.get('number', '') + ' ' + extent.get('extent_type', '') + ' ' + extent.get('physical_details', '').strip()
-                #print('string:', s)
-                extents.append(s)
+    recs_created += 1
+    print(recs_created, end='\r')
 
-            #print('extents:', extents)
+#print('>', collection_title, '('+str(recs_created), 'records created)')
 
-            #print(extents)
-            for e in extents:
-                if e.strip() != '':
-                    extent = ET.SubElement(dc, 'dc:format')
-                    extent.text = e.strip()
-
-            # subjects
-            #subjects = get_subjects('archival_objects', ao[33:])
-
-            subjects = list()
-            #obj = get_json(category, id)
-            for s in archival_object_metadata.get('subjects', []):
-                if s.get('_resolved'):
-                    source = s['_resolved'].get('source')
-                    if s['_resolved'].get('title'):
-                        subject = s['_resolved']['title']
-                        subjects.append((subject, source))
-
-            #print(subjects)
-            for s in subjects:
-                if s:
-                    subject = ET.SubElement(dc, 'dc:subject')
-                    subject.text = s[0]
-                    if s[1]:
-                        subject.attrib = {'source': s[1]}
-
-            recs_created += 1
-            print(recs_created, end='\r')
-
-        print('>', collection_title, '('+str(recs_created), 'records created)')
-
-        #print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
-        intertime = time.time()
+#print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
+intertime = time.time()
 
 # temp
 #print('devrecordcount:', devrecordcount)
-
+'''
 connection = sq.connect(dbpath)
 db = connection.cursor()
 for collid in dao_dict:
@@ -662,7 +658,7 @@ db.execute(query, [last_update, 'xml'])
 db.close()
 connection.commit()
 connection.close()
-
+'''
 #write to disk
 
 # production file
