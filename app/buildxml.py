@@ -629,8 +629,8 @@ for ao, colls_dict in archival_objects_dict.items():
             if s[1]:
                 subject.attrib = {'source': s[1]}
 
-    recs_created += 1
-    print(recs_created, end='\r')
+    #recs_created += 1
+    #print(recs_created, end='\r')
 
 #print('>', collection_title, '('+str(recs_created), 'records created)')
 
