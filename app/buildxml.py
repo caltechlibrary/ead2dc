@@ -705,7 +705,7 @@ for collection in dao_dict:
         print('>', url, dao_dict[collection][url])
 '''
 
-print(dao_count, 'total records created')
+#print(dao_count, 'total records created')
 #print(dao_skipped, 'total records skipped')
 
 #print(dao_dict)
