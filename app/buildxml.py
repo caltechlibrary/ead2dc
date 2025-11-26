@@ -180,8 +180,7 @@ def published_file_uris(do_list):
     use_exclude = ['image-thumbnail', 'URL-Redirected']
 
     # iterate over digital objects linked to archival object
-    for do in do_list:
-        print(do)
+    for do in do_list:)
         for file_version in client.get(do).json()['file_versions']:
             if file_version.get('use_statement') not in use_exclude \
                     and file_version.get('publish', False):
@@ -436,6 +435,7 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # skip archival object if no published digital object file URIs
     do_list = colls_dict['digital_objects']
+    print(do_list)
     file_uris = published_file_uris(do_list)
     if len(file_uris) == 0:
         continue
