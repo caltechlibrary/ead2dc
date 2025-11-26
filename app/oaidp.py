@@ -448,7 +448,7 @@ def oai():
         first = True
     
         # get parameters from request
-        set =  'x_000' if request.args.get('set') is None else request.args.get('set')
+        set_request =  'x_000' if request.args.get('set') is None else request.args.get('set')
         datefrom = '000-00-00' if request.args.get('from') is None else request.args.get('from')
         dateuntil = '999-99-99' if request.args.get('until') is None else request.args.get('until')
         startrec = 0
@@ -460,7 +460,7 @@ def oai():
     except:
         id = identifier
     now = datetime.now().isoformat().split('.')[0]
-    rq = [now, verb, set, id, datefrom, dateuntil]
+    rq = [now, verb, set_request, id, datefrom, dateuntil]
     log(rq)
 
 
@@ -549,7 +549,7 @@ def oai():
 
             sets_list = [setnode.text for setnode in recrd.findall('./header/setSpec', ns)]
 
-            if (set in sets_list or set == 'x_000') and \
+            if (set_request in sets_list or set_request == 'x_000') and \
                 len(set(sets_list).intersection(set(included_sets))) > 0:
 
                 if recrd.find('./header/datestamp', ns).text >= datefrom and \
@@ -578,7 +578,7 @@ def oai():
                     if cursor >= startrec + maxrecs:
                         resumptionToken = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}resumptionToken')
                         resumptionToken.attrib = {'cursor': str(cursor)}
-                        resumptionToken.text = f'{set}:{datefrom}:{dateuntil}:{cursor}'
+                        resumptionToken.text = f'{set_request}:{datefrom}:{dateuntil}:{cursor}'
                         rToken = True
                         break
 
