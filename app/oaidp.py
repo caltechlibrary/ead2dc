@@ -415,7 +415,7 @@ def oai():
     # list of collections to include
     db = get_db()
     query = "SELECT typ, collno FROM collections WHERE incl;"
-    colls = [setid[0]+'_'+setid[1] for setid in db.execute(query).fetchall()]
+    included_sets = [setid[0]+'_'+setid[1] for setid in db.execute(query).fetchall()]
 
     # empty list for errors
     errors = list()
@@ -526,7 +526,7 @@ def oai():
         rquest.text = dpurl
         listsets = ET.SubElement(oaixml, 'ListSets')
         for node in elem:
-            if node.find('./setSpec', ns).text in colls:
+            if node.find('./setSpec', ns).text in included_sets:
                 listsets.append(node)
                 count = 1
 
@@ -547,8 +547,10 @@ def oai():
 
         for recrd in recrds:
 
-            if (set in recrd.findall('./header/setSpec', ns) or set == 'x_000') and \
-                recrd.find('./header/setSpec', ns).text in colls:
+            sets_list = [setnode.text for setnode in recrd.findall('./header/setSpec', ns)]
+
+            if (set in sets_list or set == 'x_000') and \
+                len(set(sets_list).intersection(set(included_sets))) > 0:
 
                 if recrd.find('./header/datestamp', ns).text >= datefrom and \
                    recrd.find('./header/datestamp', ns).text <= dateuntil:
@@ -600,7 +602,7 @@ def oai():
             rquest.attrib = {'verb': 'GetRecord', 'identifier': identifier, 'metaDataPrefix': 'oai_dc'}
             rquest.text = dpurl
             getrecord = ET.SubElement(oaixml, 'GetRecord')
-            if root.find('./ListRecords/record/header/setSpec', ns).text in colls:
+            if root.find('./ListRecords/record/header/setSpec', ns).text in included_sets:
                 try:
                     record = root.find(f'.//identifier[.="{identifier}"]/../../.', ns)
                     getrecord.append(record)
