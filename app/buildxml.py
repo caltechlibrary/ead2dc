@@ -666,17 +666,19 @@ intertime = time.time()
 # {collid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
 connection = sq.connect(dbpath)
 db = connection.cursor()
-for collid, counts_dict in stats_dict.items():
-    for ao_count, do_counts_dict in counts_dict.items():
-        query = 'UPDATE collections SET aocount=? WHERE collid=?;'
-        db.execute(query, [ao_count, counts_dict['archival_objects']])
-        docount = 0
-        for hostcat, hostcatcount in do_counts_dict.items():
-            query = 'UPDATE collections SET '+hostcategory+'=? WHERE collid=?;'
-            db.execute(query, [hostcat, hostcatcount])
-            docount += hostcatcount
-        # update total docount
-        query = 'UPDATE collections SET '+docount+'=? WHERE collid=?;'
+
+for collid, values in stats_dict.items():
+    query = 'UPDATE collections SET aocount=? WHERE collid=?;'
+    db.execute(query, [values['archival_objects'], collid])
+
+    do_count = 0
+    for category, count in values['digital_objects'].items():
+        do_count += count
+        query = 'UPDATE collections SET '+category+'=? WHERE collid=?;'
+        db.execute(query, [count, collid])
+
+    query = 'UPDATE collections SET docount=? WHERE collid=?;'
+    db.execute(query, [do_count, collid])
 
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
 db.execute(query, [last_update, 'xml'])
