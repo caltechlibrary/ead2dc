@@ -547,7 +547,7 @@ def oai():
 
         for recrd in recrds:
 
-            if (set in recrd.findall('./header/setSpec', ns).text or set == 'x_000') and \
+            if (set in recrd.findall('./header/setSpec', ns) or set == 'x_000') and \
                 recrd.find('./header/setSpec', ns).text in colls:
 
                 if recrd.find('./header/datestamp', ns).text >= datefrom and \
