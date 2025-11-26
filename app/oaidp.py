@@ -437,7 +437,7 @@ def oai():
 
         # get resumptionToken from request and decode
         resumptionToken = request.args.get('resumptionToken').split(':')
-        set = resumptionToken[0]
+        set_request = resumptionToken[0]
         datefrom = resumptionToken[1]
         dateuntil = resumptionToken[2]
         startrec = int(resumptionToken[3])
