@@ -578,7 +578,7 @@ for ao, colls_dict in archival_objects_dict.items():
                     stats_dict[collid]['digital_objects'][hostcategory] = 1
 
             else:
-                stats_dict[collid]['digital_objects'][hostcategory] = 1}
+                stats_dict[collid]['digital_objects'][hostcategory] = 1
 
         # identifier element
         identifier = ET.SubElement(dc, 'dc:identifier')
