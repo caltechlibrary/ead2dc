@@ -55,7 +55,8 @@
     <th>YouTube</th>
     <th>Other</th>
 </tr>
-{% for coll in output[3] or g.user %}
+{% for coll in output[3] %}
+    {% if coll[8] or (g.user and g.auth)}
     <tr>
         <td align="center">
             {% if g.user and g.auth %}    
@@ -79,6 +80,7 @@
         <td align="right">{{ coll[6] }}</td>
         <td align="right">{{ coll[7] }}</td>
     </tr>
+    {% endif %}
 {% endfor %}
 <tr>
     <th align="right" colspan="4">Totals</th>
