@@ -558,11 +558,11 @@ for ao, colls_dict in archival_objects_dict.items():
             continue
 
         # categorize hostname
-        if hostname == 'resolver.caltech.edu' or hostname == 'digital.archives.caltech.edu' or hostname == 'californiarevealed.org':
+        if hostname in ['resolver.caltech.edu', 'digital.archives.caltech.edu', 'californiarevealed.org']:
             hostcategory = 'caltechlibrary'
         elif hostname == 'archive.org':
             hostcategory = 'internetarchive'
-        elif hostname == 'youtube.com' or hostname == 'youtu.be':
+        elif hostname in ['youtube.com', 'youtu.be', 'www.youtube.com', 'www.youtu.be']:
             hostcategory = 'youtube'
         else:
             hostcategory = 'other'

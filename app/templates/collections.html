@@ -55,7 +55,7 @@
     <th>YouTube</th>
     <th>Other</th>
 </tr>
-{% for coll in output[3] %}
+{% for coll in output[3] or g.user %}
     <tr>
         <td align="center">
             {% if g.user and g.auth %}    
