@@ -44,16 +44,16 @@
     <th rowspan="2">Record<br/>Type</th>
     <th rowspan="2">Record ID</th>
     <th rowspan="2">Title</th>
-    <th rowspan="2">Archival<br/>Objects</th>
-    <th rowspan="2">Digital<br/>Objects</th>
+    <th rowspan="2">Archival<br/>Objects</th> {% tot_aocount = 0 %}
+    <th rowspan="2">Digital<br/>Objects</th>  {% tot_docount = 0 %}
     <th rowspan="2">List<br/>Records</th>
     <th colspan="4">Host/Link domain</th>
 </tr>
 <tr>
-    <th>Caltech Library</th>
-    <th>Internet Archive</th>
-    <th>YouTube</th>
-    <th>Other</th>
+    <th>Caltech Library</th>                  {% tot_clibrary = 0 %}
+    <th>Internet Archive</th>                 {% tot_iarchive = 0 %}
+    <th>YouTube</th>                          {% tot_youtube = 0 %}
+    <th>Other</th>                            {% tot_other = 0 %}
 </tr>
 {% for coll in output[3] %}
     {% if coll[8] or (g.user and g.auth) %}
@@ -68,29 +68,29 @@
         <td>{{ coll[9] }}</td>
         <td><a href="{{ url }}{{ coll[9] }}s/{{ coll[0] }}">{{ coll[0] }}</a></td>
         <td><strong>{{ coll[1] }}</strong></td>
-        <td align="right">{{ coll[2] }}</td>
-        <td align="right">{{ coll[3] }}</td>
+        <td align="right">{{ coll[2] }}</td> {% tot_aocount += coll[2] %}
+        <td align="right">{{ coll[3] }}</td> {% tot_docount += coll[3] %}
         <td align="center">
             {% if (g.user and g.auth) or coll[8] %}
             <a href="oai?verb=ListRecords&set={{ coll[9] }}_{{ coll[0] }}"><i class="fas fa-solid fa-link"></i></a>
             {% endif %}
         </td>
-        <td align="right">{{ coll[4] }}</td>
-        <td align="right">{{ coll[5] }}</td>
-        <td align="right">{{ coll[6] }}</td>
-        <td align="right">{{ coll[7] }}</td>
+        <td align="right">{{ coll[4] }}</td> {% tot_clibrary += coll[4] %}
+        <td align="right">{{ coll[5] }}</td> {% tot_iarchive += coll[5] %}
+        <td align="right">{{ coll[6] }}</td> {% tot_youtube += coll[6] %}
+        <td align="right">{{ coll[7] }}</td> {% tot_other += coll[7] %}
     </tr>
     {% endif %}
 {% endfor %}
 <tr>
     <th align="right" colspan="4">Totals</th>
-    <th align="right">{{ totals['tot_aocount'] }}</th>
-    <th align="right">{{ totals['tot_docount'] }}</th>
+    <th align="right">{{ tot_aocount }}</th>
+    <th align="right">{{ tot_docount }}</th>
     <th></th>
-    <th align="right">{{ totals['tot_clibrary'] }}</th>
-    <th align="right">{{ totals['tot_iarchive'] }}</th>
-    <th align="right">{{ totals['tot_youtube'] }}</th>
-    <th align="right">{{ totals['tot_other'] }}</th>
+    <th align="right">{{ tot_clibrary }}</th>
+    <th align="right">{{ tot_iarchive }}</th>
+    <th align="right">{{ tot_youtube }}</th>
+    <th align="right">{{ tot_other }}</th>
 </tr>
 </table>
 </form>
