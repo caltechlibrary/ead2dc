@@ -552,9 +552,10 @@ def oai():
 
             # check 
             # - if record is in requested set, or no set specified (x_000)
-            # - and if record is in included (i.e. active) sets
+            # - and if record is in included (i.e. active) sets, or user is authenticated
             if (set_request in sets_list or set_request == 'x_000') \
-                and len(set(sets_list).intersection(set(included_sets))) > 0:
+                and (len(set(sets_list).intersection(set(included_sets))) > 0 \
+                    or g.user is not None):
 
                 # check if record is within date range requested
                 if recrd.find('./header/datestamp', ns).text >= datefrom and \
