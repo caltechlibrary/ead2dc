@@ -55,6 +55,16 @@
     <th>YouTube</th>                          {% set tot_youtube = 0 %}
     <th>Other</th>                            {% set tot_other = 0 %}
 </tr>
+
+{% set ns = namespace(
+    tot_aocount = 0,
+    tot_docount = 0,
+    tot_clibrary = 0,
+    tot_iarchive = 0,
+    tot_youtube = 0,
+    tot_other = 0
+    ) %}
+
 {% for coll in output[3] %}
     {% if coll[8] or (g.user and g.auth) %}
     <tr>
@@ -68,29 +78,29 @@
         <td>{{ coll[9] }}</td>
         <td><a href="{{ url }}{{ coll[9] }}s/{{ coll[0] }}">{{ coll[0] }}</a></td>
         <td><strong>{{ coll[1] }}</strong></td>
-        <td align="right">{{ coll[2] }}</td> {% set tot_aocount = tot_aocount + coll[2] %}
-        <td align="right">{{ coll[3] }}</td> {% set tot_docount = tot_docount + coll[3] %}
+        <td align="right">{{ coll[2] }}</td> {% set ns.tot_aocount = ns.tot_aocount + coll[2] %}
+        <td align="right">{{ coll[3] }}</td> {% set ns.tot_docount = ns.tot_docount + coll[3] %}
         <td align="center">
             {% if (g.user and g.auth) or coll[8] %}
             <a href="oai?verb=ListRecords&set={{ coll[9] }}_{{ coll[0] }}"><i class="fas fa-solid fa-link"></i></a>
             {% endif %}
         </td>
-        <td align="right">{{ coll[4] }}</td> {% set tot_clibrary = tot_clibrary + coll[4] %}
-        <td align="right">{{ coll[5] }}</td> {% set tot_iarchive = tot_iarchive + coll[5] %}
-        <td align="right">{{ coll[6] }}</td> {% set tot_youtube = tot_youtube + coll[6] %}
-        <td align="right">{{ coll[7] }}</td> {% set tot_other = tot_other + coll[7] %}
+        <td align="right">{{ coll[4] }}</td> {% set ns.tot_clibrary = ns.tot_clibrary + coll[4] %}
+        <td align="right">{{ coll[5] }}</td> {% set ns.tot_iarchive = ns.tot_iarchive + coll[5] %}
+        <td align="right">{{ coll[6] }}</td> {% set ns.tot_youtube = ns.tot_youtube + coll[6] %}
+        <td align="right">{{ coll[7] }}</td> {% set ns.tot_other = ns.tot_other + coll[7] %}
     </tr>
     {% endif %}
 {% endfor %}
 <tr>
     <th align="right" colspan="4">Totals</th>
-    <th align="right">{{ tot_aocount }}</th>
-    <th align="right">{{ tot_docount }}</th>
+    <th align="right">{{ ns.tot_aocount }}</th>
+    <th align="right">{{ ns.tot_docount }}</th>
     <th></th>
-    <th align="right">{{ tot_clibrary }}</th>
-    <th align="right">{{ tot_iarchive }}</th>
-    <th align="right">{{ tot_youtube }}</th>
-    <th align="right">{{ tot_other }}</th>
+    <th align="right">{{ ns.tot_clibrary }}</th>
+    <th align="right">{{ ns.tot_iarchive }}</th>
+    <th align="right">{{ ns.tot_youtube }}</th>
+    <th align="right">{{ ns.tot_other }}</th>
 </tr>
 </table>
 </form>
