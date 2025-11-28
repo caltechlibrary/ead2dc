@@ -44,6 +44,7 @@
     <th rowspan="2">Record<br/>Type</th>
     <th rowspan="2">Record ID</th>
     <th rowspan="2">Title</th>
+    <th colspan="2">Last edit</th>
     <th rowspan="2">Archival<br/>Objects</th>
     <th rowspan="2">Digital<br/>Objects</th>
     <th rowspan="2">List<br/>Records</th>
@@ -78,6 +79,7 @@
         <td>{{ coll[9] }}</td>
         <td><a href="{{ url }}{{ coll[9] }}s/{{ coll[0] }}">{{ coll[0] }}</a></td>
         <td><strong>{{ coll[1] }}</strong></td>
+        <td>{{ coll[10] }}</td>
         <td align="right">{{ coll[2] }}</td> {% set ns.tot_aocount = ns.tot_aocount + coll[2] %}
         <td align="right">{{ coll[3] }}</td> {% set ns.tot_docount = ns.tot_docount + coll[3] %}
         <td align="center">
@@ -93,7 +95,7 @@
     {% endif %}
 {% endfor %}
 <tr>
-    <th align="right" colspan="4">Totals</th>
+    <th align="right" colspan="5">Totals</th>
     <th align="right">{{ ns.tot_aocount }}</th>
     <th align="right">{{ ns.tot_docount }}</th>
     <th></th>

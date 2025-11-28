@@ -117,7 +117,8 @@ def collections():
                            dt_col=get_last_update('col'),
                            dt_xml=get_last_update('xml'),
                            url=pub_url+cbase,
-                           totals=totals)
+                           totals=totals
+                           last_edit=last_edit)
 
 # read/write collections data to db
 # display collections list
@@ -320,7 +321,7 @@ def get_total_counts():
 
 # read collections data for display
 def read_colls():
-    query = 'SELECT collno, colltitle, aocount, docount, caltechlibrary, internetarchive, youtube, other, incl, typ \
+    query = 'SELECT collno, colltitle, aocount, docount, caltechlibrary, internetarchive, youtube, other, incl, typ, last_edit \
              FROM collections \
              ORDER BY aocount DESC;'
     colls = get_db().execute(query).fetchall()
