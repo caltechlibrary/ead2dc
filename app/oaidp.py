@@ -117,8 +117,7 @@ def collections():
                            dt_col=get_last_update('col'),
                            dt_xml=get_last_update('xml'),
                            url=pub_url+cbase,
-                           totals=totals
-                           last_edit=last_edit)
+                           totals=totals)
 
 # read/write collections data to db
 # display collections list
