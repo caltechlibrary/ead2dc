@@ -627,8 +627,8 @@ for ao, colls_dict in archival_objects_dict.items():
     # dates
     dates = list()
     #obj = get_json(category, id)
-    for date in archival_object_metadata.get('dates', []):
-        dates.append(date.get('begin', ''))
+    for dt in archival_object_metadata.get('dates', []):
+        dates.append(dt.get('begin', ''))
 
     #print(ao[33:])
     #print(dates)
