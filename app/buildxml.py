@@ -634,8 +634,8 @@ for ao, colls_dict in archival_objects_dict.items():
     #print(dates)
     for d in dates:
         if d != '':
-            date = ET.SubElement(dc, 'dc:date')
-            date.text = d                
+            dt = ET.SubElement(dc, 'dc:date')
+            dt.text = d                
 
     # extents
     extents = list()
