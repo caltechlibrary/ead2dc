@@ -246,11 +246,16 @@ collections_dict, archival_objects_dict = build_collections_dict()
 # read included collections from db
 connection = sq.connect(dbpath)
 cursor = connection.cursor()
-query = 'SELECT collno,incl FROM collections'
+
+# retrieve earliest date stamp from previous build
+query = 'SELECT earliest FROM dates;'
+result = cursor.execute(query)
+earliestDatestamp = result.fetchone()[0]
 
 # retrieve included collections from db
 # return dictionary of collection numbers and inclusion status
 includedcollections = dict()
+query = 'SELECT collno,incl FROM collections;'
 for row in cursor.execute(query).fetchall():
     includedcollections[row[0]] = row[1]
 
@@ -356,7 +361,8 @@ protocolVersion = ET.SubElement(Identify, 'protocolVersion')
 protocolVersion.text = '2.0'
 adminEmail = ET.SubElement(Identify, 'adminEmail')
 adminEmail.text = 'archives@caltech.edu'
-earliestDatestamp = '2025-11-28'
+earliestDate = ET.SubElement(Identify, 'earliestDatestamp')
+earliestDate.text = earliestDatestamp
 deletedRecord = ET.SubElement(Identify, 'deletedRecord')
 deletedRecord.text = 'no'
 granularity = ET.SubElement(Identify, 'granularity')
@@ -403,9 +409,6 @@ ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
 intertime = time.time()
 
-# string form of today's date to write to each record (if needed)
-#today = date.today().strftime("%Y-%m-%d")
-
 # temp
 #devrecordcount = 0
 #devtest_textfile = Path(Path(__file__).resolve().parent).joinpath('../xml/devtest_textfile.csv')
@@ -430,9 +433,9 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit records for testing
-    #j += 1
-    #if j > 1000:
-    #    break
+    j += 1
+    if j > 3000:
+        break
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
@@ -704,9 +707,17 @@ for collid, values in stats_dict.items():
     query = 'UPDATE collections SET docount=? WHERE collid=?;'
     db.execute(query, [do_count, collid])
 
+# string form of today's date to write to each record
+today = date.today().strftime('%Y-%m-%d')
+
+earliestDatestamp = today
+query = 'UPDATE collections SET last_edit=? WHERE collid=?;'
 for collid, mod_date in coll_mdate_dict.items():
-    query = 'UPDATE collections SET last_edit =? WHERE collid=?;'
     db.execute(query, [mod_date, collid])
+    earliestDatestamp = min(earliestDatestamp, mod_date)
+
+query = 'UPDATE dates SET earliest = ?'
+db.execute(query, [earliestDatestamp])
 
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
 db.execute(query, [last_update, 'xml'])
