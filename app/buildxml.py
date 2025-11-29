@@ -447,7 +447,7 @@ for ao, colls_dict in archival_objects_dict.items():
     create_time = archival_object_metadata['create_time']
     system_mtime = archival_object_metadata['system_mtime']
     user_mtime = archival_object_metadata['user_mtime']
-    last_modified_date = min([create_time, system_mtime, user_mtime])[:10]
+    last_modified_date = max([create_time, system_mtime, user_mtime])[:10]
     
     # temp
     # limit to subset of collections for testing
