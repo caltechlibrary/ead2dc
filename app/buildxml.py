@@ -431,7 +431,7 @@ for ao, colls_dict in archival_objects_dict.items():
     # temp
     # limit records for testing
     j += 1
-    if j > 100:
+    if j > 1000:
         break
 
     # get archival object metadata
