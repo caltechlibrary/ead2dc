@@ -204,7 +204,7 @@ def create_valid_hostnames_set(file_uris):
     for host in host_exclude:
         hostnames.discard(host)
 
-    # remove direct targets is resolver.caltech.edu is present
+    # remove direct targets if resolver.caltech.edu is present
     if 'digital.archives.caltech.edu' in hostnames and 'resolver.caltech.edu' in hostnames:
         hostnames.discard('digital.archives.caltech.edu')
     if 'californiarevealed.org' in hostnames and 'resolver.caltech.edu' in hostnames:
@@ -466,10 +466,16 @@ for ao, colls_dict in archival_objects_dict.items():
     #recs_created = 0
     #recs_skipped = 0
 
+    # create list of associated digital objects
+    do_list = colls_dict['digital_objects']
+
+    # limit to those with http or https links
+    do_list = [do for do in do_list if urlparse(do.scheme) in ['http', 'https']]
+
+    # remove unpublished, thumbnails, redirects
+    file_uris = published_file_uris(do_list)
 
     # skip archival object if no published digital object file URIs
-    do_list = colls_dict['digital_objects']
-    file_uris = published_file_uris(do_list)
     if len(file_uris) == 0:
         continue
 
