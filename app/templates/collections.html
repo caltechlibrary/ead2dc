@@ -10,7 +10,7 @@
     Changes will be reflected in the table below, and in the results of Data Provider queries.
 </p>
 <p>
-    Both resource and accession records can be published through the Data Provider, with the following attributes:
+    Both resource and accession records with the following attributes can be published through the Data Provider:
 </p>
 <ul>
     <li>Archival objects (record) must be published and not suppressed</li>
@@ -18,8 +18,8 @@
     <li>The file versions must be published</li>
 </ul>
 <p>
-    The list of resources and accessions in the table below includes all those with <u>published suppressed digital records</u>.
-    The statistics represent numbers of unique <u>published</u> and <u>web-addressable</u> links.
+    The list of resources and accessions in the table below includes all those with <u>published digital records</u>.
+    The statistics represent numbers of unique <u>published</u> archival and digital objects.
     The following categories of digital content are omitted:
 </p>
 <ul>
@@ -32,7 +32,7 @@
     Examples of edits in ArchivesSpace that will change collection data and DP responses include:
 </p>
 <ul>
-    <li>Adding/removing digital content to/from collections</li>
+    <li>Adding/removing digital content in collections</li>
     <li>Changing publication or suppressed status of collections or digital objects</li>
     <li>Editing archival or digital object metadata</li>
 </ul>
@@ -43,13 +43,15 @@
     <li>Update OAI Data Provider: Check boxes to set active collections. Click the column header to update.</li>
     <li>Record type: The type of collection to which the digital objects belong.</li>
     <li>Record ID: The number that ArchivesSpace assigns to a resource or accession. 
-        Although these are unique within each category, the same number can be used in each category.</li>
+        Although these are unique within each category, the same number can be used in both categories.</li>
     <li>Title of resource or accession.</li>
-    <li>Last edit: The date of the most recently edited record in a collection.</li>
+    <li>Last edit: The date of the most recently edited record in a collection. 
+        A recent date may indicate that a collection needs to be reharvested.</li>
     <li>Archival objects: The number of published archival objects in a collection with related published digital objects.</li>
     <li>Digital objects: The number of published digital objects associated with those archival objects.</li>
     <li>List records: Links to the OAI List Records request for the collections.</li>
-    <li>Digital objects hosted by the Library, either directly or through the resolver.</li>
+    <li>Digital objects hosted by the Library, either directly or through the resolver. 
+        If there is both a direct link and a resolver link, the direct link is omitted from the record.</li>
     <li>Digital objects hosted by the Internet Archive.</li>
     <li>Digital objects hosted by YouTube.</li>
     <li>Other URLs.</li>
