@@ -235,9 +235,6 @@ start = time.time()
 print('Reading database location...')
 dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
 
-# string form of date to write to each record
-today = date.today().strftime("%Y-%m-%d")
-
 # authorize API
 print('Authorizing API...')
 client = authorize_api()
@@ -359,7 +356,7 @@ protocolVersion = ET.SubElement(Identify, 'protocolVersion')
 protocolVersion.text = '2.0'
 adminEmail = ET.SubElement(Identify, 'adminEmail')
 adminEmail.text = 'archives@caltech.edu'
-earliestDatestamp = '2025-01-01'
+earliestDatestamp = '2025-11-28'
 deletedRecord = ET.SubElement(Identify, 'deletedRecord')
 deletedRecord.text = 'no'
 granularity = ET.SubElement(Identify, 'granularity')
@@ -406,6 +403,9 @@ ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
 intertime = time.time()
 
+# string form of today's date to write to each record (if needed)
+#today = date.today().strftime("%Y-%m-%d")
+
 # temp
 #devrecordcount = 0
 #devtest_textfile = Path(Path(__file__).resolve().parent).joinpath('../xml/devtest_textfile.csv')
@@ -416,13 +416,39 @@ intertime = time.time()
 # {setid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
 stats_dict = dict()
 
+# initialize coll_mdate_dict to track most recently modified record by collection
+# {collid: 'mdate'}
+coll_mdate_dict = dict()
+
 # iterate over archival object dictionary
 # do = digital object, ao = archival object
 # archival_objects_dict = {ao: {'collections': [collids], 'digital_objects: [dos]}}        
+j = 0
 for ao, colls_dict in archival_objects_dict.items():
 
     print(ao, end='\r')
 
+    # temp
+    # limit records for testing
+    j += 1
+    if j > 100:
+        break
+
+    # get archival object metadata
+    uri = ao + "?resolve[]=ancestors" \
+            + "&resolve[]=digital_object" \
+            + "&resolve[]=linked_agents" \
+            + "&resolve[]=repository" \
+            + "&resolve[]=subjects" \
+            + "&resolve[]=top_container"
+    archival_object_metadata = client.get(uri).json()
+
+    # string form of date to write to each record
+    create_time = archival_object_metadata['create_time']
+    system_mtime = archival_object_metadata['system_mtime']
+    user_mtime = archival_object_metadata['user_mtime']
+    last_modified_date = min([create_time, system_mtime, user_mtime])[:10]
+    
     # temp
     # limit to subset of collections for testing
     #if len(set(colls_dict['collections']) & set(['/repositories/2/resources/30', '/repositories/2/resources/312'])) == 0:
@@ -471,10 +497,10 @@ for ao, colls_dict in archival_objects_dict.items():
     #identifier = ET.SubElement(header, 'identifier')
     #identifier.text = 'collections.archives.caltech.edu' + setid
     #identifier.attrib = {'type': 'collection'}
-
+    
     # datestamp element
     datestamp = ET.SubElement(header, 'datestamp')
-    datestamp.text = today
+    datestamp.text = last_modified_date
 
     # setSpec element
     for collid in colls_dict['collections']:
@@ -489,14 +515,12 @@ for ao, colls_dict in archival_objects_dict.items():
         else:
             stats_dict[collid] = {'archival_objects': 1, 'digital_objects': dict()}
 
-    # get archival object metadata
-    uri = ao + "?resolve[]=ancestors" \
-            + "&resolve[]=digital_object" \
-            + "&resolve[]=linked_agents" \
-            + "&resolve[]=repository" \
-            + "&resolve[]=subjects" \
-            + "&resolve[]=top_container"
-    archival_object_metadata = client.get(uri).json()
+        # track last modified date by collection
+        if coll_mdate_dict.get(collid):
+            if last_modified_date > coll_mdate_dict[collid]:
+                coll_mdate_dict[collid] = last_modified_date
+        else:
+            coll_mdate_dict[collid] = last_modified_date
 
     # create metadata element
     metadata = ET.SubElement(record, 'metadata')
@@ -679,6 +703,10 @@ for collid, values in stats_dict.items():
 
     query = 'UPDATE collections SET docount=? WHERE collid=?;'
     db.execute(query, [do_count, collid])
+
+for collid, mod_date in coll_mdate_dict.items():
+    query = 'UPDATE collections SET last_edit =? WHERE collid=?;'
+    db.execute(query, [mod_date, collid])
 
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
 db.execute(query, [last_update, 'xml'])
