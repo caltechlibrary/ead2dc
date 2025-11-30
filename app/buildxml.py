@@ -470,7 +470,7 @@ for ao, colls_dict in archival_objects_dict.items():
     do_list = colls_dict['digital_objects']
 
     # limit to those with http or https links
-    do_list = [do for do in do_list if urlparse(do.scheme) in ['http', 'https']]
+    do_list = [do for do in do_list if urlparse(do).scheme in ['http', 'https']]
 
     # remove unpublished, thumbnails, redirects
     file_uris = published_file_uris(do_list)
