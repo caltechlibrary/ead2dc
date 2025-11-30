@@ -321,7 +321,7 @@ for collection in collections_dict:
                            colltyp])                            # coll[11] = typ ('resource'|'accession')
     
     print('>', client.get(collection).json()['title'],
-          '(' + len(coll_aos) + ' archival objects; ' + len(coll_dos) +  ' digital objects' + ')')
+          '(' + str(len(coll_aos)) + ' archival objects; ' + str(len(coll_dos)) +  ' digital objects' + ')')
 
 # commit changes to db before reading
 connection.commit()
