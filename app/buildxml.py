@@ -276,7 +276,7 @@ query = 'INSERT INTO collections \
             (?,?,?,?,?,?,?,?,?,?,?,?);'
 
 # iterate over collections dictionary to insert collection records into db
-print ('Collection summary...')
+print ('Collections with digital objects...')
 for collection in collections_dict:
 
     # get collection info
@@ -320,8 +320,8 @@ for collection in collections_dict:
                            0,                                   # coll[10] = other (int) 
                            colltyp])                            # coll[11] = typ ('resource'|'accession')
     
-    print('>', collection, '(' + client.get(collection).json()['title'] + ')', 
-          len(coll_aos), 'archival objects;', len(coll_dos), 'digital objects')
+    print('>', client.get(collection).json()['title'],
+          '(' + len(coll_aos) + ' archival objects; ' + len(coll_dos) +  ' digital objects' + ')')
 
 # commit changes to db before reading
 connection.commit()
