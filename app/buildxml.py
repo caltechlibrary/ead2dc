@@ -469,11 +469,11 @@ for ao, colls_dict in archival_objects_dict.items():
     # create list of associated digital objects
     do_list = colls_dict['digital_objects']
 
-    # limit to those with http or https links
-    do_list = [do for do in do_list if urlparse(do).scheme in ['http', 'https']]
-
     # remove unpublished, thumbnails, redirects
     file_uris = published_file_uris(do_list)
+
+    # limit to those with http or https links
+    file_uris = [file_uri for file_uri in file_uris if urlparse(file_uri).scheme in ['http', 'https']]
 
     # skip archival object if no published digital object file URIs
     if len(file_uris) == 0:
