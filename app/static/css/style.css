@@ -61,7 +61,7 @@ tr:nth-child(odd) {
 
 .main {
     margin-right: 20px;
-    margin-left: 185px;
+    margin-left: 20px;
     /* Same width as the sidebar + left position in px */
     font-size: 14px;
     /* Increased text to enable scrolling */
