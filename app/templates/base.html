@@ -41,9 +41,9 @@
             {% if g.user %}
                 | <a href="{{ url_for('oaidp.reports') }}">Reports</a>
                 | <a href="{{ url_for('oaidp.records') }}">Records</a>
-                | <a href="{{ url_for('auth.logout') }}">Logout {{ g.user }}</a>
+                | <a href="{{ url_for('auth.logout') }}">{{ g.user }} logout</a>
             {% else %}
-                | <a href="{{ url_for('auth.login') }}">Login</a>
+                | <a href="{{ url_for('auth.login') }}">Staff login</a>
             {% endif %}
         </p>
 
