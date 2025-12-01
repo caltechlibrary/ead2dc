@@ -18,22 +18,7 @@
 </head>
 
 <body>
-<!--
-    <div class="sidenav">
-        <a href="{{ url_for('index') }}">Home</a>
-        <a href="{{ url_for('about') }}">About</a>
-        <a href="{{ url_for('oaidp.collections') }}">Collections</a>
-        {% if g.user %}
-            <a href="{{ url_for('oaidp.reports') }}">Reports</a>
-            <a href="{{ url_for('oaidp.records') }}">Records</a>
-            <a href="{{ url_for('auth.logout') }}">(logout {{ g.user }})</a>
-        {% else %}
-            <a href="{{ url_for('auth.login') }}">(login)</a>
-        {% endif %}
 
-    </div>
--->
-    
     <div class="main">
 
         <div class="heading">
@@ -42,31 +27,29 @@
 
             &nbsp;&nbsp;<a href="https://archives.caltech.edu">Archives</a>
             | <a href="https://digital.archives.caltech.edu">Digital Collections</a>
-            
-            <p>
-                  <a href="{{ url_for('index') }}">Home</a>
-                | <a href="{{ url_for('about') }}">About</a>
-                | <a href="{{ url_for('oaidp.collections') }}">Collections</a>
-                {% if g.user %}
-                    | <a href="{{ url_for('oaidp.reports') }}">Reports</a>
-                    | <a href="{{ url_for('oaidp.records') }}">Records</a>
-                    | <a href="{{ url_for('auth.logout') }}">Logout {{ g.user }}</a>
-                {% else %}
-                    | <a href="{{ url_for('auth.login') }}">Login</a>
-                {% endif %}
-            </p>
-
-        <h2>Data Provider</h2>
 
         </div>
 
-        {% block content %}{% endblock %}
+        <h2>Data Provider</h2>
+
+        <div class="heading">
 
         <p>
-        {% for message in get_flashed_messages() %}
-        {{ message }}
-        {% endfor %}
+              <a href="{{ url_for('index') }}">Home</a>
+            | <a href="{{ url_for('about') }}">About</a>
+            | <a href="{{ url_for('oaidp.collections') }}">Collections</a>
+            {% if g.user %}
+                | <a href="{{ url_for('oaidp.reports') }}">Reports</a>
+                | <a href="{{ url_for('oaidp.records') }}">Records</a>
+                | <a href="{{ url_for('auth.logout') }}">Logout {{ g.user }}</a>
+            {% else %}
+                | <a href="{{ url_for('auth.login') }}">Login</a>
+            {% endif %}
         </p>
+
+        </div>
+
+    {% block content %}{% endblock %}
 
     </div>
 
