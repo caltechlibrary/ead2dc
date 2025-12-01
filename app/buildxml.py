@@ -204,7 +204,7 @@ def create_valid_hostnames_set(file_uris):
     for host in host_exclude:
         hostnames.discard(host)
 
-    # remove direct targets is resolver.caltech.edu is present
+    # remove direct targets if resolver.caltech.edu is present
     if 'digital.archives.caltech.edu' in hostnames and 'resolver.caltech.edu' in hostnames:
         hostnames.discard('digital.archives.caltech.edu')
     if 'californiarevealed.org' in hostnames and 'resolver.caltech.edu' in hostnames:
@@ -235,9 +235,6 @@ start = time.time()
 print('Reading database location...')
 dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
 
-# string form of date to write to each record
-today = date.today().strftime("%Y-%m-%d")
-
 # authorize API
 print('Authorizing API...')
 client = authorize_api()
@@ -249,11 +246,16 @@ collections_dict, archival_objects_dict = build_collections_dict()
 # read included collections from db
 connection = sq.connect(dbpath)
 cursor = connection.cursor()
-query = 'SELECT collno,incl FROM collections'
+
+# retrieve earliest date stamp from previous build
+query = 'SELECT earliest FROM dates;'
+result = cursor.execute(query)
+earliestDatestamp = result.fetchone()[0]
 
 # retrieve included collections from db
 # return dictionary of collection numbers and inclusion status
 includedcollections = dict()
+query = 'SELECT collno,incl FROM collections;'
 for row in cursor.execute(query).fetchall():
     includedcollections[row[0]] = row[1]
 
@@ -274,7 +276,7 @@ query = 'INSERT INTO collections \
             (?,?,?,?,?,?,?,?,?,?,?,?);'
 
 # iterate over collections dictionary to insert collection records into db
-print ('Collection summary...')
+print ('Collections with digital objects...')
 for collection in collections_dict:
 
     # get collection info
@@ -318,8 +320,8 @@ for collection in collections_dict:
                            0,                                   # coll[10] = other (int) 
                            colltyp])                            # coll[11] = typ ('resource'|'accession')
     
-    print('>', collection, '(' + client.get(collection).json()['title'] + ')', 
-          len(coll_aos), 'archival objects;', len(coll_dos), 'digital objects')
+    print('>', client.get(collection).json()['title'],
+          '(' + str(len(coll_aos)) + ' archival objects; ' + str(len(coll_dos)) +  ' digital objects' + ')')
 
 # commit changes to db before reading
 connection.commit()
@@ -359,7 +361,8 @@ protocolVersion = ET.SubElement(Identify, 'protocolVersion')
 protocolVersion.text = '2.0'
 adminEmail = ET.SubElement(Identify, 'adminEmail')
 adminEmail.text = 'archives@caltech.edu'
-earliestDatestamp = '2025-01-01'
+earliestDate = ET.SubElement(Identify, 'earliestDatestamp')
+earliestDate.text = earliestDatestamp
 deletedRecord = ET.SubElement(Identify, 'deletedRecord')
 deletedRecord.text = 'no'
 granularity = ET.SubElement(Identify, 'granularity')
@@ -416,13 +419,39 @@ intertime = time.time()
 # {setid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
 stats_dict = dict()
 
+# initialize coll_mdate_dict to track most recently modified record by collection
+# {collid: 'mdate'}
+coll_mdate_dict = dict()
+
 # iterate over archival object dictionary
 # do = digital object, ao = archival object
 # archival_objects_dict = {ao: {'collections': [collids], 'digital_objects: [dos]}}        
+j = 0
 for ao, colls_dict in archival_objects_dict.items():
 
     print(ao, end='\r')
 
+    # temp
+    # limit records for testing
+    #j += 1
+    #if j > 3000:
+    #    break
+
+    # get archival object metadata
+    uri = ao + "?resolve[]=ancestors" \
+            + "&resolve[]=digital_object" \
+            + "&resolve[]=linked_agents" \
+            + "&resolve[]=repository" \
+            + "&resolve[]=subjects" \
+            + "&resolve[]=top_container"
+    archival_object_metadata = client.get(uri).json()
+
+    # string form of date to write to each record
+    create_time = archival_object_metadata['create_time']
+    system_mtime = archival_object_metadata['system_mtime']
+    user_mtime = archival_object_metadata['user_mtime']
+    last_modified_date = max([create_time, system_mtime, user_mtime])[:10]
+    
     # temp
     # limit to subset of collections for testing
     #if len(set(colls_dict['collections']) & set(['/repositories/2/resources/30', '/repositories/2/resources/312'])) == 0:
@@ -437,10 +466,16 @@ for ao, colls_dict in archival_objects_dict.items():
     #recs_created = 0
     #recs_skipped = 0
 
+    # create list of associated digital objects
+    do_list = colls_dict['digital_objects']
+
+    # remove unpublished, thumbnails, redirects
+    file_uris = published_file_uris(do_list)
+
+    # limit to those with http or https links
+    file_uris = [file_uri for file_uri in file_uris if urlparse(file_uri).scheme in ['http', 'https']]
 
     # skip archival object if no published digital object file URIs
-    do_list = colls_dict['digital_objects']
-    file_uris = published_file_uris(do_list)
     if len(file_uris) == 0:
         continue
 
@@ -471,10 +506,10 @@ for ao, colls_dict in archival_objects_dict.items():
     #identifier = ET.SubElement(header, 'identifier')
     #identifier.text = 'collections.archives.caltech.edu' + setid
     #identifier.attrib = {'type': 'collection'}
-
+    
     # datestamp element
     datestamp = ET.SubElement(header, 'datestamp')
-    datestamp.text = today
+    datestamp.text = last_modified_date
 
     # setSpec element
     for collid in colls_dict['collections']:
@@ -489,14 +524,12 @@ for ao, colls_dict in archival_objects_dict.items():
         else:
             stats_dict[collid] = {'archival_objects': 1, 'digital_objects': dict()}
 
-    # get archival object metadata
-    uri = ao + "?resolve[]=ancestors" \
-            + "&resolve[]=digital_object" \
-            + "&resolve[]=linked_agents" \
-            + "&resolve[]=repository" \
-            + "&resolve[]=subjects" \
-            + "&resolve[]=top_container"
-    archival_object_metadata = client.get(uri).json()
+        # track last modified date by collection
+        if coll_mdate_dict.get(collid):
+            if last_modified_date > coll_mdate_dict[collid]:
+                coll_mdate_dict[collid] = last_modified_date
+        else:
+            coll_mdate_dict[collid] = last_modified_date
 
     # create metadata element
     metadata = ET.SubElement(record, 'metadata')
@@ -558,11 +591,11 @@ for ao, colls_dict in archival_objects_dict.items():
             continue
 
         # categorize hostname
-        if hostname == 'resolver.caltech.edu' or hostname == 'digital.archives.caltech.edu' or hostname == 'californiarevealed.org':
+        if hostname in ['resolver.caltech.edu', 'digital.archives.caltech.edu', 'californiarevealed.org']:
             hostcategory = 'caltechlibrary'
         elif hostname == 'archive.org':
             hostcategory = 'internetarchive'
-        elif hostname == 'youtube.com' or hostname == 'youtu.be':
+        elif hostname in ['youtube.com', 'youtu.be', 'www.youtube.com', 'www.youtu.be']:
             hostcategory = 'youtube'
         else:
             hostcategory = 'other'
@@ -600,15 +633,15 @@ for ao, colls_dict in archival_objects_dict.items():
     # dates
     dates = list()
     #obj = get_json(category, id)
-    for date in archival_object_metadata.get('dates', []):
-        dates.append(date.get('begin', ''))
+    for dt in archival_object_metadata.get('dates', []):
+        dates.append(dt.get('begin', ''))
 
     #print(ao[33:])
     #print(dates)
     for d in dates:
         if d != '':
-            date = ET.SubElement(dc, 'dc:date')
-            date.text = d                
+            dt = ET.SubElement(dc, 'dc:date')
+            dt.text = d                
 
     # extents
     extents = list()
@@ -679,6 +712,18 @@ for collid, values in stats_dict.items():
 
     query = 'UPDATE collections SET docount=? WHERE collid=?;'
     db.execute(query, [do_count, collid])
+
+# string form of today's date to write to each record
+today = date.today().strftime('%Y-%m-%d')
+
+earliestDatestamp = today
+query = 'UPDATE collections SET last_edit=? WHERE collid=?;'
+for collid, mod_date in coll_mdate_dict.items():
+    db.execute(query, [mod_date, collid])
+    earliestDatestamp = min(earliestDatestamp, mod_date)
+
+query = 'UPDATE dates SET earliest = ?'
+db.execute(query, [earliestDatestamp])
 
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
 db.execute(query, [last_update, 'xml'])

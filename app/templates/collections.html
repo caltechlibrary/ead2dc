@@ -6,17 +6,56 @@
 
 {% if g.user and g.auth %}
 <p>
-    Data is updated nightly from ArchivesSpace at 3am. 
+    Data is updated nightly from ArchivesSpace at 1am. 
     Changes will be reflected in the table below, and in the results of Data Provider queries.
+</p>
+<p>
+    Both resource and accession records with the following attributes can be published through the Data Provider:
+</p>
+<ul>
+    <li>Archival objects (record) must be published and not suppressed</li>
+    <li>Digital objects (record) must be published and not suppressed</li>
+    <li>The file versions must be published</li>
+</ul>
+<p>
+    The list of resources and accessions in the table below includes all those with <u>published digital records</u>.
+    The statistics represent numbers of unique <u>published</u> archival and digital objects.
+    The following categories of digital content are omitted:
+</p>
+<ul>
+    <li>Thumbnails, redirects, and links that duplicate links to the Library resolver. (Resolver links are preferred.)</li>
+    <li>Unpublished file versions.</li>
+    <li>Links that are not public URLs, such as Google Drive, local drives, SAN addresses, etc.</li>
+</ul>
 </p>
 <p>
     Examples of edits in ArchivesSpace that will change collection data and DP responses include:
 </p>
 <ul>
-    <li>Adding/removing digital content to/from collections</li>
+    <li>Adding/removing digital content in collections</li>
     <li>Changing publication or suppressed status of collections or digital objects</li>
     <li>Editing archival or digital object metadata</li>
 </ul>
+<p>
+    Key to the table columns:
+</p>
+<ol>
+    <li>Update OAI Data Provider: Check boxes to set active collections. Click the column header to update.</li>
+    <li>Record type: The type of collection to which the digital objects belong.</li>
+    <li>Record ID: The number that ArchivesSpace assigns to a resource or accession. 
+        Although these are unique within each category, the same number can be used in both categories.</li>
+    <li>Title of resource or accession.</li>
+    <li>Last edit: The date of the most recently edited record in a collection. 
+        A recent date may indicate that a collection needs to be reharvested.</li>
+    <li>Archival objects: The number of published archival objects in a collection with related published digital objects.</li>
+    <li>Digital objects: The number of published digital objects associated with those archival objects.</li>
+    <li>List records: Links to the OAI List Records request for the collections.</li>
+    <li>Digital objects hosted by the Library, either directly or through the resolver. 
+        If there is both a direct link and a resolver link, the direct link is omitted from the record.</li>
+    <li>Digital objects hosted by the Internet Archive.</li>
+    <li>Digital objects hosted by YouTube.</li>
+    <li>Other URLs.</li>
+</ol>
 {% endif %}
 
 <table>
@@ -30,8 +69,6 @@
 
 <br/>
 
-<!--<p>Refresh data from ArchivesSpace? This takes a few minutes. Either <a href="{{ url_for('oaidp.collections2') }}">continue refresh</a>, or choose another option.</p>-->
-
 {% if g.user and g.auth %}<form action="{{ url_for('oaidp.collections3') }}" method="POST">{% endif %}
 <table>
 <tr>
@@ -44,6 +81,7 @@
     <th rowspan="2">Record<br/>Type</th>
     <th rowspan="2">Record ID</th>
     <th rowspan="2">Title</th>
+    <th rowspan="2">Last edit</th>
     <th rowspan="2">Archival<br/>Objects</th>
     <th rowspan="2">Digital<br/>Objects</th>
     <th rowspan="2">List<br/>Records</th>
@@ -55,7 +93,18 @@
     <th>YouTube</th>
     <th>Other</th>
 </tr>
+
+{% set ns = namespace(
+    tot_aocount = 0,
+    tot_docount = 0,
+    tot_clibrary = 0,
+    tot_iarchive = 0,
+    tot_youtube = 0,
+    tot_other = 0
+    ) %}
+
 {% for coll in output[3] %}
+    {% if coll[8] or (g.user and g.auth) %}
     <tr>
         <td align="center">
             {% if g.user and g.auth %}    
@@ -67,24 +116,30 @@
         <td>{{ coll[9] }}</td>
         <td><a href="{{ url }}{{ coll[9] }}s/{{ coll[0] }}">{{ coll[0] }}</a></td>
         <td><strong>{{ coll[1] }}</strong></td>
-        <td align="right">{{ coll[2] }}</td>
-        <td align="right">{{ coll[3] }}</td>
-        <td align="center">{% if coll[8] %}<a href="oai?verb=ListRecords&set={{ coll[9] }}_{{ coll[0] }}"><i class="fas fa-solid fa-link"></i></a>{% endif %}</td>
-        <td align="right">{{ coll[4] }}</td>
-        <td align="right">{{ coll[5] }}</td>
-        <td align="right">{{ coll[6] }}</td>
-        <td align="right">{{ coll[7] }}</td>
+        <td>{{ coll[10] }}</td>
+        <td align="right">{{ coll[2] }}</td> {% set ns.tot_aocount = ns.tot_aocount + coll[2] %}
+        <td align="right">{{ coll[3] }}</td> {% set ns.tot_docount = ns.tot_docount + coll[3] %}
+        <td align="center">
+            {% if (g.user and g.auth) or coll[8] %}
+            <a href="oai?verb=ListRecords&set={{ coll[9] }}_{{ coll[0] }}"><i class="fas fa-solid fa-link"></i></a>
+            {% endif %}
+        </td>
+        <td align="right">{{ coll[4] }}</td> {% set ns.tot_clibrary = ns.tot_clibrary + coll[4] %}
+        <td align="right">{{ coll[5] }}</td> {% set ns.tot_iarchive = ns.tot_iarchive + coll[5] %}
+        <td align="right">{{ coll[6] }}</td> {% set ns.tot_youtube = ns.tot_youtube + coll[6] %}
+        <td align="right">{{ coll[7] }}</td> {% set ns.tot_other = ns.tot_other + coll[7] %}
     </tr>
+    {% endif %}
 {% endfor %}
 <tr>
-    <th align="right" colspan="4">Totals</th>
-    <th align="right">{{ totals['tot_aocount'] }}</th>
-    <th align="right">{{ totals['tot_docount'] }}</th>
+    <th align="right" colspan="5">Totals</th>
+    <th align="right">{{ ns.tot_aocount }}</th>
+    <th align="right">{{ ns.tot_docount }}</th>
     <th></th>
-    <th align="right">{{ totals['tot_clibrary'] }}</th>
-    <th align="right">{{ totals['tot_iarchive'] }}</th>
-    <th align="right">{{ totals['tot_youtube'] }}</th>
-    <th align="right">{{ totals['tot_other'] }}</th>
+    <th align="right">{{ ns.tot_clibrary }}</th>
+    <th align="right">{{ ns.tot_iarchive }}</th>
+    <th align="right">{{ ns.tot_youtube }}</th>
+    <th align="right">{{ ns.tot_other }}</th>
 </tr>
 </table>
 </form>

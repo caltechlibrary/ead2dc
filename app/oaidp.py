@@ -320,14 +320,14 @@ def get_total_counts():
 
 # read collections data for display
 def read_colls():
-    query = 'SELECT collno, colltitle, aocount, docount, caltechlibrary, internetarchive, youtube, other, incl, typ \
+    query = 'SELECT collno, colltitle, aocount, docount, caltechlibrary, internetarchive, youtube, other, incl, typ, last_edit \
              FROM collections \
              ORDER BY aocount DESC;'
     colls = get_db().execute(query).fetchall()
     # archival object total
-    n0 = sum(k for (_,_,k,_,_,_,_,_,_,_) in colls)
+    n0 = sum(k for (_,_,k,_,_,_,_,_,_,_,_) in colls)
     # digital object total
-    n = sum(k for (_,_,_,k,_,_,_,_,_,_) in colls)
+    n = sum(k for (_,_,_,k,_,_,_,_,_,_,_) in colls)
     return (n0, n, len(colls), colls)
 
 # query db and update collections json file for list of ids
@@ -552,9 +552,10 @@ def oai():
 
             # check 
             # - if record is in requested set, or no set specified (x_000)
-            # - and if record is in included (i.e. active) sets
+            # - and if record is in included (i.e. active) sets, or user is authenticated
             if (set_request in sets_list or set_request == 'x_000') \
-                and len(set(sets_list).intersection(set(included_sets))) > 0:
+                    and (len(set(sets_list).intersection(set(included_sets))) > 0 \
+                or g.user):
 
                 # check if record is within date range requested
                 if recrd.find('./header/datestamp', ns).text >= datefrom and \
