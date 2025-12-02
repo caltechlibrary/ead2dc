@@ -2,9 +2,17 @@
 
 {% block content %}
 
-<p>This site provides information about, and configuration for the Caltech Archives Open Archives Initiative (OAI) Data
-    Provider (DP).
-    Access to the configuration section requires an Archives staff login.</p>
+<h3>Introduction</h3>
+
+<p>The Data Provider (DP) allows external services to harvest metadata for digital collections hosted by Caltech Archives.
+    The DP adheres to the <a href='https://www.openarchives.org/pmh/'>Open Archives Initiative Protocol for Metadata Harvesting</a> (OAI-PMH)
+    and supports all the verbs (Identify, ListMetadataFormats, ListSets, ListIdentifiers, ListRecords, and GetRecord), resumption tokens, and sets. 
+    Only DC metadata is provided. Sets correspond to the archival collections in the Caltech Archives.</p>
+    
+<p>Data is delivered from a static XML repository that is updated from ArchivesSpace daily, at 1am Pacific time.
+    Only collections and records with digital content accessible on the web are included.</p>
+
+<p>Access to the configuration section requires an Archives staff login.</p>
 
 <p>The DP supports the six OAI verbs and their arguments, with a few exceptions, as described below.
     The service is freely available. Any questions about this service should be directed to <a
@@ -99,6 +107,14 @@
     </li>
 </ul>
 
+<p>Source code is available on GitHub <a href="https://github.com/caltechlibrary/ead2dc"><img width="20" height="20"
+            src="{{ url_for('static', filename='images/github.svg') }}"></a></p>
 
+<p><strong>For more information visit:</strong></p>
+
+<ul>
+    <li><a href="https://www.openarchives.org/OAI/openarchivesprotocol.html">OAI-PMH specifications</a> <i class="fa-solid fa-arrow-up-right-from-square"></i></li>
+    <li><a href="https://archives.caltech.edu">Caltech Archives website</a> <i class="fa-solid fa-arrow-up-right-from-square"></i></li>
+</ul>
 
 {% endblock %}

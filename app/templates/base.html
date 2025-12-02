@@ -37,7 +37,6 @@
         <p>
               <a href="{{ url_for('index') }}">Home</a>
             | <a href="{{ url_for('oaidp.collections') }}">Collections</a>
-            | <a href="{{ url_for('about') }}">About</a>
             {% if g.user %}
                 | <a href="{{ url_for('oaidp.reports') }}">Reports</a>
                 | <a href="{{ url_for('oaidp.records') }}">Records</a>
