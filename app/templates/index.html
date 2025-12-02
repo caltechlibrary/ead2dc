@@ -4,10 +4,13 @@
 
 <h3>Introduction</h3>
 
-<p>The Data Provider (DP) allows external services to harvest metadata for digital collections hosted by Caltech Archives.
+<p>This Data Provider allows external services to harvest metadata for digital collections hosted by Caltech Archives.
     The DP adheres to the <a href='https://www.openarchives.org/pmh/'>Open Archives Initiative Protocol for Metadata Harvesting</a> (OAI-PMH)
-    and supports all the verbs (Identify, ListMetadataFormats, ListSets, ListIdentifiers, ListRecords, and GetRecord), resumption tokens, and sets. 
-    Only DC metadata is provided. Sets correspond to the archival collections in the Caltech Archives.</p>
+    and supports all the verbs (Identify, ListMetadataFormats, ListSets, ListIdentifiers, ListRecords, and GetRecord), resumption tokens, and sets.</p> 
+    
+<p>Only Dublin Core metadata is available at the current time.</p>
+
+<p>Sets correspond to the archival collections in the Caltech Archives.</p>
     
 <p>Data is delivered from a static XML repository that is updated from ArchivesSpace daily, at 1am Pacific time.
     Only collections and records with digital content accessible on the web are included.</p>
@@ -87,12 +90,15 @@
     </li>
 </ul>
 
-<p><strong>Notes:</strong></p>
+<h3>Additional notes</h3>
 
 <ul>
     <li><strong>Metadata</strong>
         <ul>
-            <li>Dublin Core is the only metadata standard supported at this time.</li>
+            <li>Dublin Core is the only metadata standard supported at this time. 
+                Additional metadata formats may be added in the future as the need arises.
+                Comments, advice and corrections about the metadata are welcome.
+            </li>
         </ul>
     </li>
     <li><strong>Flow control</strong>
