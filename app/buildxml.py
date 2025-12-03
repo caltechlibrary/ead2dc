@@ -437,12 +437,12 @@ coll_mdate_dict = dict()
 j = 0
 for ao, colls_dict in archival_objects_dict.items():
 
-    print(ao, end='\r')
+    #print(ao, end='\r')
 
     # temp
     # limit records for testing
     j += 1
-    if j > 100:
+    if j > 10:
         break
 
     # get archival object metadata
