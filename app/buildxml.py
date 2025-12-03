@@ -485,6 +485,8 @@ for ao, colls_dict in archival_objects_dict.items():
     # limit to those with http or https links
     file_uris = [file_uri for file_uri in file_uris if urlparse(file_uri[0]).scheme in ['http', 'https']]
 
+    print(file_uris)
+
     # skip archival object if no published digital object file URIs
     if len(file_uris) == 0:
         continue
