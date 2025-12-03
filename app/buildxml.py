@@ -183,7 +183,7 @@ def published_file_uris(do_list):
         for file_version in client.get(do).json()['file_versions']:
             if file_version.get('use_statement') not in use_exclude \
                     and file_version.get('publish', False):
-                file_uris.add((file_version['file_uri'], file_version['use_statement']))
+                file_uris.add((file_version['file_uri'], file_version.get('use_statement')))
 
     return file_uris                    
 
