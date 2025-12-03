@@ -175,16 +175,15 @@ def published_file_uris(do_list):
     file_uris = set()
 
     # use_statements to exclude
-    # 'image-thumbnail' - thumbnails not full images
     # 'URL-Redirected' - redirected URLs not direct links
-    use_exclude = ['image-thumbnail', 'URL-Redirected']
+    use_exclude = ['URL-Redirected']
 
     # iterate over digital objects linked to archival object
     for do in do_list:
         for file_version in client.get(do).json()['file_versions']:
             if file_version.get('use_statement') not in use_exclude \
                     and file_version.get('publish', False):
-                file_uris.add(file_version['file_uri'])
+                file_uris.add((file_version['file_uri'], file_version['use_statement']))
 
     return file_uris                    
 
@@ -198,7 +197,7 @@ def create_valid_hostnames_set(file_uris):
     # www.github.com - ditto
     host_exclude = ['github.com', 'www.github.com']
     
-    hostnames = {urlparse(file_uri).netloc for file_uri in file_uris}
+    hostnames = {urlparse(file_uri).netloc for file_uri[0] in file_uris}
 
     # remove excluded
     for host in host_exclude:
@@ -433,9 +432,9 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit records for testing
-    #j += 1
-    #if j > 3000:
-    #    break
+    j += 1
+    if j > 1500:
+        break
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
@@ -473,7 +472,7 @@ for ao, colls_dict in archival_objects_dict.items():
     file_uris = published_file_uris(do_list)
 
     # limit to those with http or https links
-    file_uris = [file_uri for file_uri in file_uris if urlparse(file_uri).scheme in ['http', 'https']]
+    file_uris = [file_uri for file_uri in file_uris if urlparse(file_uri[0]).scheme in ['http', 'https']]
 
     # skip archival object if no published digital object file URIs
     if len(file_uris) == 0:
@@ -586,7 +585,7 @@ for ao, colls_dict in archival_objects_dict.items():
     for file_uri in file_uris: 
 
         # skip urls not in hostnames set
-        hostname = urlparse(file_uri).netloc
+        hostname = urlparse(file_uri[0]).netloc
         if hostname not in hostnames:
             continue
 
@@ -616,10 +615,11 @@ for ao, colls_dict in archival_objects_dict.items():
                 stats_dict[collid]['digital_objects'][hostcategory] = 1
 
         # identifier element
-        identifier = ET.SubElement(dc, 'dc:identifier')
-        identifier.text = file_uri
-        identifier.attrib = {'scheme': 'URI', 'type': 'resource'}
-        uri_test = True
+        for file_uri in file_uris:
+            identifier = ET.SubElement(dc, 'dc:identifier')
+            identifier.text = file_uri[0]
+            identifier.attrib = {'scheme': 'URI', 'type': file_uri[1] if file_uri[1] else 'unknown'}
+            uri_test = True
     
     if not uri_test:
         print('> warning: no file URIs for archival object:', ao)
