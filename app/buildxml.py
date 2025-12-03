@@ -615,11 +615,10 @@ for ao, colls_dict in archival_objects_dict.items():
                 stats_dict[collid]['digital_objects'][hostcategory] = 1
 
         # identifier element
-        for file_uri in file_uris:
-            identifier = ET.SubElement(dc, 'dc:identifier')
-            identifier.text = file_uri[0]
-            identifier.attrib = {'scheme': 'URI', 'type': file_uri[1] if file_uri[1] else 'unknown'}
-            uri_test = True
+        identifier = ET.SubElement(dc, 'dc:identifier')
+        identifier.text = file_uri[0]
+        identifier.attrib = {'scheme': 'URI', 'type': file_uri[1] if file_uri[1] else 'unknown'}
+        uri_test = True
     
     if not uri_test:
         print('> warning: no file URIs for archival object:', ao)
