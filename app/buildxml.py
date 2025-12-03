@@ -184,13 +184,13 @@ def published_file_uris(do_list):
         obj = client.get(do).json()
 
         for file_version in obj['file_versions']:
-            print('file version:', file_version)
+            print('file version:', file_version, '\n')
             #if file_version.get('use_statement', 'Web-Access') not in use_exclude and file_version.get('publish'):
             file_uris.add((file_version['file_uri'], file_version.get('use_statement', 'not specified')))
                 
         if obj.get('representative_file_version'):
             rfv = obj['representative_file_version']
-            print('representative file version:', rfv['file_uri'])
+            print('representative file version:', rfv['file_uri'], '\n')
             #if rfv.get('use_statement', 'Web-Access') not in use_exclude and rfv.get('publish'):
             file_uris.add((rfv['file_uri'], rfv.get('use_statement', 'not specified')))
 
