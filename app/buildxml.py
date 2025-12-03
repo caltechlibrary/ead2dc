@@ -180,11 +180,14 @@ def published_file_uris(do_list):
 
     # iterate over digital objects linked to archival object
     for do in do_list:
-        for file_version in client.get(do).json()['file_versions']:
-            if file_version.get('use_statement') not in use_exclude \
-                    and file_version.get('publish', False):
-                file_uris.add((file_version['file_uri'], file_version.get('use_statement')))
 
+        for fvs in ['file_versions', 'representative_file_version']:
+
+            for file_version in client.get(do).json()[fvs]:
+                if file_version.get('use_statement') not in use_exclude \
+                        and file_version.get('publish', False):
+                    file_uris.add((file_version['file_uri'], file_version.get('use_statement')))
+                
     return file_uris                    
 
 
@@ -432,9 +435,9 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit records for testing
-    #j += 1
-    #if j > 1500:
-    #    break
+    j += 1
+    if j > 1500:
+        break
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
@@ -468,7 +471,7 @@ for ao, colls_dict in archival_objects_dict.items():
     # create list of associated digital objects
     do_list = colls_dict['digital_objects']
 
-    # remove unpublished, thumbnails, redirects
+    # remove unpublished, redirects
     file_uris = published_file_uris(do_list)
 
     # limit to those with http or https links
