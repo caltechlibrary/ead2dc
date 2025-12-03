@@ -163,6 +163,8 @@ def build_collections_dict():
 
     print('Done building archival objects dictionary...')
 
+    print(archival_objects_dict['/repositories/2/archival_objects/104134'])
+
  
     return collections_dict, archival_objects_dict
 
@@ -439,9 +441,9 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit records for testing
-    #j += 1
-    #if j > 1500:
-    #    break
+    j += 1
+    if j > 1500:
+        break
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
