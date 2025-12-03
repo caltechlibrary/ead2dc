@@ -210,7 +210,7 @@ def published_file_uris(do_list):
             if rfv.get('use_statement') not in use_exclude and rfv.get('publish'):
                 file_uris.add((rfv['file_uri'], rfv.get('use_statement', 'not specified')))
 
-    return deduplicate_file_uris(file_uris)                    
+    return file_uris                    
 
 
 #-----------------------------------------------------------------------#
