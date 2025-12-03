@@ -184,13 +184,13 @@ def published_file_uris(do_list):
         obj = client.get(do).json()
 
         for file_version in obj['file_versions']:
-            if file_version.get('use_statement', 'Web-Access') not in use_exclude and file_version.get('publish'):
-                file_uris.add((file_version['file_uri'], file_version.get('use_statement', 'Web-Access')))
+            #if file_version.get('use_statement', 'Web-Access') not in use_exclude and file_version.get('publish'):
+            file_uris.add((file_version['file_uri'], file_version.get('use_statement', 'Web-Access')))
                 
         if obj.get('representative_file_version'):
             rfv = obj['representative_file_version']
-            if rfv.get('use_statement', 'Web-Access') not in use_exclude and rfv.get('publish'):
-                file_uris.add((rfv['file_uri'], rfv.get('use_statement')))
+            #if rfv.get('use_statement', 'Web-Access') not in use_exclude and rfv.get('publish'):
+            file_uris.add((rfv['file_uri'], rfv.get('use_statement')))
 
     return file_uris                    
 
@@ -439,9 +439,9 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit records for testing
-    #j += 1
-    #if j > 1500:
-    #    break
+    j += 1
+    if j > 1500:
+        break
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
