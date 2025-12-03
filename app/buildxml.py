@@ -494,6 +494,8 @@ for ao, colls_dict in archival_objects_dict.items():
     # create hostnames set
     hostnames = create_valid_hostnames_set(file_uris)
 
+    print('hostnames:', hostnames)
+
     # update archival object record count
     #if dao_dict[setid].get('aocount'):
     #    dao_dict[setid]['aocount'] += 1
