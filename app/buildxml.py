@@ -163,9 +163,7 @@ def build_collections_dict():
 
     print('Done building archival objects dictionary...')
 
-    print(archival_objects_dict['/repositories/2/archival_objects/104134'])
 
- 
     return collections_dict, archival_objects_dict
 
 
@@ -187,12 +185,12 @@ def published_file_uris(do_list):
 
         for file_version in obj['file_versions']:
             #if file_version.get('use_statement', 'Web-Access') not in use_exclude and file_version.get('publish'):
-            file_uris.add((file_version['file_uri'], file_version.get('use_statement', 'Web-Access')))
+            file_uris.add((file_version['file_uri'], file_version.get('use_statement', 'not specified')))
                 
         if obj.get('representative_file_version'):
             rfv = obj['representative_file_version']
             #if rfv.get('use_statement', 'Web-Access') not in use_exclude and rfv.get('publish'):
-            file_uris.add((rfv['file_uri'], rfv.get('use_statement')))
+            file_uris.add((rfv['file_uri'], rfv.get('use_statement', 'not specified')))
 
     return file_uris                    
 
@@ -442,7 +440,7 @@ for ao, colls_dict in archival_objects_dict.items():
     # temp
     # limit records for testing
     j += 1
-    if j > 1500:
+    if j > 100:
         break
 
     # get archival object metadata
