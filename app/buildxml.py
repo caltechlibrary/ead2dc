@@ -184,17 +184,13 @@ def published_file_uris(do_list):
         obj = client.get(do).json()
 
         for file_version in obj['file_versions']:
-            print('file version:', file_version['file_uri'], '\n')
-            #if file_version.get('use_statement', 'Web-Access') not in use_exclude and file_version.get('publish'):
-            file_uris.add((file_version['file_uri'], file_version.get('use_statement', 'not specified')))
+            if file_version.get('use_statement') not in use_exclude and file_version.get('publish'):
+                file_uris.add((file_version['file_uri'], file_version.get('use_statement', 'not specified')))
                 
         if obj.get('representative_file_version'):
             rfv = obj['representative_file_version']
-            print('representative file version:', rfv['file_uri'], '\n')
-            #if rfv.get('use_statement', 'Web-Access') not in use_exclude and rfv.get('publish'):
-            file_uris.add((rfv['file_uri'], rfv.get('use_statement', 'not specified')))
-
-    print(file_uris)
+            if rfv.get('use_statement') not in use_exclude and rfv.get('publish'):
+                file_uris.add((rfv['file_uri'], rfv.get('use_statement', 'not specified')))
 
     return file_uris                    
 
@@ -210,19 +206,15 @@ def create_valid_hostnames_set(file_uris):
     
     hostnames = {urlparse(file_uri[0]).netloc for file_uri in file_uris}
 
-    print('1:', hostnames)
-
-    # remove excluded
+        # remove excluded
     for host in host_exclude:
         hostnames.discard(host)
 
     # remove direct targets if resolver.caltech.edu is present
-    if 'digital.archives.caltech.edu' in hostnames and 'resolver.caltech.edu' in hostnames:
-        hostnames.discard('digital.archives.caltech.edu')
-    if 'californiarevealed.org' in hostnames and 'resolver.caltech.edu' in hostnames:
-        hostnames.discard('californiarevealed.org')
-
-    print('2:', hostnames)
+    #if 'digital.archives.caltech.edu' in hostnames and 'resolver.caltech.edu' in hostnames:
+    #    hostnames.discard('digital.archives.caltech.edu')
+    #if 'californiarevealed.org' in hostnames and 'resolver.caltech.edu' in hostnames:
+    #    hostnames.discard('californiarevealed.org')
 
     return hostnames
 
@@ -489,16 +481,12 @@ for ao, colls_dict in archival_objects_dict.items():
     # limit to those with http or https links
     file_uris = [file_uri for file_uri in file_uris if urlparse(file_uri[0]).scheme in ['http', 'https']]
 
-    print(file_uris)
-
     # skip archival object if no published digital object file URIs
     if len(file_uris) == 0:
         continue
 
     # create hostnames set
     hostnames = create_valid_hostnames_set(file_uris)
-
-    print('hostnames:', hostnames)
 
     # update archival object record count
     #if dao_dict[setid].get('aocount'):
