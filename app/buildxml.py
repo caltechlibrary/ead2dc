@@ -190,7 +190,7 @@ def published_file_uris(do_list):
                 
         if obj.get('representative_file_version'):
             rfv = obj['representative_file_version']
-            if rfv.get('representative_file_version')['use_statement'] not in use_exclude \
+            if rfv['use_statement'] not in use_exclude \
                     and rfv.get('publish', False):
                 file_uris.add((rfv['file_uri'], rfv.get('use_statement')))
 
