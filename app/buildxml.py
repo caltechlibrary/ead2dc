@@ -197,7 +197,7 @@ def create_valid_hostnames_set(file_uris):
     # www.github.com - ditto
     host_exclude = ['github.com', 'www.github.com']
     
-    hostnames = {urlparse(file_uri).netloc for file_uri[0] in file_uris}
+    hostnames = {urlparse(file_uri[0]).netloc for file_uri in file_uris}
 
     # remove excluded
     for host in host_exclude:
