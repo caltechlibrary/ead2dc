@@ -169,6 +169,24 @@ def build_collections_dict():
 
 #-----------------------------------------------------------------------#
 
+def create_valid_hostnames_set(file_uris):
+
+    # hostnames to exclude
+    # github.com - github links are not direct links to digital content
+    # www.github.com - ditto
+    host_exclude = ['github.com', 'www.github.com']
+    
+    hostnames = {urlparse(file_uri[0]).netloc for file_uri in file_uris}
+
+    # remove excluded
+    for host in host_exclude:
+        hostnames.discard(host)
+
+    return hostnames
+
+
+#-----------------------------------------------------------------------#
+
 def published_file_uris(do_list):
 
     # create file_uris set
@@ -197,39 +215,23 @@ def published_file_uris(do_list):
 
 #-----------------------------------------------------------------------#
 
-def create_valid_hostnames_set(file_uris):
-
-    # hostnames to exclude
-    # github.com - github links are not direct links to digital content
-    # www.github.com - ditto
-    host_exclude = ['github.com', 'www.github.com']
-    
-    hostnames = {urlparse(file_uri[0]).netloc for file_uri in file_uris}
-
-    # remove excluded
-    for host in host_exclude:
-        hostnames.discard(host)
-
-    return hostnames
-
-
-#-----------------------------------------------------------------------#
-
 def deduplicate_file_uris(file_uris):
 
     deduped_file_uris = list(set(file_uris)).sort()
 
-    if len(deduped_file_uris) > 1:
-        first = deduped_file_uris[0]
+    if deduped_file_uris:
 
-        for file_uri in deduped_file_uris[1:]:
-            if (file_uri[0] == first[0]) and (file_uri[1] != first[1]):
-                if file_uri[1] == 'not specified':
-                    file_uri[1] = 'delete'
-                if first[1] == 'not specified':
-                    first[1] = 'delete'
+        if len(deduped_file_uris) > 1:
+            first = deduped_file_uris[0]
+
+            for file_uri in deduped_file_uris[1:]:
+                if (file_uri[0] == first[0]) and (file_uri[1] != first[1]):
+                    if file_uri[1] == 'not specified':
+                        file_uri[1] = 'delete'
+                    if first[1] == 'not specified':
+                        first[1] = 'delete'
         
-        deduped_file_uris = [file_uri for file_uri in deduped_file_uris if file_uri[1] != 'delete']
+            deduped_file_uris = [file_uri for file_uri in deduped_file_uris if file_uri[1] != 'delete']
 
 
     return deduped_file_uris
