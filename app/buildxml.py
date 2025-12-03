@@ -194,6 +194,8 @@ def published_file_uris(do_list):
             #if rfv.get('use_statement', 'Web-Access') not in use_exclude and rfv.get('publish'):
             file_uris.add((rfv['file_uri'], rfv.get('use_statement', 'not specified')))
 
+    print(file_uris)
+
     return file_uris                    
 
 
@@ -442,7 +444,7 @@ for ao, colls_dict in archival_objects_dict.items():
     # temp
     # limit records for testing
     j += 1
-    if j > 10:
+    if j > 2:
         break
 
     # get archival object metadata
