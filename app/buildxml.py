@@ -192,7 +192,7 @@ def published_file_uris(do_list):
             if rfv.get('use_statement') not in use_exclude and rfv.get('publish'):
                 file_uris.add((rfv['file_uri'], rfv.get('use_statement', 'not specified')))
 
-    return file_uris                    
+    return deduplicate_file_uris(file_uris)                    
 
 
 #-----------------------------------------------------------------------#
@@ -206,18 +206,33 @@ def create_valid_hostnames_set(file_uris):
     
     hostnames = {urlparse(file_uri[0]).netloc for file_uri in file_uris}
 
-        # remove excluded
+    # remove excluded
     for host in host_exclude:
         hostnames.discard(host)
 
-    # remove direct targets if resolver.caltech.edu is present
-    #if 'digital.archives.caltech.edu' in hostnames and 'resolver.caltech.edu' in hostnames:
-    #    hostnames.discard('digital.archives.caltech.edu')
-    #if 'californiarevealed.org' in hostnames and 'resolver.caltech.edu' in hostnames:
-    #    hostnames.discard('californiarevealed.org')
-
     return hostnames
 
+
+#-----------------------------------------------------------------------#
+
+def deduplicate_file_uris(file_uris):
+
+    deduped_file_uris = list(set(file_uris)).sort()
+
+    if len(deduped_file_uris) > 1:
+        first = deduped_file_uris[0]
+
+        for file_uri in deduped_file_uris[1:]:
+            if (file_uri[0] == first[0]) and (file_uri[1] != first[1]):
+                if file_uri[1] == 'not specified':
+                    file_uri[1] = 'delete'
+                if first[1] == 'not specified':
+                    first[1] = 'delete'
+        
+        deduped_file_uris = [file_uri for file_uri in deduped_file_uris if file_uri[1] != 'delete']
+
+
+    return deduped_file_uris
 
 #-----------------------------------------------------------------------#
 
@@ -435,12 +450,12 @@ coll_mdate_dict = dict()
 j = 0
 for ao, colls_dict in archival_objects_dict.items():
 
-    #print(ao, end='\r')
+    print(ao, end='\r')
 
     # temp
     # limit records for testing
     j += 1
-    if j > 2:
+    if j > 200:
         break
 
     # get archival object metadata
