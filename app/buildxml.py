@@ -593,8 +593,8 @@ for ao, colls_dict in archival_objects_dict.items():
 
         # skip urls not in hostnames set
         hostname = urlparse(file_uri[0]).netloc
-        if hostname not in hostnames:
-            continue
+        #if hostname not in hostnames:
+        #    continue
 
         # categorize hostname
         if hostname in ['resolver.caltech.edu', 'digital.archives.caltech.edu', 'californiarevealed.org']:
@@ -624,7 +624,7 @@ for ao, colls_dict in archival_objects_dict.items():
         # identifier element
         identifier = ET.SubElement(dc, 'dc:identifier')
         identifier.text = file_uri[0]
-        identifier.attrib = {'scheme': 'URI', 'type': file_uri[1] if file_uri[1] else 'unknown'}
+        identifier.attrib = {'scheme': 'URI', 'type': file_uri[1]}
         uri_test = True
     
     if not uri_test:
