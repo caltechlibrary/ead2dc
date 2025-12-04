@@ -244,7 +244,11 @@ def get_digital_object_type(do_list):
     type_list = [client.get(do).json().get('digital_object_type') for do in do_list]
 
     type_list = list(set(type_list))
+    print(type_list)
 
+    return 'Type'
+
+'''
     if len(type_list) == 0:
 
         return 'Not specified'
@@ -263,7 +267,7 @@ def get_digital_object_type(do_list):
     else:
 
         return ', '.join([t for t in type_list])
-
+'''
 
 #-----------------------------------------------------------------------#
 # START OF SCRIPT                                                       #
