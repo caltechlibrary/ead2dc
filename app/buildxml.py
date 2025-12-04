@@ -213,7 +213,7 @@ def published_file_uris(do_list):
             rfv = obj['representative_file_version']
 
             if rfv.get('publish') and rfv.get('use_statement') \
-                    and not in use_exclude:
+                    not in use_exclude:
                 
                 file_uris.add((rfv['file_uri'], rfv.get('use_statement', 'not specified')))
 
