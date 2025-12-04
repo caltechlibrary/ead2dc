@@ -241,33 +241,17 @@ def get_digital_object_type(do_list):
 
     type_list = list()
 
+    # list of types
     type_list = [client.get(do).json().get('digital_object_type') for do in do_list]
 
+    # de-duplicate
     type_list = list(set(type_list))
-    print(type_list)
 
-    return 'Type'
-
-'''
-    if len(type_list) == 0:
-
-        return 'Not specified'
+    # remove None values
+    type_list = [t for t in type_list if t is not None]
     
-    elif len(type_list) == 1:
+    return ', '.join(type_list) if type_list else 'Not specified'
 
-        if type_list[0]:
-            return type_list[0]
-        else:
-            return 'Not specified'
-        
-    elif type_list == [None] or type_list is None:
-
-        return 'Not specified'
-    
-    else:
-
-        return ', '.join([t for t in type_list])
-'''
 
 #-----------------------------------------------------------------------#
 # START OF SCRIPT                                                       #
