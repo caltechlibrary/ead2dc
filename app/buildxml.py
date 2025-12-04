@@ -210,31 +210,44 @@ def published_file_uris(do_list):
             if rfv.get('use_statement') not in use_exclude and rfv.get('publish'):
                 file_uris.add((rfv['file_uri'], rfv.get('use_statement', 'not specified')))
 
-    return file_uris                    
+    return deduplicate_file_uris(file_uris)                    
 
 
 #-----------------------------------------------------------------------#
 
 def deduplicate_file_uris(file_uris):
 
-    deduped_file_uris = list(set(file_uris)).sort()
+    file_uris = list(set(file_uris))
+    file_uris.sort()
 
-    if deduped_file_uris:
 
-        if len(deduped_file_uris) > 1:
-            first = deduped_file_uris[0]
+    return file_uris
 
-            for file_uri in deduped_file_uris[1:]:
-                if (file_uri[0] == first[0]) and (file_uri[1] != first[1]):
-                    if file_uri[1] == 'not specified':
-                        file_uri[1] = 'delete'
-                    if first[1] == 'not specified':
-                        first[1] = 'delete'
+'''
+    if len(file_uris) > 1:
+
+        deduped_file_uris = list()
+        first = file_uris[0]
+
+        for n, file_uri in enumerate(file_uris[1:]):
+            # uris match, use statements differ
+            if (file_uri[0] == first[0]) and (file_uri[1] != first[1]):
+                
+            
+                deduped_file_uris.append(first)
+                deduped_file_uris.append(file_uri)
+            
+            
         
-            deduped_file_uris = [file_uri for file_uri in deduped_file_uris if file_uri[1] != 'delete']
+        deduped_file_uris = [file_uri for file_uri in deduped_file_uris if file_uri[1] != 'delete']
+
+    else:
+
+        deduped_file_uris = file_uris
+
+'''
 
 
-    return deduped_file_uris
 
 #-----------------------------------------------------------------------#
 
