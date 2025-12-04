@@ -202,51 +202,25 @@ def published_file_uris(do_list):
         obj = client.get(do).json()
 
         for file_version in obj['file_versions']:
-            if file_version.get('use_statement') not in use_exclude and file_version.get('publish'):
-                file_uris.add((file_version['file_uri'], file_version.get('use_statement', 'not specified')))
+
+            if file_version.get('publish') and file_version.get('use_statement') \
+                    and file_version.get('use_statement') not in use_exclude:
+                
+                file_uris.add((file_version['file_uri'], file_version.get('use_statement')))
                 
         if obj.get('representative_file_version'):
+
             rfv = obj['representative_file_version']
-            if rfv.get('use_statement') not in use_exclude and rfv.get('publish'):
+
+            if rfv.get('publish') and rfv.get('use_statement') \
+                    and not in use_exclude:
+                
                 file_uris.add((rfv['file_uri'], rfv.get('use_statement', 'not specified')))
-
-    return deduplicate_file_uris(file_uris)                    
-
-
-#-----------------------------------------------------------------------#
-
-def deduplicate_file_uris(file_uris):
 
     file_uris = list(set(file_uris))
     file_uris.sort()
 
-
-    return file_uris
-
-'''
-    if len(file_uris) > 1:
-
-        deduped_file_uris = list()
-        first = file_uris[0]
-
-        for n, file_uri in enumerate(file_uris[1:]):
-            # uris match, use statements differ
-            if (file_uri[0] == first[0]) and (file_uri[1] != first[1]):
-                
-            
-                deduped_file_uris.append(first)
-                deduped_file_uris.append(file_uri)
-            
-            
-        
-        deduped_file_uris = [file_uri for file_uri in deduped_file_uris if file_uri[1] != 'delete']
-
-    else:
-
-        deduped_file_uris = file_uris
-
-'''
-
+    return file_uris                    
 
 
 #-----------------------------------------------------------------------#
