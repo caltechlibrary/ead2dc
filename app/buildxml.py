@@ -236,6 +236,32 @@ def get_set_id(collection_id):
 
 
 #-----------------------------------------------------------------------#
+
+def get_digital_object_type(do_list):
+
+    type_list = list()
+
+    type_list = [client.get(do).json().get('digital_object_type') for do in do_list]
+
+    type_list = list(set(type_list))
+
+    if len(type_list) == 0:
+
+        return 'Not specified'
+    
+    elif len(type_list) == 1:
+
+        if type_list[0]:
+            return type_list[0]
+        else:
+            return 'Not specified'
+        
+    else:
+
+        return [t for t in type_list].join(', ')
+
+
+#-----------------------------------------------------------------------#
 # START OF SCRIPT                                                       #
 #-----------------------------------------------------------------------#
 
@@ -443,9 +469,9 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit records for testing
-    #j += 1
-    #if j > 3000:
-    #    break
+    j += 1
+    if j > 3000:
+        break
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
@@ -674,6 +700,11 @@ for ao, colls_dict in archival_objects_dict.items():
             extent = ET.SubElement(dc, 'dc:format')
             extent.text = e.strip()
 
+    # type
+    type_value = get_digital_object_type(do_list)
+    type_el = ET.SubElement(dc, 'dc:type')
+    type_el.text = 'Text'  # default type
+    
     # subjects
     #subjects = get_subjects('archival_objects', ao[33:])
 
