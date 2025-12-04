@@ -258,7 +258,7 @@ def get_digital_object_type(do_list):
         
     else:
 
-        return [t for t in type_list].join(', ')
+        return ', '.join([t for t in type_list])
 
 
 #-----------------------------------------------------------------------#
@@ -701,9 +701,8 @@ for ao, colls_dict in archival_objects_dict.items():
             extent.text = e.strip()
 
     # type
-    type_value = get_digital_object_type(do_list)
     type_el = ET.SubElement(dc, 'dc:type')
-    type_el.text = 'Text'  # default type
+    type_el.text = get_digital_object_type(do_list)
     
     # subjects
     #subjects = get_subjects('archival_objects', ao[33:])
