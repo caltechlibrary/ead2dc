@@ -173,10 +173,9 @@ def create_valid_hostnames_set(file_uris):
 
     # hostnames to exclude
     # github.com - github links are not direct links to digital content
-    # www.github.com - ditto
-    host_exclude = ['github.com', 'www.github.com']
+    host_exclude = ['github.com']
     
-    hostnames = {urlparse(file_uri[0]).netloc for file_uri in file_uris}
+    hostnames = {urlparse(get_domain_from_url(file_uri[0])).netloc for file_uri in file_uris}
 
     # remove excluded
     for host in host_exclude:
@@ -184,6 +183,21 @@ def create_valid_hostnames_set(file_uris):
 
     return hostnames
 
+
+#-----------------------------------------------------------------------#
+
+def get_domain_from_url(file_url):
+    
+    # parse url
+    hostname = urlparse(file_url).netloc
+    # remove port if present
+    hostname = hostname.split(':')[0]
+    # get last two segments for domain
+    hostname = hostname.split('.')[-2:]
+    # reassemble hostname  
+    domain = '.'.join(hostname)
+
+    return domain  
 
 #-----------------------------------------------------------------------#
 
@@ -239,9 +253,7 @@ def get_set_id(collection_id):
 
 def get_digital_object_type(do_list):
 
-    type_list = list()
-
-    # list of types
+    # create list of types
     type_list = [client.get(do).json().get('digital_object_type') for do in do_list]
 
     # de-duplicate
@@ -250,6 +262,7 @@ def get_digital_object_type(do_list):
     # remove None values
     type_list = [t for t in type_list if t is not None]
     
+    # contatenate types if more than one; return 'text (default)' if none
     return ', '.join(type_list) if type_list else 'text (default)'
 
 
@@ -457,7 +470,7 @@ coll_mdate_dict = dict()
 j = 0
 for ao, colls_dict in archival_objects_dict.items():
 
-    print(ao, end='\r')
+    print(ao, '   ', end='\r')
 
     # temp
     # limit records for testing
@@ -613,23 +626,36 @@ for ao, colls_dict in archival_objects_dict.items():
     
     for file_uri in file_uris: 
 
-        # skip urls not in hostnames set
-        hostname = urlparse(file_uri[0]).netloc
+        # parse url
+        hostname = get_domain_from_url(file_uri[0])
+
+        # skip excluded hostnames
         if hostname not in hostnames:
             continue
 
         # categorize hostname
-        if hostname in ['resolver.caltech.edu', 'digital.archives.caltech.edu', 'californiarevealed.org']:
+        if hostname in ['caltech.edu', 'californiarevealed.org']:
             hostcategory = 'caltechlibrary'
         elif hostname == 'archive.org':
             hostcategory = 'internetarchive'
-        elif hostname in ['youtube.com', 'youtu.be', 'www.youtube.com', 'www.youtu.be']:
+        elif hostname in ['youtube.com', 'youtu.be']:
             hostcategory = 'youtube'
         else:
             hostcategory = 'other'
 
         # add archival record to stats_dict
         # {setid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
+
+        # identifier element
+        identifier = ET.SubElement(dc, 'dc:identifier')
+        identifier.text = file_uri[0]
+        identifier.attrib = {'scheme': 'URI', 'type': file_uri[1] if file_uri[1] else 'unknown'}
+        uri_test = True
+
+        # omit thumbnail links from statistics
+        if 'thumbnail' in file_uri[1].lower():
+            continue
+
         for collid in colls_dict['collections']:
 
             if stats_dict[collid].get('digital_objects'):
@@ -643,12 +669,6 @@ for ao, colls_dict in archival_objects_dict.items():
             else:
                 stats_dict[collid]['digital_objects'][hostcategory] = 1
 
-        # identifier element
-        identifier = ET.SubElement(dc, 'dc:identifier')
-        identifier.text = file_uri[0]
-        identifier.attrib = {'scheme': 'URI', 'type': file_uri[1] if file_uri[1] else 'unknown'}
-        uri_test = True
-    
     if not uri_test:
         print('> warning: no file URIs for archival object:', ao)
 
