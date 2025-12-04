@@ -256,6 +256,10 @@ def get_digital_object_type(do_list):
         else:
             return 'Not specified'
         
+    elif type_list == [None] or type_list is None:
+
+        return 'Not specified'
+    
     else:
 
         return ', '.join([t for t in type_list])
