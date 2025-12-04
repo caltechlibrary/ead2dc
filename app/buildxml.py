@@ -629,6 +629,7 @@ for ao, colls_dict in archival_objects_dict.items():
         # parse url
         hostname = get_domain_from_url(file_uri[0])
         print(hostname)
+        print(hostnames)
 
         # skip excluded hostnames
         if hostname not in hostnames:
@@ -654,6 +655,7 @@ for ao, colls_dict in archival_objects_dict.items():
         uri_test = True
 
         # omit thumbnail links from statistics
+        print(file_uri[1].lower())
         if 'thumbnail' in file_uri[1].lower():
             continue
 
