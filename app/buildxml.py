@@ -628,6 +628,7 @@ for ao, colls_dict in archival_objects_dict.items():
 
         # parse url
         hostname = get_domain_from_url(file_uri[0])
+        print(hostname)
 
         # skip excluded hostnames
         if hostname not in hostnames:
