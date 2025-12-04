@@ -175,7 +175,7 @@ def create_valid_hostnames_set(file_uris):
     # github.com - github links are not direct links to digital content
     host_exclude = ['github.com']
     
-    hostnames = {urlparse(get_domain_from_url(file_uri[0])).netloc for file_uri in file_uris}
+    hostnames = {urlparse(file_uri[0]).netloc for file_uri in file_uris}
 
     # remove excluded
     for host in host_exclude:
