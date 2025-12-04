@@ -250,7 +250,7 @@ def get_digital_object_type(do_list):
     # remove None values
     type_list = [t for t in type_list if t is not None]
     
-    return ', '.join(type_list) if type_list else 'Not specified'
+    return ', '.join(type_list) if type_list else 'text (default)'
 
 
 #-----------------------------------------------------------------------#
@@ -461,9 +461,9 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit records for testing
-    j += 1
-    if j > 3000:
-        break
+    #j += 1
+    #if j > 3000:
+    #    break
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
