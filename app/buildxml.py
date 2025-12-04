@@ -716,6 +716,13 @@ for ao, colls_dict in archival_objects_dict.items():
             if s[1]:
                 subject.attrib = {'source': s[1]}
 
+    # rights
+    rights = ET.SubElement(dc, 'dc:rights')
+    rights.text = 'The copyright and related rights status of this Item has not been evaluated. \
+                    Please contact Caltech Archives and Special Collections for more information. \
+                    You are free to use this Item in any way that is permitted by the copyright \
+                    and related rights legislation that applies to your use.'
+
     #recs_created += 1
     #print(recs_created, end='\r')
 
