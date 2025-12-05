@@ -137,12 +137,12 @@
         <td>{{ coll[10] }}</td>
         <td align="right">{{ coll[2] }}</td> {% set ns.tot_aocount = ns.tot_aocount + coll[2] %}
         <td align="right">{{ coll[3] }}</td> {% set ns.tot_docount = ns.tot_docount + coll[3] %}
+        {% if g.user and g.auth %}
         <td align="center">
             {% if (g.user and g.auth) or coll[8] %}
             <a href="oai?verb=ListRecords&set={{ coll[9] }}_{{ coll[0] }}"><i class="fas fa-solid fa-link"></i></a>
             {% endif %}
         </td>
-        {% if g.user and g.auth %}
         <td align="right">{{ coll[4] }}</td> {% set ns.tot_clibrary = ns.tot_clibrary + coll[4] %}
         <td align="right">{{ coll[5] }}</td> {% set ns.tot_iarchive = ns.tot_iarchive + coll[5] %}
         <td align="right">{{ coll[6] }}</td> {% set ns.tot_youtube = ns.tot_youtube + coll[6] %}
