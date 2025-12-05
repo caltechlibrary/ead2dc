@@ -440,21 +440,10 @@ for coll in colls:
     )
     setDescription.text = coll[2]
 
-#dao_count = 0
-#dao_skipped = 0
-
 # build ListRecords segment
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 
-#print('Elapsed time:', round(time.time() - start, 1), 'secs')
-
 intertime = time.time()
-
-# temp
-#devrecordcount = 0
-#devtest_textfile = Path(Path(__file__).resolve().parent).joinpath('../xml/devtest_textfile.csv')
-#if os.path.exists(devtest_textfile):
-#    os.remove(devtest_textfile)
 
 # initialize stats_dict for collection statistics
 # {setid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
@@ -498,15 +487,6 @@ for ao, colls_dict in archival_objects_dict.items():
     #if len(set(colls_dict['collections']) & set(['/repositories/2/resources/30', '/repositories/2/resources/312'])) == 0:
     #    continue
 
-    #collection_number = coll[0]
-    #collection_title = coll[1]
-    #collection_type = coll[11]
-    #setid = '/repositories/2/' + collection_type + 's/' + collection_number
-    #dao_dict[setid] = dict() # initialize dictionary for collection's statistics
-
-    #recs_created = 0
-    #recs_skipped = 0
-
     # create list of associated digital objects
     do_list = colls_dict['digital_objects']
 
@@ -523,31 +503,16 @@ for ao, colls_dict in archival_objects_dict.items():
     # create hostnames set
     hostnames = create_valid_hostnames_set(file_uris)
 
-    # update archival object record count
-    #if dao_dict[setid].get('aocount'):
-    #    dao_dict[setid]['aocount'] += 1
-    #else:
-    #    dao_dict[setid]['aocount'] = 1
-    
     # record element
     record = ET.SubElement(ListRecords, 'record')
 
     # header element
     header = ET.SubElement(record, 'header')
 
-    # identifier elements
-    #identifier = ET.SubElement(header, 'identifier')
-    #identifier.text = 'collections.archives.caltech.edu' + do
-    #identifier.attrib = {'type': 'digital'}
-
     identifier = ET.SubElement(header, 'identifier')
     identifier.text = 'collections.archives.caltech.edu' + ao
     #identifier.attrib = {'type': 'archival'}
 
-    #identifier = ET.SubElement(header, 'identifier')
-    #identifier.text = 'collections.archives.caltech.edu' + setid
-    #identifier.attrib = {'type': 'collection'}
-    
     # datestamp element
     datestamp = ET.SubElement(header, 'datestamp')
     datestamp.text = last_modified_date
@@ -580,22 +545,11 @@ for ao, colls_dict in archival_objects_dict.items():
                                         'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
                                         'xmlns:dcterms': 'http://purl.org/dc/terms/'})
     
-    # title elements
-    #title = ET.SubElement(dc, 'dc:title')
-    #title.text = client.get(do).json()['title']
-    #title.attrib = {'type': 'digital'}
-
     title = ET.SubElement(dc, 'dc:title')
     title.text = archival_object_metadata['title']
     #title.attrib = {'type': 'archival'}
 
-    #title = ET.SubElement(dc, 'dc:title')
-    #title.text = client.get(setid).json()['title']
-    #title.attrib = {'type': 'collection'}
-
     # ancestor titles
-    # print('testing:', ao[33:])
-    # ancestors = get_ancestors('archival_objects', ao[33:])
     ancestors = list()
     for a in archival_object_metadata.get('ancestors', []):
         level = a.get('level')
@@ -611,15 +565,6 @@ for ao, colls_dict in archival_objects_dict.items():
             ancestor.text = a[0]
             if a[1]:
                 ancestor.attrib = {'level': a[1]}
-
-    # relation element
-    #relation = ET.SubElement(dc, 'dc:relation')
-    #relation.text = collectiontitle
-    #relation.attrib = {'label': 'Collection'}
-
-    # description element
-    #description = ET.SubElement(dc, 'dc:description')
-    #description.text = 'Digital object in ' + collectiontitle
 
     # warning for no file_uris
     uri_test = False
@@ -693,20 +638,10 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # extents
     extents = list()
-    #obj = get_json(category, id)
-    #print(archival_object_metadata.get('extents'))
     for extent in archival_object_metadata.get('extents', []):
-        #print(extent)
-        #print('number:', extent.get('number'))
-        #print('details:', extent.get('physical_details'))
-        #print('type:', extent.get('extent_type'))
         s = extent.get('number', '') + ' ' + extent.get('extent_type', '') + ' ' + extent.get('physical_details', '').strip()
-        #print('string:', s)
         extents.append(s)
 
-    #print('extents:', extents)
-
-    #print(extents)
     for e in extents:
         if e.strip() != '':
             extent = ET.SubElement(dc, 'dc:format')
@@ -717,10 +652,7 @@ for ao, colls_dict in archival_objects_dict.items():
     type_el.text = get_digital_object_type(do_list)
     
     # subjects
-    #subjects = get_subjects('archival_objects', ao[33:])
-
     subjects = list()
-    #obj = get_json(category, id)
     for s in archival_object_metadata.get('subjects', []):
         if s.get('_resolved'):
             source = s['_resolved'].get('source')
@@ -728,7 +660,6 @@ for ao, colls_dict in archival_objects_dict.items():
                 subject = s['_resolved']['title']
                 subjects.append((subject, source))
 
-    #print(subjects)
     for s in subjects:
         if s:
             subject = ET.SubElement(dc, 'dc:subject')
@@ -743,16 +674,7 @@ for ao, colls_dict in archival_objects_dict.items():
                     You are free to use this Item in any way that is permitted by the copyright \
                     and related rights legislation that applies to your use.'
 
-    #recs_created += 1
-    #print(recs_created, end='\r')
-
-#print('>', collection_title, '('+str(recs_created), 'records created)')
-
-#print('>', round(time.time() - intertime, 1), 'secs', '(' + datetime.now().isoformat() + ')')
 intertime = time.time()
-
-# temp
-#print('devrecordcount:', devrecordcount)
 
 # update collection statistics in db
 # {collid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
@@ -795,11 +717,7 @@ connection.close()
 # production file
 fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
 
-#dev file
-#fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives-dev.xml')
-
 with open(fileout, 'w') as f:
-    #f.write(ET.tostring(oaixml, encoding='unicode', method='xml'))
     f.write(prettify(oaixml))
 
 '''
@@ -808,11 +726,6 @@ for collection in dao_dict:
     for url in dao_dict[collection]:
         print('>', url, dao_dict[collection][url])
 '''
-
-#print(dao_count, 'total records created')
-#print(dao_skipped, 'total records skipped')
-
-#print(dao_dict)
 
 print('\nTotal elapsed time:', round(time.time() - start, 1))
 
