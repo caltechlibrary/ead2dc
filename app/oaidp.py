@@ -547,6 +547,10 @@ def oai():
 
         for recrd in recrds:
 
+            # test for Type
+            if recrd.find('./metadata/oai_dc:dc/dc:type', ns).text == 'text':
+                continue
+
             # get list of sets for record
             sets_list = [setnode.text for setnode in recrd.findall('./header/setSpec', ns)]
 
