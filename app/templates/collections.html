@@ -100,15 +100,19 @@
     <th rowspan="2">Archival<br/>Objects</th>
     <th rowspan="2">Digital<br/>Objects</th>
     <th rowspan="2">List<br/>Records</th>
-    <th colspan="4">Host/Link domain</th>
+    {% if g.user and g.auth %}
+        <th colspan="4">Host/Link domain</th>
+    {% endif %}
 </tr>
+{% if g.user and g.auth %}
 <tr>
     <th>Caltech Library</th>
     <th>Internet Archive</th>
     <th>YouTube</th>
     <th>Other</th>
 </tr>
-
+{% endif %
+}
 {% set ns = namespace(
     tot_aocount = 0,
     tot_docount = 0,
@@ -139,10 +143,12 @@
             <a href="oai?verb=ListRecords&set={{ coll[9] }}_{{ coll[0] }}"><i class="fas fa-solid fa-link"></i></a>
             {% endif %}
         </td>
+        {% if g.user and g.auth %}
         <td align="right">{{ coll[4] }}</td> {% set ns.tot_clibrary = ns.tot_clibrary + coll[4] %}
         <td align="right">{{ coll[5] }}</td> {% set ns.tot_iarchive = ns.tot_iarchive + coll[5] %}
         <td align="right">{{ coll[6] }}</td> {% set ns.tot_youtube = ns.tot_youtube + coll[6] %}
         <td align="right">{{ coll[7] }}</td> {% set ns.tot_other = ns.tot_other + coll[7] %}
+        {% endif %}
     </tr>
     {% endif %}
 {% endfor %}
@@ -151,10 +157,12 @@
     <th align="right">{{ ns.tot_aocount }}</th>
     <th align="right">{{ ns.tot_docount }}</th>
     <th></th>
+    {% if g.user and g.auth %}
     <th align="right">{{ ns.tot_clibrary }}</th>
     <th align="right">{{ ns.tot_iarchive }}</th>
     <th align="right">{{ ns.tot_youtube }}</th>
     <th align="right">{{ ns.tot_other }}</th>
+    {% endif %}
 </tr>
 </table>
 </form>
