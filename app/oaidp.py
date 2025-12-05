@@ -548,8 +548,8 @@ def oai():
         for recrd in recrds:
 
             # test for Type
-            # valid types are text, still_image, moving_image, sound_recording
-            if recrd.find('./metadata/oai_dc:dc/dc:type', ns).text not in ['text', 'still_image', 'sound_recording']:
+            # valid types are text, still_image
+            if recrd.find('./metadata/oai_dc:dc/dc:type', ns).text not in ['text', 'still_image']:
                 continue
 
             # get list of sets for record
