@@ -86,69 +86,21 @@
 {% if g.user and g.auth %}<form action="{{ url_for('oaidp.collections3') }}" method="POST">{% endif %}
 <table>
 <tr>
-    {% if g.user and g.auth %}
-        <th rowspan="2">
-    {% else %}
-        <th>
-    {% endif %}
+    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}
         {% if g.user and g.auth %}
             <button type="submit">Update OAI<br/>Data Provider</button>
         {% else %}
-            Published<br/>via OAI<br/>Data Provider
+            Available
         {% endif %}
     </th>
-    {% if g.user and g.auth %}
-        <th rowspan="2">
-    {% else %}
-        <th>
-    {% endif %}
-        Record Type
-    </th>
-        {% if g.user and g.auth %}
-        <th rowspan="2">
-    {% else %}
-        <th>
-    {% endif %}
-        Record ID
-    </th>
-        {% if g.user and g.auth %}
-        <th rowspan="2">
-    {% else %}
-        <th>
-    {% endif %}
-        Title
-    </th>
-        {% if g.user and g.auth %}
-        <th rowspan="2">
-    {% else %}
-        <th>
-    {% endif %}
-        Last edit
-    </th>
-        {% if g.user and g.auth %}
-        <th rowspan="2">
-    {% else %}
-        <th>
-    {% endif %}
-        Archival Objects
-    </th>
-        {% if g.user and g.auth %}
-        <th rowspan="2">
-    {% else %}
-        <th>
-    {% endif %}
-        Digital Objects
-    </th>
-        {% if g.user and g.auth %}
-        <th rowspan="2">
-    {% else %}
-        <th>
-    {% endif %}
-        List Records
-    </th>
-    {% if g.user and g.auth %}
-    <th colspan="4">Host/Link domain</th>
-    {% endif %}
+    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Record Type</th>
+    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Record ID</th>
+    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Title</th>
+    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Last edit</th>
+    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Archival Objects</th>
+    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Digital Objects</th>
+    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}List Records</th>
+    {% if g.user and g.auth %}<th colspan="4">Host/Link domain</th>{% endif %}
 </tr>
 {% if g.user and g.auth %}
 <tr>
