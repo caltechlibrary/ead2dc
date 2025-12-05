@@ -462,9 +462,9 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit records for testing
-    j += 1
-    if j > 3000:
-        break
+    #j += 1
+    #if j > 3000:
+    #    break
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
