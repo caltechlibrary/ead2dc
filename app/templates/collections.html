@@ -14,15 +14,15 @@
 </p>
 
 <p>
-    Set IDs have the following format: &lt;record type&gt;_&lt;record ID&gt;. For example, the set ID for the Caltech
-    Images Collection is resource_219.
-</p>
-
-<p>
     The links in the 'List Records' column generate OAI-PMH ListRecords requests for 
     each collection.
 </p>
 {% if g.user and g.auth %}
+<p>
+    Set IDs have the following format: &lt;record type&gt;_&lt;record ID&gt;. For example, the set ID for the Caltech
+    Images Collection is resource_219.
+</p>
+
 <p>
     Both resource and accession records with the following attributes can be published through the Data Provider:
 </p>
@@ -70,7 +70,6 @@
     <li>Digital objects hosted by YouTube (youtube.com, youtu.be).</li>
     <li>Other URLs.</li>
 </ol>
-{% endif %}
 
 <table>
     <tr>
@@ -80,6 +79,8 @@
         <td align="right"><strong>Collection selection last updated:</strong></td><td>{{ dt_col }}</td>
     </tr>
 </table>
+
+{% endif %}
 
 <br/>
 
