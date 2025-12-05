@@ -261,8 +261,8 @@ def get_digital_object_type(do_list):
     # remove None values
     type_list = [t for t in type_list if t is not None]
     
-    # contatenate types if more than one; return 'text (default)' if none
-    return ', '.join(type_list) if type_list else 'text (default)'
+    # concatenate types if more than one; return 'text (default)' if none
+    return ', '.join(type_list) if type_list else 'text'
 
 
 #-----------------------------------------------------------------------#
