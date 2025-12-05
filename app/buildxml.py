@@ -217,7 +217,7 @@ def published_file_uris(do_list):
 
         for file_version in obj['file_versions']:
 
-            if file_version.get('publish') and file_version.get('use_statement') not in use_exclude:
+            if file_version.get('publish') and file_version.get('use_statement', 'Web-Access') not in use_exclude:
                 
                 file_uris.add((file_version['file_uri'], file_version.get('use_statement', 'Web-Access')))
                 
@@ -225,10 +225,10 @@ def published_file_uris(do_list):
 
             rfv = obj['representative_file_version']
 
-            if rfv.get('publish') and rfv.get('use_statement') \
+            if rfv.get('publish') and rfv.get('use_statement', 'Web-Access') \
                     not in use_exclude:
                 
-                file_uris.add((rfv['file_uri'], rfv.get('use_statement', 'not specified')))
+                file_uris.add((rfv['file_uri'], rfv.get('use_statement', 'Web-Access')))
 
     file_uris = list(set(file_uris))
     file_uris.sort()
