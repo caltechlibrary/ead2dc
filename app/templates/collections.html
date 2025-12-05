@@ -96,10 +96,10 @@
     <th rowspan="2">Record ID</th>
     <th rowspan="2">Title</th>
     <th rowspan="2">Last edit</th>
-    {% if g.user and g.auth %}
     <th rowspan="2">Archival<br/>Objects</th>
     <th rowspan="2">Digital<br/>Objects</th>
     <th rowspan="2">List<br/>Records</th>
+    {% if g.user and g.auth %}
     <th colspan="4">Host/Link domain</th>
     {% endif %}
 </tr>
