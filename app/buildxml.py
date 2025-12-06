@@ -248,8 +248,12 @@ def published_file_uris(do_list):
     file_uris = [file_uri for file_uri in file_uris if urlparse(file_uri[0]).scheme in ['http', 'https']]
 
     # check for duplicate urls
-    # using enumerte and list copies to allow removal during iteration
+    # using enumerate and list copies to allow removal during iteration
     for index, (f1, f2) in enumerate(zip(list(file_uris), list(file_uris[1:]))):
+
+        # if duplicate urls with different 'Persistent-URL' and 'Web-Access' use statements, remove 'Persistent-URL' entry
+        # assumes list is sorted and deduped (as above)
+        # additional logic can be added here to handle other duplicates as needed
         if f1[0] == f2[0] \
             and f1[1]=="Persistent-URL" \
             and f2[1]=="Web-Access":
@@ -484,9 +488,9 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit records for testing
-    j += 1
-    if j > 2000:
-        break
+    #j += 1
+    #if j > 2000:
+    #    break
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
