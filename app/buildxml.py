@@ -26,7 +26,18 @@ from asnake.client import ASnakeClient
 # FUNCTIONS                                                             #
 #-----------------------------------------------------------------------#
 
-# returns a "pretty" XML string
+# establish API connection
+def authorize_api():
+    secrets = __import__('secrets')
+    client = ASnakeClient(baseurl = secrets.baseurl,
+                        username = secrets.username,
+                        password = secrets.password)
+    client.authorize()
+    return client
+
+#-----------------------------------------------------------------------#
+
+# returns a "pretty" XML string from an ElementTree Element (xml.etree.ElementTree.Element)
 def prettify(elem):
     xml_string = ET.tostring(elem)
     xml_file = dom.parseString(xml_string)
@@ -35,7 +46,7 @@ def prettify(elem):
 
 #-----------------------------------------------------------------------#
 
-# create collection description string from collection notes
+# create collection description string from collection notes in ArchivesSpace
 def create_collection_description(coll_info):
 
     try:
@@ -59,18 +70,9 @@ def create_collection_description(coll_info):
 
 #-----------------------------------------------------------------------#
 
-# establish API connection
-def authorize_api():
-    secrets = __import__('secrets')
-    client = ASnakeClient(baseurl = secrets.baseurl,
-                        username = secrets.username,
-                        password = secrets.password)
-    client.authorize()
-    return client
-
-#-----------------------------------------------------------------------#
-
-# build collections dictionary
+# builds two dictionaries: for collections and archival objects
+# collections_dict has the form {collection: {ao: {do}}}
+# archival_objects_dict has the form {ao: {'collections': [collection], 'digital_objects': [do]}}
 def build_collections_dict():
 
     # initialize collections dictionary
@@ -169,6 +171,7 @@ def build_collections_dict():
 
 #-----------------------------------------------------------------------#
 
+# removes invalid hostnames from file_uris list and returns set of valid hostnames
 def create_valid_hostnames_set(file_uris):
 
     # hostnames to exclude
@@ -186,6 +189,7 @@ def create_valid_hostnames_set(file_uris):
 
 #-----------------------------------------------------------------------#
 
+# extracts domain from url
 def get_domain_from_url(file_url):
     
     # parse url
@@ -201,6 +205,9 @@ def get_domain_from_url(file_url):
 
 #-----------------------------------------------------------------------#
 
+# returns list of published file URIs and use statements from digital objects in do_list
+# do_list is a list of digital object URIs
+# returns list of tuples: (file_uri, use_statement)
 def published_file_uris(do_list):
 
     # create file_uris set
@@ -213,25 +220,40 @@ def published_file_uris(do_list):
     # iterate over digital objects linked to archival object
     for do in do_list:
 
+        # get digital object metadata
         obj = client.get(do).json()
 
+        # iterate over file versions
         for file_version in obj['file_versions']:
 
+            # only include published file versions with use statements not in exclude list
+            # use default use statement of 'Web-Access' if none present
             if file_version.get('publish') and file_version.get('use_statement', 'Web-Access') not in use_exclude:
-                
                 file_uris.add((file_version['file_uri'], file_version.get('use_statement', 'Web-Access')))
                 
+        # check for representative file version
         if obj.get('representative_file_version'):
-
             rfv = obj['representative_file_version']
 
-            if rfv.get('publish') and rfv.get('use_statement', 'Web-Access') \
-                    not in use_exclude:
-                
+            # only include published representative file version with use statement not in exclude list
+            # use default use statement of 'Web-Access' if none present
+            if rfv.get('publish') and rfv.get('use_statement', 'Web-Access') not in use_exclude:
                 file_uris.add((rfv['file_uri'], rfv.get('use_statement', 'Web-Access')))
 
+    # de-duplicate and sort file_uris list
     file_uris = list(set(file_uris))
     file_uris.sort()
+
+    # limit to http or https urls
+    file_uris = [file_uri for file_uri in file_uris if urlparse(file_uri[0]).scheme in ['http', 'https']]
+
+    # check for duplicate urls
+    # using enumerte and list copies to allow removal during iteration
+    for index, (f1, f2) in enumerate(zip(list(file_uris), list(file_uris[1:]))):
+        if f1[0] == f2[0] \
+            and f1[1]=="Persistent-URL" \
+            and f2[1]=="Web-Access":
+            file_uris.pop(index)
 
     return file_uris                    
 
@@ -462,9 +484,9 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit records for testing
-    #j += 1
-    #if j > 3000:
-    #    break
+    j += 1
+    if j > 2000:
+        break
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
@@ -491,9 +513,6 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # remove unpublished, redirects
     file_uris = published_file_uris(do_list)
-
-    # limit to those with http or https links
-    file_uris = [file_uri for file_uri in file_uris if urlparse(file_uri[0]).scheme in ['http', 'https']]
 
     # skip archival object if no published digital object file URIs
     if len(file_uris) == 0:
