@@ -47,6 +47,7 @@ def prettify(elem):
 #-----------------------------------------------------------------------#
 
 # create collection description string from collection notes in ArchivesSpace
+# used to compile dc:description element in OAI-PMH setDescription
 def create_collection_description(coll_info):
 
     try:
@@ -277,6 +278,26 @@ def get_set_id(collection_id):
 #-----------------------------------------------------------------------#
 
 def get_digital_object_type(do_list):
+
+    # ArchivesSpace digital_object_type_values
+    # mapped to Dublin Core types
+    # source: https://www.dublincore.org/specifications/dublin-core/dcmi-terms/
+    # DC Type Vocabulary:
+    #     Collection, Dataset, Event, Image, InteractiveResource,
+    #     MovingImage, PhysicalObject, Service, Software, Sound,
+    #     StillImage, Text
+    digital_object_type_values = {
+        'Cartographic': 'Image',
+        'Mixed Materials': 'Collection',
+        'Moving Image': 'MovingImage',
+        'Notated Music': 'Text',
+        'Software, Multimedia': 'Software',
+        'Sound Recording': 'Sound',
+        'Sound Recording (Musical)': 'Sound',
+        'Sound Recording (Non-musical)': 'Sound',
+        'Still Image': 'StillImage',
+        'Text': 'Text',
+    }
 
     # create list of types
     type_list = [client.get(do).json().get('digital_object_type') for do in do_list]
