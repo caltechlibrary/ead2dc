@@ -286,7 +286,7 @@ def get_digital_object_type(do_list):
     #     Collection, Dataset, Event, Image, InteractiveResource,
     #     MovingImage, PhysicalObject, Service, Software, Sound,
     #     StillImage, Text
-    digital_object_type_values = {
+    digital_object_type_map = {
         'Cartographic': 'Image',
         'Mixed Materials': 'Collection',
         'Moving Image': 'MovingImage',
@@ -296,7 +296,7 @@ def get_digital_object_type(do_list):
         'Sound Recording (Musical)': 'Sound',
         'Sound Recording (Non-musical)': 'Sound',
         'Still Image': 'StillImage',
-        'Text': 'Text',
+        'Text': 'Text'
     }
 
     # create list of types
@@ -305,11 +305,10 @@ def get_digital_object_type(do_list):
     # de-duplicate
     type_list = list(set(type_list))
 
-    # remove None values
-    type_list = [t for t in type_list if t is not None]
-    
-    # concatenate types if more than one; return 'text (default)' if none
-    return ', '.join(type_list) if type_list else 'text'
+    # map values to dc:type and remove None values
+    type_list = [digital_object_type_map.get(dotype) for dotype in type_list if dotype in digital_object_type_map else 'Text']
+
+    return type_list
 
 
 #-----------------------------------------------------------------------#
@@ -492,7 +491,7 @@ ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
 intertime = time.time()
 
 # initialize stats_dict for collection statistics
-# {setid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
+# {setid: {'archival_objects': #, 'digital_objects': {hostcategory: #}, 'types': {type: #}}
 stats_dict = dict()
 
 # initialize coll_mdate_dict to track most recently modified record by collection
@@ -509,9 +508,9 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit records for testing
-    #j += 1
-    #if j > 2000:
-    #    break
+    j += 1
+    if j > 2000:
+        break
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
@@ -691,9 +690,20 @@ for ao, colls_dict in archival_objects_dict.items():
             extent.text = e.strip()
 
     # type
-    type_el = ET.SubElement(dc, 'dc:type')
-    type_el.text = get_digital_object_type(do_list)
-    
+    for type_value in get_digital_object_type(do_list):
+        type_el = ET.SubElement(dc, 'dc:type')
+        type_el.text = type_value
+
+        # add type to stats_dict
+        # {setid: {'types': {type_value: #}}
+        if stats_dict[collid].get('types'):
+            if stats_dict[collid]['types'].get(type_value):
+                stats_dict[collid]['types'][type_value] += 1
+            else:
+                stats_dict[collid]['types'][type_value] = 1
+        else:
+            stats_dict[collid]['types'][type_value] = 1
+
     # subjects
     subjects = list()
     for s in archival_object_metadata.get('subjects', []):
@@ -736,6 +746,10 @@ for collid, values in stats_dict.items():
 
     query = 'UPDATE collections SET docount=? WHERE collid=?;'
     db.execute(query, [do_count, collid])
+
+    for type_value, count in values.get('types', {}).items():
+        query = 'UPDATE collections SET '+type_value+'=? WHERE collid=?;'
+        db.execute(query, [count, collid])
 
 # string form of today's date to write to each record
 today = date.today().strftime('%Y-%m-%d')
