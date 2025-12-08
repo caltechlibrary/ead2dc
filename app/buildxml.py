@@ -287,16 +287,18 @@ def get_digital_object_type(do_list):
     #     MovingImage, PhysicalObject, Service, Software, Sound,
     #     StillImage, Text
     digital_object_type_map = {
-        'Cartographic': 'Image',
-        'Mixed Materials': 'Collection',
-        'Moving Image': 'MovingImage',
-        'Notated Music': 'Text',
-        'Software, Multimedia': 'Software',
-        'Sound Recording': 'Sound',
-        'Sound Recording (Musical)': 'Sound',
-        'Sound Recording (Non-musical)': 'Sound',
-        'Still Image': 'StillImage',
-        'Text': 'Text'
+        'Cartographic': 'still_image',
+        'Mixed Materials': 'collection',
+        'Moving Image': 'moving_image',
+        'Notated Music': 'text',
+        'Software, Multimedia': 'software',
+        'Sound Recording': 'sound',
+        'Sound Recording (Musical)': 'sound',
+        'Sound Recording (Non-musical)': 'sound',
+        'Still Image': 'still_image',
+        'Text': 'text',
+        'text': 'text',
+        'still_image': 'still_image'
     }
 
     # create list of types
@@ -306,12 +308,15 @@ def get_digital_object_type(do_list):
     type_list = list(set(type_list))
 
     # map values to dc:type and remove None values
-    type_list = [digital_object_type_map.get(dotype) for dotype in type_list]
+    type_list = [digital_object_type_map.get(t) for t in type_list]
 
     # remove None values
-    type_list = [dot for dot in type_list if dot]
+    type_list = [t for t in type_list if t is not None]
 
-    return type_list
+    if type_list == []:
+        return ['text']
+    else:
+        return type_list
 
 
 #-----------------------------------------------------------------------#
