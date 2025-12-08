@@ -338,9 +338,9 @@ def read_colls():
              ORDER BY aocount DESC;'
     colls = get_db().execute(query).fetchall()
     # archival object total
-    n0 = sum(k for (_,_,k,_,_,_,_,_,_,_,_) in colls)
+    n0 = sum(k for (_,_,k,_,_,_,_,_,_,_,_,_,_) in colls)
     # digital object total
-    n = sum(k for (_,_,_,k,_,_,_,_,_,_,_) in colls)
+    n = sum(k for (_,_,_,k,_,_,_,_,_,_,_,_,_) in colls)
     return (n0, n, len(colls), colls)
 
 # query db and update collections json file for list of ids
