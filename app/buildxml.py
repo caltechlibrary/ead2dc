@@ -748,7 +748,7 @@ for collid, values in stats_dict.items():
     db.execute(query, [do_count, collid])
 
     for type_value, count in values.get('types', {}).items():
-        query = 'UPDATE collections SET '+type_value+'=? WHERE collid=?;'
+        query = 'UPDATE collections SET type_'+type_value.lower()+'=? WHERE collid=?;'
         db.execute(query, [count, collid])
 
 # string form of today's date to write to each record
@@ -765,6 +765,7 @@ db.execute(query, [earliestDatestamp])
 
 query = 'UPDATE last_update SET dt=? WHERE fn=?;'
 db.execute(query, [last_update, 'xml'])
+
 db.close()
 connection.commit()
 connection.close()
