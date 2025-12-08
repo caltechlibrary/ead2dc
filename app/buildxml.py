@@ -287,18 +287,18 @@ def get_digital_object_type(do_list):
     #     MovingImage, PhysicalObject, Service, Software, Sound,
     #     StillImage, Text
     digital_object_type_map = {
-        'Cartographic': 'still_image',
+        'Cartographic': 'stillimage',
         'Mixed Materials': 'collection',
-        'Moving Image': 'moving_image',
+        'Moving Image': 'movingimage',
         'Notated Music': 'text',
         'Software, Multimedia': 'software',
         'Sound Recording': 'sound',
         'Sound Recording (Musical)': 'sound',
         'Sound Recording (Non-musical)': 'sound',
-        'Still Image': 'still_image',
+        'Still Image': 'stillimage',
         'Text': 'text',
         'text': 'text',
-        'still_image': 'still_image'
+        'still_image': 'stillimage'
     }
 
     # create list of types
@@ -516,9 +516,9 @@ for ao, colls_dict in archival_objects_dict.items():
 
     # temp
     # limit records for testing
-    j += 1
-    if j > 200:
-        break
+    #j += 1
+    #if j > 3000:
+    #    break
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
