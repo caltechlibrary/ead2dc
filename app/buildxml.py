@@ -570,7 +570,7 @@ for ao, colls_dict in archival_objects_dict.items():
         if stats_dict.get(collid):
             stats_dict[collid]['archival_objects'] += 1
         else:
-            stats_dict[collid] = {'archival_objects': 1, 'digital_objects': dict()}
+            stats_dict[collid] = {'archival_objects': 1, 'digital_objects': dict(), 'types': dict()}
 
         # track last modified date by collection
         if coll_mdate_dict.get(collid):
