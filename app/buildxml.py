@@ -306,7 +306,7 @@ def get_digital_object_type(do_list):
     type_list = list(set(type_list))
 
     # map values to dc:type and remove None values
-    type_list = [digital_object_type_map.get(dotype) for dotype in type_list if dotype in digital_object_type_map else 'Text']
+    type_list = [digital_object_type_map.get(dotype) if dotype in digital_object_type_map else 'Text' for dotype in type_list]
 
     return type_list
 
