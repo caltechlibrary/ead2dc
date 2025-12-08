@@ -100,7 +100,8 @@
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Archival Objects</th>
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Digital Objects</th>
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}List Records</th>
-    {% if g.user and g.auth %}<th colspan="4">Host/Link domain</th>{% endif %}
+    {% if g.user and g.auth %}<th colspan="4">Host/Link domain</th>
+                              <th colspan="2">Type</th>{% endif %}
 </tr>
 {% if g.user and g.auth %}
 <tr>
@@ -108,6 +109,8 @@
     <th>Internet Archive</th>
     <th>YouTube</th>
     <th>Other</th>
+    <th>StillImage</th>
+    <th>Text</th>
 </tr>
 {% endif %}
 
@@ -117,7 +120,9 @@
     tot_clibrary = 0,
     tot_iarchive = 0,
     tot_youtube = 0,
-    tot_other = 0
+    tot_other = 0,
+    tot_stillimage = 0,
+    tot_text = 0
     ) %}
 
 {% for coll in output[3] %}
@@ -146,6 +151,8 @@
         <td align="right">{{ coll[5] }}</td> {% set ns.tot_iarchive = ns.tot_iarchive + coll[5] %}
         <td align="right">{{ coll[6] }}</td> {% set ns.tot_youtube = ns.tot_youtube + coll[6] %}
         <td align="right">{{ coll[7] }}</td> {% set ns.tot_other = ns.tot_other + coll[7] %}
+        <td align="right">{{ coll[8] }}</td> {% set ns.tot_stillimage = ns.tot_stillimage + coll[8] %}
+        <td align="right">{{ coll[9] }}</td> {% set ns.tot_text = ns.tot_text + coll[9] %}
         {% endif %}
     </tr>
     {% endif %}
@@ -160,6 +167,8 @@
     <th align="right">{{ ns.tot_iarchive }}</th>
     <th align="right">{{ ns.tot_youtube }}</th>
     <th align="right">{{ ns.tot_other }}</th>
+    <th align="right">{{ ns.tot_stillimage }}</th>
+    <th align="right">{{ ns.tot_text }}</th>
     {% endif %}
 </tr>
 </table>

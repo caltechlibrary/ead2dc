@@ -287,18 +287,18 @@ def get_digital_object_type(do_list):
     #     MovingImage, PhysicalObject, Service, Software, Sound,
     #     StillImage, Text
     digital_object_type_map = {
-        'Cartographic': 'stillimage',
-        'Mixed Materials': 'collection',
-        'Moving Image': 'movingimage',
-        'Notated Music': 'text',
-        'Software, Multimedia': 'software',
-        'Sound Recording': 'sound',
-        'Sound Recording (Musical)': 'sound',
-        'Sound Recording (Non-musical)': 'sound',
-        'Still Image': 'stillimage',
-        'Text': 'text',
-        'text': 'text',
-        'still_image': 'stillimage'
+        'Cartographic': 'StillImage',
+        'Mixed Materials': 'Collection',
+        'Moving Image': 'MovingImage',
+        'Notated Music': 'Image',
+        'Software, Multimedia': 'Software',
+        'Sound Recording': 'Sound',
+        'Sound Recording (Musical)': 'Sound',
+        'Sound Recording (Non-musical)': 'Sound',
+        'Still Image': 'StillImage',
+        'Text': 'Text',
+        'text': 'Text',
+        'still_image': 'StillImage'
     }
 
     # create list of types
