@@ -320,7 +320,20 @@ def get_total_counts():
 
 # read collections data for display
 def read_colls():
-    query = 'SELECT collno, colltitle, aocount, docount, caltechlibrary, internetarchive, youtube, other, incl, typ, last_edit \
+    query = 'SELECT \
+                collno, \
+                colltitle, \
+                aocount, \
+                docount, \
+                caltechlibrary, \
+                internetarchive, \
+                youtube, \
+                other, \
+                incl, \
+                typ, \
+                last_edit, \
+                type_stillimage, \
+                type_text \
              FROM collections \
              ORDER BY aocount DESC;'
     colls = get_db().execute(query).fetchall()
