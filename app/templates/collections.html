@@ -86,13 +86,9 @@
 {% if g.user and g.auth %}<form action="{{ url_for('oaidp.collections3') }}" method="POST">{% endif %}
 <table>
 <tr>
-    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}
-        {% if g.user and g.auth %}
-            <button type="submit">Update OAI<br/>Data Provider</button>
-        {% else %}
-            Available
-        {% endif %}
-    </th>
+    {% if g.user and g.auth %}
+    <th rowspan="2"><button type="submit">Update OAI<br/>Data Provider</button></th>
+    {% endif %}
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Collection Type</th>
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Record ID</th>
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Title</th>
@@ -128,13 +124,12 @@
 {% for coll in output[3] %}
     {% if coll[8] or (g.user and g.auth) %}
     <tr>
-        <td align="center">
-            {% if g.user and g.auth %}    
-                <input name="include" id="include" type="checkbox" value="{{ coll[0] }}"{% if coll[8] %} checked {% endif %}>
-            {% elif coll[8] %}
-                &#x2713;
-            {% endif %}
+        
+        {% if g.user and g.auth %}
+        <td align="center"></td>    
+            <input name="include" id="include" type="checkbox" value="{{ coll[0] }}"{% if coll[8] %} checked {% endif %}>
         </td>
+        {% endif %}
         <td>{{ coll[9] }}</td>
         <td><a href="{{ url }}{{ coll[9] }}s/{{ coll[0] }}">{{ coll[0] }}</a></td>
         <td><strong>{{ coll[1] }}</strong></td>
@@ -158,7 +153,11 @@
     {% endif %}
 {% endfor %}
 <tr>
+    {% if g.user and g.auth %}
     <th align="right" colspan="5">Totals</th>
+    {% else %}
+    <th align="right" colspan="4">Totals</th>
+    {% endif %}
     <th align="right">{{ ns.tot_aocount }}</th>
     <th align="right">{{ ns.tot_docount }}</th>
     <th></th>
