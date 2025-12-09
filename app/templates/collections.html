@@ -88,8 +88,8 @@
 <tr>
     {% if g.user and g.auth %}
     <th rowspan="2"><button type="submit">Update OAI<br/>Data Provider</button></th>
-    {% endif %}
-    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Collection Type</th>
+    <th rowspan="2">Collection Type</th>
+    {% else %}
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Record ID</th>
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Title</th>
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Last edit</th>
@@ -129,8 +129,8 @@
         <td align="center"></td>    
             <input name="include" id="include" type="checkbox" value="{{ coll[0] }}"{% if coll[8] %} checked {% endif %}>
         </td>
-        {% endif %}
         <td>{{ coll[9] }}</td>
+        {% endif %}
         <td><a href="{{ url }}{{ coll[9] }}s/{{ coll[0] }}">{{ coll[0] }}</a></td>
         <td><strong>{{ coll[1] }}</strong></td>
         <td>{{ coll[10] }}</td>
@@ -156,7 +156,7 @@
     {% if g.user and g.auth %}
     <th align="right" colspan="5">Totals</th>
     {% else %}
-    <th align="right" colspan="4">Totals</th>
+    <th align="right" colspan="3">Totals</th>
     {% endif %}
     <th align="right">{{ ns.tot_aocount }}</th>
     <th align="right">{{ ns.tot_docount }}</th>
