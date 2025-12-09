@@ -89,7 +89,7 @@
     {% if g.user and g.auth %}
     <th rowspan="2"><button type="submit">Update OAI<br/>Data Provider</button></th>
     <th rowspan="2">Collection Type</th>
-    {% else %}
+    {% endif %}
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Record ID</th>
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Title</th>
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Last edit</th>
