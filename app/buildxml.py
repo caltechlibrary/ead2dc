@@ -365,7 +365,8 @@ cursor.execute(query)
 
 # save query to insert collection records into db
 query = 'INSERT INTO collections \
-            (collno,colltitle,description,collid,aocount,docount,incl,caltechlibrary,internetarchive,youtube,other,typ) \
+            (collno,colltitle,description,collid,aocount,docount,incl,caltechlibrary,internetarchive,youtube,other,typ, \
+            type_text, type_stillimage, type_movingimage, type_sound, type_other) \
          VALUES \
             (?,?,?,?,?,?,?,?,?,?,?,?);'
 
@@ -401,18 +402,24 @@ for collection in collections_dict:
                 coll_dos.add(do)
 
     # insert collection record into db
-    cursor.execute(query, [collno,                              # coll[0] = collno (str)
-                           colltitle,                           # coll[1] = colltitle (str)
-                           description,                         # coll[2] = description (str)                 
-                           collid,                              # coll[3] = collid (str) 
-                           0,                                   # coll[4] = aocount (int) 
-                           0,                                   # coll[5] = docount (int) 
-                           includedcollections.get(collno, 0),  # coll[6] = incl (Boolean) 
-                           0,                                   # coll[7] = caltechlibrary (int)
-                           0,                                   # coll[8] = internetarchive (int)
-                           0,                                   # coll[9] = youtube (int) 
-                           0,                                   # coll[10] = other (int) 
-                           colltyp])                            # coll[11] = typ ('resource'|'accession')
+    cursor.execute(query, [collno,                              # collno (str)
+                           colltitle,                           # colltitle (str)
+                           description,                         # description (str)                 
+                           collid,                              # collid (str) 
+                           0,                                   # aocount (int) 
+                           0,                                   # docount (int) 
+                           includedcollections.get(collno, 0),  # incl (Boolean) 
+                           0,                                   # caltechlibrary (int)
+                           0,                                   # internetarchive (int)
+                           0,                                   # youtube (int) 
+                           0,                                   # other (int) 
+                           colltyp,                             # typ ('resource'|'accession')
+                           0,                                   # type_text (int)
+                           0,                                   # type_stillimage (int)
+                           0,                                   # type_movingimage (int)
+                           0,                                   # type_sound (int)
+                           0                                    # type_other (int)
+                           ])
     
     print('>', client.get(collection).json()['title'],
           '(' + str(len(coll_aos)) + ' archival objects; ' + str(len(coll_dos)) +  ' digital objects' + ')')
