@@ -93,11 +93,11 @@
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Record ID</th>
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Title</th>
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Last edit</th>
-    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Archival Objects</th>
-    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Digital Objects</th>
+    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Archival<br>Objects</th>
+    {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}Digital<br> Objects</th>
     {% if g.user and g.auth %}<th rowspan="2">{% else %}<th>{% endif %}List Records</th>
     {% if g.user and g.auth %}<th colspan="4">Host/Link domain</th><th colspan="2">Type</th>
-                    {% else %}<th>Type: StillImage</th><th>Type: Text</th>{% endif %}
+                    {% else %}<th>Type:<br>StillImage</th><th>Type:<br>Text</th>{% endif %}
 </tr>
 {% if g.user and g.auth %}
 <tr>
