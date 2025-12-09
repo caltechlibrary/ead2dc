@@ -7,6 +7,17 @@ body {
     padding: 0;
 }
 
+/* Global focus styles for accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: 3px solid rgba(244, 93, 44, 0.25);
+    outline-offset: 2px;
+}
+
 /* Skip link for accessibility */
 .skip-link {
     position: absolute;
@@ -43,19 +54,40 @@ body {
 #logo {
     width: 460px;
     flex-shrink: 0;
+    overflow: visible;
 }
 
 /* SVG logo styling */
 #logo rect {
     fill: transparent;
+    stroke: transparent;
+    transition: fill 0.2s ease, stroke 0.2s ease;
+}
+
+#logo a:hover > rect {
+    fill: rgba(244, 93, 44, 0.25);
+}
+
+#logo a:focus-visible > rect {
+    stroke: rgba(244, 93, 44, 0.25);
+    stroke-width: 3px;
+}
+
+#logo a {
+    outline: none;
 }
 
 #logo .caltech-logotype {
-    fill: #FF6C0C; /* Caltech orange */
+    fill: #FF6C0C;
+    transition: fill 0.2s ease;
+}
+
+#logo a:first-of-type:hover > .caltech-logotype {
+    fill: #000000;
 }
 
 #logo path:not(.caltech-logotype) {
-    fill: #000000; /* Black for Archives & Special Collections */
+    fill: #000000; 
 }
 
 a:link {
@@ -126,7 +158,7 @@ tr:nth-child(odd) {
     align-items: center;
     gap: 10px;
     white-space: nowrap;
-    margin-left: auto; /* Pushes nav to the right */
+    margin-left: auto;
 }
 
 .utility-nav a {
@@ -139,7 +171,7 @@ tr:nth-child(odd) {
     text-decoration: underline;
 }
 
-/* Responsive: adjust when nav needs to wrap */
+/* Responsive */
 @media (max-width: 980px) {
     .site-branding {
         padding: 20px 40px;
