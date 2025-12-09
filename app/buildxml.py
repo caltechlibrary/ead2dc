@@ -296,9 +296,11 @@ def get_digital_object_type(do_list):
         'Sound Recording (Musical)': 'Sound',
         'Sound Recording (Non-musical)': 'Sound',
         'Still Image': 'StillImage',
+        'stillimage': 'StillImage',
+        'still_image': 'StillImage',
+        'StillImage': 'StillImage',
         'Text': 'Text',
-        'text': 'Text',
-        'still_image': 'StillImage'
+        'text': 'Text'
     }
 
     # create list of types
