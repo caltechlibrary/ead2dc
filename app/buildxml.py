@@ -23,7 +23,16 @@ from urllib.parse import urlparse
 from asnake.client import ASnakeClient
 
 #-----------------------------------------------------------------------#
-# FUNCTIONS                                                             #
+# FUNCTIONS (in order of appearance)
+#   authorize_api()
+#   prettify(elem)
+#   create_collection_description(coll_info)
+#   build_collections_dict()
+#   create_valid_hostnames_set(file_uris)
+#   get_domain_from_url(file_url)
+#   published_file_uris(do_list)
+#   get_set_id(collection_id)
+#   get_digital_object_type(do_list)
 #-----------------------------------------------------------------------#
 
 # establish API connection
@@ -322,24 +331,47 @@ def get_digital_object_type(do_list):
 
 
 #-----------------------------------------------------------------------#
-# START OF SCRIPT                                                       #
+# START OF SCRIPT 
+# 
+# Contents
+# 
+# 1. ESTABLISH API CONNECTION
+# 2. BUILD COLLECTIONS DICTIONARIES
+# 3. READ/WRITE COLLECTION DATA TO DATABASE FROM ARCHIVESSPACE
+# 4. BUILD OAI-PMH XML OBJECT (oaixml)
+# 5. UPDATE DATABASE
+# 6. WRITE XML TO DISK
 #-----------------------------------------------------------------------#
 
 start = time.time()
 
-# db location
-print('Reading database location...')
-dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
-
-# authorize API
+#-----------------------------------------------------------------------#
+# 1. ESTABLISH API CONNECTION
+#-----------------------------------------------------------------------#
 print('Authorizing API...')
 client = authorize_api()
 
-# build collections dictionary
+#-----------------------------------------------------------------------#
+# 2. BUILD COLLECTIONS DICTIONARIES
+#-----------------------------------------------------------------------#
+# builds two dictionaries: for collections and archival objects
+# collections_dict has the form {collection: {ao: {do}}}
+# archival_objects_dict has the form {ao: {'collections': [collection], 'digital_objects: [do]}}
 print('Building collections dictionary...')
 collections_dict, archival_objects_dict = build_collections_dict()
 
-# read included collections from db
+#-----------------------------------------------------------------------#
+# 3. READ/WRITE COLLECTION DATA TO DATABASE FROM ARCHIVESSPACE
+#-----------------------------------------------------------------------#
+# db location
+# relevant tables in database:
+#   collections - records data about collections with digital content
+#   dates - records dates of last updates of XML file and collection selection
+#   logs - logs data provider requests (used in oaidp.py)
+print('Reading database location...')
+dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
+
+# open database connection
 connection = sq.connect(dbpath)
 cursor = connection.cursor()
 
@@ -366,9 +398,25 @@ query = 'DELETE FROM collections;'
 cursor.execute(query)
 
 # save query to insert collection records into db
-query = 'INSERT INTO collections \
-            (collno,colltitle,description,collid,aocount,docount,incl,caltechlibrary,internetarchive,youtube,other,typ, \
-            type_text, type_stillimage, type_movingimage, type_sound, type_other) \
+query = 'INSERT INTO collections ( \
+            collno, \
+            colltitle, \
+            description, \
+            collid, \
+            aocount, \
+            docount, \
+            incl, \
+            caltechlibrary, \
+            internetarchive, \
+            youtube, \
+            other, \
+            typ, \
+            type_text, \
+            type_stillimage, \
+            type_movingimage, \
+            type_sound, \
+            type_other \
+            ) \
          VALUES \
             (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'
 
@@ -379,16 +427,15 @@ for collection in collections_dict:
     # get collection info
     coll_info = client.get(collection).json()
 
-    # extract collection data
+     # create collection description from collection notes in ArchivesSpace
     collid = coll_info['uri']
     colltitle = coll_info['title']
     description = create_collection_description(coll_info)
 
     # initialize sets to count unique digital objects and archival objects
-    coll_dos = set()
-    coll_aos = set()
+    coll_dos, coll_aos = set(), set()
 
-    # identify collection type and number
+    # extract collection type and number from collection id
     if collid[16:25] == 'resources':
         colltyp = 'resource'
         collno = collid[26:]
@@ -423,6 +470,7 @@ for collection in collections_dict:
                            0                                    # type_other (int)
                            ])
     
+    # print collection summary
     print('>', client.get(collection).json()['title'],
           '(' + str(len(coll_aos)) + ' archival objects; ' + str(len(coll_dos)) +  ' digital objects' + ')')
 
@@ -430,13 +478,19 @@ for collection in collections_dict:
 connection.commit()
 
 # read collection info from db
-# colls is a list of tuples
-query = 'SELECT collno,colltitle,description,collid,aocount,docount,incl,caltechlibrary,internetarchive,youtube,other,typ FROM collections'
+# colls is a list of tuples: {(collno, colltitle, description, collid, aocount, docount, incl,
+#                             caltechlibrary, internetarchive, youtube, other, typ)}
+query = 'SELECT collno, colltitle, description, collid, aocount, docount, incl, \
+                caltechlibrary, internetarchive, youtube, other, typ \
+         FROM collections'
 colls = cursor.execute(query).fetchall()
 cursor.close()
 connection.close()
 
-# build XML
+#-----------------------------------------------------------------------#
+# 4. BUILD OAI-PMH XML OBJECT (oaixml)
+#-----------------------------------------------------------------------#
+
 print('Building static repository...')
 
 # namespace dictionary
@@ -742,6 +796,9 @@ for ao, colls_dict in archival_objects_dict.items():
                     You are free to use this Item in any way that is permitted by the copyright \
                     and related rights legislation that applies to your use.'
 
+#-----------------------------------------------------------------------#
+# 5. UPDATE DATABASE
+#-----------------------------------------------------------------------#
 # update collection statistics in db
 # {collid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
 connection = sq.connect(dbpath)
@@ -764,14 +821,12 @@ for collid, values in stats_dict.items():
         query = 'UPDATE collections SET type_'+type_value.lower()+'=? WHERE collid=?;'
         db.execute(query, [count, collid])
 
-# string form of today's date to write to each record
-today = date.today().strftime('%Y-%m-%d')
-
-earliestDatestamp = today
+# update last modified date by collection in db
 query = 'UPDATE collections SET last_edit=? WHERE collid=?;'
+today = date.today().strftime('%Y-%m-%d')
 for collid, mod_date in coll_mdate_dict.items():
     db.execute(query, [mod_date, collid])
-    earliestDatestamp = min(earliestDatestamp, mod_date)
+    earliestDatestamp = min(today, mod_date)
 
 query = 'UPDATE dates SET earliest = ?'
 db.execute(query, [earliestDatestamp])
@@ -783,7 +838,9 @@ db.close()
 connection.commit()
 connection.close()
 
-#write to disk
+#-----------------------------------------------------------------------#
+# 6. WRITE XML TO DISK
+#-----------------------------------------------------------------------#
 
 # production file
 fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
@@ -791,13 +848,8 @@ fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives
 with open(fileout, 'w') as f:
     f.write(prettify(oaixml))
 
-'''
-for collection in dao_dict:
-    print(collection)
-    for url in dao_dict[collection]:
-        print('>', url, dao_dict[collection][url])
-'''
-
-print('\nTotal elapsed  :', round(time.time() - start, 1))
+# print elapsed time in seconds (about 75 mins)
+print('\nTotal elapsed  +' \
+':', round(time.time() - start, 1))
 
 print('Done.')
