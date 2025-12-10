@@ -290,7 +290,7 @@ def get_digital_object_type(do_list):
         'Cartographic'                  : 'StillImage',
         'Mixed Materials'               : 'Collection',
         'Moving Image'                  : 'MovingImage',
-        'Notated Music'                 : 'Image',
+        'Notated Music'                 : 'StillImage',
         'Software, Multimedia'          : 'Software',
         'Sound Recording'               : 'Sound',
         'Sound Recording (Musical)'     : 'Sound',
