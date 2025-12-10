@@ -370,7 +370,7 @@ query = 'INSERT INTO collections \
             (collno,colltitle,description,collid,aocount,docount,incl,caltechlibrary,internetarchive,youtube,other,typ, \
             type_text, type_stillimage, type_movingimage, type_sound, type_other) \
          VALUES \
-            (?,?,?,?,?,?,?,?,?,?,?,?);'
+            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'
 
 # iterate over collections dictionary to insert collection records into db
 print ('Collections with digital objects...')
