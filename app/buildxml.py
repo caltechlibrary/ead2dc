@@ -287,20 +287,20 @@ def get_digital_object_type(do_list):
     #     MovingImage, PhysicalObject, Service, Software, Sound,
     #     StillImage, Text
     digital_object_type_map = {
-        'Cartographic': 'StillImage',
-        'Mixed Materials': 'Collection',
-        'Moving Image': 'MovingImage',
-        'Notated Music': 'Image',
-        'Software, Multimedia': 'Software',
-        'Sound Recording': 'Sound',
-        'Sound Recording (Musical)': 'Sound',
-        'Sound Recording (Non-musical)': 'Sound',
-        'Still Image': 'StillImage',
-        'stillimage': 'StillImage',
-        'still_image': 'StillImage',
-        'StillImage': 'StillImage',
-        'Text': 'Text',
-        'text': 'Text'
+        'Cartographic'                  : 'StillImage',
+        'Mixed Materials'               : 'Collection',
+        'Moving Image'                  : 'MovingImage',
+        'Notated Music'                 : 'Image',
+        'Software, Multimedia'          : 'Software',
+        'Sound Recording'               : 'Sound',
+        'Sound Recording (Musical)'     : 'Sound',
+        'Sound Recording (Non-musical)' : 'Sound',
+        'Still Image'                   : 'StillImage',
+        'stillimage'                    : 'StillImage',
+        'still_image'                   : 'StillImage',
+        'StillImage'                    : 'StillImage',
+        'Text'                          : 'Text',
+        'text'                          : 'Text'
     }
 
     # create list of types
@@ -504,8 +504,6 @@ for coll in colls:
 
 # build ListRecords segment
 ListRecords = ET.SubElement(oaixml, 'ListRecords', {'metadataPrefix': 'oai_dc'})
-
-intertime = time.time()
 
 # initialize stats_dict for collection statistics
 # {setid: {'archival_objects': #, 'digital_objects': {hostcategory: #}, 'types': {type: #}}
@@ -744,8 +742,6 @@ for ao, colls_dict in archival_objects_dict.items():
                     You are free to use this Item in any way that is permitted by the copyright \
                     and related rights legislation that applies to your use.'
 
-intertime = time.time()
-
 # update collection statistics in db
 # {collid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
 connection = sq.connect(dbpath)
@@ -802,6 +798,6 @@ for collection in dao_dict:
         print('>', url, dao_dict[collection][url])
 '''
 
-print('\nTotal elapsed time:', round(time.time() - start, 1))
+print('\nTotal elapsed  :', round(time.time() - start, 1))
 
 print('Done.')
