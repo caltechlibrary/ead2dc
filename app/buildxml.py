@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# xml-build.py
+# buildxml.py
 #
 # Generates static OAI-PMH XML for Caltech Archives digital objects
 # Data source is ArchivesSpace API
