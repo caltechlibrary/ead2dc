@@ -412,7 +412,7 @@ def get_digital_object_type(do_list):
     type_list = [t for t in type_list if t is not None]
 
     if type_list == []:
-        return ['Text']
+        return ['text']
     else:
         return type_list
 
