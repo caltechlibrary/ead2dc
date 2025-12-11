@@ -135,7 +135,7 @@ qdb_collections_select = 'SELECT \
                                     type_sound, \
                                     type_other \
                                     ) \
-                                FROM collections'
+                                FROM collections;'
 
 #-----------------------------------------------------------------------#
 # FUNCTIONS (in order of appearance)
