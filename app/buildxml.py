@@ -34,8 +34,8 @@ from asnake.client import ASnakeClient
 
 # Initialize parser
 parser = argparse.ArgumentParser()
-parser.add_argument('-r', '--runtype', default='production')
-parser.add_argument('-n', '--num_recs', default='-1')
+parser.add_argument('-r', '--runtype', default='production', type=str)
+parser.add_argument('-n', '--num_recs', default=-1, type=int)
 
 # Read arguments from command line
 args = parser.parse_args()
@@ -49,7 +49,7 @@ if runtype == 'production':
 
 else:
     print('Running in', runtype, 'mode...')
-    if int(num_recs) < 0:
+    if num_recs < 0:
         num_recs = 1000
     else:
         num_recs = int(num_recs)
