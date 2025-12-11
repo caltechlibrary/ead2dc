@@ -16,12 +16,46 @@ import time, os
 import sqlite3 as sq
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
+import argparse
 from datetime import date, datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
 # import ASnakeClient for ArchivesSpace API access
 from asnake.client import ASnakeClient
+
+#-----------------------------------------------------------------------#
+# RUNTYPE VARAIBLES
+
+# set -r to 'test' or 'dev' for test or development runs
+# default -r is 'production'
+# set -n to limit number of records processed (for testing)
+# default -n is 0 (process all records)
+
+# Initialize parser
+parser = argparse.ArgumentParser()
+parser.add_argument('-r', '--runtype', default='production')
+parser.add_argument('-n', '--num_recs', default='-1')
+
+# Read arguments from command line
+args = parser.parse_args()
+runtype = Path(args.runtype)
+num_recs = Path(args.num_recs)
+
+if runtype == 'production':
+    print('Running in production mode...')
+    print('Processing all records...')
+    xml_output_path = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
+
+else:
+    print('Running in', runtype, 'mode...')
+    if int(num_recs) < 0:
+        num_recs = 1000
+    else:
+        num_recs = int(num_recs)
+    print('Limiting to', num_recs, 'records for testing...')
+    xml_output_path = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives_test.xml')
+
 
 #-----------------------------------------------------------------------#
 # CONFIGURATION VARAIBLES
@@ -54,7 +88,52 @@ digital_object_type_map = {
         'text'                          : 'text'
     }
 
+# query to insert collection records into db
+dbq_collections_insert = 'INSERT INTO collections \
+                                    ( \
+                                    collno, \
+                                    colltitle, \
+                                    description, \
+                                    collid, \
+                                    aocount, \
+                                    docount, \
+                                    incl, \
+                                    caltechlibrary, \
+                                    internetarchive, \
+                                    youtube, \
+                                    other, \
+                                    typ, \
+                                    type_text, \
+                                    type_stillimage, \
+                                    type_movingimage, \
+                                    type_sound, \
+                                    type_other \
+                                    ) \
+                                VALUES \
+                                    (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'
 
+# query to read collection info from db
+qdb_collections_select = 'SELECT \
+                                    ( \
+                                    collno, \
+                                    colltitle, \
+                                    description, \
+                                    collid, \
+                                    aocount, \
+                                    docount, \
+                                    incl, \
+                                    caltechlibrary, \
+                                    internetarchive, \
+                                    youtube, \
+                                    other, \
+                                    typ, \
+                                    type_text, \
+                                    type_stillimage, \
+                                    type_movingimage, \
+                                    type_sound, \
+                                    type_other \
+                                    ) \
+                                FROM collections'
 
 #-----------------------------------------------------------------------#
 # FUNCTIONS (in order of appearance)
@@ -406,29 +485,6 @@ cursor.execute(query, [last_update, 'xml'])
 query = 'DELETE FROM collections;'
 cursor.execute(query)
 
-# save query to insert collection records into db
-query = 'INSERT INTO collections ( \
-            collno, \
-            colltitle, \
-            description, \
-            collid, \
-            aocount, \
-            docount, \
-            incl, \
-            caltechlibrary, \
-            internetarchive, \
-            youtube, \
-            other, \
-            typ, \
-            type_text, \
-            type_stillimage, \
-            type_movingimage, \
-            type_sound, \
-            type_other \
-            ) \
-         VALUES \
-            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'
-
 # iterate over collections dictionary to insert collection records into db
 print ('Collections with digital objects...')
 for collection in collections_dict:
@@ -460,7 +516,7 @@ for collection in collections_dict:
                 coll_dos.add(do)
 
     # insert collection record into db
-    cursor.execute(query, [collno,                              # collno (str)
+    cursor.execute(dbq_collections_insert, [collno,             # collno (str)
                            colltitle,                           # colltitle (str)
                            description,                         # description (str)                 
                            collid,                              # collid (str) 
@@ -486,13 +542,10 @@ for collection in collections_dict:
 # commit changes to db before reading
 connection.commit()
 
-# read collection info from db
 # colls is a list of tuples: {(collno, colltitle, description, collid, aocount, docount, incl,
-#                             caltechlibrary, internetarchive, youtube, other, typ)}
-query = 'SELECT collno, colltitle, description, collid, aocount, docount, incl, \
-                caltechlibrary, internetarchive, youtube, other, typ \
-         FROM collections'
-colls = cursor.execute(query).fetchall()
+#                             caltechlibrary, internetarchive, youtube, other, typ,
+#                             type_text, type_stillimage, type_movingimage, type_sound, type_other)}
+colls = cursor.execute(qdb_collections_select).fetchall()
 cursor.close()
 connection.close()
 
@@ -584,11 +637,11 @@ for ao, colls_dict in archival_objects_dict.items():
 
     print(ao, '   ', end='\r')
 
-    # temp
-    # limit records for testing
-    #j += 1
-    #if j > 3000:
-    #    break
+    # limit number of records processed if testing
+    if runtype != 'production':
+        j += 1
+        if j > num_recs:
+            break
 
     # get archival object metadata
     uri = ao + "?resolve[]=ancestors" \
@@ -851,10 +904,9 @@ connection.close()
 # 6. WRITE XML TO DISK
 #-----------------------------------------------------------------------#
 
-# production file
-fileout = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
-
-with open(fileout, 'w') as f:
+# write XML to disk
+print('Writing XML...')
+with open(xml_output_path, 'w') as f:
     f.write(prettify(oaixml))
 
 # print elapsed time in seconds (about 75 mins)
