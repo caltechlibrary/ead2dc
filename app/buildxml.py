@@ -5,7 +5,7 @@
 # Generates static OAI-PMH XML for Caltech Archives digital objects
 # Data source is ArchivesSpace API
 # Output is a single XML file: caltecharchives.xml
-# Only archival objects with digital objects are included
+# Only archival objects with associated digital objects are included
 # An SQLite3 database, instance/ead2dc.db, is used to store collection information
 # Tables: 
 #   logs - logs data provider requests
@@ -20,7 +20,41 @@ from datetime import date, datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
+# import ASnakeClient for ArchivesSpace API access
 from asnake.client import ASnakeClient
+
+#-----------------------------------------------------------------------#
+# CONFIGURATION VARAIBLES
+
+# use_statements to exclude
+# 'URL-Redirected' - redirected URLs not direct links
+use_exclude = ['URL-Redirected']
+
+# hostnames to exclude
+# github.com - github links are not direct links to digital content
+host_exclude = ['github.com']
+
+# maps of MODS types to Dublin Core types
+# source: https://www.loc.gov/standards/mods/mods-outline-3-6.html#typeOfResource
+# source: https://www.dublincore.org/specifications/dublin-core/dcmi
+digital_object_type_map = {
+        'Cartographic'                  : 'stillImage',
+        'Mixed Materials'               : 'collection',
+        'Moving Image'                  : 'movingimage',
+        'Notated Music'                 : 'stillimage',
+        'Software, Multimedia'          : 'software',
+        'Sound Recording'               : 'sound',
+        'Sound Recording (Musical)'     : 'sound',
+        'Sound Recording (Non-musical)' : 'sound',
+        'Still Image'                   : 'stillimage',
+        'stillimage'                    : 'stillimage',
+        'still_image'                   : 'stillimage',
+        'StillImage'                    : 'stillimage',
+        'Text'                          : 'text',
+        'text'                          : 'text'
+    }
+
+
 
 #-----------------------------------------------------------------------#
 # FUNCTIONS (in order of appearance)
@@ -183,10 +217,6 @@ def build_collections_dict():
 
 # removes invalid hostnames from file_uris list and returns set of valid hostnames
 def create_valid_hostnames_set(file_uris):
-
-    # hostnames to exclude
-    # github.com - github links are not direct links to digital content
-    host_exclude = ['github.com']
     
     hostnames = {get_domain_from_url(file_uri[0]) for file_uri in file_uris}
 
@@ -222,10 +252,6 @@ def published_file_uris(do_list):
 
     # create file_uris set
     file_uris = set()
-
-    # use_statements to exclude
-    # 'URL-Redirected' - redirected URLs not direct links
-    use_exclude = ['URL-Redirected']
 
     # iterate over digital objects linked to archival object
     for do in do_list:
@@ -295,23 +321,6 @@ def get_digital_object_type(do_list):
     #     Collection, Dataset, Event, Image, InteractiveResource,
     #     MovingImage, PhysicalObject, Service, Software, Sound,
     #     StillImage, Text
-    digital_object_type_map = {
-        'Cartographic'                  : 'StillImage',
-        'Mixed Materials'               : 'Collection',
-        'Moving Image'                  : 'MovingImage',
-        'Notated Music'                 : 'StillImage',
-        'Software, Multimedia'          : 'Software',
-        'Sound Recording'               : 'Sound',
-        'Sound Recording (Musical)'     : 'Sound',
-        'Sound Recording (Non-musical)' : 'Sound',
-        'Still Image'                   : 'StillImage',
-        'stillimage'                    : 'StillImage',
-        'still_image'                   : 'StillImage',
-        'StillImage'                    : 'StillImage',
-        'Text'                          : 'Text',
-        'text'                          : 'Text'
-    }
-
     # create list of types
     type_list = [client.get(do).json().get('digital_object_type') for do in do_list]
 
