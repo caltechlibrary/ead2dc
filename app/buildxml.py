@@ -904,7 +904,6 @@ connection.close()
 #-----------------------------------------------------------------------#
 
 # write XML to disk
-print('Writing XML...')
 with open(xml_output_path, 'w') as f:
     f.write(prettify(oaixml))
 
