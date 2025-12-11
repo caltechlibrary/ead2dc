@@ -115,7 +115,7 @@ dbq_collections_insert = 'INSERT INTO collections \
                                     (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'
 
 # query to read collection info from db
-qdb_collections_select = 'SELECT (  collno, \
+qdb_collections_select = 'SELECT    collno, \
                                     colltitle, \
                                     description, \
                                     collid, \
@@ -126,7 +126,12 @@ qdb_collections_select = 'SELECT (  collno, \
                                     internetarchive, \
                                     youtube, \
                                     other, \
-                                    typ ) \
+                                    typ, \
+                                    type_text, \
+                                    type_stillimage, \
+                                    type_movingimage, \
+                                    type_sound, \
+                                    type_other \
                                 FROM collections;'
 
 #-----------------------------------------------------------------------#
