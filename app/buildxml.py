@@ -56,6 +56,7 @@ else:
         num_recs = int(num_recs)
     except:
         num_recs = -1
+    print(num_recs)
     if num_recs < 0:
         num_recs = 1000
     print('Limiting to', num_recs, 'records for testing...')
