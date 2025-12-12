@@ -38,7 +38,7 @@ from asnake.client import ASnakeClient
 # Initialize parser
 parser = argparse.ArgumentParser()
 parser.add_argument('-r', '--runtype', default='production')
-parser.add_argument('-n', '--num_recs', default='-1')
+parser.add_argument('-n', '--num_recs', default=-1, type=int)
 
 # Read arguments from command line
 args = parser.parse_args()
