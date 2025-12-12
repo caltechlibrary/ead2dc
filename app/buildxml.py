@@ -42,8 +42,8 @@ parser.add_argument('-n', '--num_recs', default=-1, type=int)
 
 # Read arguments from command line
 args = parser.parse_args()
-runtype = Path(args.runtype)
-num_recs = Path(args.num_recs)
+runtype = args.runtype
+num_recs = args.num_recs
 
 if runtype == 'production':
     print('Running in production mode...')
