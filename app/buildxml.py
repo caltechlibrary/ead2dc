@@ -564,8 +564,7 @@ def main():
         for ao in collections_dict[collection]:
             coll_aos.add(ao)
             for dos in collections_dict[collection][ao]:
-                for do in dos:
-                    coll_dos.add(do)
+                coll_dos.add(do)
 
         # insert collection record into db
         cursor.execute(dbq_collections_insert, [collno,             # collno (str)
