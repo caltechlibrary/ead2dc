@@ -54,7 +54,6 @@ else:
     print('Running in', runtype, 'mode...')
     if num_recs < 0:
         num_recs = 1000
-    print(num_recs, type(num_recs))
     print('Limiting to', num_recs, 'records for testing...')
     xml_output_path = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives_test.xml')
 
