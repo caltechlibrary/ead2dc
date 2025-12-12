@@ -27,10 +27,13 @@ from asnake.client import ASnakeClient
 #-----------------------------------------------------------------------#
 # RUNTYPE VARAIBLES
 
-# set -r to 'test' or 'dev' for test or development runs
+# set -r to 'test' or 'dev' or anything except 'production' for test or development runs
 # default -r is 'production'
 # set -n to limit number of records processed (for testing)
-# default -n is 0 (process all records)
+# default -n is 1000 for development runtype
+# default -n is all records for production runtype
+# output xml file is caltecharchives_test.xml for test or development runtype
+# output xml file is caltecharchives.xml for production runtype
 
 # Initialize parser
 parser = argparse.ArgumentParser()
@@ -90,6 +93,29 @@ digital_object_type_map = {
         'text'                          : 'text'
     }
 
+# default resource type if none found in digital object
+default_digital_object_type = 'text'
+
+# TABLE:    collections
+# COLUMNS:  collno              text    numerical id of collection, e.g. '123'
+#           colltitle           text    title of collection, e.g. 'John Doe Papers'
+#           description         text    description of collection  
+#           collid              text    ArchivesSpace collection id, e.g. '/repositories/2/resources/123'
+#           aocount             int     number of archival objects in collection
+#           docount             int     number of digital objects in collection
+#           incl                int     whether or not collection is published via OAI (1 = include, 0 = exclude)
+#           caltechlibrary      int     number of digital objects hosted on Caltech Library servers
+#           internetarchive     int     number of digital objects hosted on Internet Archive
+#           youtube             int     number of digital objects hosted on YouTube
+#           other               int     number of digital objects hosted on other servers
+#           typ                 text    collection type: 'resource' or 'accession'
+#           type_text           int     number of digital objects of type 'text'
+#           type_stillimage     int     number of digital objects of type 'stillImage'
+#           type_movingimage    int     number of digital objects of type 'movingImage'
+#           type_sound          int     number of digital objects of type 'sound'
+#           type_other          int     number of digital objects of other types
+#           last_edit           text    date of last edit to collection record (from previous build)
+
 # query to insert collection records into db
 dbq_collections_insert = 'INSERT INTO collections \
                                     ( \
@@ -136,15 +162,35 @@ qdb_collections_select = 'SELECT    collno, \
 
 #-----------------------------------------------------------------------#
 # FUNCTIONS (in order of appearance)
-#   authorize_api()
-#   prettify(elem)
-#   create_collection_description(coll_info)
-#   build_collections_dict()
-#   create_valid_hostnames_set(file_uris)
-#   get_domain_from_url(file_url)
-#   published_file_uris(do_list)
-#   get_set_id(collection_id)
-#   get_digital_object_type(do_list)
+#
+#   authorize_api()                             establish API connection
+#
+#   prettify(elem)                              returns a "pretty" XML string 
+#                                               from an ElementTree Element
+#
+#   create_collection_description(coll_info)    create collection description string from 
+#                                               collection notes in ArchivesSpace
+#                                               used to compile dc:description element in 
+#                                               OAI-PMH setDescription
+#
+#   build_collections_dict()                    builds two dictionaries: for collections and archival objects
+#                                               collections_dict has the form {collection: {ao: {do}}}
+#                                               archival_objects_dict has the form 
+#                                               {ao: {'collections': [collection], 'digital_objects': [do]}}
+#
+#   create_valid_hostnames_set(file_uris)       removes invalid hostnames from file_uris list and 
+#                                               returns set of valid hostnames
+#
+#   get_domain_from_url(file_url)               extracts domain from url
+#
+#   published_file_uris(do_list)                returns list of published file URIs and use statements from 
+#                                               digital objects in do_list. do_list is a list of digital object URIs
+#                                               returns list of tuples: (file_uri, use_statement)
+#
+#   get_set_id(collection_id)                   converts collection id to set id
+#
+#   get_digital_object_type(do_list)            returns list of digital object types from digital objects in do_list
+#                                               uses digital_object_type_map to map ArchivesSpace types to Dublin Core types
 #-----------------------------------------------------------------------#
 
 # establish API connection
@@ -378,6 +424,7 @@ def published_file_uris(do_list):
 
 #-----------------------------------------------------------------------#
 
+# converts collection id to set id
 def get_set_id(collection_id):
 
     id_list = collection_id.split('/')
@@ -390,6 +437,7 @@ def get_set_id(collection_id):
 
 #-----------------------------------------------------------------------#
 
+# returns list of digital object types from digital objects in do_list
 def get_digital_object_type(do_list):
 
     # ArchivesSpace digital_object_type_values
@@ -412,7 +460,7 @@ def get_digital_object_type(do_list):
     type_list = [t for t in type_list if t is not None]
 
     if type_list == []:
-        return ['text']
+        return [default_digital_object_type]
     else:
         return type_list
 
