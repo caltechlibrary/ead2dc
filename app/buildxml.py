@@ -563,7 +563,7 @@ def main():
         # iterate over collection to count unique digital objects and archival objects
         for ao in collections_dict[collection]:
             coll_aos.add(ao)
-            for dos in collections_dict[collection][ao]:
+            for do in collections_dict[collection][ao]:
                 coll_dos.add(do)
 
         # insert collection record into db
