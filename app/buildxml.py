@@ -12,7 +12,7 @@
 #   collections - records data about collections with digital content
 #   last_update - records dates of last updates of XML file and collection selection
 
-import time, os
+import time
 import sqlite3 as sq
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
