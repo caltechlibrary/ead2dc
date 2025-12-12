@@ -956,7 +956,6 @@ with open(xml_output_path, 'w') as f:
     f.write(prettify(oaixml))
 
 # print elapsed time in seconds (about 75 mins)
-print('\nTotal elapsed  +' \
-':', round(time.time() - start, 1))
+print('\nTotal elapsed time:', round(time.time() - start, 1))
 
 print('Done.')
