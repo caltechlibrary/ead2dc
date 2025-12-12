@@ -478,16 +478,16 @@ def main():
 
     start = time.time()
 
-#-----------------------------------------------------------------------#
-# 1. ESTABLISH API CONNECTION
-#-----------------------------------------------------------------------#
+    #-----------------------------------------------------------------------#
+    # 1. ESTABLISH API CONNECTION
+    #-----------------------------------------------------------------------#
     
     print('Authorizing API...')
     client = authorize_api()
 
-#-----------------------------------------------------------------------#
-# 2. BUILD COLLECTIONS DICTIONARIES
-#-----------------------------------------------------------------------#
+    #-----------------------------------------------------------------------#
+    # 2. BUILD COLLECTIONS DICTIONARIES
+    #-----------------------------------------------------------------------#
     # builds two dictionaries: for collections and archival objects
     # collections_dict has the form {collection: {ao: {do}}}
     # archival_objects_dict has the form {ao: {'collections': [collection], 'digital_objects: [do]}}
@@ -495,9 +495,9 @@ def main():
     print('Building collections dictionary...')
     collections_dict, archival_objects_dict = build_collections_dict(client)
 
-#-----------------------------------------------------------------------#
-# 3. READ/WRITE COLLECTION DATA TO DATABASE FROM ARCHIVESSPACE
-#-----------------------------------------------------------------------#
+    #-----------------------------------------------------------------------#
+    # 3. READ/WRITE COLLECTION DATA TO DATABASE FROM ARCHIVESSPACE
+    #-----------------------------------------------------------------------#
     # db location
     # relevant tables in database:
     #   collections - records data about collections with digital content
@@ -600,9 +600,9 @@ def main():
     cursor.close()
     connection.close()
 
-#-----------------------------------------------------------------------#
-# 4. BUILD OAI-PMH XML OBJECT (oaixml)
-#-----------------------------------------------------------------------#
+    #-----------------------------------------------------------------------#
+    # 4. BUILD OAI-PMH XML OBJECT (oaixml)
+    #-----------------------------------------------------------------------#
 
     print('Building static repository...')
 
@@ -965,6 +965,7 @@ def main():
     print('Done.')
 
 #-----------------------------------------------------------------------#
+
+
 if __name__ == '__main__':
     main()
-#-----------------------------------------------------------------------#
