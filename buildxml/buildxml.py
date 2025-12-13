@@ -902,7 +902,8 @@ def main():
                 if dt.get('certainty'):
                     attribs['certainty'] = dt['certainty']
                 if attribs != dict():
-                    dt.attrib = attribs           
+                    dt.attrib = attribs
+                    print(attribs)
 
         # extents
         extents = list()
