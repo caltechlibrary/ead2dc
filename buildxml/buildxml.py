@@ -874,17 +874,35 @@ def main():
             identifier.attrib = {'type': 'localid'}
 
         # dates
-        dates = list()
-        #obj = get_json(category, id)
         for dt in archival_object_metadata.get('dates', []):
-            dates.append(dt.get('begin', ''))
 
-        #print(ao[33:])
-        #print(dates)
-        for d in dates:
-            if d != '':
+            if dt.get('expression'):
+                date_expression = dt['expression']
+            else:
+                date_expression = ''
+                if dt.get('begin'):
+                    date_expression += dt['begin']
+                if dt.get('end'):
+                    if date_expression != '':
+                        date_expression += ' - '
+                    date_expression += dt['end']
+
+            if date_expression != '':
                 dt = ET.SubElement(dc, 'dc:date')
-                dt.text = d                
+                dt.text = date_expression
+                attribs = dict()
+                if dt.get('begin'):
+                    attribs['begin'] = dt['begin']
+                if dt.get('end'):
+                    attribs['end'] = dt['end']
+                if dt.get('date_type'):
+                    attribs['type'] = dt['date_type']
+                if dt.get('label'):
+                    attribs['label'] = dt['label']
+                if dt.get('certainty'):
+                    attribs['certainty'] = dt['certainty']
+                if attribs != dict():
+                    dt.attrib = attribs           
 
         # extents
         extents = list()
