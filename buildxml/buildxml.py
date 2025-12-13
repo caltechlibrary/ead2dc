@@ -891,18 +891,19 @@ def main():
                 date_elem = ET.SubElement(dc, 'dc:date')
                 date_elem.text = date_expression
                 attribs = dict()
-                if date_elem.get('begin'):
+                if dt.get('begin'):
                     attribs['begin'] = dt['begin']
-                if date_elem.get('end'):
+                if dt.get('end'):
                     attribs['end'] = dt['end']
-                if date_elem.get('date_type'):
+                if dt.get('date_type'):
                     attribs['type'] = dt['date_type']
-                if date_elem.get('label'):
+                if dt.get('label'):
                     attribs['label'] = dt['label']
-                if date_elem.get('certainty'):
+                if dt.get('certainty'):
                     attribs['certainty'] = dt['certainty']
                 if attribs != dict():
                     date_elem.attrib = attribs
+                print(attribs)
 
         # extents
         extents = list()
