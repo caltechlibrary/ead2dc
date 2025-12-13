@@ -878,7 +878,6 @@ def main():
 
             if dt.get('expression'):
                 date_expression = dt['expression']
-                print(date_expression)
             else:
                 date_expression = ''
                 if dt.get('begin'):
@@ -887,25 +886,23 @@ def main():
                     if date_expression != '':
                         date_expression += ' - '
                     date_expression += dt['end']
-                print(date_expression)
 
             if date_expression:
-                dt = ET.SubElement(dc, 'dc:date')
-                dt.text = date_expression
+                date_elem = ET.SubElement(dc, 'dc:date')
+                date_elem.text = date_expression
                 attribs = dict()
-                if dt.get('begin'):
+                if date_elem.get('begin'):
                     attribs['begin'] = dt['begin']
-                if dt.get('end'):
+                if date_elem.get('end'):
                     attribs['end'] = dt['end']
-                if dt.get('date_type'):
+                if date_elem.get('date_type'):
                     attribs['type'] = dt['date_type']
-                if dt.get('label'):
+                if date_elem.get('label'):
                     attribs['label'] = dt['label']
-                if dt.get('certainty'):
+                if date_elem.get('certainty'):
                     attribs['certainty'] = dt['certainty']
                 if attribs != dict():
-                    dt.attrib = attribs
-                    print(attribs)
+                    date_elem.attrib = attribs
 
         # extents
         extents = list()
