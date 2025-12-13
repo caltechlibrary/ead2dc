@@ -789,10 +789,35 @@ def main():
                 ancestor.text = a[0]
                 if a[1]:
                     ancestor.attrib = {'level': a[1]}
-
-        # warning for no file_uris
-        uri_test = False
         
+        # subjects
+        subjects = list()
+        for s in archival_object_metadata.get('subjects', []):
+            if s.get('_resolved'):
+                source = s['_resolved'].get('source')
+                if s['_resolved'].get('title'):
+                    subject = s['_resolved']['title']
+                    subjects.append((subject, source))
+
+        for s in subjects:
+            if s:
+                subject = ET.SubElement(dc, 'dc:subject')
+                subject.text = s[0]
+                if s[1]:
+                    subject.attrib = {'source': s[1]}
+        
+        # description
+        for note in archival_object_metadata.get('notes', []):
+            if note.get('publish') and (note['type'] == 'scopecontent' or note['type'] == 'abstract'):
+                if note['jsonmodel_type'] == 'note_singlepart':
+                    desc_text = note['content'][0]
+                    description = ET.SubElement(dc, 'dc:description')
+                    description.text = desc_text
+                elif note['jsonmodel_type'] == 'note_multipart':
+                    desc_text = note['subnotes'][0]['content']
+                    description = ET.SubElement(dc, 'dc:description')
+                    description.text = desc_text
+
         for file_uri in file_uris: 
 
             # parse url
@@ -819,7 +844,6 @@ def main():
             identifier = ET.SubElement(dc, 'dc:identifier')
             identifier.text = file_uri[0]
             identifier.attrib = {'scheme': 'URI', 'type': file_uri[1] if file_uri[1] else 'unknown'}
-            uri_test = True
 
             # omit thumbnail links from statistics
             if 'thumbnail' in file_uri[1].lower():
@@ -837,9 +861,6 @@ def main():
 
                 else:
                     stats_dict[collid]['digital_objects'][hostcategory] = 1
-
-        if not uri_test:
-            print('> warning: no file URIs for archival object:', ao)
 
         # identifier element
         if archival_object_metadata.get('component_id'):
@@ -885,22 +906,6 @@ def main():
                     stats_dict[collid]['types'][type_value] = 1
             else:
                 stats_dict[collid]['types'][type_value] = 1
-
-        # subjects
-        subjects = list()
-        for s in archival_object_metadata.get('subjects', []):
-            if s.get('_resolved'):
-                source = s['_resolved'].get('source')
-                if s['_resolved'].get('title'):
-                    subject = s['_resolved']['title']
-                    subjects.append((subject, source))
-
-        for s in subjects:
-            if s:
-                subject = ET.SubElement(dc, 'dc:subject')
-                subject.text = s[0]
-                if s[1]:
-                    subject.attrib = {'source': s[1]}
 
         # rights
         rights = ET.SubElement(dc, 'dc:rights')
