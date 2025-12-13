@@ -122,6 +122,11 @@ qdb_collections_select = 'SELECT    collno, \
                                     type_other \
                                 FROM collections;'
 
+# rightst statement to include in XML records
+rights_statement = 'The copyright and related rights status of this Item has not been evaluated. \
+Please contact Caltech Archives and Special Collections for more information. You are free to use this \
+Item in any way that is permitted by the copyright and related rights legislation that applies to your use.'
+
 #-----------------------------------------------------------------------#
 # FUNCTIONS (in order of appearance)
 #
@@ -909,10 +914,7 @@ def main():
 
         # rights
         rights = ET.SubElement(dc, 'dc:rights')
-        rights.text = 'The copyright and related rights status of this Item has not been evaluated. \
-                        Please contact Caltech Archives and Special Collections for more information. \
-                        You are free to use this Item in any way that is permitted by the copyright \
-                        and related rights legislation that applies to your use.'
+        rights.text = rights_statement
 
     #-----------------------------------------------------------------------#
     # 5. UPDATE DATABASE
