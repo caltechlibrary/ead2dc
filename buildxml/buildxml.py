@@ -878,6 +878,7 @@ def main():
 
             if dt.get('expression'):
                 date_expression = dt['expression']
+                print(date_expression)
             else:
                 date_expression = ''
                 if dt.get('begin'):
@@ -886,8 +887,9 @@ def main():
                     if date_expression != '':
                         date_expression += ' - '
                     date_expression += dt['end']
+                print(date_expression)
 
-            if date_expression != '':
+            if date_expression:
                 dt = ET.SubElement(dc, 'dc:date')
                 dt.text = date_expression
                 attribs = dict()
