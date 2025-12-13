@@ -903,7 +903,6 @@ def main():
                     attribs['certainty'] = dt['certainty']
                 if attribs != dict():
                     date_elem.attrib = attribs
-                print(attribs)
 
         # extents
         extents = list()
