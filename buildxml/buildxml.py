@@ -815,8 +815,8 @@ def main():
                     desc_text = note['subnotes'][0]['content']
                 description = ET.SubElement(dc, 'dc:description')
                 description.text = desc_text
-                description.attrib = {'type': 'scopecontent' if note['type']=='scopecontent' else 'abstract'}
-                description.attrib = {'label': 'Scope and Content' if note['type']=='scopecontent' else 'Abstract'}
+                description.attrib = {'type': 'scopecontent' if note['type']=='scopecontent' else 'abstract',
+                                      'label': 'Scope and Content' if note['type']=='scopecontent' else 'Abstract'}
 
         for file_uri in file_uris: 
 
