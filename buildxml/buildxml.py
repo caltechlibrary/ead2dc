@@ -813,6 +813,8 @@ def main():
                     desc_text = note['content'][0]
                     description = ET.SubElement(dc, 'dc:description')
                     description.text = desc_text
+                    description.attrib = {'type': 'scopecontent' if note['type']=='scopecontent' else 'abstract'}
+                    description.attrib = {'label': 'Scope and Content' if note['type']=='scopecontent' else 'Abstract'}
                 elif note['jsonmodel_type'] == 'note_multipart':
                     desc_text = note['subnotes'][0]['content']
                     description = ET.SubElement(dc, 'dc:description')
