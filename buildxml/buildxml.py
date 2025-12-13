@@ -478,7 +478,7 @@ def main():
         if num_recs < 0:
             num_recs = 1000
         print('Limiting to', num_recs, 'records for testing...')
-        xml_output_path = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives_test.xml')
+        xml_output_path = Path(Path(__file__).resolve().parent).joinpath('../dev/caltecharchives.xml')
 
 
     start = time.time()
