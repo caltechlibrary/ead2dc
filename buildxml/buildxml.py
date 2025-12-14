@@ -55,8 +55,29 @@ digital_object_type_map = {
         'text'                          : 'text'
     }
 
+# maps of MODS relator codes to text for creator element
+# source: https://www.loc.gov/marc/relators/relacode.html
+relator_map = {
+        'ive'                           : 'interviewee',
+        'ivr'                           : 'interviewer',
+        'aut'                           : 'author',
+        'ctb'                           : 'contributor',
+        'edt'                           : 'editor',
+        'col'                           : 'collector',
+        'com'                           : 'compiler',
+        'con'                           : 'conservator',
+        'crp'                           : 'correspondent',
+        'cur'                           : 'curator',
+        'dnr'                           : 'donor',
+        'trc'                           : 'transcriber',
+        'trl'                           : 'translator'}
+ 
+
 # default resource type if none found in digital object
 default_digital_object_type = 'text'
+
+# database location
+dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
 
 # TABLE:    collections
 # COLUMNS:  collno              text    numerical id of collection, e.g. '123'
@@ -433,6 +454,145 @@ def get_digital_object_type(client, do_list):
 
 
 #-----------------------------------------------------------------------#
+
+# refresh collections information to database from collections dictionary
+def database_refresh(client, collections_dict):
+
+    # open database connection
+    connection = sq.connect(dbpath)
+    cursor = connection.cursor()
+
+    # retrieve earliest date stamp from previous build
+    query = 'SELECT earliest FROM dates;'
+    result = cursor.execute(query)
+    earliestDatestamp = result.fetchone()[0]
+
+    # retrieve included collections from db
+    # return dictionary of collection numbers and inclusion status
+    includedcollections = dict()
+    query = 'SELECT collno,incl FROM collections;'
+    for row in cursor.execute(query).fetchall():
+        includedcollections[row[0]] = row[1]
+
+    # delete all records from db
+    query = 'DELETE FROM collections;'
+    cursor.execute(query)
+
+    # iterate over collections dictionary to insert collection records into db
+    print ('Collections with digital objects...')
+    for collection in collections_dict:
+
+        # get collection info
+        coll_info = client.get(collection).json()
+
+        # create collection description from collection notes in ArchivesSpace
+        collid = coll_info['uri']
+        colltitle = coll_info['title']
+        description = create_collection_description(coll_info)
+
+        # initialize sets to count unique digital objects and archival objects
+        coll_dos, coll_aos = set(), set()
+
+        # extract collection type and number from collection id
+        if collid[16:25] == 'resources':
+            colltyp = 'resource'
+            collno = collid[26:]
+        else:
+            colltyp = 'accession'
+            collno = collid[27:]
+
+        # iterate over collection to count unique digital objects and archival objects
+        for ao in collections_dict[collection]:
+            coll_aos.add(ao)
+            for do in collections_dict[collection][ao]:
+                coll_dos.add(do)
+
+        # insert collection record into db
+        cursor.execute(dbq_collections_insert, [collno,         # collno (str)
+                           colltitle,                           # colltitle (str)
+                           description,                         # description (str)                 
+                           collid,                              # collid (str) 
+                           0,                                   # aocount (int) 
+                           0,                                   # docount (int) 
+                           includedcollections.get(collno, 0),  # incl (Boolean) 
+                           0,                                   # caltechlibrary (int)
+                           0,                                   # internetarchive (int)
+                           0,                                   # youtube (int) 
+                           0,                                   # other (int) 
+                           colltyp,                             # typ ('resource'|'accession')
+                           0,                                   # type_text (int)
+                           0,                                   # type_stillimage (int)
+                           0,                                   # type_movingimage (int)
+                           0,                                   # type_sound (int)
+                           0                                    # type_other (int)
+                           ])
+    
+        # print collection summary
+        print('>', client.get(collection).json()['title'],
+              '(' + str(len(coll_aos)) + ' archival objects; ' + str(len(coll_dos)) +  ' digital objects' + ')')
+
+    # commit changes to db before reading
+    connection.commit()
+
+    # colls is a list of tuples: {(collno, colltitle, description, collid, aocount, docount, incl,
+    #                             caltechlibrary, internetarchive, youtube, other, typ,
+    #                             type_text, type_stillimage, type_movingimage, type_sound, type_other)}
+    colls = cursor.execute(qdb_collections_select).fetchall()
+    cursor.close()
+    connection.close()
+
+    return colls, earliestDatestamp
+
+
+#-----------------------------------------------------------------------#
+
+# update collections
+def database_update(stats_dict, coll_mdate_dict):
+
+    connection = sq.connect(dbpath)
+    db = connection.cursor()
+
+    for collid, values in stats_dict.items():
+        query = 'UPDATE collections SET aocount=? WHERE collid=?;'
+        db.execute(query, [values['archival_objects'], collid])
+
+        do_count = 0
+        for category, count in values['digital_objects'].items():
+            do_count += count
+            query = 'UPDATE collections SET '+category+'=? WHERE collid=?;'
+            db.execute(query, [count, collid])
+
+        query = 'UPDATE collections SET docount=? WHERE collid=?;'
+        db.execute(query, [do_count, collid])
+
+        for type_value, count in values.get('types', {}).items():
+            query = 'UPDATE collections SET type_'+type_value.lower()+'=? WHERE collid=?;'
+            db.execute(query, [count, collid])
+
+    # update last modified date by collection in db
+    query = 'UPDATE collections SET last_edit=? WHERE collid=?;'
+    today = date.today().strftime('%Y-%m-%d')
+    for collid, mod_date in coll_mdate_dict.items():
+        db.execute(query, [mod_date, collid])
+        earliestDatestamp = min(today, mod_date)
+
+    query = 'UPDATE dates SET earliest = ?'
+    db.execute(query, [earliestDatestamp])
+
+    # write ISO last update
+    now = datetime.now()
+    last_update = now.isoformat()
+    query = 'UPDATE last_update SET dt=? WHERE fn=?;'
+    db.execute(query, [last_update, 'xml'])
+
+    db.close()
+    connection.commit()
+    connection.close()
+
+    return
+
+
+#-----------------------------------------------------------------------#
 # START OF SCRIPT 
 # 
 # Contents
@@ -455,6 +615,7 @@ def main():
     # set -n to limit number of records processed (for testing)
     # default -n is 1000 for development runtype
     # default -n is all records for production runtype
+    # stats are not updated when runtype != 'production'
     # output xml file is caltecharchives_test.xml for test or development runtype
     # output xml file is caltecharchives.xml for production runtype
 
@@ -509,102 +670,9 @@ def main():
     #   dates - records dates of last updates of XML file and collection selection
     #   logs - logs data provider requests (used in oaidp.py)
 
-    print('Reading database location...')
-    dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
-
-    # open database connection
-    connection = sq.connect(dbpath)
-    cursor = connection.cursor()
-
-    # retrieve earliest date stamp from previous build
-    query = 'SELECT earliest FROM dates;'
-    result = cursor.execute(query)
-    earliestDatestamp = result.fetchone()[0]
-
-    # retrieve included collections from db
-    # return dictionary of collection numbers and inclusion status
-
-    includedcollections = dict()
-    query = 'SELECT collno,incl FROM collections;'
-    for row in cursor.execute(query).fetchall():
-        includedcollections[row[0]] = row[1]
-
-    # write ISO last update
-
-    now = datetime.now()
-    last_update = now.isoformat()
-    query = 'UPDATE last_update SET dt=? WHERE fn=?;'
-    cursor.execute(query, [last_update, 'xml'])
-  
-    # delete all records from db
-
-    query = 'DELETE FROM collections;'
-    cursor.execute(query)
-
-    # iterate over collections dictionary to insert collection records into db
-
-    print ('Collections with digital objects...')
-    for collection in collections_dict:
-
-        # get collection info
-        coll_info = client.get(collection).json()
-
-        # create collection description from collection notes in ArchivesSpace
-        collid = coll_info['uri']
-        colltitle = coll_info['title']
-        description = create_collection_description(coll_info)
-
-        # initialize sets to count unique digital objects and archival objects
-        coll_dos, coll_aos = set(), set()
-
-        # extract collection type and number from collection id
-        if collid[16:25] == 'resources':
-            colltyp = 'resource'
-            collno = collid[26:]
-        else:
-            colltyp = 'accession'
-            collno = collid[27:]
-
-        # iterate over collection to count unique digital objects and archival objects
-        for ao in collections_dict[collection]:
-            coll_aos.add(ao)
-            for do in collections_dict[collection][ao]:
-                coll_dos.add(do)
-
-        # insert collection record into db
-        cursor.execute(dbq_collections_insert, [collno,             # collno (str)
-                           colltitle,                           # colltitle (str)
-                           description,                         # description (str)                 
-                           collid,                              # collid (str) 
-                           0,                                   # aocount (int) 
-                           0,                                   # docount (int) 
-                           includedcollections.get(collno, 0),  # incl (Boolean) 
-                           0,                                   # caltechlibrary (int)
-                           0,                                   # internetarchive (int)
-                           0,                                   # youtube (int) 
-                           0,                                   # other (int) 
-                           colltyp,                             # typ ('resource'|'accession')
-                           0,                                   # type_text (int)
-                           0,                                   # type_stillimage (int)
-                           0,                                   # type_movingimage (int)
-                           0,                                   # type_sound (int)
-                           0                                    # type_other (int)
-                           ])
+    print('Refreshing database...')
+    colls, earliestDatestamp = database_refresh(client, collections_dict)
     
-        # print collection summary
-        print('>', client.get(collection).json()['title'],
-              '(' + str(len(coll_aos)) + ' archival objects; ' + str(len(coll_dos)) +  ' digital objects' + ')')
-
-    # commit changes to db before reading
-    connection.commit()
-
-    # colls is a list of tuples: {(collno, colltitle, description, collid, aocount, docount, incl,
-    #                             caltechlibrary, internetarchive, youtube, other, typ,
-    #                             type_text, type_stillimage, type_movingimage, type_sound, type_other)}
-    colls = cursor.execute(qdb_collections_select).fetchall()
-    cursor.close()
-    connection.close()
-
     #-----------------------------------------------------------------------#
     # 4. BUILD OAI-PMH XML OBJECT (oaixml)
     #-----------------------------------------------------------------------#
@@ -795,14 +863,7 @@ def main():
                 if a[1]:
                     ancestor.attrib = {'level': a[1]}
         
-        
-        
         # creators, subjects
-        relator_map = {'ive': 'interviewee',
-                       'ivr': 'interviewer',
-                       'aut': 'author',
-                       'ctb': 'contributor',
-                       'edt': 'editor'}
         creators = list()
         subjects = list()
         for linked_agent in archival_object_metadata.get('linked_agents', []):
@@ -846,8 +907,11 @@ def main():
                     desc_text = note['subnotes'][0]['content']
                 description = ET.SubElement(dc, 'dc:description')
                 description.text = desc_text
+                '''
+                # optional description attribute
                 description.attrib = {'type': 'scopecontent' if note['type']=='scopecontent' else 'abstract',
                                       'label': 'Scope and Content' if note['type']=='scopecontent' else 'Abstract'}
+                '''
 
         for file_uri in file_uris: 
 
@@ -965,42 +1029,11 @@ def main():
     #-----------------------------------------------------------------------#
     # update collection statistics in db
     # {collid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
-    connection = sq.connect(dbpath)
-    db = connection.cursor()
 
-    for collid, values in stats_dict.items():
-        query = 'UPDATE collections SET aocount=? WHERE collid=?;'
-        db.execute(query, [values['archival_objects'], collid])
+    if runtype == 'production':
 
-        do_count = 0
-        for category, count in values['digital_objects'].items():
-            do_count += count
-            query = 'UPDATE collections SET '+category+'=? WHERE collid=?;'
-            db.execute(query, [count, collid])
-
-        query = 'UPDATE collections SET docount=? WHERE collid=?;'
-        db.execute(query, [do_count, collid])
-
-        for type_value, count in values.get('types', {}).items():
-            query = 'UPDATE collections SET type_'+type_value.lower()+'=? WHERE collid=?;'
-            db.execute(query, [count, collid])
-
-    # update last modified date by collection in db
-    query = 'UPDATE collections SET last_edit=? WHERE collid=?;'
-    today = date.today().strftime('%Y-%m-%d')
-    for collid, mod_date in coll_mdate_dict.items():
-        db.execute(query, [mod_date, collid])
-        earliestDatestamp = min(today, mod_date)
-
-    query = 'UPDATE dates SET earliest = ?'
-    db.execute(query, [earliestDatestamp])
-
-    query = 'UPDATE last_update SET dt=? WHERE fn=?;'
-    db.execute(query, [last_update, 'xml'])
-
-    db.close()
-    connection.commit()
-    connection.close()
+        print('Updating database...')
+        database_update(stats_dict, coll_mdate_dict)
 
     #-----------------------------------------------------------------------#
     # 6. WRITE XML TO DISK
