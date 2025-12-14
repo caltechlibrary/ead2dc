@@ -512,7 +512,8 @@ def database_refresh(client, collections_dict, runtype):
         if runtype == 'production':
         
             # insert collection record into db
-            cursor.execute(dbq_collections_insert, [collno,         # collno (str)
+            cursor.execute(dbq_collections_insert, 
+                           [collno,                              # collno (str)
                             colltitle,                           # colltitle (str)
                             description,                         # description (str)                 
                             collid,                              # collid (str) 
@@ -535,9 +536,9 @@ def database_refresh(client, collections_dict, runtype):
         print('>', client.get(collection).json()['title'],
             '(' + str(len(coll_aos)) + ' archival objects; ' + str(len(coll_dos)) +  ' digital objects' + ')')
 
-        if runtype == 'production':
-            # commit changes to db before reading
-            connection.commit()
+    if runtype == 'production':
+        # commit changes to db before reading
+        connection.commit()
 
     # colls is a list of tuples: {(collno, colltitle, description, collid, aocount, docount, incl,
     #                             caltechlibrary, internetarchive, youtube, other, typ,
