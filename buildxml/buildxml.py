@@ -1030,6 +1030,8 @@ def main():
         rights = ET.SubElement(dc, 'dc:rights')
         rights.text = rights_statement
 
+    print(' ' * 20 + '\r')
+
     #-----------------------------------------------------------------------#
     # 5. UPDATE DATABASE
     #-----------------------------------------------------------------------#
@@ -1050,7 +1052,7 @@ def main():
         f.write(prettify(oaixml))
 
     # print elapsed time in seconds (about 75 mins)
-    print('\nTotal elapsed time:', round(time.time() - start, 1))
+    print('Total elapsed time:', round(time.time() - start, 1))
 
     print('Done.')
 
