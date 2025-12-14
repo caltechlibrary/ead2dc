@@ -805,17 +805,15 @@ def main():
         for linked_agent in archival_object_metadata.get('linked_agents', []):
             if linked_agent.get('role') == 'creator':
                 if linked_agent.get('_resolved'):
-                    name = (linked_agent['_resolved'].get('title'), 
-                            relator_map.get(linked_agent.get('relator'), None))
-                    if name:
-                        creators.append(name)
+                    name = linked_agent['_resolved'].get('title')
+                    role = relator_map.get(linked_agent.get('relator'), None)
+                    if role:
+                        name = name + ', ' + relator_map[linked_agent.get('relator')]
+                    creators.append(name)
  
         for c in creators:
-            if c:
-                creator = ET.SubElement(dc, 'dc:creator')
-                creator.text = c[0]
-                if c[1]:
-                    creator.attrib = {'role': c[1]}
+            creator = ET.SubElement(dc, 'dc:creator')
+            creator.text = c
 
         # subjects
         subjects = list()
