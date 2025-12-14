@@ -816,7 +816,7 @@ def main():
             if linked_agent.get('role') == 'subject':
                 if linked_agent.get('_resolved'):
                     name = linked_agent['_resolved'].get('title')
-                    subjects.append(name)
+                    subjects.append((name, None))
  
         for c in creators:
             creator = ET.SubElement(dc, 'dc:creator')
