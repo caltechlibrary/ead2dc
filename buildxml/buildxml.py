@@ -795,6 +795,28 @@ def main():
                 if a[1]:
                     ancestor.attrib = {'level': a[1]}
         
+        # creators
+        relator_map = {'ive': 'interviewee',
+                       'ivr': 'interviewer',
+                       'aut': 'author',
+                       'ctb': 'contributor',
+                       'edt': 'editor'}
+        creators = list()
+        for linked_agent in archival_object_metadata.get('linked_agents', []):
+            if linked_agent.get('role') == 'creator':
+                if linked_agent.get('_resolved'):
+                    name = (linked_agent['_resolved'].get('title'), 
+                            relator_map.get(linked_agent.get('relator'), None))
+                    if name:
+                        creators.append(name)
+ 
+        for c in creators:
+            if c:
+                creator = ET.SubElement(dc, 'dc:creator')
+                creator.text = c[0]
+                if c[1]:
+                    creator.attrib = {'role': c[1]}
+
         # subjects
         subjects = list()
         for s in archival_object_metadata.get('subjects', []):
