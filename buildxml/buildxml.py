@@ -1050,7 +1050,7 @@ def main():
         f.write(prettify(oaixml))
 
     # print elapsed time in seconds (about 75 mins)
-    print('Total elapsed time:', round(time.time() - start, 1), 50 * ' ')
+    print('Total elapsed time:', round(time.time() - start, 1), 50*' ')
 
     print('Done.')
 
