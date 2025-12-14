@@ -1030,7 +1030,7 @@ def main():
         rights = ET.SubElement(dc, 'dc:rights')
         rights.text = rights_statement
 
-    print(' ' * 20 + '\r')
+    print(' ' * 50 + '\r')
 
     #-----------------------------------------------------------------------#
     # 5. UPDATE DATABASE
