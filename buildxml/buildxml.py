@@ -456,7 +456,7 @@ def get_digital_object_type(client, do_list):
 #-----------------------------------------------------------------------#
 
 # refresh collections information to database from collections dictionary
-def database_refresh(client, collections_dict):
+def database_refresh(client, collections_dict, runtype):
 
     # open database connection
     connection = sq.connect(dbpath)
@@ -473,10 +473,12 @@ def database_refresh(client, collections_dict):
     query = 'SELECT collno,incl FROM collections;'
     for row in cursor.execute(query).fetchall():
         includedcollections[row[0]] = row[1]
+    
+    if runtype == 'production':
 
-    # delete all records from db
-    query = 'DELETE FROM collections;'
-    cursor.execute(query)
+        # delete all records from db
+        query = 'DELETE FROM collections;'
+        cursor.execute(query)
 
     # iterate over collections dictionary to insert collection records into db
     print ('Collections with digital objects...')
@@ -507,32 +509,35 @@ def database_refresh(client, collections_dict):
             for do in collections_dict[collection][ao]:
                 coll_dos.add(do)
 
-        # insert collection record into db
-        cursor.execute(dbq_collections_insert, [collno,         # collno (str)
-                           colltitle,                           # colltitle (str)
-                           description,                         # description (str)                 
-                           collid,                              # collid (str) 
-                           0,                                   # aocount (int) 
-                           0,                                   # docount (int) 
-                           includedcollections.get(collno, 0),  # incl (Boolean) 
-                           0,                                   # caltechlibrary (int)
-                           0,                                   # internetarchive (int)
-                           0,                                   # youtube (int) 
-                           0,                                   # other (int) 
-                           colltyp,                             # typ ('resource'|'accession')
-                           0,                                   # type_text (int)
-                           0,                                   # type_stillimage (int)
-                           0,                                   # type_movingimage (int)
-                           0,                                   # type_sound (int)
-                           0                                    # type_other (int)
-                           ])
+        if runtype == 'production':
+        
+            # insert collection record into db
+            cursor.execute(dbq_collections_insert, [collno,         # collno (str)
+                            colltitle,                           # colltitle (str)
+                            description,                         # description (str)                 
+                            collid,                              # collid (str) 
+                            0,                                   # aocount (int) 
+                            0,                                   # docount (int) 
+                            includedcollections.get(collno, 0),  # incl (Boolean) 
+                            0,                                   # caltechlibrary (int)
+                            0,                                   # internetarchive (int)
+                            0,                                   # youtube (int) 
+                            0,                                   # other (int) 
+                            colltyp,                             # typ ('resource'|'accession')
+                            0,                                   # type_text (int)
+                            0,                                   # type_stillimage (int)
+                            0,                                   # type_movingimage (int)
+                            0,                                   # type_sound (int)
+                            0                                    # type_other (int)
+                            ])
     
         # print collection summary
         print('>', client.get(collection).json()['title'],
-              '(' + str(len(coll_aos)) + ' archival objects; ' + str(len(coll_dos)) +  ' digital objects' + ')')
+            '(' + str(len(coll_aos)) + ' archival objects; ' + str(len(coll_dos)) +  ' digital objects' + ')')
 
-    # commit changes to db before reading
-    connection.commit()
+        if runtype == 'production':
+            # commit changes to db before reading
+            connection.commit()
 
     # colls is a list of tuples: {(collno, colltitle, description, collid, aocount, docount, incl,
     #                             caltechlibrary, internetarchive, youtube, other, typ,
@@ -671,7 +676,7 @@ def main():
     #   logs - logs data provider requests (used in oaidp.py)
 
     print('Refreshing database...')
-    colls, earliestDatestamp = database_refresh(client, collections_dict)
+    colls, earliestDatestamp = database_refresh(client, collections_dict, runtype)
     
     #-----------------------------------------------------------------------#
     # 4. BUILD OAI-PMH XML OBJECT (oaixml)
