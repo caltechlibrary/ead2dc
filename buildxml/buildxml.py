@@ -17,7 +17,7 @@ import sqlite3 as sq
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 import argparse
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -759,6 +759,10 @@ def main():
     # do = digital object, ao = archival object
     # archival_objects_dict = {ao: {'collections': [collids], 'digital_objects: [dos]}}        
     j = 0
+
+    # initialize set to check for duplicate uris
+    file_uri_set = set()
+
     for ao, colls_dict in archival_objects_dict.items():
 
         print(ao, '   ', end='\r')
@@ -783,11 +787,6 @@ def main():
         system_mtime = archival_object_metadata['system_mtime']
         user_mtime = archival_object_metadata['user_mtime']
         last_modified_date = max([create_time, system_mtime, user_mtime])[:10]
-        
-        # temp
-        # limit to subset of collections for testing
-        #if len(set(colls_dict['collections']) & set(['/repositories/2/resources/30', '/repositories/2/resources/312'])) == 0:
-        #    continue
 
         # create list of associated digital objects
         do_list = colls_dict['digital_objects']
@@ -797,6 +796,17 @@ def main():
 
         # skip archival object if no published digital object file URIs
         if len(file_uris) == 0:
+            continue
+        
+        # skip archival object if duplicate uri
+        dup = False
+        for file_uri in file_uris:
+            if file_uri_set.get(file_uri):
+                print('Duplicate URI found:', file_uri)
+                dup = True
+            else:
+                file_uri_set.add(file_uri)
+        if dup:
             continue
 
         # create hostnames set
@@ -848,23 +858,6 @@ def main():
         title.text = archival_object_metadata['title']
         #title.attrib = {'type': 'archival'}
 
-        # ancestor titles
-        ancestors = list()
-        for a in archival_object_metadata.get('ancestors', []):
-            level = a.get('level')
-            if a.get('_resolved'):
-                if a['_resolved'].get('title'):
-                    title = a['_resolved']['title']
-                    ancestors.append((title, level))
-
-        #print(ancestors)
-        for a in ancestors:
-            if a:
-                ancestor = ET.SubElement(dc, 'dc:title')
-                ancestor.text = a[0]
-                if a[1]:
-                    ancestor.attrib = {'level': a[1]}
-        
         # creators, subjects
         creators = list()
         subjects = list()
@@ -934,16 +927,15 @@ def main():
             else:
                 hostcategory = 'other'
 
-            # add archival record to stats_dict
-            # {setid: {'archival_objects': #, 'digital_objects': {hostcategory: #}}
-
             # identifier element
+            # unpack tuple
+            f_uri, f_use = file_uri
             identifier = ET.SubElement(dc, 'dc:identifier')
-            identifier.text = file_uri[0]
-            identifier.attrib = {'scheme': 'URI', 'type': file_uri[1] if file_uri[1] else 'unknown'}
+            identifier.text = f_uri
+            identifier.attrib = {'scheme': 'URI', 'type': f_use if f_use else 'unknown'}
 
             # omit thumbnail links from statistics
-            if 'thumbnail' in file_uri[1].lower():
+            if 'thumbnail' in f_use.lower():
                 continue
 
             for collid in colls_dict['collections']:
@@ -996,17 +988,6 @@ def main():
                 if attribs != dict():
                     date_elem.attrib = attribs
 
-        # extents
-        extents = list()
-        for extent in archival_object_metadata.get('extents', []):
-            s = extent.get('number', '') + ' ' + extent.get('extent_type', '') + ' ' + extent.get('physical_details', '').strip()
-            extents.append(s)
-
-        for e in extents:
-            if e.strip() != '':
-                extent = ET.SubElement(dc, 'dc:format')
-                extent.text = e.strip()
-
         # type
         for type_value in get_digital_object_type(client, do_list):
             type_el = ET.SubElement(dc, 'dc:type')
@@ -1022,6 +1003,33 @@ def main():
             else:
                 stats_dict[collid]['types'][type_value] = 1
 
+        # extents
+        extents = list()
+        for extent in archival_object_metadata.get('extents', []):
+            s = extent.get('number', '') + ' ' + extent.get('extent_type', '') + ' ' + extent.get('physical_details', '').strip()
+            extents.append(s)
+
+        for e in extents:
+            if e.strip() != '':
+                extent = ET.SubElement(dc, 'dc:format')
+                extent.text = e.strip()
+
+        # relation
+        ancestors = list()
+        for a in archival_object_metadata.get('ancestors', []):
+            level = a.get('level')
+            if a.get('_resolved'):
+                if a['_resolved'].get('title'):
+                    title = a['_resolved']['title']
+                    ancestors.append((title, level))
+
+        for a in ancestors:
+            if a:
+                ancestor = ET.SubElement(dc, 'dc:relation')
+                ancestor.text = a[0]
+                if a[1]:
+                    ancestor.attrib = {'level': a[1]}
+        
         # rights
         rights = ET.SubElement(dc, 'dc:rights')
         rights.text = rights_statement
@@ -1046,7 +1054,8 @@ def main():
         f.write(prettify(oaixml))
 
     # print elapsed time in seconds (about 75 mins)
-    print('Total elapsed time:', round(time.time() - start, 1), 50*' ')
+    elapsed_time = timedelta(seconds=time.time()-start)
+    print('Total elapsed time:', elapsed_time, 50*' ')
 
     print('Done.')
 
