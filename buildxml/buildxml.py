@@ -801,7 +801,7 @@ def main():
         # skip archival object if duplicate uri
         dup = False
         for file_uri in file_uris:
-            if file_uri_set.get(file_uri):
+            if file_uri in file_uri_set:
                 print('Duplicate URI found:', file_uri)
                 dup = True
             else:
