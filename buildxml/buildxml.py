@@ -686,10 +686,6 @@ def main():
     print('Building static repository...')
 
     # namespace dictionary
-    ns = {'': 'urn:isbn:1-931666-22-9', 
-      'xlink': 'http://www.w3.org/1999/xlink',
-      'oai_dc': 'http://www.openarchives.org/OAI/2.0/oai_dc/',
-      'dc': 'http://purl.org/dc/elements/1.1/'}
     ET.register_namespace('', 'http://www.openarchives.org/OAI/2.0/')
     ET.register_namespace('xlink', 'http://www.w3.org/1999/xlink')
     ET.register_namespace('oai_dc', 'http://www.openarchives.org/OAI/2.0/oai_dc/')
