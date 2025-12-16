@@ -41,7 +41,9 @@ host_exclude = ['github.com']
 digital_object_type_map = {
         'Cartographic'                  : 'stillImage',
         'Mixed Materials'               : 'collection',
+        'mixed_materials'               : 'collection',
         'Moving Image'                  : 'movingimage',
+        'moving_image'                  : 'movingimage',
         'Notated Music'                 : 'stillimage',
         'Software, Multimedia'          : 'software',
         'Sound Recording'               : 'sound',
