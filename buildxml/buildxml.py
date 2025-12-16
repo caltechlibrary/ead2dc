@@ -1057,9 +1057,10 @@ def main():
 
     # write duplicate URI report
     with open(dup_output_path, 'w') as f:
-        for d in duplicate_uris_set:
-            f_uri, f_use = d
-            f.write(f_uri, '('+f_use+')')
+        for url in duplicate_uris_set:
+            f_uri, f_use = url
+            out = f_uri, '('+f_use+')'
+            f.write(out)
 
     # print elapsed time in seconds (about 75 mins)
     elapsed_time = timedelta(seconds=time.time()-start)
