@@ -39,21 +39,15 @@ host_exclude = ['github.com']
 # source: https://www.loc.gov/standards/mods/mods-outline-3-6.html#typeOfResource
 # source: https://www.dublincore.org/specifications/dublin-core/dcmi
 digital_object_type_map = {
-        'Cartographic'                  : 'stillImage',
-        'Mixed Materials'               : 'collection',
-        'mixed_materials'               : 'collection',
-        'Moving Image'                  : 'movingimage',
-        'moving_image'                  : 'movingimage',
-        'Notated Music'                 : 'stillimage',
-        'Software, Multimedia'          : 'software',
-        'Sound Recording'               : 'sound',
-        'Sound Recording (Musical)'     : 'sound',
-        'Sound Recording (Non-musical)' : 'sound',
-        'Still Image'                   : 'stillimage',
-        'stillimage'                    : 'stillimage',
         'still_image'                   : 'stillimage',
-        'StillImage'                    : 'stillimage',
-        'Text'                          : 'text',
+        'mixed_materials'               : 'collection',
+        'moving_image'                  : 'movingimage',
+        'notated_music'                 : 'stillimage',
+        'software_multimedia'           : 'software',
+        'sound_recording'               : 'sound',
+        'sound_recording_musical'       : 'sound',
+        'sound_recording_nonmusical'    : 'sound',
+        'still_image'                   : 'stillimage',
         'text'                          : 'text'
     }
 
