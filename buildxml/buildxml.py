@@ -74,7 +74,7 @@ relator_map = {
  
 
 # default resource type if none found in digital object
-default_digital_object_type = 'text'
+default_digital_object_type = 'unknown'
 
 # database location
 dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
@@ -441,7 +441,7 @@ def get_digital_object_type(client, do_list):
     # de-duplicate
     type_list = list(set(type_list))
 
-    # map values to dc:type and remove None values
+    # map values to dc:type
     type_list = [digital_object_type_map.get(t) for t in type_list]
 
     # remove None values
@@ -766,6 +766,7 @@ def main():
 
     for ao, colls_dict in archival_objects_dict.items():
 
+        # display archival object id
         print(ao, '   ', end='\r')
 
         # limit number of records processed if testing
