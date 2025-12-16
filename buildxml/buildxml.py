@@ -76,7 +76,7 @@ relator_map = {
  
 
 # default resource type if none found in digital object
-default_digital_object_type = 'unknown'
+default_digital_object_type = 'other'
 
 # database location
 dbpath = Path(Path(__file__).resolve().parent).joinpath('../instance/ead2dc.db')
