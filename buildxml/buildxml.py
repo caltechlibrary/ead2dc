@@ -639,6 +639,7 @@ def main():
         print('Running in production mode...')
         print('Processing all records...')
         xml_output_path = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
+        dup_output_path = Path(Path(__file__).resolve().parent).joinpath('../xml/duplicates.txt')
 
     else:
         print('Running in', runtype, 'mode...')
@@ -646,7 +647,7 @@ def main():
             num_recs = 1000
         print('Limiting to', num_recs, 'records for testing...')
         xml_output_path = Path(Path(__file__).resolve().parent).joinpath('../dev/caltecharchives.xml')
-
+        dup_output_path = Path(Path(__file__).resolve().parent).joinpath('../dev/duplicates.txt')
 
     start = time.time()
 
@@ -761,7 +762,7 @@ def main():
     j = 0
 
     # initialize set to check for duplicate uris
-    file_uri_set = set()
+    file_uri_set, duplicate_uris_set = set(), set()
 
     for ao, colls_dict in archival_objects_dict.items():
 
@@ -802,7 +803,7 @@ def main():
         dup = False
         for file_uri in file_uris:
             if file_uri in file_uri_set:
-                print('Duplicate URI found:', file_uri)
+                duplicate_uris_set.add(file_uri)
                 dup = True
             else:
                 file_uri_set.add(file_uri)
@@ -1052,6 +1053,12 @@ def main():
     # write XML to disk
     with open(xml_output_path, 'w') as f:
         f.write(prettify(oaixml))
+
+    # write duplicate URI report
+    with open(dup_output_path, 'w') as f:
+        for d in duplicate_uris_set:
+            f_uri, f_use = d
+            f.write(f_uri, '('+f_use+')')
 
     # print elapsed time in seconds (about 75 mins)
     elapsed_time = timedelta(seconds=time.time()-start)
