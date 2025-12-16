@@ -562,9 +562,11 @@ def oai():
 
             # test for Type
             # valid types are text, still_image
-            if recrd.find('./metadata/oai_dc:dc/dc:type', ns).text not in ['Text', 'text', 'StillImage', 'stillimage']:
+            # (need to populate ALL type elements before implementing)
+            '''
+            if recrd.find('./metadata/oai_dc:dc/dc:type', ns).text not in ['text', 'stillimage']:
                 continue
-
+            '''
             # get list of sets for record
             sets_list = [setnode.text for setnode in recrd.findall('./header/setSpec', ns)]
 
