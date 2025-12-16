@@ -1062,8 +1062,8 @@ def main():
     
     with open(dup_output_path, 'w') as f:
         for uri_tuple in duplicate_uris_set:
-            out = uri_tuple[0] + '(' + uri_tuple[0]
-            print(out)
+            out = uri_tuple[0] + ' (' + uri_tuple[0]
+            f.write(out)
     
     # print elapsed time in seconds (about 75 mins)
     elapsed_time = timedelta(seconds=time.time()-start)
