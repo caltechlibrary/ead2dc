@@ -1060,7 +1060,7 @@ def main():
         for url in duplicate_uris_set:
             f_uri, f_use = url
             out = f_uri, '('+f_use+')'
-            f.write(out)
+            f.write(str(out))
 
     # print elapsed time in seconds (about 75 mins)
     elapsed_time = timedelta(seconds=time.time()-start)
