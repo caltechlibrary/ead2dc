@@ -333,7 +333,10 @@ def read_colls():
                 typ, \
                 last_edit, \
                 type_stillimage, \
-                type_text \
+                type_text, \
+                type_movingimage, \
+                type_sound, \
+                type_other \
              FROM collections \
              ORDER BY aocount DESC;'
     colls = get_db().execute(query).fetchall()
