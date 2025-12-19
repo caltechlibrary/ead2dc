@@ -70,6 +70,8 @@ def build():
 # returns a list of IDs
 @bp.route('/browse/<page_number>')
 def browse(page_number):
+    if not page_number:
+        page_number=1
     page_number=int(page_number)
     page_size=1000
     items_total=len(ids)
