@@ -51,6 +51,7 @@
                     <li><a href="{{ url_for('oaidp.reports') }}">Reports</a></li>
                     <li><a href="{{ url_for('oaidp.records') }}">Records</a></li>
                     <li><a href="{{ url_for('oaidp.search') }}">Search</a></li>
+                    <li><a href="{{ url_for('oaidp.browse/1') }}">Browse</a></li>
                     <li><a href="{{ url_for('auth.logout') }}">{{ g.user }} logout</a></li>
                 {% else %}
                     <li><a href="{{ url_for('auth.login') }}">Staff login</a></li>
