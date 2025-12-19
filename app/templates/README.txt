@@ -12,18 +12,23 @@ templates/collections.html
 "Update OAI Data Provider"
 -> templates/collections3.html
 
-'Reports'
-templates/reports.html
--> oaidp.reports
--> templates/reports2.html
-
 'Records'
 templates/records.html
 -> oaidp.recordidlist
 -> oaidp.records
 
+'Search'
+
+'Browse'
+
+'Reports'
+templates/reports.html
+-> oaidp.reports
+-> templates/reports2.html
+
 'login'
 templates/auth/login.html
+templates/auth/logout.html
 
 STAFF LOGIN
 

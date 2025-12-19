@@ -379,6 +379,10 @@ def collections3():
                            dt_xml=get_last_update('xml'),
                            url=pub_url+cbase,
                            totals=totals)
+'''
+# this section provides for manual regeneration of the static repository and database update
+# this has been replaced with the automatic nightly update
+# the 'buildxml' code can also be run from the command line on the server
 
 # regenerate info
 @bp.route('/regen')
@@ -391,7 +395,7 @@ def regen():
 # regenerate XML
 @bp.route('/regen2')
 def regen2():
-    codepath = Path(Path(__file__).resolve().parent).joinpath('ead2dc.py')
+    codepath = Path(Path(__file__).resolve().parent).joinpath('buildxml/buildxml.py')
     subprocess.run(['python', codepath], capture_output=False)
     return render_template("regen.html", 
                            done=True, 
@@ -407,7 +411,7 @@ def update():
                            done=True, 
                            dt_xml=get_last_update('xml'),
                            dt_col=get_last_update('col'))
-
+'''
 @bp.route('/search2')
 def search2():
     try:
