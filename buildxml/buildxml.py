@@ -1023,7 +1023,7 @@ def main():
                     ancestors.append((level, title))
 
                 if a['_resolved'].get('notes'):
-                    nn = a['_resolved']['notes']:
+                    nn = a['_resolved']['notes']
                     for n in nn:
                         if n.get('type'):
                             if n['type']=='userestrict':
