@@ -1024,6 +1024,7 @@ def main():
 
                 if a['_resolved'].get('notes'):
                     nn = a['_resolved']['notes']
+                    print(nn)
                     for n in nn:
                         if n.get('type'):
                             if n['type']=='userestrict':
