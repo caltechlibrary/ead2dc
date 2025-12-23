@@ -1012,25 +1012,47 @@ def main():
                 extent = ET.SubElement(dc, 'dc:format')
                 extent.text = e.strip()
 
-        # relation
-        ancestors = list()
+        # relation, rights
+        ancestors, rights = list(), list()
         for a in archival_object_metadata.get('ancestors', []):
             level = a.get('level')
+
             if a.get('_resolved'):
                 if a['_resolved'].get('title'):
                     title = a['_resolved']['title']
-                    ancestors.append((title, level))
+                    ancestors.append((level, title))
 
+                if a['_resolved'].get('notes'):
+                    nn = a['_resolved']['notes']:
+                    for n in nn:
+                        if n.get('type'):
+                            if n['type']=='userestrict':
+                                if n['jsonmodel_type']=='note_singlepart':
+                                    content = ' '.join(n['content'])
+                                else:
+                                    content = n['subnotes'][0]['content']
+                                rights.append((level, content))
+
+        rights.sort(reverse=True)
+
+        # relation
         for a in ancestors:
             if a:
                 ancestor = ET.SubElement(dc, 'dc:relation')
-                ancestor.text = a[0]
+                ancestor.text = a[1]
                 if a[1]:
-                    ancestor.attrib = {'level': a[1]}
+                    ancestor.attrib = {'level': a[0]}
         
         # rights
-        rights = ET.SubElement(dc, 'dc:rights')
-        rights.text = default_rights_statement
+        rights_el = ET.SubElement(dc, 'dc:rights')
+        ok = False
+        for r in rights:
+            if r[1]:
+                rights_el.text = r[1]
+                ok = True
+                break
+        if not ok:
+            rights_el.text = default_rights_statement
 
     #-----------------------------------------------------------------------#
     # 5. UPDATE DATABASE
