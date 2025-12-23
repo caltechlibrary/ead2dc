@@ -1027,6 +1027,7 @@ def main():
                     for n in nn:
                         if n.get('type'):
                             if n['type']=='userestrict':
+                                print(n)
                                 if n['jsonmodel_type']=='note_singlepart':
                                     content = ' '.join(n['content'])
                                 else:
