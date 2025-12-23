@@ -1,3 +1,8 @@
+# DIGITAL OBJECT TYPES
+# list of digital objects to include in OAI output
+# potential complete list: [stillimage, movingimage, sound, text, collection, software]
+digital_object_type_filter = ['text', 'stillimage']
+
 # local imports
 from importlib import resources
 from app.aspace import get_notes, get_last_update, write_last_update, csv_gen
@@ -567,13 +572,10 @@ def oai():
 
         for recrd in recrds:
 
-            # test for Type
-            # valid types are text, still_image
-            # (need to populate ALL type elements before implementing)
-            '''
-            if recrd.find('./metadata/oai_dc:dc/dc:type', ns).text not in ['text', 'stillimage']:
+            # test for valid Type
+            if recrd.find('./metadata/oai_dc:dc/dc:type', ns).text not in digital_object_type_filter:
                 continue
-            '''
+
             # get list of sets for record
             sets_list = [setnode.text for setnode in recrd.findall('./header/setSpec', ns)]
 
