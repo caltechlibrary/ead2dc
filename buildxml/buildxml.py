@@ -1042,7 +1042,6 @@ def main():
                     nn = a['_resolved']['notes']
                     for n in nn:
                         if n.get('type'):
-                            print(n)
                             if n['type']=='userestrict':
                                 if n['jsonmodel_type']=='note_singlepart':
                                     content = ' '.join(n['content'])
