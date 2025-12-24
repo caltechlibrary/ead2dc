@@ -1026,6 +1026,7 @@ def main():
                     nn = a['_resolved']['notes']
                     for n in nn:
                         if n.get('type'):
+                            print(n)
                             if n['type']=='userestrict':
                                 if n['jsonmodel_type']=='note_singlepart':
                                     content = ' '.join(n['content'])
@@ -1033,6 +1034,7 @@ def main():
                                     content = n['subnotes'][0]['content']
                                 rights.append((level, content))
 
+        # sort order: 'subseries', 'series', 'collection'
         rights.sort(reverse=True)
 
         # relation
