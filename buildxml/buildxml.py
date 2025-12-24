@@ -891,15 +891,31 @@ def main():
                 if s[1]:
                     subject.attrib = {'source': s[1]}
         
-        # description
+        # description, rights
+        # list to capture rights info from userestrict note
+        # format: list of tuples [(level, content)]
+        # levels are in order of preference: 'x_item', 'subseries', 'series', 'collection'
+        rights = list()
         for note in archival_object_metadata.get('notes', []):
+
             if note.get('publish') and (note['type'] == 'scopecontent' or note['type'] == 'abstract'):
                 if note['jsonmodel_type'] == 'note_singlepart':
                     desc_text = note['content'][0]
                 elif note['jsonmodel_type'] == 'note_multipart':
                     desc_text = note['subnotes'][0]['content']
+
                 description = ET.SubElement(dc, 'dc:description')
                 description.text = desc_text
+
+            if note.get('publish') and (note['type'] == 'userestrict'):
+                if note['jsonmodel_type'] == 'note_singlepart':
+                    item_rights_note = note['content'][0]
+                elif note['jsonmodel_type'] == 'note_multipart':
+                    item_rights_note = note['subnotes'][0]['content']
+
+                # capture item rights info for use below
+                rights.append(('x_item', item_rights_note))
+                
                 '''
                 # optional description attribute
                 description.attrib = {'type': 'scopecontent' if note['type']=='scopecontent' else 'abstract',
@@ -1013,7 +1029,7 @@ def main():
                 extent.text = e.strip()
 
         # relation, rights
-        ancestors, rights = list(), list()
+        ancestors = list()
         for a in archival_object_metadata.get('ancestors', []):
             level = a.get('level')
 
@@ -1034,9 +1050,6 @@ def main():
                                     content = n['subnotes'][0]['content']
                                 rights.append((level, content))
 
-        # sort order: 'subseries', 'series', 'collection'
-        rights.sort(reverse=True)
-
         # relation
         for a in ancestors:
             if a:
@@ -1046,14 +1059,21 @@ def main():
                     ancestor.attrib = {'level': a[0]}
         
         # rights
+        # sort order: 'x_item', 'subseries', 'series', 'collection'
+        rights.sort(reverse=True)
+
         rights_el = ET.SubElement(dc, 'dc:rights')
+
         ok = False
+
         for r in rights:
             if r[1]:
                 rights_el.text = r[1]
                 ok = True
                 break
+
         if not ok:
+
             rights_el.text = default_rights_statement
 
     #-----------------------------------------------------------------------#
