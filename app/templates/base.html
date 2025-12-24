@@ -45,13 +45,13 @@
 
         <nav class="primary-nav" aria-label="Primary navigation">
             <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('oaidp.collections') }}">Collections</a></li>
+                <li><a href="{{ url_for('index') }}" title="Information on using the OAI Data Provider.">Home</a></li>
+                <li><a href="{{ url_for('oaidp.collections') }}" title="List of collections with digital content for which the OAI Data Provider provides metadata for harvesting.">Collections</a></li>
                 {% if g.user %}
-                    <li><a href="{{ url_for('oaidp.records') }}">Records</a></li>
-                    <li><a href="{{ url_for('oaidp.search') }}">Search</a></li>
-                    <li><a href="{{ url_for('oaidp.browse', page_number=1) }}">Browse</a></li>
-                    <li><a href="{{ url_for('oaidp.reports') }}">Reports</a></li>
+                    <li><a href="{{ url_for('oaidp.records') }}" title="Tools for browsing and displaying JSON records for Resources, Accessions, Archival and Digital Objects, and Subjects.">Records</a></li>
+                    <li><a href="{{ url_for('oaidp.search') }}" title="Search Archival Objects by ID.">Search</a></li>
+                    <li><a href="{{ url_for('oaidp.browse', page_number=1) }}" title="Browse Archival Objects by ID.">Browse</a></li>
+                    <li><a href="{{ url_for('oaidp.reports') }}" title="CSV reports for Resources, Accessions and Digital Objects.">Reports</a></li>
                     <li><a href="{{ url_for('auth.logout') }}">{{ g.user }} logout</a></li>
                 {% else %}
                     <li><a href="{{ url_for('auth.login') }}">Staff login</a></li>
