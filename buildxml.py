@@ -179,7 +179,7 @@ Item in any way that is permitted by the copyright and related rights legislatio
 
 # establish API connection
 def authorize_api():
-    secrets = importlib.import_module('.app.secrets', package='ead2dc')
+    secrets = __import__('.app.secrets')
     client = ASnakeClient(baseurl = secrets.baseurl,
                         username = secrets.username,
                         password = secrets.password)
