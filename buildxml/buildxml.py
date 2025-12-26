@@ -179,7 +179,8 @@ Item in any way that is permitted by the copyright and related rights legislatio
 
 # establish API connection
 def authorize_api():
-    secrets = importlib.util.spec_from_file_location('secrets', '../app/')
+    loc = Path(Path(__file__).resolve().parent).joinpath('../app/')
+    secrets = importlib.util.spec_from_file_location('secrets', loc)
     client = ASnakeClient(baseurl = secrets.baseurl,
                         username = secrets.username,
                         password = secrets.password)
