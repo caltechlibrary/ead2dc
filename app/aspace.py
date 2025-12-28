@@ -23,9 +23,9 @@ pub_url = config['PUBLIC_URL']
 cbase = config['COLLECTION_BASE_URI']
 
 from asnake.client import ASnakeClient
-client = ASnakeClient(baseurl=config['ASPACE_API_URL'],
-                      username=config['ASPACE_USERNAME'],
-                      password=config['ASPACE_PASSWORD'])
+client = ASnakeClient(baseurl = secrets.baseurl,
+                        username = secrets.username,
+                        password = secrets.password)
 
 
 def csv_gen(filename, fieldnames, category):
