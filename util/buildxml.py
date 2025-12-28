@@ -12,7 +12,7 @@
 #   collections - records data about collections with digital content
 #   last_update - records dates of last updates of XML file and collection selection
 
-import time, importlib
+import time
 import sqlite3 as sq
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
@@ -20,6 +20,9 @@ import argparse
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from urllib.parse import urlparse
+
+# local imports
+import secrets
 
 # import ASnakeClient for ArchivesSpace API access
 from asnake.client import ASnakeClient
@@ -179,7 +182,6 @@ Item in any way that is permitted by the copyright and related rights legislatio
 
 # establish API connection
 def authorize_api():
-    secrets = importlib.import_module('secrets')
     client = ASnakeClient(baseurl = secrets.baseurl,
                         username = secrets.username,
                         password = secrets.password)
