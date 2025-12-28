@@ -9,8 +9,8 @@ from util import secrets
 from util import defaults
 
 # read config file
-with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
-    config = json.load(f)
+#with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
+#    config = json.load(f)
 
 # max number of records to return
 maxrecs = defaults.maxrecs
