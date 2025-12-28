@@ -5,7 +5,7 @@ from datetime import datetime
 import json, csv
 
 # local imports
-import util.secrets.test
+import util.secrets
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
