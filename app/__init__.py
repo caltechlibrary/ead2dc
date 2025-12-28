@@ -2,6 +2,8 @@ import os, json
 from pathlib import Path
 from flask import Flask, render_template
 
+from util import secrets
+
 #from asnake.client import ASnakeClient
 
 # read config file
@@ -17,7 +19,8 @@ with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as
 
 # create and configure the app
 app = Flask(__name__, instance_relative_config=True)
-app.config['SECRET_KEY'] = config['SECRET_KEY']
+app.config['SECRET_KEY'] = secrets.secret_key
+#app.config['SECRET_KEY'] = config['SECRET_KEY']
 app.config.from_mapping(DATABASE=os.path.join(app.instance_path, 'ead2dc.db'))
 
 from . import db

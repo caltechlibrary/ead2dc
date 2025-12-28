@@ -1,32 +1,32 @@
-from app.db import get_db
 
 from pathlib import Path
 from datetime import datetime
 import json, csv
 
 # local imports
+from app.db import get_db
 from util import secrets
+from util import defaults
 
 # read config file
 with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
     config = json.load(f)
 
 # max number of records to return
-maxrecs = config['MAXIMUM_RECORDS_RETURNED']
+maxrecs = defaults.maxrecs
 # data provider URL
-dpurl = config['DATA_PROVIDER_URL']
+dpurl = defaults.dpurl
 # base uri
-idbase = config['ID_BASE_URI'] 
+idbase = defaults.idbase
 # public url
-pub_url = config['PUBLIC_URL']
+pub_url = defaults.pub_url
 # collection base
-cbase = config['COLLECTION_BASE_URI']
+cbase = defaults.cbase
 
 from asnake.client import ASnakeClient
 client = ASnakeClient(baseurl = secrets.baseurl,
                         username = secrets.username,
                         password = secrets.password)
-
 
 def csv_gen(filename, fieldnames, category):
 
