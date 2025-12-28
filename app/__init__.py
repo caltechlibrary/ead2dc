@@ -7,8 +7,8 @@ from util import secrets
 #from asnake.client import ASnakeClient
 
 # read config file
-with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
-    config = json.load(f)
+# with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
+#     config = json.load(f)
 
 #asnake_client = ASnakeClient(
 #    baseurl=config["ASPACE_API_URL"],
