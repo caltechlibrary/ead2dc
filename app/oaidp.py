@@ -9,6 +9,8 @@ from app.aspace import get_notes, get_last_update, write_last_update, csv_gen
 from app.aspace import get_json, get_ids, get_subjects, get_extents, get_dates
 # get_json, get_ids, get_subjects, get_extents, get_dates are also in helperfunctions.py
 from app.db import get_db
+from util import defaults
+
 # other imports
 from flask import Blueprint, request, Response, render_template, send_file, g
 from datetime import datetime, date
@@ -19,19 +21,19 @@ from pathlib import Path
 import csv, json, subprocess
 
 # read config file
-with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), 'r') as f:
-    config = json.load(f)
+#with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), 'r') as f:
+#    config = json.load(f)
 
 # max number of records to return
-maxrecs = config['MAXIMUM_RECORDS_RETURNED']
+maxrecs = defaults.maxrecs #config['MAXIMUM_RECORDS_RETURNED']
 # data provider URL
-dpurl = config['DATA_PROVIDER_URL']
+dpurl = defaults.dpurl #config['DATA_PROVIDER_URL']
 # base uri
-idbase = config['ID_BASE_URI'] 
+idbase = defaults.idbase #config['ID_BASE_URI'] 
 # public url
-pub_url = config['PUBLIC_URL']
+pub_url = defaults.pub_url #config['PUBLIC_URL']
 # collection base
-cbase = config['COLLECTION_BASE_URI']
+cbase = defaults.cbase #config['COLLECTION_BASE_URI']
 
 bp = Blueprint('oaidp', __name__)
 
