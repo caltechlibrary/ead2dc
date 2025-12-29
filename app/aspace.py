@@ -6,23 +6,8 @@ import csv
 # local imports
 from app.db import get_db
 from util import secrets
-from util import defaults
 
-# read config file
-#with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
-#    config = json.load(f)
-'''
-# max number of records to return
-maxrecs = defaults.maxrecs
-# data provider URL
-dpurl = defaults.dpurl
-# base uri
-idbase = defaults.idbase
-# public url
-pub_url = defaults.pub_url
-# collection base
-cbase = defaults.cbase
-'''
+# ArchivesSpace API authentication
 from asnake.client import ASnakeClient
 client = ASnakeClient(baseurl = secrets.baseurl,
                         username = secrets.username,
