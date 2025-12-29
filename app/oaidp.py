@@ -19,20 +19,16 @@ import xml.dom.minidom as dom
 from pathlib import Path
 import json, subprocess
 
-# read config file
-#with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), 'r') as f:
-#    config = json.load(f)
-
 # max number of records to return
-maxrecs = defaults.maxrecs #config['MAXIMUM_RECORDS_RETURNED']
+maxrecs = defaults.maxrecs
 # data provider URL
-dpurl = defaults.dpurl #config['DATA_PROVIDER_URL']
+dpurl = defaults.dpurl
 # base uri
-idbase = defaults.idbase #config['ID_BASE_URI'] 
+idbase = defaults.idbase 
 # public url
-pub_url = defaults.pub_url #config['PUBLIC_URL']
+pub_url = defaults.pub_url
 # collection base
-cbase = defaults.cbase #config['COLLECTION_BASE_URI']
+cbase = defaults.cbase
 
 bp = Blueprint('oaidp', __name__)
 

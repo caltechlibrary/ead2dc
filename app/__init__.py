@@ -1,25 +1,12 @@
 import os
 from flask import Flask, render_template
 
-from util import secrets
-
-#from asnake.client import ASnakeClient
-
-# read config file
-# with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), "r") as f:
-#     config = json.load(f)
-
-#asnake_client = ASnakeClient(
-#    baseurl=config["ASPACE_API_URL"],
-#    username=config["ASPACE_USERNAME"],
-#    password=config["ASPACE_PASSWORD"]
-#)
-#asnake_client.authorize()
+# local imports
+from util.secrets import secret_key
 
 # create and configure the app
 app = Flask(__name__, instance_relative_config=True)
-app.config['SECRET_KEY'] = secrets.secret_key
-#app.config['SECRET_KEY'] = config['SECRET_KEY']
+app.config['SECRET_KEY'] = secret_key
 app.config.from_mapping(DATABASE=os.path.join(app.instance_path, 'ead2dc.db'))
 
 from . import db
