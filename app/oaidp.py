@@ -293,7 +293,6 @@ def records():
     response = Response(csv_data, mimetype='text/csv')
     response.headers.set('Content-Disposition', 'attachment', filename='collections.csv')
     return response
-'''
 
 # refresh collections data from ArchivesSpace
 @bp.route('/collections2')
@@ -307,6 +306,7 @@ def collections2():
                            digitalobject_count=output,
                            archivalobject_count=output,
                            totals=get_total_counts())
+'''
 
 # get total object counts
 def get_total_counts():
