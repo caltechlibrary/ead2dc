@@ -1,7 +1,7 @@
 
 from pathlib import Path
 from datetime import datetime
-import json, csv
+import csv
 
 # local imports
 from app.db import get_db

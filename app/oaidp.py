@@ -4,7 +4,6 @@
 digital_object_type_filter = ['text', 'stillimage']
 
 # local imports
-from importlib import resources
 from app.aspace import get_notes, get_last_update, write_last_update, csv_gen
 from app.aspace import get_json, get_ids, get_subjects, get_extents, get_dates
 # get_json, get_ids, get_subjects, get_extents, get_dates are also in helperfunctions.py
@@ -13,12 +12,12 @@ from util import defaults
 
 # other imports
 from flask import Blueprint, request, Response, render_template, send_file, g
-from datetime import datetime, date
+from datetime import datetime
 import pandas as pd
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as dom
 from pathlib import Path
-import csv, json, subprocess
+import json, subprocess
 
 # read config file
 #with open(Path(Path(__file__).resolve().parent).joinpath('config.json'), 'r') as f:
