@@ -288,25 +288,6 @@ def records():
     else:
         return render_template('records.html')
 
-'''
-# return the CSV file as a response
-    response = Response(csv_data, mimetype='text/csv')
-    response.headers.set('Content-Disposition', 'attachment', filename='collections.csv')
-    return response
-
-# refresh collections data from ArchivesSpace
-@bp.route('/collections2')
-def collections2():
-    codepath = Path(Path(__file__).resolve().parent).joinpath('updcollinfo.py')
-    output=subprocess.run(['python', codepath], capture_output=True, text=True)
-    return render_template('collections.html', 
-                           output=read_colls(), 
-                           dt=get_last_update('col'),
-                           url=pub_url+cbase,
-                           digitalobject_count=output,
-                           archivalobject_count=output,
-                           totals=get_total_counts())
-'''
 
 # get total object counts
 def get_total_counts():
