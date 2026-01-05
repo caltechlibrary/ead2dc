@@ -93,7 +93,7 @@ def get_ids(category):
         id_list.append((id, obj['uri']))
     return id_list
 
-def get_json(category, id, ancestors=False, digital_object=False, linked_agents=False, repository=False, subjects=False, top_container=False):
+def get_json(category, id, ancestors, digital_object, linked_agents, repository, subjects, top_container):
     client.authorize()
     uri = '/repositories/2/'+category+'/'+id
     if ancestors:
