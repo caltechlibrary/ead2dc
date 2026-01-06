@@ -134,7 +134,7 @@ def get_json(category, id, ancestors, digital_object, linked_agents, repository,
 
 def get_ancestors(category, id):
     ancestors = list()
-    obj = get_json(category, id)
+    obj = get_json(category, id, True, False, False, False, False, False)
     for a in obj.get('ancestors', []):
         level = a.get('level')
         if a.get('_resolved'):
@@ -145,7 +145,7 @@ def get_ancestors(category, id):
 
 def get_subjects(category, id):
     subjects = list()
-    obj = get_json(category, id)
+    obj = get_json(category, id, False, False, False, False, True, False)
     for s in obj.get('subjects', []):
         if s.get('_resolved'):
             if s['_resolved'].get('title'):
@@ -160,14 +160,14 @@ def get_subjects(category, id):
 
 def get_dates(category, id):
     dates = list()
-    obj = get_json(category, id)
+    obj = get_json(category, id, False, False, False, False, False, False)
     for date in obj.get('dates', []):
         dates.append(date.get('expression', ''))
     return dates
 
 def get_extents(category, id):
     extents = list()
-    obj = get_json(category, id)
+    obj = get_json(category, id, False, False, False, False, False, False)
     for extent in obj.get('extents', []):
         extents.append(extent.get('number', '') + ' ' + extent.get('extent_type', ''))
     return extents

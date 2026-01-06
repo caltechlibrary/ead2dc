@@ -248,12 +248,12 @@ def records():
         recordtype = request.form.get('recordtype', 'resources')
         saveas = request.form.get('saveas', 'json')
         recordid = request.form.get('recordid', None)
-        ancestors = request.form.get('ancestors', False)
-        digital_object = request.form.get('digital_object', False)
-        linked_agents = request.form.get('linked_agents', False)
-        repository = request.form.get('repository', False)
-        subjects = request.form.get('subjects', False)
-        top_container = request.form.get('top_container', False)
+        ancestors = request.form.get('ancestors')
+        digital_object = request.form.get('digital_object')
+        linked_agents = request.form.get('linked_agents')
+        repository = request.form.get('repository')
+        subjects = request.form.get('subjects')
+        top_container = request.form.get('top_container')
         if recordid:
             obj = get_json(recordtype, recordid, ancestors, digital_object, linked_agents, repository, subjects, top_container)
             if obj is None:
