@@ -96,18 +96,39 @@ def get_ids(category):
 def get_json(category, id, ancestors, digital_object, linked_agents, repository, subjects, top_container):
     client.authorize()
     uri = '/repositories/2/'+category+'/'+id
+    begin = True
     if ancestors:
         uri = uri + "?resolve[]=ancestors"
+        begin = False
     if digital_object:
-        uri = uri + "?resolve[]=digital_object"
+        if begin:
+            uri = uri + "?resolve[]=digital_object"
+            begin = False
+        else:
+            uri = uri + "&resolve[]=digital_object"
     if linked_agents:
-        uri = uri + "?resolve[]=linked_agents"
+        if begin:
+            uri = uri + "?resolve[]=linked_agents"
+            begin = False
+        else:
+            uri = uri + "&resolve[]=linked_agents"
     if repository:
-        uri = uri + "?resolve[]=repository"
+        if begin:
+            uri = uri + "?resolve[]=repository"
+            begin = False
+        else:
+            uri = uri + "&resolve[]=repository"
     if subjects:
-        uri = uri + "?resolve[]=subjects"
+        if begin:
+            uri = uri + "?resolve[]=subjects"
+            begin = False
+        else:
+            uri = uri + "&resolve[]=subjects"
     if top_container:
-        uri = uri + "?resolve[]=top_container"
+        if begin:
+            uri = uri + "?resolve[]=top_container"
+        else:
+            uri = uri + "&resolve[]=top_container"
     obj = client.get(uri)
     return obj.json()
 
