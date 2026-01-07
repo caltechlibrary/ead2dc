@@ -1,4 +1,4 @@
-# An OAI Static Repository and Data Provider for ArchivesSapce
+# An OAI Static Repository and Data Provider for ArchivesSpace
 
 There are two components to this service:
 
