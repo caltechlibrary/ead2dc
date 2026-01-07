@@ -52,38 +52,17 @@ The [OAI Data Provider](https://apps.library.caltech.edu/ead2dc/) is a web appli
 
 ### Common services
 
-## Mapping
 
-| Element | Encoded Archival Description | Dublin Core |
-|---|---|---|
-| Collection title  | `archdesc/did/unittitle`  | `title`  |
-| Container titles  | `dsc/c??/did/unittitle`  | `title`  |
-| Personal creators  | `dsc/c??/did/origination label="creator"/persname`  | `creator`  |
-| Corporate creators  | `dsc/c??/did/origination label="creator"/corpname`  | `creator`  |
-| Dates  | `dsc/c??/did/unitdate`  | `date`  |
-| Extent  | `dsc/c??/did/physdesc/extent`  | `extent`  |
-| Description  | `dsc/c??/did/abstract`  | `description`  |
-| Subject, general  | `dsc/c??/controlaccess/subject`  | `subject`  |
-| Subject, geographic  | `dsc/c??/controlaccess/geogname`  | `subject`  |
-| Subject, person  | `dsc/c??/controlaccess/persname`  | `subject`  |
-| Subject, corporate  | `dsc/c??/controlaccess/corpname`  | `subject`  |
-| Subject, activity  | `dsc/c??/controlaccess/function`  | `subject`  |
-| Identifier  | `dsc/c??/did/unitid`  | `identifier`  |
-| Identifier, link  | `dsc/c??/did/daogrp/daoloc['xlink:href']`  | `identifier`  |
+
 
 
 ## Example
 
-Paul B. MacCready Papers ca. 1931-2002, Caltech Archives
-
-* [Finding Aid](https://collections.archives.caltech.edu/repositories/2/resources/197)
-* [ArchivesSpace OAI Data Provider output](https://caltechlibrary.github.io/ead2dc/xml/maccready-ead.xml)
-* [OAI Static Repository created by ead2dc](https://caltechlibrary.github.io/ead2dc/xml/maccready-dc.xml)
 
 
 ## License
 
-Software produced by the Caltech Library is Copyright © 2023 California Institute of Technology.  This software is freely distributed under a BSD-style license.  Please see the [LICENSE](LICENSE) file for more information.
+Software produced by the Caltech Library is Copyright © 2026 California Institute of Technology.  This software is freely distributed under a BSD-style license.  Please see the [LICENSE](LICENSE) file for more information.
 
 
 ## References
