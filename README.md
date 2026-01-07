@@ -4,6 +4,7 @@ There are two components to this service:
 
 * A Python 3 script, [buildxml.py](util/buildxml.py), to build an [Open Archives Initiative](https://www.openarchives.org/pmh/) (OAI) [Static Repository](https://www.openarchives.org/OAI/2.0/guidelines-static-repository.htm) from an ArchivesSpace repository using the ArchivesSpace API.  
 * A Flask [web application](app/) that implements an OAI Data Provider to provide access to records in the Static Repository.
+* The name of this repository, [ead2dc](https://github.com/caltechlibrary/ead2dc), is a misnomer, referring to a former version that transformed ArchivesSpace EAD output to generate the static repository.
 
 
 [![License](https://img.shields.io/badge/License-BSD--like-lightgrey)](https://choosealicense.com/licenses/bsd-3-clause)
