@@ -1,9 +1,9 @@
-# ArchiveSpace OAI/EAD to OAI/DC Conversion
+# An OAI Static Repository and Data Provider for ArchivesSapce
 
 There are two components to this service:
 
-* A Python 3 script to build an [Open Archives Initiative](https://www.openarchives.org/pmh/) (OAI) [Static Repository](https://www.openarchives.org/OAI/2.0/guidelines-static-repository.htm) from an ArchivesSpace repository using the ArchivesSpace API.
-* A Flask web application that implements an OAI Data Provider to provide access to records in the Static Repository.
+* A Python 3 script, [buildxml.py](util/buildxml.py), to build an [Open Archives Initiative](https://www.openarchives.org/pmh/) (OAI) [Static Repository](https://www.openarchives.org/OAI/2.0/guidelines-static-repository.htm) from an ArchivesSpace repository using the ArchivesSpace API.  
+* A Flask [web application](app/) that implements an OAI Data Provider to provide access to records in the Static Repository.
 
 
 [![License](https://img.shields.io/badge/License-BSD--like-lightgrey)](https://choosealicense.com/licenses/bsd-3-clause)
