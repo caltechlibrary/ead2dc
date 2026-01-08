@@ -47,6 +47,28 @@ Installation of the [ArchivesSnake client library](https://github.com/archivessp
 ```
 pip3 install ArchivesSnake
 ```
+Other required packages are all standard Python.
+
+To generate the static XML repository run the script in the same location as the defaults.py and secrets.py files:
+```
+python buildxml.py
+```
+[defaults.py](util/defaults_template.py) contains default values that identify the OAI URL, AS repository number, base URI for identifiers, and the public repository URL. [secrets.py](util/secrets_template.py) defines the data provider base URL, and API username and password.
+
+The XML file will be written to the 'xml' directory.
+
+There are options for running the script in dev or test mode. To see options:
+```
+ python buildxml.py -h
+ ```
+ ```
+ usage: buildxml.py [-h] [-r RUNTYPE] [-n NUM_RECS]
+
+options:
+  -h, --help            show this help message and exit
+  -r RUNTYPE, --runtype RUNTYPE
+  -n NUM_RECS, --num_recs NUM_RECS
+```
 
 ### Data Provider
 
