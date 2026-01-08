@@ -69,6 +69,9 @@ options:
   -r RUNTYPE, --runtype RUNTYPE
   -n NUM_RECS, --num_recs NUM_RECS
 ```
+Default runtype is 'production' and includes all appropriate records in the repository. Any other value will cause the script to run in dev/test mode and the XML file will be written to the 'dev' folder. If no -n value is given, all records will be processed. If a negative -n value is given, 1000 records will be processed. Any other number defines the number of records to process.
+
+Running in dev/test mode does not affect the production XML output, which is the xml folder.
 
 ### Data Provider
 
