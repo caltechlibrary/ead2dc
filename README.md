@@ -14,8 +14,8 @@ There are two components to this service:
 
 * [Introduction](#introduction)
 * [Installation and Usage](#installation-and-usage)
-* [Mapping](#mapping)
-* [Example](#example)
+* 
+* 
 * [License](#license)
 * [References](#references)
 * [Acknowledgments](#acknowledgments)
@@ -29,20 +29,24 @@ The [OAI Data Provider](https://apps.library.caltech.edu/ead2dc/) adheres to the
 
 Main features and assumptions:
 
+* The OAI Data Provider uses a static repository, i.e. it does not dynamically generate records. The behavior of the Data Provider is, however, indistinguishable from a dynamic provider, except for the currency of the data. In the Caltech Library implementation the static repository is rewritten automatically once per day.
 * The output of the Data Provider is OAI-compliant, as tested using this [OAI-PMH Validator](https://validator.oaipmh.com/).
-* Each DC record includes a single title. Other titles in a finding aid hierarchy (collection, series, subseries, etc.) are included in DC:relation.
-* Descriptive metadata is drawn from archival object records.
-* Only digital objects are included. Archives object records without digital content are omitted.
-* The OAI Data Provider uses a static repository, i.e. it does not dynamically generate records.
-* DC metadata only.
-* Sets correspond to the archival collections and do not overlap.
-* Records are delivered in batches of 250.
+* Only digital objects are included. Archival objects without digital content are omitted.
+* Descriptive metadata is drawn from the archival object associated with each digital object.
+* Only Dublin Core metadata is supported. Other metadata formats are not currently supported.
+* Sets correspond to the AS archival collections (resources). A single record can belong to more than one set (i.e. be represented in more than one collection).
+* The data provider returns records in batches of 250. A resumption token is provided to request each subsequent page.
 
 ## Installation and Usage
 
 ### buildxml
 
-The [buildxml.py](util/buildxml.py) file is designed to be run from the command line, or from within your favorite editing environment. It uses standard Python libraries and has been tested using Python 3.9 through 3.12.
+The [buildxml.py](util/buildxml.py) file is designed to be run from the command line, or from within your favorite editing environment. It uses standard Python libraries and has been tested using Python 3.12.
+
+Installation of the [ArchivesSnake client library](https://github.com/archivesspace-labs/ArchivesSnake) is required to utilize the ArchivesSpace backend API. It can be installed using 
+```
+pip3 install ArchivesSnake
+```
 
 ### Data Provider
 
