@@ -4,7 +4,7 @@
 #
 # Generates static OAI-PMH XML for Caltech Archives digital objects
 # Data source is ArchivesSpace API
-# Output is a single XML file: caltecharchives.xml
+# Output is a single XML file: staticrepo.xml
 # Only archival objects with associated digital objects are included
 # An SQLite3 database, instance/ead2dc.db, is used to store collection information
 # Tables: 
@@ -620,8 +620,8 @@ def main():
     # default -n is 1000 for development runtype
     # default -n is all records for production runtype
     # stats are not updated when runtype != 'production'
-    # output xml file is caltecharchives_test.xml for test or development runtype
-    # output xml file is caltecharchives.xml for production runtype
+    # output xml file is staticrepo_test.xml for test or development runtype
+    # output xml file is staticrepo.xml for production runtype
 
     # Initialize parser
     parser = argparse.ArgumentParser()
@@ -636,7 +636,7 @@ def main():
     if runtype == 'production':
         print('Running in production mode...')
         print('Processing all records...')
-        xml_output_path = Path(Path(__file__).resolve().parent).joinpath('../xml/caltecharchives.xml')
+        xml_output_path = Path(Path(__file__).resolve().parent).joinpath('../xml/staticrepo.xml')
         dup_output_path = Path(Path(__file__).resolve().parent).joinpath('../xml/duplicates.txt')
 
     else:
@@ -644,7 +644,7 @@ def main():
         if num_recs < 0:
             num_recs = 1000
         print('Limiting to', num_recs, 'records for testing...')
-        xml_output_path = Path(Path(__file__).resolve().parent).joinpath('../dev/caltecharchives.xml')
+        xml_output_path = Path(Path(__file__).resolve().parent).joinpath('../dev/staticrepo.xml')
         dup_output_path = Path(Path(__file__).resolve().parent).joinpath('../dev/duplicates.txt')
 
     start = time.time()
