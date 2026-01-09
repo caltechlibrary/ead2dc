@@ -55,8 +55,13 @@ python buildxml.py
 ```
 [defaults.py](util/defaults_template.py) contains default values that identify the OAI URL, AS repository number, base URI for identifiers, and the public repository URL. [secrets.py](util/secrets_template.py) defines the data provider base URL, and API username and password.
 
-The XML file will be written to the 'xml' directory.
-
+The XML file will be written to 'staticrepo.xml' in the 'xml' directory:
+```
+../xml/staticrepo.xml
+```
+If duplicate URLs are found they are written to 'duplicates.txt' and omitted from the static repository:
+```
+../xml/duplicates.txt
 There are options for running the script in dev or test mode. To see options:
 ```
  python buildxml.py -h
@@ -70,7 +75,10 @@ options:
   -n NUM_RECS, --num_recs NUM_RECS
 ```
 Default runtype is 'production' and includes all appropriate records in the repository. Any other value will cause the script to run in dev/test mode and the XML file will be written to the 'dev' folder. If no -n value is given, all records will be processed. If a negative -n value is given, 1000 records will be processed. Any other number defines the number of records to process.
-
+```
+../dev/staticrepo.xml
+../dev/duplicates.txt
+```
 Running in dev/test mode does not affect the production XML output, which is the xml folder.
 
 ### Data Provider
