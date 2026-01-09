@@ -86,7 +86,11 @@ Running in dev/test mode does not affect the production XML output, which is the
 
 The [OAI Data Provider](https://apps.library.caltech.edu/ead2dc/) is a web application written in Python 3 using the [Flask](https://flask.palletsprojects.com/en/3.0.x/) micro web framework. Installation of Flask will include dependent libraries, such as Jinja2 and werkzeug. No additional libraries are required.
 
+The OAI Data Provider functionality provided by [oaidp.py](app/oaidp.py)
+
 ### Defaults
+
+
 
 ### Common services
 
