@@ -14,8 +14,10 @@ There are two components to this service:
 
 * [Introduction](#introduction)
 * [Installation and Usage](#installation-and-usage)
-* 
-* 
+  * [buildxml](#database)
+  * [Data Provider](#data-provider)
+  * [Database](#database)
+  * [Default Values](#default-values)
 * [License](#license)
 * [References](#references)
 * [Acknowledgments](#acknowledgments)
@@ -86,21 +88,24 @@ Running in dev/test mode does not affect the production XML output, which is the
 
 The [OAI Data Provider](https://apps.library.caltech.edu/ead2dc/) is a web application written in Python 3 using the [Flask](https://flask.palletsprojects.com/en/3.0.x/) micro web framework. Installation of Flask will include dependent libraries, such as Jinja2 and werkzeug. No additional libraries are required.
 
-The OAI Data Provider functionality provided by [oaidp.py](app/oaidp.py)
+The OAI Data Provider functionality provided by [oaidp.py](app/oaidp.py). Additional functions are imported from [aspace.py](app/aspace.py).
 
-### Defaults
+### Database
 
+An SQLite3 database is used to store a log of OAI requests, information about collections (rewritten nightly when 'buildxml.py' runs), update dates, authorized users, and earliest date in the repository.
+```
+CREATE TABLE logs (date text, verb text, setname text, identifier text, datefrom text, dateuntil text);
+CREATE TABLE collections (collno text, colltitle text, docount int, incl int, caltechlibrary int, internetarchive int, youtube int, other int, collid text, description text, typ text, aocount int default 0, last_edit text, type_text int, type_stillimage int, type_movingimage int, type_sound int, type_other int);
+CREATE TABLE last_update (dt text, fn text);
+CREATE TABLE user(username TEXT UNIQUE NOT NULL, role text);
+CREATE TABLE dates (earliest TEXT);
+```
 
+### Default Values
 
-### Common services
+Application defaults are stored in 'util/defaults.py' and 'util/secrets.py'. See [defaults_template.py](util/defaults_template.py) and [secrets_template](util/secrets_template.py) for guidance.
 
-
-
-
-
-## Example
-
-
+Global variables for [buildxml.py](util/buildxml.py) are listed in the "Global Configuration Section" at the top of that script. 
 
 ## License
 
