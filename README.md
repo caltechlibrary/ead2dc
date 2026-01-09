@@ -62,6 +62,7 @@ The XML file will be written to 'staticrepo.xml' in the 'xml' directory:
 If duplicate URLs are found they are written to 'duplicates.txt' and omitted from the static repository:
 ```
 ../xml/duplicates.txt
+```
 There are options for running the script in dev or test mode. To see options:
 ```
  python buildxml.py -h
