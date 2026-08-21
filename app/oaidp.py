@@ -23,7 +23,7 @@ maxrecs = defaults.maxrecs
 # data provider URL
 dpurl = defaults.dpurl
 # base uri
-idbase = defaults.idbase 
+idbase = defaults.idbase
 # public url
 pub_url = defaults.pub_url
 # collection base
@@ -76,9 +76,9 @@ def browse(page_number):
     items_total=len(ids)
     pages_total=(items_total+page_size-1)//page_size
     ids_display=ids[(page_number-1)*page_size:page_number*page_size]
-    return render_template("browse.html", 
-                           ids=ids_display, 
-                           idbase=idbase, 
+    return render_template("browse.html",
+                           ids=ids_display,
+                           idbase=idbase,
                            dpurl=dpurl,
                            page_size=page_size,
                            items_total=items_total,
@@ -94,9 +94,9 @@ def search():
             id = request.form['id']
         else:
             id = "id not found"
-        return render_template("search.html", 
-                               id=id, 
-                               idbase=idbase, 
+        return render_template("search.html",
+                               id=id,
+                               idbase=idbase,
                                dpurl=dpurl)
     else:
         return render_template("search.html")
@@ -113,8 +113,8 @@ def collections():
                     sum(other) as tot_other \
                 FROM collections;'
     totals = db.execute(query).fetchone()
-    return render_template('collections.html', 
-                           output=read_colls(), 
+    return render_template('collections.html',
+                           output=read_colls(),
                            dt_col=get_last_update('col'),
                            dt_xml=get_last_update('xml'),
                            url=pub_url+cbase,
@@ -125,33 +125,33 @@ def collections():
 # download collections data
 @bp.route('/reports', methods=['GET', 'POST'])
 def reports():
-    fieldnames = {  'resources' :                            
-                           ['uri', 
-                            'title', 
+    fieldnames = {  'resources' :
+                           ['uri',
+                            'title',
                             'suppressed',
-                            'publish', 
-                            'restrictions', 
-                            'repository_processing_note', 
-                            'ead_id', 
-                            'finding_aid_title', 
-                            'finding_aid_filing_title', 
-                            'finding_aid_date', 
-                            'finding_aid_author', 
-                            'created_by', 
-                            'last_modified_by', 
-                            'create_time', 
-                            'system_mtime', 
-                            'user_mtime', 
-                            'is_slug_auto', 
-                            'id_0', 
-                            'level', 
-                            'resource_type', 
-                            'finding_aid_description_rules', 
-                            'finding_aid_language', 
+                            'publish',
+                            'restrictions',
+                            'repository_processing_note',
+                            'ead_id',
+                            'finding_aid_title',
+                            'finding_aid_filing_title',
+                            'finding_aid_date',
+                            'finding_aid_author',
+                            'created_by',
+                            'last_modified_by',
+                            'create_time',
+                            'system_mtime',
+                            'user_mtime',
+                            'is_slug_auto',
+                            'id_0',
+                            'level',
+                            'resource_type',
+                            'finding_aid_description_rules',
+                            'finding_aid_language',
                             'finding_aid_script',
-                            'finding_aid_status', 
+                            'finding_aid_status',
                             'jsonmodel_type'],
-                    'accessions' : 
+                    'accessions' :
                            ['uri',
                             'suppressed',
                             'publish',
@@ -173,12 +173,12 @@ def reports():
                             'id_0',
                             'id_1',
                             'jsonmodel_type'],
-                    'digital_objects' : 
+                    'digital_objects' :
                            ['uri',
                             'digital_object_id',
                             'title',
                             'publish',
-                            'restrictions',    
+                            'restrictions',
                             'created_by',
                             'last_modified_by',
                             'create_time',
@@ -187,7 +187,7 @@ def reports():
                             'suppressed',
                             'is_slug_auto',
                             'jsonmodel_type'],
-                    'archival_objects' : 
+                    'archival_objects' :
                            ['uri',
                             'position',
                             'publish',
@@ -205,10 +205,10 @@ def reports():
                             'level',
                             'jsonmodel_type',
                             'has_unpublished_ancestor']
-                        }         
+                        }
     # remove archival objects from fieldnames (TIMES OUT)
-    fieldnames.pop('archival_objects', None)  
-    
+    fieldnames.pop('archival_objects', None)
+
     if request.method == 'POST':
         category = request.form.get('category', 'resources')
         fields = request.form.getlist('include')
@@ -257,7 +257,7 @@ def records():
         if recordid:
             obj = get_json(recordtype, recordid, ancestors, digital_object, linked_agents, repository, subjects, top_container)
             if obj is None:
-                return render_template('records.html', 
+                return render_template('records.html',
                                        error='Record not found.')
             else:
                 json_filename = Path(Path(__file__).resolve().parent).joinpath(g.user + '_' + recordtype + recordid + '.json')
@@ -279,16 +279,16 @@ def records():
                     subjects = get_subjects(recordtype, recordid)
                     dates = get_dates(recordtype, recordid)
                     extents = get_extents(recordtype, recordid)
-                    return render_template('records.html', 
-                                    subjects=subjects, 
-                                    dates=dates, 
+                    return render_template('records.html',
+                                    subjects=subjects,
+                                    dates=dates,
                                     extents=extents,
                                     recordtype=recordtype,
                                     recordid=recordid)
                 else:
                     return render_template('records.html')
         else:
-            return render_template('records.html', 
+            return render_template('records.html',
                                    error='No record ID provided.')
     else:
         return render_template('records.html')
@@ -361,8 +361,8 @@ def collections3():
         update_coll_json(ids)
         write_last_update('col')
     totals = db.execute('SELECT total,caltechlibrary,internetarchive,youtube,other FROM totals;').fetchone()
-    return render_template('collections.html', 
-                           output=read_colls(), 
+    return render_template('collections.html',
+                           output=read_colls(),
                            dt_col=get_last_update('col'),
                            dt_xml=get_last_update('xml'),
                            url=pub_url+cbase,
@@ -375,8 +375,8 @@ def collections3():
 # regenerate info
 @bp.route('/regen')
 def regen():
-    return render_template("regen.html", 
-                           done=False, 
+    return render_template("regen.html",
+                           done=False,
                            dt_xml=get_last_update('xml'),
                            dt_col=get_last_update('col'))
 
@@ -385,8 +385,8 @@ def regen():
 def regen2():
     codepath = Path(Path(__file__).resolve().parent).joinpath('buildxml/buildxml.py')
     subprocess.run(['python', codepath], capture_output=False)
-    return render_template("regen.html", 
-                           done=True, 
+    return render_template("regen.html",
+                           done=True,
                            dt_xml=get_last_update('xml'),
                            dt_col=get_last_update('col'))
 
@@ -395,8 +395,8 @@ def regen2():
 def update():
     codepath = Path(Path(__file__).resolve().parent).joinpath('update.sh')
     subprocess.run(['sh', codepath], capture_output=False)
-    return render_template("regen.html", 
-                           done=True, 
+    return render_template("regen.html",
+                           done=True,
                            dt_xml=get_last_update('xml'),
                            dt_col=get_last_update('col'))
 '''
@@ -434,7 +434,7 @@ def oai():
     # get verb from request
     verb = request.args.get('verb')
     identifier = request.args.get('identifier')
- 
+
     # resumption token flag
     rToken = False
 
@@ -454,7 +454,7 @@ def oai():
 
         # iteration flag
         first = True
-    
+
         # get parameters from request
         set_request =  'x_000' if request.args.get('set') is None else request.args.get('set')
         datefrom = '000-00-00' if request.args.get('from') is None else request.args.get('from')
@@ -562,7 +562,7 @@ def oai():
             # get list of sets for record
             sets_list = [setnode.text for setnode in recrd.findall('./header/setSpec', ns)]
 
-            # check 
+            # check
             # - if record is in requested set, or no set specified (x_000)
             # - and if record is in included (i.e. active) sets, or user is authenticated
             if (set_request in sets_list or set_request == 'x_000') \
@@ -632,7 +632,7 @@ def oai():
                     count += 1
                 except:
                     pass
-            
+
     else:
 
         oaixml = ET.Element('OAI-PMH')
