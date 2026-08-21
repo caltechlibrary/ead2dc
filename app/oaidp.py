@@ -546,7 +546,7 @@ def oai():
         respDate = ET.SubElement(oaixml, 'responseDate')
         respDate.text = datetime.now().isoformat().split('.')[0]
         rquest = ET.SubElement(oaixml, 'request')
-        rquest.attrib = {'verb': 'ListRecords',
+        rquest.attrib = {'verb': verb,
                          'metadataPrefix': 'oai_dc'
                         }
         rquest.text = dpurl
@@ -593,18 +593,23 @@ def oai():
                             for node in metad:
                                 dc.append(node)
 
-                    if cursor >= startrec + maxrecs:
-                        resumptionToken = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}resumptionToken')
-                        resumptionToken.attrib = {'cursor': str(cursor)}
-                        resumptionToken.text = f'{set_request}:{datefrom}:{dateuntil}:{cursor}'
+                    elif cursor > startrec + maxrecs:
+                        # a further matching record exists beyond this page
                         rToken = True
                         break
 
-
-        if not rToken and not first:
+        if rToken:
             resumptionToken = ET.SubElement(listrecords, '{http://www.openarchives.org/OAI/2.0/}resumptionToken')
-            resumptionToken.attrib = {'cursor': str(cursor)}
-                                  
+            resumptionToken.attrib = {'cursor': str(startrec + maxrecs)}
+            resumptionToken.text = f'{set_request}:{datefrom}:{dateuntil}:{startrec + maxrecs}'
+
+        if count == 0:
+            # spec: response must contain a single noRecordsMatch error and nothing else
+            oaixml.remove(listrecords)
+            error = ET.SubElement(oaixml, 'error')
+            error.attrib = {'code': 'noRecordsMatch'}
+            error.text = ('The combination of the values of the from, until, set, '
+                          'and metadataPrefix arguments results in an empty list.')
 
     elif verb == 'GetRecord':
 
